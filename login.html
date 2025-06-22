@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 Club - Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 2rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 0.5rem;
+        }
+        
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: var(--light);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .country-code {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .country-code span {
+            margin-left: 0.5rem;
+        }
+        
+        input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--light);
+            outline: none;
+        }
+        
+        input::placeholder {
+            color: var(--gray);
+        }
+        
+        .password-input {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+            left: 0;
+        }
+        
+        .checkmark {
+            position: absolute;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-container:hover input ~ .checkmark {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+        
+        .checkbox-container .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        
+        .checkbox-container label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            cursor: pointer;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+        
+        .links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .links a:hover {
+            color: var(--light);
+        }
+        
+        .customer-service-btn {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .customer-service-btn a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .customer-service-btn a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-btn:hover {
+            color: var(--light);
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--light);
+        }
+
+        .modal h2 {
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            text-align: center;
+        }
+
+        .modal .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .modal textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            margin-bottom: 1rem;
+            resize: none;
+            outline: none;
+        }
+
+        .modal .btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .modal .btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .toast.error {
+            background-color: var(--danger);
+        }
+
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-img">53</div>
+            <h1>53 Club</h1>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('login')">Login</div>
+            <div class="tab" onclick="switchTab('register')">Register</div>
+        </div>
+        
+        <!-- Login Form -->
+        <div id="login-tab" class="tab-content active">
+            <div class="form-group">
+                <label>Phone Number</label>
+                <div class="input-group">
+                    <div class="country-code">
+                        <span>+91</span>
+                    </div>
+                    <input type="tel" id="login-phone" placeholder="Enter your phone number" maxlength="10" pattern="[0-9]{10}" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-group password-input">
+                    <input type="password" id="login-password" placeholder="Enter your password" required>
+                    <span class="toggle-password" onclick="togglePassword('login-password')">👁️</span>
+                </div>
+            </div>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="remember-me">
+                <span class="checkmark"></span>
+                <label for="remember-me">Remember me</label>
+            </div>
+            
+            <button class="btn btn-primary" onclick="login()">Login</button>
+            
+            <div class="links">
+                <a href="#" onclick="switchTab('register')">Create new account</a>
+                <a href="#" onclick="showForgotPassword()">Forgot password?</a>
+            </div>
+            
+            <div class="customer-service-btn">
+                <a href="#" onclick="showCustomerServiceModal()">Contact Customer Care</a>
+            </div>
+        </div>
+        
+        <!-- Registration Form -->
+        <div id="register-tab" class="tab-content">
+            <div class="form-group">
+                <label>Phone Number</label>
+                <div class="input-group">
+                    <div class="country-code">
+                        <span>+91</span>
+                    </div>
+                    <input type="tel" id="register-phone" placeholder="Enter your phone number" maxlength="10" pattern="[0-9]{10}" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Set Password</label>
+                <div class="input-group password-input">
+                    <input type="password" id="register-password" placeholder="Create a password" required>
+                    <span class="toggle-password" onclick="togglePassword('register-password')">👁️</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <div class="input-group password-input">
+                    <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+                    <span class="toggle-password" onclick="togglePassword('confirm-password')">👁️</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Invite Code (Optional)</label>
+                <div class="input-group">
+                    <input type="text" id="invite-code" placeholder="Enter invite code">
+                </div>
+            </div>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="agree-terms" required>
+                <span class="checkmark"></span>
+                <label for="agree-terms">I agree to the <a href="#" style="color: var(--secondary);" onclick="showTermsModal()">Terms & Conditions</a></label>
+            </div>
+            
+            <button class="btn btn-primary" id="register-btn" onclick="register()">Register</button>
+            
+            <div class="links">
+                <a href="#" onclick="switchTab('login')">Already have an account? Login</a>
+            </div>
+            
+            <div class="customer-service-btn">
+                <a href="#" onclick="showCustomerServiceModal()">Contact Customer Care</a>
+            </div>
+        </div>
+        
+        <!-- Forgot Password Form -->
+        <div id="forgot-password-tab" class="tab-content hidden">
+            <div class="form-group">
+                <label>Phone Number</label>
+                <div class="input-group">
+                    <div class="country-code">
+                        <span>+91</span>
+                    </div>
+                    <input type="tel" id="forgot-phone" placeholder="Enter your phone number" maxlength="10" pattern="[0-9]{10}" required>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="resetPassword()">Reset Password</button>
+            
+            <a href="#" class="back-btn" onclick="switchTab('login')">← Back to login</a>
+        </div>
+    </div>
+
+    <!-- Customer Service Modal -->
+    <div id="customer-service-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideCustomerServiceModal()">&times;</span>
+            <h2>Contact Customer Service</h2>
+            
+            <div class="form-group">
+                <label>Your Phone Number</label>
+                <div class="input-group">
+                    <div class="country-code">
+                        <span>+91</span>
+                    </div>
+                    <input type="tel" id="cs-phone" placeholder="Your phone number" maxlength="10" pattern="[0-9]{10}" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Your Message</label>
+                <textarea id="cs-message" placeholder="Describe your issue..." rows="4" required></textarea>
+            </div>
+            
+            <button class="btn" id="send-message-btn" onclick="sendCustomerServiceMessage()">Send Message</button>
+        </div>
+    </div>
+
+    <!-- Terms & Conditions Modal -->
+    <div id="terms-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideTermsModal()">&times;</span>
+            <h2>Terms & Conditions</h2>
+            
+            <div style="max-height: 400px; overflow-y: auto; margin-bottom: 1.5rem;">
+                <p style="margin-bottom: 1rem;">Welcome to 53 Club! These terms and conditions outline the rules and regulations for the use of our platform.</p>
+                
+                <h3 style="margin-bottom: 0.5rem; color: var(--light);">1. Acceptance of Terms</h3>
+                <p style="margin-bottom: 1rem;">By accessing or using our service, you agree to be bound by these terms. If you disagree with any part of the terms, you may not access the service.</p>
+                
+                <h3 style="margin-bottom: 0.5rem; color: var(--light);">2. User Account</h3>
+                <p style="margin-bottom: 1rem;">You must provide accurate and complete information when creating an account. You are responsible for maintaining the confidentiality of your account credentials.</p>
+                
+                <h3 style="margin-bottom: 0.5rem; color: var(--light);">3. Prohibited Activities</h3>
+                <p style="margin-bottom: 1rem;">You agree not to engage in any illegal activities, fraud, or any behavior that may harm the platform or other users.</p>
+                
+                <h3 style="margin-bottom: 0.5rem; color: var(--light);">4. Privacy Policy</h3>
+                <p style="margin-bottom: 1rem;">Your use of our service is also governed by our Privacy Policy, which explains how we collect, use, and protect your information.</p>
+                
+                <h3 style="margin-bottom: 0.5rem; color: var(--light);">5. Modifications</h3>
+                <p style="margin-bottom: 1rem;">We reserve the right to modify these terms at any time. Your continued use of the service constitutes acceptance of the modified terms.</p>
+                
+                <h3 style="margin-bottom: 0.5rem; color: var(--light);">6. Termination</h3>
+                <p style="margin-bottom: 1rem;">We may terminate or suspend your account immediately, without prior notice, for any violation of these terms.</p>
+            </div>
+            
+            <button class="btn btn-primary" onclick="hideTermsModal()">I Understand</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.firebasestorage.app",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        
+        // Check if user is already logged in
+        if(localStorage.getItem('userLoggedIn') === 'true') {
+            const expiry = localStorage.getItem('loginExpiry');
+            if(expiry && new Date().getTime() < parseInt(expiry)) {
+                window.location.href = "main.html";
+            } else {
+                localStorage.removeItem('userLoggedIn');
+                localStorage.removeItem('userPhone');
+                localStorage.removeItem('loginExpiry');
+            }
+        } else if(sessionStorage.getItem('userLoggedIn') === 'true') {
+            window.location.href = "main.html";
+        }
+        
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                content.classList.add('hidden');
+            });
+            
+            if(tabName === 'login') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('login-tab').classList.add('active');
+                document.getElementById('login-tab').classList.remove('hidden');
+            } else if(tabName === 'register') {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('register-tab').classList.add('active');
+                document.getElementById('register-tab').classList.remove('hidden');
+            }
+        }
+        
+        // Show customer service modal
+        function showCustomerServiceModal() {
+            document.getElementById('customer-service-modal').style.display = 'flex';
+            document.getElementById('cs-phone').focus();
+        }
+        
+        // Hide customer service modal
+        function hideCustomerServiceModal() {
+            document.getElementById('customer-service-modal').style.display = 'none';
+        }
+        
+        // Show terms modal
+        function showTermsModal() {
+            document.getElementById('terms-modal').style.display = 'flex';
+        }
+        
+        // Hide terms modal
+        function hideTermsModal() {
+            document.getElementById('terms-modal').style.display = 'none';
+        }
+        
+        // Show forgot password
+        function showForgotPassword() {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                content.classList.add('hidden');
+            });
+            
+            document.getElementById('forgot-password-tab').classList.add('active');
+            document.getElementById('forgot-password-tab').classList.remove('hidden');
+        }
+        
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : '⚠'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Login function
+        function login() {
+            const phone = document.getElementById('login-phone').value;
+            const password = document.getElementById('login-password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+            
+            if(!phone || !password) {
+                showToast('Please enter both phone number and password', 'error');
+                return;
+            }
+            
+            if(!/^\d{10}$/.test(phone)) {
+                showToast('Please enter a valid 10-digit phone number', 'error');
+                return;
+            }
+            
+            // Simulate loading
+            const btn = document.querySelector('#login-tab .btn-primary');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Logging in...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Save login state
+                if(rememberMe) {
+                    localStorage.setItem('userLoggedIn', 'true');
+                    localStorage.setItem('userPhone', phone);
+                    // Set expiry for 1 day
+                    const expiry = new Date();
+                    expiry.setDate(expiry.getDate() + 1);
+                    localStorage.setItem('loginExpiry', expiry.getTime());
+                } else {
+                    sessionStorage.setItem('userLoggedIn', 'true');
+                    sessionStorage.setItem('userPhone', phone);
+                }
+                
+                showToast('Login successful! Redirecting...');
+                
+                // Redirect to main page
+                setTimeout(() => {
+                    window.location.href = "main.html";
+                }, 1000);
+            }, 1500);
+        }
+        
+        // Register function
+        function register() {
+            const phone = document.getElementById('register-phone').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const inviteCode = document.getElementById('invite-code').value;
+            const agreeTerms = document.getElementById('agree-terms').checked;
+            
+            if(!phone || !password || !confirmPassword) {
+                showToast('Please fill all required fields', 'error');
+                return;
+            }
+            
+            if(!/^\d{10}$/.test(phone)) {
+                showToast('Please enter a valid 10-digit phone number', 'error');
+                return;
+            }
+            
+            if(password.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            if(password !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            
+            if(!agreeTerms) {
+                showToast('You must agree to the terms and conditions', 'error');
+                return;
+            }
+            
+            // Simulate loading
+            const btn = document.getElementById('register-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Registering...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Save user data
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('userPhone', phone);
+                // Set expiry for 1 day
+                const expiry = new Date();
+                expiry.setDate(expiry.getDate() + 1);
+                localStorage.setItem('loginExpiry', expiry.getTime());
+                
+                if(inviteCode) {
+                    localStorage.setItem('inviteCodeUsed', inviteCode);
+                }
+                
+                showToast('Registration successful! Redirecting...');
+                
+                // Redirect to main page
+                setTimeout(() => {
+                    window.location.href = "main.html";
+                }, 1000);
+            }, 1500);
+        }
+        
+        // Reset password function
+        function resetPassword() {
+            const phone = document.getElementById('forgot-phone').value;
+            
+            if(!phone) {
+                showToast('Please enter your phone number', 'error');
+                return;
+            }
+            
+            if(!/^\d{10}$/.test(phone)) {
+                showToast('Please enter a valid 10-digit phone number', 'error');
+                return;
+            }
+            
+            // Simulate loading
+            const btn = document.querySelector('#forgot-password-tab .btn-primary');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Sending...';
+            
+            // Simulate API call
+            setTimeout(() => {
+                showToast('Password reset link sent to your phone number');
+                btn.disabled = false;
+                btn.textContent = 'Reset Password';
+                switchTab('login');
+            }, 1500);
+        }
+        
+        // Send customer service message to Telegram
+        function sendCustomerServiceMessage() {
+            const phone = document.getElementById('cs-phone').value;
+            const message = document.getElementById('cs-message').value;
+            
+            if(!phone || !message) {
+                showToast('Please enter both phone number and message', 'error');
+                return;
+            }
+            
+            if(!/^\d{10}$/.test(phone)) {
+                showToast('Please enter a valid 10-digit phone number', 'error');
+                return;
+            }
+            
+            if(message.length < 10) {
+                showToast('Please describe your issue in at least 10 characters', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('send-message-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Sending...';
+            
+            const telegramBotToken = '7645796543:AAEh8jLyrcaUN6Em8GFCM0fZz17hsUFRXkQ';
+            const chatId = '6690653192';
+            
+            const text = `New customer service message from 53 Club:\n\nPhone: +91${phone}\nMessage: ${message}`;
+            
+            // Simulate API call with realistic delay
+            setTimeout(() => {
+                fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: text
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.ok) {
+                        showToast('Your message has been sent to customer service');
+                        document.getElementById('cs-message').value = '';
+                        hideCustomerServiceModal();
+                    } else {
+                        showToast('Failed to send message. Please try again.', 'error');
+                    }
+                    btn.disabled = false;
+                    btn.textContent = 'Send Message';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Failed to send message. Please try again.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Send Message';
+                });
+            }, 2000);
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const customerModal = document.getElementById('customer-service-modal');
+            const termsModal = document.getElementById('terms-modal');
+            
+            if (event.target === customerModal) {
+                hideCustomerServiceModal();
+            }
+            
+            if (event.target === termsModal) {
+                hideTermsModal();
+            }
+        }
+
+        // Initialize checkbox functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make terms checkbox clickable on the label
+            document.querySelector('.checkbox-container label[for="agree-terms"]').addEventListener('click', function(e) {
+                e.preventDefault();
+                const checkbox = document.getElementById('agree-terms');
+                checkbox.checked = !checkbox.checked;
+                // Trigger change event
+                const event = new Event('change');
+                checkbox.dispatchEvent(event);
+            });
+            
+            // Make remember me checkbox clickable on the label
+            document.querySelector('.checkbox-container label[for="remember-me"]').addEventListener('click', function(e) {
+                e.preventDefault();
+                const checkbox = document.getElementById('remember-me');
+                checkbox.checked = !checkbox.checked;
+                // Trigger change event
+                const event = new Event('change');
+                checkbox.dispatchEvent(event);
+            });
+        });
+    </script>
+</body>
+</html>
