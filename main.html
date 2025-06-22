@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 Club - Main</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .balance {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-right: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .balance i {
+            margin-right: 8px;
+            color: var(--success);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .user-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            padding: 10px 0;
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            z-index: 100;
+        }
+        
+        .user-menu.active {
+            display: block;
+        }
+        
+        .user-menu a {
+            display: block;
+            padding: 8px 15px;
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .user-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--secondary);
+        }
+        
+        .user-menu a i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .banner {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .banner-content {
+            text-align: center;
+            z-index: 2;
+            padding: 20px;
+        }
+        
+        .banner h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, white, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .banner p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+        }
+        
+        .banner .btn {
+            padding: 8px 20px;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .banner .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .banner-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: radial-gradient(circle, white 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .categories {
+            display: flex;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: none;
+        }
+        
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category {
+            padding: 8px 15px;
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category.active {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+        }
+        
+        .category:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .games-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .see-all {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .games-container {
+            position: relative;
+        }
+        
+        .games-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            padding-bottom: 10px;
+        }
+        
+        .games-slider::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .game-card {
+            min-width: 150px;
+            margin-right: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-thumbnail {
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .game-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
+        }
+        
+        .game-title {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 1;
+        }
+        
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        
+        .slider-btn {
+            width: 30px;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            pointer-events: all;
+            z-index: 10;
+        }
+        
+        .slider-btn:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        .slider-btn.left {
+            margin-left: -15px;
+        }
+        
+        .slider-btn.right {
+            margin-right: -15px;
+        }
+        
+        .auto-slider {
+            height: 180px;
+            position: relative;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        
+        .auto-slider-container {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+        
+        .auto-slide {
+            min-width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .auto-slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .auto-slide-content {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1;
+            max-width: 60%;
+        }
+        
+        .auto-slide h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .auto-slide p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .auto-slide .btn {
+            padding: 6px 15px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .auto-slider-dots {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            z-index: 1;
+        }
+        
+        .auto-slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .auto-slider-dot.active {
+            background: white;
+            width: 20px;
+            border-radius: 4px;
+        }
+        
+        .winning-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .winning-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .winning-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .refresh-btn {
+            background: none;
+            border: none;
+            color: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .refresh-btn i {
+            margin-right: 5px;
+        }
+        
+        .winners-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .winner-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .winner-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .winner-details {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .winner-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .winner-amount {
+            font-size: 0.8rem;
+            color: var(--success);
+            font-weight: 500;
+        }
+        
+        .big-winners {
+            margin-top: 20px;
+        }
+        
+        .big-winners-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--warning);
+        }
+        
+        .big-winners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .big-winner-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .big-winner-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(106, 17, 203, 0.1), rgba(74, 107, 255, 0.1));
+            z-index: -1;
+        }
+        
+        .big-winner-rank {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: var(--warning);
+            font-weight: 600;
+        }
+        
+        .big-winner-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+            float: left;
+        }
+        
+        .big-winner-details {
+            overflow: hidden;
+        }
+        
+        .big-winner-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .big-winner-game {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .big-winner-amount {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+        
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: var(--gray);
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--light);
+        }
+        
+        .disclaimer {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .banner h2 {
+                font-size: 1.4rem;
+            }
+            
+            .winners-list {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .big-winners-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .user-info {
+                margin-top: 15px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .balance {
+                margin-right: 0;
+            }
+            
+            .banner {
+                height: 150px;
+            }
+            
+            .banner h2 {
+                font-size: 1.2rem;
+            }
+            
+            .auto-slide-content {
+                max-width: 80%;
+            }
+            
+            .winners-list {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-img">53</div>
+                <h1>53 Club</h1>
+            </div>
+            
+            <div class="user-info">
+                <div class="balance">
+                    <i class="fas fa-wallet"></i>
+                    <span id="user-balance">₹10,000.00</span>
+                </div>
+                
+                <div class="user-avatar" id="user-avatar" onclick="toggleUserMenu()">
+                    <span id="avatar-text">U</span>
+                </div>
+                
+                <div class="user-menu" id="user-menu">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="wallet.html"><i class="fas fa-wallet"></i> Wallet</a>
+                    <a href="transactions.html"><i class="fas fa-exchange-alt"></i> Transactions</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </header>
+        
+        <div class="banner">
+            <div class="banner-pattern"></div>
+            <div class="banner-content">
+                <h2>Welcome to 53 Club!</h2>
+                <p>Get 28% bonus on your first deposit</p>
+                <button class="btn">Deposit Now</button>
+            </div>
+        </div>
+        
+        <div class="categories">
+            <div class="category active">All</div>
+            <div class="category">Lottery</div>
+            <div class="category">Original</div>
+            <div class="category">Slots</div>
+            <div class="category">Casino</div>
+            <div class="category">Sports</div>
+        </div>
+        
+        <!-- Auto Slider for Featured Games -->
+        <div class="auto-slider">
+            <div class="auto-slider-container" id="auto-slider">
+                <div class="auto-slide" style="background-image: url('https://via.placeholder.com/800x400/6a11cb/ffffff?text=Game+1')">
+                    <div class="auto-slide-content">
+                        <h3>Dragon's Treasure</h3>
+                        <p>Win up to ₹10,00,000 in this exciting adventure</p>
+                        <button class="btn">Play Now</button>
+                    </div>
+                </div>
+                <div class="auto-slide" style="background-image: url('https://via.placeholder.com/800x400/4a6bff/ffffff?text=Game+2')">
+                    <div class="auto-slide-content">
+                        <h3>Lucky Spin</h3>
+                        <p>Spin the wheel for instant rewards</p>
+                        <button class="btn">Play Now</button>
+                    </div>
+                </div>
+                <div class="auto-slide" style="background-image: url('https://via.placeholder.com/800x400/28a745/ffffff?text=Game+3')">
+                    <div class="auto-slide-content">
+                        <h3>Fortune King</h3>
+                        <p>Become the king of fortune</p>
+                        <button class="btn">Play Now</button>
+                    </div>
+                </div>
+                <div class="auto-slide" style="background-image: url('https://via.placeholder.com/800x400/dc3545/ffffff?text=Game+4')">
+                    <div class="auto-slide-content">
+                        <h3>Golden Jackpot</h3>
+                        <p>Hit the jackpot and win big</p>
+                        <button class="btn">Play Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="auto-slider-dots" id="auto-slider-dots">
+                <div class="auto-slider-dot active" onclick="goToSlide(0)"></div>
+                <div class="auto-slider-dot" onclick="goToSlide(1)"></div>
+                <div class="auto-slider-dot" onclick="goToSlide(2)"></div>
+                <div class="auto-slider-dot" onclick="goToSlide(3)"></div>
+            </div>
+        </div>
+        
+        <!-- Popular Games Section -->
+        <div class="games-section">
+            <div class="section-header">
+                <h3 class="section-title">Popular Games</h3>
+                <a href="popular-games.html" class="see-all">See All</a>
+            </div>
+            
+            <div class="games-container">
+                <div class="games-slider" id="popular-games">
+                    <div class="game-card" onclick="openGame('game1')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/6a11cb/ffffff?text=WIN+Go')">
+                            <div class="game-title">WIN Go</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game2')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/4a6bff/ffffff?text=K3+Lottery')">
+                            <div class="game-title">K3 Lottery</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game3')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/28a745/ffffff?text=5D+Lottery')">
+                            <div class="game-title">5D Lottery</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game4')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/dc3545/ffffff?text=Dragon+Slots')">
+                            <div class="game-title">Dragon Slots</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game5')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/ffc107/121212?text=Fortune+Wheel')">
+                            <div class="game-title">Fortune Wheel</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slider-controls">
+                    <div class="slider-btn left" onclick="scrollSlider('popular-games', -150)"><i class="fas fa-chevron-left"></i></div>
+                    <div class="slider-btn right" onclick="scrollSlider('popular-games', 150)"><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- New Games Section -->
+        <div class="games-section">
+            <div class="section-header">
+                <h3 class="section-title">New Games</h3>
+                <a href="new-games.html" class="see-all">See All</a>
+            </div>
+            
+            <div class="games-container">
+                <div class="games-slider" id="new-games">
+                    <div class="game-card" onclick="openGame('game6')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/17a2b8/ffffff?text=Treasure+Hunt')">
+                            <div class="game-title">Treasure Hunt</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game7')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/6610f2/ffffff?text=Lucky+7')">
+                            <div class="game-title">Lucky 7</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game8')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/20c997/ffffff?text=Golden+Fish')">
+                            <div class="game-title">Golden Fish</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game9')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/fd7e14/ffffff?text=Jungle+King')">
+                            <div class="game-title">Jungle King</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game10')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/e83e8c/ffffff?text=Magic+Wheel')">
+                            <div class="game-title">Magic Wheel</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slider-controls">
+                    <div class="slider-btn left" onclick="scrollSlider('new-games', -150)"><i class="fas fa-chevron-left"></i></div>
+                    <div class="slider-btn right" onclick="scrollSlider('new-games', 150)"><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Winning Information Section -->
+        <div class="winning-info">
+            <div class="winning-info-header">
+                <h3 class="winning-title">Winning Information</h3>
+                <button class="refresh-btn" onclick="refreshWinners()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+            </div>
+            
+            <div class="winners-list" id="winners-list">
+                <!-- Winners will be loaded here by JavaScript -->
+            </div>
+            
+            <div class="big-winners">
+                <h4 class="big-winners-title">Today's Big Winners</h4>
+                
+                <div class="big-winners-grid" id="big-winners">
+                    <!-- Big winners will be loaded here by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recommended Games Section -->
+        <div class="games-section">
+            <div class="section-header">
+                <h3 class="section-title">Recommended For You</h3>
+                <a href="recommended-games.html" class="see-all">See All</a>
+            </div>
+            
+            <div class="games-container">
+                <div class="games-slider" id="recommended-games">
+                    <div class="game-card" onclick="openGame('game11')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/6a11cb/ffffff?text=Dragon+Slots')">
+                            <div class="game-title">Dragon Slots</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game12')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/4a6bff/ffffff?text=Fortune+King')">
+                            <div class="game-title">Fortune King</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game13')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/28a745/ffffff?text=Lucky+Spin')">
+                            <div class="game-title">Lucky Spin</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game14')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/dc3545/ffffff?text=Golden+Jackpot')">
+                            <div class="game-title">Golden Jackpot</div>
+                        </div>
+                    </div>
+                    <div class="game-card" onclick="openGame('game15')">
+                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/ffc107/121212?text=Treasure+Hunt')">
+                            <div class="game-title">Treasure Hunt</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slider-controls">
+                    <div class="slider-btn left" onclick="scrollSlider('recommended-games', -150)"><i class="fas fa-chevron-left"></i></div>
+                    <div class="slider-btn right" onclick="scrollSlider('recommended-games', 150)"><i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-links">
+                <a href="about.html">About Us</a>
+                <a href="terms.html">Terms & Conditions</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="contact.html">Contact Us</a>
+                <a href="help.html">Help Center</a>
+            </div>
+            
+            <div class="disclaimer">
+                <p>DGCLUB mainly features online video games, slots and casino. We work with more than 10,000 video games, slot and casino providers, all of whom are certified as fair gambling, support fast deposits and withdrawals, and friendly service. Gambling is Addictive, Please Play It Wisely, DGCLUB Only Accepts Customers over the Age of 18.</p>
+            </div>
+            
+            <p>&copy; 2023 53 Club. All Rights Reserved.</p>
+        </footer>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.firebasestorage.app",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Check if user is logged in
+        const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
+        if(!userPhone) {
+            window.location.href = "index.html";
+        } else {
+            // Set avatar with first letter of phone number
+            document.getElementById('avatar-text').textContent = userPhone.charAt(0).toUpperCase();
+            
+            // Load user balance
+            loadUserBalance();
+        }
+        
+        // Auto slider functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.auto-slide');
+        const dots = document.querySelectorAll('.auto-slider-dot');
+        const slider = document.getElementById('auto-slider');
+        let slideInterval;
+        
+        function startSlider() {
+            slideInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateSlider();
+            }, 3000);
+        }
+        
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+            resetInterval();
+        }
+        
+        function resetInterval() {
+            clearInterval(slideInterval);
+            startSlider();
+        }
+        
+        // Initialize slider
+        startSlider();
+        
+        // Slider controls
+        function scrollSlider(sliderId, amount) {
+            const slider = document.getElementById(sliderId);
+            slider.scrollBy({ left: amount, behavior: 'smooth' });
+        }
+        
+        // User menu toggle
+        function toggleUserMenu() {
+            document.getElementById('user-menu').classList.toggle('active');
+        }
+        
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('user-menu');
+            const userAvatar = document.getElementById('user-avatar');
+            
+            if(userMenu.classList.contains('active') && !userAvatar.contains(event.target) && !userMenu.contains(event.target)) {
+                userMenu.classList.remove('active');
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userPhone');
+            localStorage.removeItem('loginExpiry');
+            sessionStorage.removeItem('userLoggedIn');
+            sessionStorage.removeItem('userPhone');
+            
+            window.location.href = "index.html";
+        }
+        
+        // Load user balance from Firebase
+        function loadUserBalance() {
+            database.ref('users/' + userPhone + '/balance').once('value').then((snapshot) => {
+                const balance = snapshot.val() || 0;
+                document.getElementById('user-balance').textContent = '₹' + balance.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            });
+        }
+        
+        // Load winners data
+        function loadWinners() {
+            // Recent winners
+            const recentWinners = [
+                { id: 'Mem™DEE', amount: 58.80 },
+                { id: 'Mem™OWY', amount: 39.20 },
+                { id: 'Mem™VCL', amount: 284.20 },
+                { id: 'Mem™WSV', amount: 15.68 },
+                { id: 'Mem™WCM', amount: 39.20 },
+                { id: 'Mem™BWA', amount: 26.46 }
+            ];
+            
+            const winnersList = document.getElementById('winners-list');
+            winnersList.innerHTML = '';
+            
+            recentWinners.forEach(winner => {
+                const winnerCard = document.createElement('div');
+                winnerCard.className = 'winner-card';
+                winnerCard.innerHTML = `
+                    <div class="winner-avatar">${winner.id.charAt(4)}</div>
+                    <div class="winner-details">
+                        <div class="winner-name">${winner.id}</div>
+                        <div class="winner-amount">₹${winner.amount.toFixed(2)}</div>
+                    </div>
+                `;
+                winnersList.appendChild(winnerCard);
+            });
+            
+            // Big winners
+            const bigWinners = [
+                { id: 'Mem™B75', amount: 1220446177.16, rank: 'NO1', game: 'Dragon Slots' },
+                { id: 'Axa**pq2', amount: 215600000.00, rank: 'NO2', game: 'Fortune King' },
+                { id: 'B.R***LA', amount: 8016400.00, rank: 'NO3', game: 'Lucky Spin' },
+                { id: 'Mem™SVZ', amount: 8016400.00, rank: 'NO4', game: 'Golden Jackpot' },
+                { id: 'Mem™4PI', amount: 2037570.92, rank: 'NO5', game: 'Treasure Hunt' }
+            ];
+            
+            const bigWinnersGrid = document.getElementById('big-winners');
+            bigWinnersGrid.innerHTML = '';
+            
+            bigWinners.forEach(winner => {
+                const bigWinnerCard = document.createElement('div');
+                bigWinnerCard.className = 'big-winner-card';
+                bigWinnerCard.innerHTML = `
+                    <div class="big-winner-rank">${winner.rank}</div>
+                    <div class="big-winner-avatar">${winner.id.charAt(4)}</div>
+                    <div class="big-winner-details">
+                        <div class="big-winner-name">${winner.id}</div>
+                        <div class="big-winner-game">${winner.game}</div>
+                        <div class="big-winner-amount">₹${winner.amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                    </div>
+                `;
+                bigWinnersGrid.appendChild(bigWinnerCard);
+            });
+        }
+        
+        // Refresh winners
+        function refreshWinners() {
+            showToast('Winners list refreshed', 'info');
+            loadWinners();
+        }
+        
+        // Open game
+        function openGame(gameId) {
+            // In a real app, this would redirect to the game page
+            showToast(`Opening ${gameId}...`, 'info');
+            
+            // For demo, we'll just show a toast
+            const gameNames = {
+                'game1': 'WIN Go',
+                'game2': 'K3 Lottery',
+                'game3': '5D Lottery',
+                'game4': 'Dragon Slots',
+                'game5': 'Fortune Wheel',
+                'game6': 'Treasure Hunt',
+                'game7': 'Lucky 7',
+                'game8': 'Golden Fish',
+                'game9': 'Jungle King',
+                'game10': 'Magic Wheel',
+                'game11': 'Dragon Slots',
+                'game12': 'Fortune King',
+                'game13': 'Lucky Spin',
+                'game14': 'Golden Jackpot',
+                'game15': 'Treasure Hunt'
+            };
+            
+            showToast(`Playing ${gameNames[gameId]}`, 'success');
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWinners();
+        });
+    </script>
+</body>
+</html>
