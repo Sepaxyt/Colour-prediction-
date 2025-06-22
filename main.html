@@ -98,20 +98,19 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            background: rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
-            font-weight: bold;
             cursor: pointer;
-            position: relative;
+            font-size: 1.2rem;
         }
         
         .user-menu {
             position: absolute;
             top: 50px;
-            right: 0;
+            right: 20px;
             background: rgba(0, 0, 0, 0.9);
             border-radius: 8px;
             padding: 10px 0;
@@ -733,11 +732,11 @@
             <div class="user-info">
                 <div class="balance">
                     <i class="fas fa-wallet"></i>
-                    <span id="user-balance">₹10,000.00</span>
+                    <span id="user-balance">₹0.00</span>
                 </div>
                 
                 <div class="user-avatar" id="user-avatar" onclick="toggleUserMenu()">
-                    <span id="avatar-text">U</span>
+                    <i class="fas fa-ellipsis-v"></i>
                 </div>
                 
                 <div class="user-menu" id="user-menu">
@@ -755,7 +754,7 @@
             <div class="banner-content">
                 <h2>Welcome to 53 Club!</h2>
                 <p>Get 28% bonus on your first deposit</p>
-                <button class="btn">Deposit Now</button>
+                <button class="btn" onclick="window.location.href='deposit.html'">Deposit Now</button>
             </div>
         </div>
         
@@ -771,41 +770,11 @@
         <!-- Auto Slider for Featured Games -->
         <div class="auto-slider">
             <div class="auto-slider-container" id="auto-slider">
-                <div class="auto-slide" style="background-image: url('https://via.placeholder.com/800x400/6a11cb/ffffff?text=Game+1')">
-                    <div class="auto-slide-content">
-                        <h3>Dragon's Treasure</h3>
-                        <p>Win up to ₹10,00,000 in this exciting adventure</p>
-                        <button class="btn">Play Now</button>
-                    </div>
-                </div>
-                <div class="auto-slide" style="background-image: url('https://via.placeholder.com/800x400/4a6bff/ffffff?text=Game+2')">
-                    <div class="auto-slide-content">
-                        <h3>Lucky Spin</h3>
-                        <p>Spin the wheel for instant rewards</p>
-                        <button class="btn">Play Now</button>
-                    </div>
-                </div>
-                <div class="auto-slide" style="background-image: url('https://via.placeholder.com/800x400/28a745/ffffff?text=Game+3')">
-                    <div class="auto-slide-content">
-                        <h3>Fortune King</h3>
-                        <p>Become the king of fortune</p>
-                        <button class="btn">Play Now</button>
-                    </div>
-                </div>
-                <div class="auto-slide" style="background-image: url('https://via.placeholder.com/800x400/dc3545/ffffff?text=Game+4')">
-                    <div class="auto-slide-content">
-                        <h3>Golden Jackpot</h3>
-                        <p>Hit the jackpot and win big</p>
-                        <button class="btn">Play Now</button>
-                    </div>
-                </div>
+                <!-- Slides will be loaded dynamically from JSON -->
             </div>
             
             <div class="auto-slider-dots" id="auto-slider-dots">
-                <div class="auto-slider-dot active" onclick="goToSlide(0)"></div>
-                <div class="auto-slider-dot" onclick="goToSlide(1)"></div>
-                <div class="auto-slider-dot" onclick="goToSlide(2)"></div>
-                <div class="auto-slider-dot" onclick="goToSlide(3)"></div>
+                <!-- Dots will be loaded dynamically -->
             </div>
         </div>
         
@@ -818,31 +787,7 @@
             
             <div class="games-container">
                 <div class="games-slider" id="popular-games">
-                    <div class="game-card" onclick="openGame('game1')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/6a11cb/ffffff?text=WIN+Go')">
-                            <div class="game-title">WIN Go</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game2')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/4a6bff/ffffff?text=K3+Lottery')">
-                            <div class="game-title">K3 Lottery</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game3')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/28a745/ffffff?text=5D+Lottery')">
-                            <div class="game-title">5D Lottery</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game4')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/dc3545/ffffff?text=Dragon+Slots')">
-                            <div class="game-title">Dragon Slots</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game5')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/ffc107/121212?text=Fortune+Wheel')">
-                            <div class="game-title">Fortune Wheel</div>
-                        </div>
-                    </div>
+                    <!-- Popular games will be loaded dynamically from JSON -->
                 </div>
                 
                 <div class="slider-controls">
@@ -861,31 +806,7 @@
             
             <div class="games-container">
                 <div class="games-slider" id="new-games">
-                    <div class="game-card" onclick="openGame('game6')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/17a2b8/ffffff?text=Treasure+Hunt')">
-                            <div class="game-title">Treasure Hunt</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game7')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/6610f2/ffffff?text=Lucky+7')">
-                            <div class="game-title">Lucky 7</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game8')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/20c997/ffffff?text=Golden+Fish')">
-                            <div class="game-title">Golden Fish</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game9')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/fd7e14/ffffff?text=Jungle+King')">
-                            <div class="game-title">Jungle King</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game10')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/e83e8c/ffffff?text=Magic+Wheel')">
-                            <div class="game-title">Magic Wheel</div>
-                        </div>
-                    </div>
+                    <!-- New games will be loaded dynamically from JSON -->
                 </div>
                 
                 <div class="slider-controls">
@@ -906,14 +827,14 @@
             </div>
             
             <div class="winners-list" id="winners-list">
-                <!-- Winners will be loaded here by JavaScript -->
+                <!-- Winners will be loaded dynamically -->
             </div>
             
             <div class="big-winners">
                 <h4 class="big-winners-title">Today's Big Winners</h4>
                 
                 <div class="big-winners-grid" id="big-winners">
-                    <!-- Big winners will be loaded here by JavaScript -->
+                    <!-- Big winners will be loaded dynamically -->
                 </div>
             </div>
         </div>
@@ -927,31 +848,7 @@
             
             <div class="games-container">
                 <div class="games-slider" id="recommended-games">
-                    <div class="game-card" onclick="openGame('game11')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/6a11cb/ffffff?text=Dragon+Slots')">
-                            <div class="game-title">Dragon Slots</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game12')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/4a6bff/ffffff?text=Fortune+King')">
-                            <div class="game-title">Fortune King</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game13')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/28a745/ffffff?text=Lucky+Spin')">
-                            <div class="game-title">Lucky Spin</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game14')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/dc3545/ffffff?text=Golden+Jackpot')">
-                            <div class="game-title">Golden Jackpot</div>
-                        </div>
-                    </div>
-                    <div class="game-card" onclick="openGame('game15')">
-                        <div class="game-thumbnail" style="background-image: url('https://via.placeholder.com/300x200/ffc107/121212?text=Treasure+Hunt')">
-                            <div class="game-title">Treasure Hunt</div>
-                        </div>
-                    </div>
+                    <!-- Recommended games will be loaded dynamically -->
                 </div>
                 
                 <div class="slider-controls">
@@ -971,7 +868,7 @@
             </div>
             
             <div class="disclaimer">
-                <p>DGCLUB mainly features online video games, slots and casino. We work with more than 10,000 video games, slot and casino providers, all of whom are certified as fair gambling, support fast deposits and withdrawals, and friendly service. Gambling is Addictive, Please Play It Wisely, DGCLUB Only Accepts Customers over the Age of 18.</p>
+                <p>53 Club mainly features online video games, slots and casino. We work with more than 10,000 video games, slot and casino providers, all of whom are certified as fair gambling, support fast deposits and withdrawals, and friendly service. Gambling is Addictive, Please Play It Wisely, 53 Club Only Accepts Customers over the Age of 18.</p>
             </div>
             
             <p>&copy; 2023 53 Club. All Rights Reserved.</p>
@@ -1002,31 +899,129 @@
         const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
         if(!userPhone) {
             window.location.href = "index.html";
-        } else {
-            // Set avatar with first letter of phone number
-            document.getElementById('avatar-text').textContent = userPhone.charAt(0).toUpperCase();
-            
-            // Load user balance
-            loadUserBalance();
         }
+        
+        // Game data JSON structure
+        const gameData = {
+            featuredGames: [
+                {
+                    id: "game1",
+                    title: "Dragon's Treasure",
+                    description: "Win up to ₹10,00,000 in this exciting adventure",
+                    image: "https://via.placeholder.com/800x400/6a11cb/ffffff?text=Dragon+Treasure",
+                    buttonText: "Play Now"
+                },
+                {
+                    id: "game2",
+                    title: "Lucky Spin",
+                    description: "Spin the wheel for instant rewards",
+                    image: "https://via.placeholder.com/800x400/4a6bff/ffffff?text=Lucky+Spin",
+                    buttonText: "Play Now"
+                },
+                {
+                    id: "game3",
+                    title: "Fortune King",
+                    description: "Become the king of fortune",
+                    image: "https://via.placeholder.com/800x400/28a745/ffffff?text=Fortune+King",
+                    buttonText: "Play Now"
+                },
+                {
+                    id: "game4",
+                    title: "Golden Jackpot",
+                    description: "Hit the jackpot and win big",
+                    image: "https://via.placeholder.com/800x400/dc3545/ffffff?text=Golden+Jackpot",
+                    buttonText: "Play Now"
+                }
+            ],
+            popularGames: [
+                {
+                    id: "game5",
+                    title: "WIN Go",
+                    image: "https://via.placeholder.com/300x200/6a11cb/ffffff?text=WIN+Go"
+                },
+                {
+                    id: "game6",
+                    title: "K3 Lottery",
+                    image: "https://via.placeholder.com/300x200/4a6bff/ffffff?text=K3+Lottery"
+                },
+                {
+                    id: "game7",
+                    title: "5D Lottery",
+                    image: "https://via.placeholder.com/300x200/28a745/ffffff?text=5D+Lottery"
+                },
+                {
+                    id: "game8",
+                    title: "Dragon Slots",
+                    image: "https://via.placeholder.com/300x200/dc3545/ffffff?text=Dragon+Slots"
+                },
+                {
+                    id: "game9",
+                    title: "Fortune Wheel",
+                    image: "https://via.placeholder.com/300x200/ffc107/121212?text=Fortune+Wheel"
+                }
+            ],
+            newGames: [
+                {
+                    id: "game10",
+                    title: "Treasure Hunt",
+                    image: "https://via.placeholder.com/300x200/17a2b8/ffffff?text=Treasure+Hunt"
+                },
+                {
+                    id: "game11",
+                    title: "Lucky 7",
+                    image: "https://via.placeholder.com/300x200/6610f2/ffffff?text=Lucky+7"
+                },
+                {
+                    id: "game12",
+                    title: "Golden Fish",
+                    image: "https://via.placeholder.com/300x200/20c997/ffffff?text=Golden+Fish"
+                },
+                {
+                    id: "game13",
+                    title: "Jungle King",
+                    image: "https://via.placeholder.com/300x200/fd7e14/ffffff?text=Jungle+King"
+                },
+                {
+                    id: "game14",
+                    title: "Magic Wheel",
+                    image: "https://via.placeholder.com/300x200/e83e8c/ffffff?text=Magic+Wheel"
+                }
+            ]
+        };
+        
+        // Random names for winners
+        const randomNames = [
+            "Mem™DEE", "Mem™OWY", "Mem™VCL", "Mem™WSV", "Mem™WCM", "Mem™BWA",
+            "Mem™B75", "Axa**pq2", "B.R***LA", "Mem™SVZ", "Mem™4PI", "Mem™ZSF",
+            "Mem™FHN", "Mem™S2B", "Mem™GJN", "Mem™KLP", "Mem™QWE", "Mem™RTY",
+            "Mem™UIO", "Mem™PAS", "Mem™DFG", "Mem™HJK", "Mem™LZX", "Mem™CVB",
+            "Mem™NMQ", "Mem™WER", "Mem™SDF", "Mem™XCV", "Mem™FGH", "Mem™VBN"
+        ];
+        
+        // Random game names for winners
+        const randomGameNames = [
+            "WIN Go", "K3 Lottery", "5D Lottery", "Dragon Slots", "Fortune Wheel",
+            "Treasure Hunt", "Lucky 7", "Golden Fish", "Jungle King", "Magic Wheel",
+            "Dragon's Treasure", "Lucky Spin", "Fortune King", "Golden Jackpot"
+        ];
         
         // Auto slider functionality
         let currentSlide = 0;
         const slides = document.querySelectorAll('.auto-slide');
-        const dots = document.querySelectorAll('.auto-slider-dot');
-        const slider = document.getElementById('auto-slider');
         let slideInterval;
         
         function startSlider() {
             slideInterval = setInterval(() => {
-                currentSlide = (currentSlide + 1) % slides.length;
+                currentSlide = (currentSlide + 1) % document.querySelectorAll('.auto-slide').length;
                 updateSlider();
             }, 3000);
         }
         
         function updateSlider() {
+            const slider = document.getElementById('auto-slider');
             slider.style.transform = `translateX(-${currentSlide * 100}%)`;
             
+            const dots = document.querySelectorAll('.auto-slider-dot');
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentSlide);
             });
@@ -1043,8 +1038,188 @@
             startSlider();
         }
         
-        // Initialize slider
-        startSlider();
+        // Load game data
+        function loadGameData() {
+            // Load featured games
+            const autoSlider = document.getElementById('auto-slider');
+            const sliderDots = document.getElementById('auto-slider-dots');
+            
+            gameData.featuredGames.forEach((game, index) => {
+                autoSlider.innerHTML += `
+                    <div class="auto-slide" style="background-image: url('${game.image}')">
+                        <div class="auto-slide-content">
+                            <h3>${game.title}</h3>
+                            <p>${game.description}</p>
+                            <button class="btn" onclick="openGame('${game.id}')">${game.buttonText}</button>
+                        </div>
+                    </div>
+                `;
+                
+                sliderDots.innerHTML += `
+                    <div class="auto-slider-dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>
+                `;
+            });
+            
+            // Load popular games
+            const popularGames = document.getElementById('popular-games');
+            gameData.popularGames.forEach(game => {
+                popularGames.innerHTML += `
+                    <div class="game-card" onclick="openGame('${game.id}')">
+                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
+                            <div class="game-title">${game.title}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Load new games
+            const newGames = document.getElementById('new-games');
+            gameData.newGames.forEach(game => {
+                newGames.innerHTML += `
+                    <div class="game-card" onclick="openGame('${game.id}')">
+                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
+                            <div class="game-title">${game.title}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Load recommended games (mix of popular and new)
+            const recommendedGames = document.getElementById('recommended-games');
+            const mixedGames = [...gameData.popularGames.slice(0, 2), ...gameData.newGames.slice(0, 3)];
+            
+            mixedGames.forEach(game => {
+                recommendedGames.innerHTML += `
+                    <div class="game-card" onclick="openGame('${game.id}')">
+                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
+                            <div class="game-title">${game.title}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        // Load user balance from Firebase
+        function loadUserBalance() {
+            database.ref('users/' + userPhone + '/balance').once('value').then((snapshot) => {
+                const balance = snapshot.val() || 0;
+                document.getElementById('user-balance').textContent = '₹' + balance.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }).catch((error) => {
+                console.error("Error loading balance:", error);
+                document.getElementById('user-balance').textContent = '₹0.00';
+            });
+        }
+        
+        // Generate random winners
+        function generateRandomWinners() {
+            // Recent winners (6 random entries)
+            const recentWinners = [];
+            const usedNames = new Set();
+            
+            for (let i = 0; i < 6; i++) {
+                let name;
+                do {
+                    name = randomNames[Math.floor(Math.random() * randomNames.length)];
+                } while (usedNames.has(name));
+                
+                usedNames.add(name);
+                
+                recentWinners.push({
+                    id: name,
+                    amount: (Math.random() * 500 + 10).toFixed(2)
+                });
+            }
+            
+            const winnersList = document.getElementById('winners-list');
+            winnersList.innerHTML = '';
+            
+            recentWinners.forEach(winner => {
+                const winnerCard = document.createElement('div');
+                winnerCard.className = 'winner-card';
+                winnerCard.innerHTML = `
+                    <div class="winner-avatar">${winner.id.charAt(4)}</div>
+                    <div class="winner-details">
+                        <div class="winner-name">${winner.id}</div>
+                        <div class="winner-amount">₹${winner.amount}</div>
+                    </div>
+                `;
+                winnersList.appendChild(winnerCard);
+            });
+            
+            // Big winners (5 random entries)
+            const bigWinners = [];
+            const usedBigNames = new Set();
+            
+            for (let i = 0; i < 5; i++) {
+                let name;
+                do {
+                    name = randomNames[Math.floor(Math.random() * randomNames.length)];
+                } while (usedBigNames.has(name) || usedNames.has(name));
+                
+                usedBigNames.add(name);
+                usedNames.add(name);
+                
+                bigWinners.push({
+                    id: name,
+                    amount: (Math.random() * 10000000 + 1000000).toFixed(2),
+                    rank: 'NO' + (i + 1),
+                    game: randomGameNames[Math.floor(Math.random() * randomGameNames.length)]
+                });
+            }
+            
+            const bigWinnersGrid = document.getElementById('big-winners');
+            bigWinnersGrid.innerHTML = '';
+            
+            bigWinners.forEach(winner => {
+                const bigWinnerCard = document.createElement('div');
+                bigWinnerCard.className = 'big-winner-card';
+                bigWinnerCard.innerHTML = `
+                    <div class="big-winner-rank">${winner.rank}</div>
+                    <div class="big-winner-avatar">${winner.id.charAt(4)}</div>
+                    <div class="big-winner-details">
+                        <div class="big-winner-name">${winner.id}</div>
+                        <div class="big-winner-game">${winner.game}</div>
+                        <div class="big-winner-amount">₹${parseFloat(winner.amount).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                    </div>
+                `;
+                bigWinnersGrid.appendChild(bigWinnerCard);
+            });
+        }
+        
+        // Refresh winners
+        function refreshWinners() {
+            showToast('Winners list refreshed', 'info');
+            generateRandomWinners();
+        }
+        
+        // Open game
+        function openGame(gameId) {
+            // In a real app, this would redirect to the game page
+            const game = [...gameData.featuredGames, ...gameData.popularGames, ...gameData.newGames].find(g => g.id === gameId);
+            if (game) {
+                showToast(`Opening ${game.title}...`, 'success');
+            } else {
+                showToast('Game is loading...', 'info');
+            }
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
         
         // Slider controls
         function scrollSlider(sliderId, amount) {
@@ -1078,124 +1253,15 @@
             window.location.href = "index.html";
         }
         
-        // Load user balance from Firebase
-        function loadUserBalance() {
-            database.ref('users/' + userPhone + '/balance').once('value').then((snapshot) => {
-                const balance = snapshot.val() || 0;
-                document.getElementById('user-balance').textContent = '₹' + balance.toLocaleString('en-IN', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-            });
-        }
-        
-        // Load winners data
-        function loadWinners() {
-            // Recent winners
-            const recentWinners = [
-                { id: 'Mem™DEE', amount: 58.80 },
-                { id: 'Mem™OWY', amount: 39.20 },
-                { id: 'Mem™VCL', amount: 284.20 },
-                { id: 'Mem™WSV', amount: 15.68 },
-                { id: 'Mem™WCM', amount: 39.20 },
-                { id: 'Mem™BWA', amount: 26.46 }
-            ];
-            
-            const winnersList = document.getElementById('winners-list');
-            winnersList.innerHTML = '';
-            
-            recentWinners.forEach(winner => {
-                const winnerCard = document.createElement('div');
-                winnerCard.className = 'winner-card';
-                winnerCard.innerHTML = `
-                    <div class="winner-avatar">${winner.id.charAt(4)}</div>
-                    <div class="winner-details">
-                        <div class="winner-name">${winner.id}</div>
-                        <div class="winner-amount">₹${winner.amount.toFixed(2)}</div>
-                    </div>
-                `;
-                winnersList.appendChild(winnerCard);
-            });
-            
-            // Big winners
-            const bigWinners = [
-                { id: 'Mem™B75', amount: 1220446177.16, rank: 'NO1', game: 'Dragon Slots' },
-                { id: 'Axa**pq2', amount: 215600000.00, rank: 'NO2', game: 'Fortune King' },
-                { id: 'B.R***LA', amount: 8016400.00, rank: 'NO3', game: 'Lucky Spin' },
-                { id: 'Mem™SVZ', amount: 8016400.00, rank: 'NO4', game: 'Golden Jackpot' },
-                { id: 'Mem™4PI', amount: 2037570.92, rank: 'NO5', game: 'Treasure Hunt' }
-            ];
-            
-            const bigWinnersGrid = document.getElementById('big-winners');
-            bigWinnersGrid.innerHTML = '';
-            
-            bigWinners.forEach(winner => {
-                const bigWinnerCard = document.createElement('div');
-                bigWinnerCard.className = 'big-winner-card';
-                bigWinnerCard.innerHTML = `
-                    <div class="big-winner-rank">${winner.rank}</div>
-                    <div class="big-winner-avatar">${winner.id.charAt(4)}</div>
-                    <div class="big-winner-details">
-                        <div class="big-winner-name">${winner.id}</div>
-                        <div class="big-winner-game">${winner.game}</div>
-                        <div class="big-winner-amount">₹${winner.amount.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
-                    </div>
-                `;
-                bigWinnersGrid.appendChild(bigWinnerCard);
-            });
-        }
-        
-        // Refresh winners
-        function refreshWinners() {
-            showToast('Winners list refreshed', 'info');
-            loadWinners();
-        }
-        
-        // Open game
-        function openGame(gameId) {
-            // In a real app, this would redirect to the game page
-            showToast(`Opening ${gameId}...`, 'info');
-            
-            // For demo, we'll just show a toast
-            const gameNames = {
-                'game1': 'WIN Go',
-                'game2': 'K3 Lottery',
-                'game3': '5D Lottery',
-                'game4': 'Dragon Slots',
-                'game5': 'Fortune Wheel',
-                'game6': 'Treasure Hunt',
-                'game7': 'Lucky 7',
-                'game8': 'Golden Fish',
-                'game9': 'Jungle King',
-                'game10': 'Magic Wheel',
-                'game11': 'Dragon Slots',
-                'game12': 'Fortune King',
-                'game13': 'Lucky Spin',
-                'game14': 'Golden Jackpot',
-                'game15': 'Treasure Hunt'
-            };
-            
-            showToast(`Playing ${gameNames[gameId]}`, 'success');
-        }
-        
-        // Show toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
-                ${message}
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-        
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
-            loadWinners();
+            loadGameData();
+            loadUserBalance();
+            generateRandomWinners();
+            startSlider();
+            
+            // Auto-refresh winners every 2 minutes
+            setInterval(generateRandomWinners, 120000);
         });
     </script>
 </body>
