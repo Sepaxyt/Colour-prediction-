@@ -648,6 +648,11 @@
         };
         
         firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Admin credentials
+        const ADMIN_PHONE = "9988998899";
+        const ADMIN_PASSWORD = "admin123";
         
         // Check if user is already logged in
         if(localStorage.getItem('userLoggedIn') === 'true') {
@@ -759,28 +764,71 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span> Logging in...';
             
-            // Simulate API call
-            setTimeout(() => {
-                // Save login state
-                if(rememberMe) {
-                    localStorage.setItem('userLoggedIn', 'true');
-                    localStorage.setItem('userPhone', phone);
-                    // Set expiry for 1 day
-                    const expiry = new Date();
-                    expiry.setDate(expiry.getDate() + 1);
-                    localStorage.setItem('loginExpiry', expiry.getTime());
-                } else {
-                    sessionStorage.setItem('userLoggedIn', 'true');
-                    sessionStorage.setItem('userPhone', phone);
-                }
-                
-                showToast('Login successful! Redirecting...');
-                
-                // Redirect to main page
+            // Check if admin login
+            if(phone === ADMIN_PHONE && password === ADMIN_PASSWORD) {
+                // Admin login
                 setTimeout(() => {
-                    window.location.href = "main.html";
-                }, 1000);
-            }, 1500);
+                    // Save login state
+                    if(rememberMe) {
+                        localStorage.setItem('userLoggedIn', 'true');
+                        localStorage.setItem('userPhone', phone);
+                        localStorage.setItem('isAdmin', 'true');
+                        // Set expiry for 1 day
+                        const expiry = new Date();
+                        expiry.setDate(expiry.getDate() + 1);
+                        localStorage.setItem('loginExpiry', expiry.getTime());
+                    } else {
+                        sessionStorage.setItem('userLoggedIn', 'true');
+                        sessionStorage.setItem('userPhone', phone);
+                        sessionStorage.setItem('isAdmin', 'true');
+                    }
+                    
+                    showToast('Admin login successful! Redirecting...');
+                    
+                    // Redirect to main page
+                    setTimeout(() => {
+                        window.location.href = "main.html";
+                    }, 1000);
+                }, 1500);
+                return;
+            }
+            
+            // Normal user login
+            // Check if user exists in Firebase
+            database.ref('users/' + phone).once('value').then((snapshot) => {
+                setTimeout(() => {
+                    const userData = snapshot.val();
+                    if(userData && userData.password === password) {
+                        // Save login state
+                        if(rememberMe) {
+                            localStorage.setItem('userLoggedIn', 'true');
+                            localStorage.setItem('userPhone', phone);
+                            // Set expiry for 1 day
+                            const expiry = new Date();
+                            expiry.setDate(expiry.getDate() + 1);
+                            localStorage.setItem('loginExpiry', expiry.getTime());
+                        } else {
+                            sessionStorage.setItem('userLoggedIn', 'true');
+                            sessionStorage.setItem('userPhone', phone);
+                        }
+                        
+                        showToast('Login successful! Redirecting...');
+                        
+                        // Redirect to main page
+                        setTimeout(() => {
+                            window.location.href = "main.html";
+                        }, 1000);
+                    } else {
+                        showToast('Invalid phone number or password', 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'Login';
+                    }
+                }, 1500);
+            }).catch((error) => {
+                showToast('Error logging in. Please try again.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Login';
+            });
         }
         
         // Register function
@@ -816,32 +864,61 @@
                 return;
             }
             
+            // Check if phone number is admin number
+            if(phone === ADMIN_PHONE) {
+                showToast('This phone number is reserved for admin', 'error');
+                return;
+            }
+            
             // Simulate loading
             const btn = document.getElementById('register-btn');
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span> Registering...';
             
-            // Simulate API call
-            setTimeout(() => {
-                // Save user data
-                localStorage.setItem('userLoggedIn', 'true');
-                localStorage.setItem('userPhone', phone);
-                // Set expiry for 1 day
-                const expiry = new Date();
-                expiry.setDate(expiry.getDate() + 1);
-                localStorage.setItem('loginExpiry', expiry.getTime());
-                
-                if(inviteCode) {
-                    localStorage.setItem('inviteCodeUsed', inviteCode);
+            // Check if user already exists
+            database.ref('users/' + phone).once('value').then((snapshot) => {
+                if(snapshot.exists()) {
+                    showToast('Phone number already registered', 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Register';
+                    return;
                 }
                 
-                showToast('Registration successful! Redirecting...');
-                
-                // Redirect to main page
-                setTimeout(() => {
-                    window.location.href = "main.html";
-                }, 1000);
-            }, 1500);
+                // Create new user in Firebase
+                database.ref('users/' + phone).set({
+                    phone: phone,
+                    password: password,
+                    inviteCode: inviteCode || '',
+                    createdAt: new Date().toISOString()
+                }).then(() => {
+                    // Save user data
+                    localStorage.setItem('userLoggedIn', 'true');
+                    localStorage.setItem('userPhone', phone);
+                    // Set expiry for 1 day
+                    const expiry = new Date();
+                    expiry.setDate(expiry.getDate() + 1);
+                    localStorage.setItem('loginExpiry', expiry.getTime());
+                    
+                    if(inviteCode) {
+                        localStorage.setItem('inviteCodeUsed', inviteCode);
+                    }
+                    
+                    showToast('Registration successful! Redirecting...');
+                    
+                    // Redirect to main page
+                    setTimeout(() => {
+                        window.location.href = "main.html";
+                    }, 1000);
+                }).catch((error) => {
+                    showToast('Error registering. Please try again.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Register';
+                });
+            }).catch((error) => {
+                showToast('Error checking user. Please try again.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Register';
+            });
         }
         
         // Reset password function
@@ -863,13 +940,23 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span> Sending...';
             
-            // Simulate API call
-            setTimeout(() => {
-                showToast('Password reset link sent to your phone number');
+            // Check if user exists
+            database.ref('users/' + phone).once('value').then((snapshot) => {
+                setTimeout(() => {
+                    if(snapshot.exists()) {
+                        showToast('Password reset link sent to your phone number');
+                    } else {
+                        showToast('Phone number not registered', 'error');
+                    }
+                    btn.disabled = false;
+                    btn.textContent = 'Reset Password';
+                    switchTab('login');
+                }, 1500);
+            }).catch((error) => {
+                showToast('Error resetting password. Please try again.', 'error');
                 btn.disabled = false;
                 btn.textContent = 'Reset Password';
-                switchTab('login');
-            }, 1500);
+            });
         }
         
         // Send customer service message to Telegram
@@ -948,26 +1035,29 @@
             }
         }
 
-        // Initialize checkbox functionality
+        // Fix checkbox click issue
         document.addEventListener('DOMContentLoaded', function() {
             // Make terms checkbox clickable on the label
-            document.querySelector('.checkbox-container label[for="agree-terms"]').addEventListener('click', function(e) {
-                e.preventDefault();
-                const checkbox = document.getElementById('agree-terms');
-                checkbox.checked = !checkbox.checked;
-                // Trigger change event
-                const event = new Event('change');
-                checkbox.dispatchEvent(event);
+            document.querySelectorAll('.checkbox-container').forEach(container => {
+                container.addEventListener('click', function(e) {
+                    // Don't prevent default if clicking on a link inside the label
+                    if(e.target.tagName !== 'A') {
+                        const checkbox = container.querySelector('input[type="checkbox"]');
+                        if(checkbox) {
+                            checkbox.checked = !checkbox.checked;
+                            // Trigger change event
+                            const event = new Event('change');
+                            checkbox.dispatchEvent(event);
+                        }
+                    }
+                });
             });
             
-            // Make remember me checkbox clickable on the label
-            document.querySelector('.checkbox-container label[for="remember-me"]').addEventListener('click', function(e) {
-                e.preventDefault();
-                const checkbox = document.getElementById('remember-me');
-                checkbox.checked = !checkbox.checked;
-                // Trigger change event
-                const event = new Event('change');
-                checkbox.dispatchEvent(event);
+            // Prevent label click from triggering container click when clicking on link
+            document.querySelectorAll('.checkbox-container a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
             });
         });
     </script>
