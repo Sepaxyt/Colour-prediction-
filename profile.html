@@ -141,12 +141,23 @@
         
         .stat-item {
             text-align: center;
+            min-width: 100px;
         }
         
         .stat-value {
             font-size: 1.2rem;
             font-weight: 600;
             color: var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .copy-btn {
+            margin-left: 5px;
+            cursor: pointer;
+            color: var(--secondary);
+            font-size: 0.8rem;
         }
         
         .stat-label {
@@ -297,17 +308,17 @@
                 <div class="profile-avatar" id="user-avatar">
                     <span id="avatar-text">M</span>
                 </div>
-                <h2 class="profile-name" id="user-name">Mem™US3MZ</h2>
-                <div class="profile-id">Member ID: <span id="user-id">US3MZ</span></div>
+                <h2 class="profile-name" id="user-name">Loading...</h2>
+                <div class="profile-id">Member ID: <span id="user-id">Loading...</span></div>
             </div>
             
             <div class="profile-stats">
                 <div class="stat-item">
-                    <div class="stat-value" id="user-balance">¥3.82</div>
+                    <div class="stat-value" id="user-balance">₹0.00<span class="copy-btn" onclick="copyToClipboard('balance')"><i class="far fa-copy"></i></span></div>
                     <div class="stat-label">Balance</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value" id="total-wins">27</div>
+                    <div class="stat-value" id="total-wins">0</div>
                     <div class="stat-label">Total Wins</div>
                 </div>
                 <div class="stat-item">
@@ -319,15 +330,15 @@
             <div class="profile-details">
                 <div class="detail-item">
                     <span class="detail-label">Registration Date:</span>
-                    <span class="detail-value" id="reg-date">2025-06-22</span>
+                    <span class="detail-value" id="reg-date">Loading...</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Last Login:</span>
-                    <span class="detail-value" id="last-login">2025-06-22, 16:26</span>
+                    <span class="detail-value" id="last-login">Loading...</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Phone Number:</span>
-                    <span class="detail-value" id="phone-number">+91 ••••• •••89</span>
+                    <span class="detail-value" id="phone-number">Loading...</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Account Status:</span>
@@ -396,6 +407,9 @@
         } else {
             // Load user data from Firebase
             loadUserData();
+            
+            // Set up real-time balance listener
+            setupRealtimeUpdates();
         }
         
         // Load user data
@@ -405,28 +419,104 @@
                 
                 if(userData) {
                     // Set avatar with first letter of UID
-                    const uid = userData.uid || "US3MZ";
+                    const uid = userData.uid || generateUID();
                     document.getElementById('avatar-text').textContent = uid.charAt(0);
                     document.getElementById('user-name').textContent = `Mem™${uid}`;
                     document.getElementById('user-id').textContent = uid;
                     
                     // Set other user data
-                    document.getElementById('user-balance').textContent = `¥${(userData.balance || 0).toFixed(2)}`;
+                    updateBalanceDisplay(userData.balance || 0);
                     document.getElementById('total-wins').textContent = userData.totalWins || 0;
                     document.getElementById('vip-level').textContent = userData.vipLevel || 1;
-                    document.getElementById('reg-date').textContent = userData.registrationDate || "2025-06-22";
-                    document.getElementById('last-login').textContent = userData.lastLogin || "2025-06-22, 16:26";
                     
-                    // Mask phone number
+                    // Format dates
+                    const regDate = userData.registrationDate ? formatDate(userData.registrationDate) : formatDate(new Date().toISOString());
+                    const lastLogin = userData.lastLogin ? formatDate(userData.lastLogin) : formatDate(new Date().toISOString());
+                    
+                    document.getElementById('reg-date').textContent = regDate;
+                    document.getElementById('last-login').textContent = lastLogin;
+                    
+                    // Show full phone number
                     if(userData.phone) {
                         const phone = userData.phone.toString();
-                        const masked = `+${phone.substring(0,2)} ••••• •••${phone.substring(phone.length-2)}`;
-                        document.getElementById('phone-number').textContent = masked;
+                        const formattedPhone = `+${phone.substring(0,2)} ${phone.substring(2,7)} ${phone.substring(7)}`;
+                        document.getElementById('phone-number').textContent = formattedPhone;
+                    } else {
+                        document.getElementById('phone-number').textContent = `+${userPhone}`;
+                    }
+                    
+                    // Save UID if not already set
+                    if(!userData.uid) {
+                        database.ref('users/' + userPhone + '/uid').set(uid);
                     }
                 }
             }).catch((error) => {
                 console.error("Error loading user data:", error);
                 showToast('Error loading profile data', 'error');
+            });
+        }
+        
+        // Set up real-time updates for balance
+        function setupRealtimeUpdates() {
+            database.ref('users/' + userPhone + '/balance').on('value', (snapshot) => {
+                const balance = snapshot.val() || 0;
+                updateBalanceDisplay(balance);
+            });
+            
+            database.ref('users/' + userPhone + '/totalWins').on('value', (snapshot) => {
+                const wins = snapshot.val() || 0;
+                document.getElementById('total-wins').textContent = wins;
+            });
+        }
+        
+        // Update balance display with proper formatting
+        function updateBalanceDisplay(balance) {
+            const formattedBalance = parseFloat(balance).toLocaleString('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            document.getElementById('user-balance').innerHTML = `${formattedBalance}<span class="copy-btn" onclick="copyToClipboard('balance')"><i class="far fa-copy"></i></span>`;
+        }
+        
+        // Generate a random UID if none exists
+        function generateUID() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let uid = '';
+            for(let i = 0; i < 5; i++) {
+                uid += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return uid;
+        }
+        
+        // Format date to YYYY-MM-DD, HH:MM
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}, ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        }
+        
+        // Copy to clipboard function
+        function copyToClipboard(type) {
+            let textToCopy = '';
+            
+            switch(type) {
+                case 'balance':
+                    const balanceText = document.getElementById('user-balance').textContent;
+                    textToCopy = balanceText.replace('₹', '').trim();
+                    break;
+                case 'uid':
+                    textToCopy = document.getElementById('user-id').textContent;
+                    break;
+                default:
+                    return;
+            }
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast('Copied to clipboard!', 'success');
+            }).catch((err) => {
+                showToast('Failed to copy', 'error');
+                console.error('Could not copy text: ', err);
             });
         }
         
