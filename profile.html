@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 Club - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .back-btn {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn i {
+            margin-right: 5px;
+        }
+        
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            position: relative;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .profile-id {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .profile-details {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: var(--gray);
+        }
+        
+        .detail-value {
+            font-weight: 500;
+        }
+        
+        .profile-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .action-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .action-card i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+        
+        .action-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .action-desc {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .profile-stats {
+                flex-wrap: wrap;
+            }
+            
+            .profile-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="main.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            
+            <div class="logo">
+                <div class="logo-img">53</div>
+                <h1>53 Club</h1>
+            </div>
+            
+            <div style="width: 60px;"> <!-- Spacer for alignment --> </div>
+        </header>
+        
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar" id="user-avatar">
+                    <span id="avatar-text">M</span>
+                </div>
+                <h2 class="profile-name" id="user-name">Mem™US3MZ</h2>
+                <div class="profile-id">Member ID: <span id="user-id">US3MZ</span></div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="user-balance">¥3.82</div>
+                    <div class="stat-label">Balance</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-wins">27</div>
+                    <div class="stat-label">Total Wins</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="vip-level">1</div>
+                    <div class="stat-label">VIP Level</div>
+                </div>
+            </div>
+            
+            <div class="profile-details">
+                <div class="detail-item">
+                    <span class="detail-label">Registration Date:</span>
+                    <span class="detail-value" id="reg-date">2025-06-22</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Last Login:</span>
+                    <span class="detail-value" id="last-login">2025-06-22, 16:26</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Phone Number:</span>
+                    <span class="detail-value" id="phone-number">+91 ••••• •••89</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Account Status:</span>
+                    <span class="detail-value" id="account-status">Active</span>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <div class="action-card" onclick="window.location.href='game-history.html'">
+                    <div class="action-title"><i class="fas fa-history"></i> Game History</div>
+                    <div class="action-desc">View your complete game history</div>
+                </div>
+                
+                <div class="action-card" onclick="window.location.href='deposit.html'">
+                    <div class="action-title"><i class="fas fa-wallet"></i> Deposit</div>
+                    <div class="action-desc">Add funds to your account</div>
+                </div>
+                
+                <div class="action-card" onclick="window.location.href='withdraw.html'">
+                    <div class="action-title"><i class="fas fa-money-bill-wave"></i> Withdraw</div>
+                    <div class="action-desc">Withdraw your winnings</div>
+                </div>
+                
+                <div class="action-card" onclick="window.location.href='notifications.html'">
+                    <div class="action-title"><i class="fas fa-bell"></i> Notifications</div>
+                    <div class="action-desc">Check your notifications</div>
+                </div>
+                
+                <div class="action-card" onclick="window.location.href='vip.html'">
+                    <div class="action-title"><i class="fas fa-crown"></i> VIP Club</div>
+                    <div class="action-desc">View VIP benefits and rewards</div>
+                </div>
+                
+                <div class="action-card" onclick="window.location.href='settings.html'">
+                    <div class="action-title"><i class="fas fa-cog"></i> Settings</div>
+                    <div class="action-desc">Manage your account settings</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.firebasestorage.app",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Check if user is logged in
+        const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
+        if(!userPhone) {
+            window.location.href = "index.html";
+        } else {
+            // Load user data from Firebase
+            loadUserData();
+        }
+        
+        // Load user data
+        function loadUserData() {
+            database.ref('users/' + userPhone).once('value').then((snapshot) => {
+                const userData = snapshot.val();
+                
+                if(userData) {
+                    // Set avatar with first letter of UID
+                    const uid = userData.uid || "US3MZ";
+                    document.getElementById('avatar-text').textContent = uid.charAt(0);
+                    document.getElementById('user-name').textContent = `Mem™${uid}`;
+                    document.getElementById('user-id').textContent = uid;
+                    
+                    // Set other user data
+                    document.getElementById('user-balance').textContent = `¥${(userData.balance || 0).toFixed(2)}`;
+                    document.getElementById('total-wins').textContent = userData.totalWins || 0;
+                    document.getElementById('vip-level').textContent = userData.vipLevel || 1;
+                    document.getElementById('reg-date').textContent = userData.registrationDate || "2025-06-22";
+                    document.getElementById('last-login').textContent = userData.lastLogin || "2025-06-22, 16:26";
+                    
+                    // Mask phone number
+                    if(userData.phone) {
+                        const phone = userData.phone.toString();
+                        const masked = `+${phone.substring(0,2)} ••••• •••${phone.substring(phone.length-2)}`;
+                        document.getElementById('phone-number').textContent = masked;
+                    }
+                }
+            }).catch((error) => {
+                console.error("Error loading user data:", error);
+                showToast('Error loading profile data', 'error');
+            });
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
