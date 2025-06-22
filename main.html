@@ -381,36 +381,6 @@
             background: rgba(0, 0, 0, 0.3);
         }
         
-        .auto-slide-content {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1;
-            max-width: 60%;
-        }
-        
-        .auto-slide h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: white;
-        }
-        
-        .auto-slide p {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-        
-        .auto-slide .btn {
-            padding: 6px 15px;
-            background: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-        
         .auto-slider-dots {
             position: absolute;
             bottom: 15px;
@@ -448,24 +418,31 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            position: relative;
         }
         
         .winning-title {
             font-size: 1.1rem;
             font-weight: 600;
-        }
-        
-        .refresh-btn {
-            background: none;
-            border: none;
-            color: var(--secondary);
-            cursor: pointer;
             display: flex;
             align-items: center;
         }
         
-        .refresh-btn i {
-            margin-right: 5px;
+        .winning-title i {
+            margin-right: 10px;
+            color: var(--warning);
+        }
+        
+        .refresh-indicator {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .winners-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
         
         .winners-list {
@@ -475,11 +452,18 @@
         }
         
         .winner-card {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(106, 17, 203, 0.1);
             border-radius: 8px;
             padding: 12px;
             display: flex;
             align-items: center;
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .winner-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
         .winner-avatar {
@@ -512,7 +496,13 @@
         .winner-amount {
             font-size: 0.8rem;
             color: var(--success);
-            font-weight: 500;
+            font-weight: 600;
+        }
+        
+        .winner-game {
+            font-size: 0.7rem;
+            color: var(--gray);
+            margin-top: 2px;
         }
         
         .big-winners {
@@ -524,6 +514,12 @@
             font-weight: 600;
             margin-bottom: 15px;
             color: var(--warning);
+            display: flex;
+            align-items: center;
+        }
+        
+        .big-winners-title i {
+            margin-right: 10px;
         }
         
         .big-winners-grid {
@@ -533,11 +529,18 @@
         }
         
         .big-winner-card {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(74, 107, 255, 0.1);
             border-radius: 8px;
             padding: 15px;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+            border-left: 3px solid var(--warning);
+        }
+        
+        .big-winner-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         
         .big-winner-card::before {
@@ -547,7 +550,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(106, 17, 203, 0.1), rgba(74, 107, 255, 0.1));
+            background: linear-gradient(135deg, rgba(106, 17, 203, 0.05), rgba(74, 107, 255, 0.05));
             z-index: -1;
         }
         
@@ -558,6 +561,9 @@
             font-size: 0.8rem;
             color: var(--warning);
             font-weight: 600;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
         }
         
         .big-winner-avatar {
@@ -666,10 +672,6 @@
                 font-size: 1.2rem;
             }
             
-            .auto-slide-content {
-                max-width: 80%;
-            }
-            
             .winners-list {
                 grid-template-columns: 1fr 1fr;
             }
@@ -718,6 +720,16 @@
         .toast-icon {
             margin-right: 10px;
             font-size: 1.2rem;
+        }
+        
+        /* Animation for winners */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .winner-card {
+            animation: fadeIn 0.5s ease;
         }
     </style>
 </head>
@@ -797,63 +809,24 @@
             </div>
         </div>
         
-        <!-- New Games Section -->
-        <div class="games-section">
-            <div class="section-header">
-                <h3 class="section-title">New Games</h3>
-                <a href="new-games.html" class="see-all">See All</a>
-            </div>
-            
-            <div class="games-container">
-                <div class="games-slider" id="new-games">
-                    <!-- New games will be loaded dynamically from JSON -->
-                </div>
-                
-                <div class="slider-controls">
-                    <div class="slider-btn left" onclick="scrollSlider('new-games', -150)"><i class="fas fa-chevron-left"></i></div>
-                    <div class="slider-btn right" onclick="scrollSlider('new-games', 150)"><i class="fas fa-chevron-right"></i></div>
-                </div>
-            </div>
-        </div>
-        
         <!-- Winning Information Section -->
         <div class="winning-info">
             <div class="winning-info-header">
-                <h3 class="winning-title">Winning Information</h3>
-                <button class="refresh-btn" onclick="refreshWinners()">
-                    <i class="fas fa-sync-alt"></i>
-                    Refresh
-                </button>
+                <h3 class="winning-title"><i class="fas fa-trophy"></i> Winning Information</h3>
+                <div class="refresh-indicator" id="refresh-timer">Auto-refreshing in 5s</div>
             </div>
             
-            <div class="winners-list" id="winners-list">
-                <!-- Winners will be loaded dynamically -->
+            <div class="winners-container">
+                <div class="winners-list" id="winners-list">
+                    <!-- Winners will be loaded dynamically -->
+                </div>
             </div>
             
             <div class="big-winners">
-                <h4 class="big-winners-title">Today's Big Winners</h4>
+                <h4 class="big-winners-title"><i class="fas fa-crown"></i> Today's Big Winners</h4>
                 
                 <div class="big-winners-grid" id="big-winners">
                     <!-- Big winners will be loaded dynamically -->
-                </div>
-            </div>
-        </div>
-        
-        <!-- Recommended Games Section -->
-        <div class="games-section">
-            <div class="section-header">
-                <h3 class="section-title">Recommended For You</h3>
-                <a href="recommended-games.html" class="see-all">See All</a>
-            </div>
-            
-            <div class="games-container">
-                <div class="games-slider" id="recommended-games">
-                    <!-- Recommended games will be loaded dynamically -->
-                </div>
-                
-                <div class="slider-controls">
-                    <div class="slider-btn left" onclick="scrollSlider('recommended-games', -150)"><i class="fas fa-chevron-left"></i></div>
-                    <div class="slider-btn right" onclick="scrollSlider('recommended-games', 150)"><i class="fas fa-chevron-right"></i></div>
                 </div>
             </div>
         </div>
@@ -901,90 +874,50 @@
             window.location.href = "index.html";
         }
         
-        // Game data JSON structure
+        // Game data JSON structure with your provided images
         const gameData = {
-            featuredGames: [
+            featuredBanners: [
                 {
-                    id: "game1",
-                    title: "Dragon's Treasure",
-                    description: "Win up to ₹10,00,000 in this exciting adventure",
-                    image: "https://via.placeholder.com/800x400/6a11cb/ffffff?text=Dragon+Treasure",
-                    buttonText: "Play Now"
+                    id: "banner1",
+                    image: "https://i.ibb.co/27qvcHJH/Banner-20250117222909yv6t.jpg"
                 },
                 {
-                    id: "game2",
-                    title: "Lucky Spin",
-                    description: "Spin the wheel for instant rewards",
-                    image: "https://via.placeholder.com/800x400/4a6bff/ffffff?text=Lucky+Spin",
-                    buttonText: "Play Now"
+                    id: "banner2",
+                    image: "https://i.ibb.co/n8Rfxnnm/Banner-202501172229382rs9.jpg"
                 },
                 {
-                    id: "game3",
-                    title: "Fortune King",
-                    description: "Become the king of fortune",
-                    image: "https://via.placeholder.com/800x400/28a745/ffffff?text=Fortune+King",
-                    buttonText: "Play Now"
+                    id: "banner3",
+                    image: "https://i.ibb.co/8nbjPn8Y/Banner-20250117222949rbe6.jpg"
                 },
                 {
-                    id: "game4",
-                    title: "Golden Jackpot",
-                    description: "Hit the jackpot and win big",
-                    image: "https://via.placeholder.com/800x400/dc3545/ffffff?text=Golden+Jackpot",
-                    buttonText: "Play Now"
+                    id: "banner4",
+                    image: "https://i.ibb.co/Gv8cvNsw/Banner-20250117223036ogqj.jpg"
+                },
+                {
+                    id: "banner5",
+                    image: "https://i.ibb.co/6cmc3tL5/Banner-20250117223118sxi7.jpg"
                 }
             ],
             popularGames: [
                 {
-                    id: "game5",
+                    id: "wingo",
                     title: "WIN Go",
-                    image: "https://via.placeholder.com/300x200/6a11cb/ffffff?text=WIN+Go"
+                    image: "https://i.ibb.co/GfZgdQgD/lotterycategory-202501081300366bjd.png"
                 },
                 {
-                    id: "game6",
+                    id: "k3",
                     title: "K3 Lottery",
-                    image: "https://via.placeholder.com/300x200/4a6bff/ffffff?text=K3+Lottery"
+                    image: "https://i.ibb.co/8D3fksgB/lotterycategory-20250108130042mug3.png"
                 },
                 {
-                    id: "game7",
+                    id: "5d",
                     title: "5D Lottery",
-                    image: "https://via.placeholder.com/300x200/28a745/ffffff?text=5D+Lottery"
+                    image: "https://i.ibb.co/Y7PSCL39/lotterycategory-20250108130049l1jl.png"
                 },
                 {
-                    id: "game8",
-                    title: "Dragon Slots",
-                    image: "https://via.placeholder.com/300x200/dc3545/ffffff?text=Dragon+Slots"
-                },
-                {
-                    id: "game9",
-                    title: "Fortune Wheel",
-                    image: "https://via.placeholder.com/300x200/ffc107/121212?text=Fortune+Wheel"
-                }
-            ],
-            newGames: [
-                {
-                    id: "game10",
-                    title: "Treasure Hunt",
-                    image: "https://via.placeholder.com/300x200/17a2b8/ffffff?text=Treasure+Hunt"
-                },
-                {
-                    id: "game11",
-                    title: "Lucky 7",
-                    image: "https://via.placeholder.com/300x200/6610f2/ffffff?text=Lucky+7"
-                },
-                {
-                    id: "game12",
-                    title: "Golden Fish",
-                    image: "https://via.placeholder.com/300x200/20c997/ffffff?text=Golden+Fish"
-                },
-                {
-                    id: "game13",
-                    title: "Jungle King",
-                    image: "https://via.placeholder.com/300x200/fd7e14/ffffff?text=Jungle+King"
-                },
-                {
-                    id: "game14",
-                    title: "Magic Wheel",
-                    image: "https://via.placeholder.com/300x200/e83e8c/ffffff?text=Magic+Wheel"
+                    id: "trx",
+                    title: "TRX Lottery",
+                    image: "https://i.ibb.co/b5K58SSr/lotterycategory-20250108130057tmo2.png"
                 }
             ]
         };
@@ -1000,21 +933,21 @@
         
         // Random game names for winners
         const randomGameNames = [
-            "WIN Go", "K3 Lottery", "5D Lottery", "Dragon Slots", "Fortune Wheel",
-            "Treasure Hunt", "Lucky 7", "Golden Fish", "Jungle King", "Magic Wheel",
-            "Dragon's Treasure", "Lucky Spin", "Fortune King", "Golden Jackpot"
+            "WIN Go", "K3 Lottery", "5D Lottery", "TRX Lottery"
         ];
         
         // Auto slider functionality
         let currentSlide = 0;
-        const slides = document.querySelectorAll('.auto-slide');
         let slideInterval;
         
         function startSlider() {
             slideInterval = setInterval(() => {
                 currentSlide = (currentSlide + 1) % document.querySelectorAll('.auto-slide').length;
                 updateSlider();
-            }, 3000);
+            }, 5000); // Change slide every 5 seconds
+            
+            // Update timer display
+            updateRefreshTimer();
         }
         
         function updateSlider() {
@@ -1040,19 +973,16 @@
         
         // Load game data
         function loadGameData() {
-            // Load featured games
+            // Load featured banners
             const autoSlider = document.getElementById('auto-slider');
             const sliderDots = document.getElementById('auto-slider-dots');
             
-            gameData.featuredGames.forEach((game, index) => {
+            autoSlider.innerHTML = '';
+            sliderDots.innerHTML = '';
+            
+            gameData.featuredBanners.forEach((banner, index) => {
                 autoSlider.innerHTML += `
-                    <div class="auto-slide" style="background-image: url('${game.image}')">
-                        <div class="auto-slide-content">
-                            <h3>${game.title}</h3>
-                            <p>${game.description}</p>
-                            <button class="btn" onclick="openGame('${game.id}')">${game.buttonText}</button>
-                        </div>
-                    </div>
+                    <div class="auto-slide" style="background-image: url('${banner.image}')"></div>
                 `;
                 
                 sliderDots.innerHTML += `
@@ -1062,34 +992,10 @@
             
             // Load popular games
             const popularGames = document.getElementById('popular-games');
+            popularGames.innerHTML = '';
+            
             gameData.popularGames.forEach(game => {
                 popularGames.innerHTML += `
-                    <div class="game-card" onclick="openGame('${game.id}')">
-                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
-                            <div class="game-title">${game.title}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            // Load new games
-            const newGames = document.getElementById('new-games');
-            gameData.newGames.forEach(game => {
-                newGames.innerHTML += `
-                    <div class="game-card" onclick="openGame('${game.id}')">
-                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
-                            <div class="game-title">${game.title}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            // Load recommended games (mix of popular and new)
-            const recommendedGames = document.getElementById('recommended-games');
-            const mixedGames = [...gameData.popularGames.slice(0, 2), ...gameData.newGames.slice(0, 3)];
-            
-            mixedGames.forEach(game => {
-                recommendedGames.innerHTML += `
                     <div class="game-card" onclick="openGame('${game.id}')">
                         <div class="game-thumbnail" style="background-image: url('${game.image}')">
                             <div class="game-title">${game.title}</div>
@@ -1129,7 +1035,8 @@
                 
                 recentWinners.push({
                     id: name,
-                    amount: (Math.random() * 500 + 10).toFixed(2)
+                    amount: (Math.random() * 500 + 10).toFixed(2),
+                    game: randomGameNames[Math.floor(Math.random() * randomGameNames.length)]
                 });
             }
             
@@ -1144,6 +1051,7 @@
                     <div class="winner-details">
                         <div class="winner-name">${winner.id}</div>
                         <div class="winner-amount">₹${winner.amount}</div>
+                        <div class="winner-game">${winner.game}</div>
                     </div>
                 `;
                 winnersList.appendChild(winnerCard);
@@ -1189,16 +1097,26 @@
             });
         }
         
-        // Refresh winners
-        function refreshWinners() {
-            showToast('Winners list refreshed', 'info');
-            generateRandomWinners();
+        // Update refresh timer display
+        function updateRefreshTimer() {
+            let seconds = 5;
+            const timerElement = document.getElementById('refresh-timer');
+            
+            const timerInterval = setInterval(() => {
+                seconds--;
+                timerElement.textContent = `Auto-refreshing in ${seconds}s`;
+                
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    generateRandomWinners();
+                    updateRefreshTimer(); // Restart the timer
+                }
+            }, 1000);
         }
         
         // Open game
         function openGame(gameId) {
-            // In a real app, this would redirect to the game page
-            const game = [...gameData.featuredGames, ...gameData.popularGames, ...gameData.newGames].find(g => g.id === gameId);
+            const game = gameData.popularGames.find(g => g.id === gameId);
             if (game) {
                 showToast(`Opening ${game.title}...`, 'success');
             } else {
@@ -1259,9 +1177,6 @@
             loadUserBalance();
             generateRandomWinners();
             startSlider();
-            
-            // Auto-refresh winners every 2 minutes
-            setInterval(generateRandomWinners, 120000);
         });
     </script>
 </body>
