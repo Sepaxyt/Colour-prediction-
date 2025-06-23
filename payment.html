@@ -411,7 +411,9 @@
                 document.getElementById('submit-btn').disabled = true;
                 
                 // Update transaction status in Firebase
-                database.ref('deposits/' + userPhone + '/' + transactionId + '/status').set('expired');
+                database.ref('deposits/' + userPhone + '/' + transactionId).update({
+                    status: 'expired'
+                });
                 
                 // Create notification
                 createNotification(
@@ -479,12 +481,16 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span> Verifying...';
             
-            // Update transaction in Firebase
-            database.ref('deposits/' + userPhone + '/' + transactionId).update({
-                utr: utrNumber,
+            // Create deposit record in Firebase
+            const depositData = {
+                amount: amount,
                 status: 'processing',
-                verifiedAt: Date.now()
-            })
+                timestamp: Date.now(),
+                utr: utrNumber,
+                channel: 'UPI'
+            };
+            
+            database.ref('deposits/' + userPhone + '/' + transactionId).set(depositData)
             .then(() => {
                 // Send notification to admin
                 database.ref('adminNotifications').push({
