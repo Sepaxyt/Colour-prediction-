@@ -392,7 +392,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const transactionId = urlParams.get('txn');
         const amount = parseInt(urlParams.get('amount'));
-        const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
+        const userPhone = urlParams.get('phone');
         
         // Set payment amount
         document.getElementById('payment-amount').textContent = `₹${amount.toLocaleString('en-IN')}`;
@@ -482,16 +482,32 @@
             // Update transaction in Firebase
             database.ref('deposits/' + userPhone + '/' + transactionId).update({
                 utr: utrNumber,
-                status: 'pending_approval',
-                timestamp: Date.now()
+                status: 'processing',
+                verifiedAt: Date.now()
             })
             .then(() => {
-                // Notify admin
-                notifyAdmin(utrNumber, amount, userPhone, transactionId);
+                // Send notification to admin
+                database.ref('adminNotifications').push({
+                    type: 'deposit',
+                    userId: userPhone,
+                    transactionId: transactionId,
+                    amount: amount,
+                    utr: utrNumber,
+                    status: 'pending',
+                    timestamp: Date.now(),
+                    read: false
+                });
+                
+                // Create success notification for user
+                createNotification(
+                    'Payment Submitted',
+                    `Your payment of ₹${amount} has been submitted for verification. UTR: ${utrNumber}`,
+                    'info'
+                );
                 
                 showToast('Payment submitted for verification!', 'success');
                 
-                // Redirect to wallet after delay
+                // Redirect back to wallet after delay
                 setTimeout(() => {
                     window.location.href = 'wallet.html';
                 }, 1500);
@@ -504,30 +520,7 @@
             });
         }
         
-        // Notify admin about new payment
-        function notifyAdmin(utr, amount, phone, txnId) {
-            // Create admin notification
-            database.ref('adminNotifications').push().set({
-                type: 'deposit_approval',
-                userPhone: phone,
-                amount: amount,
-                utr: utr,
-                transactionId: txnId,
-                timestamp: Date.now(),
-                status: 'pending'
-            });
-            
-            // Also update the transaction in admin view
-            database.ref('adminTransactions').child(txnId).set({
-                userPhone: phone,
-                amount: amount,
-                utr: utr,
-                status: 'pending_approval',
-                timestamp: Date.now()
-            });
-        }
-        
-        // Create user notification
+        // Create notification
         function createNotification(title, message, type) {
             const notificationId = 'NOT' + Date.now();
             
