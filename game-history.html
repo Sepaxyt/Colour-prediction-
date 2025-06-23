@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 Club - Game History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --green: #28a745;
+            --violet: #6f42c1;
+            --red: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.2rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .back-btn {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn i {
+            margin-right: 5px;
+        }
+        
+        .history-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .history-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .history-tabs {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .history-tab {
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .history-tab.active {
+            background: var(--primary);
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .history-table th {
+            text-align: left;
+            padding: 10px;
+            color: var(--gray);
+            font-weight: normal;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .history-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .history-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-won {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+        
+        .status-lost {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: var(--danger);
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+        
+        .color-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .color-green {
+            background-color: var(--green);
+        }
+        
+        .color-violet {
+            background-color: var(--violet);
+        }
+        
+        .color-red {
+            background-color: var(--red);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .page-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+        }
+        
+        .page-btn.active {
+            background: var(--primary);
+        }
+        
+        .no-history {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--gray);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .history-table {
+                font-size: 0.8rem;
+            }
+            
+            .history-table th, 
+            .history-table td {
+                padding: 8px 5px;
+            }
+            
+            .history-tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="main.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            
+            <div class="logo">
+                <div class="logo-img">53</div>
+                <h1>53 Club</h1>
+            </div>
+            
+            <div style="width: 60px;"></div>
+        </header>
+        
+        <div class="history-container">
+            <div class="history-header">
+                <h2 class="history-title">Game History</h2>
+                <div class="history-tabs">
+                    <div class="history-tab active" onclick="showTab('all')">All Games</div>
+                    <div class="history-tab" onclick="showTab('wingo30')">WinGo 30s</div>
+                    <div class="history-tab" onclick="showTab('wingo1')">WinGo 1m</div>
+                    <div class="history-tab" onclick="showTab('wingo3')">WinGo 3m</div>
+                    <div class="history-tab" onclick="showTab('wingo5')">WinGo 5m</div>
+                </div>
+            </div>
+            
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Game</th>
+                        <th>Bet Type</th>
+                        <th>Amount</th>
+                        <th>Result</th>
+                        <th>Win/Loss</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <!-- History items will be loaded here -->
+                </tbody>
+            </table>
+            
+            <div id="no-history" class="no-history" style="display: none;">
+                No history found
+            </div>
+            
+            <div class="pagination">
+                <div class="page-btn" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i></div>
+                <div class="page-btn active" id="page-1">1</div>
+                <div class="page-btn" id="page-2">2</div>
+                <div class="page-btn" id="page-3">3</div>
+                <div class="page-btn" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.firebasestorage.app",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Game state variables
+        let currentTab = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let allBets = [];
+        let filteredBets = [];
+        
+        // Check if user is logged in
+        const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
+        if(!userPhone) {
+            window.location.href = "index.html";
+        } else {
+            // Load user bets
+            loadUserBets();
+        }
+        
+        // Load all user bets from database
+        function loadUserBets() {
+            database.ref('bets').once('value').then((snapshot) => {
+                allBets = [];
+                
+                snapshot.forEach(gameTypeSnapshot => {
+                    const gameType = gameTypeSnapshot.key;
+                    
+                    gameTypeSnapshot.forEach(periodSnapshot => {
+                        const period = periodSnapshot.key;
+                        
+                        periodSnapshot.forEach(userSnapshot => {
+                            if(userSnapshot.key === userPhone) {
+                                userSnapshot.forEach(betSnapshot => {
+                                    const bet = betSnapshot.val();
+                                    bet.id = betSnapshot.key;
+                                    bet.gameType = gameType;
+                                    bet.period = period;
+                                    
+                                    // Calculate time ago
+                                    const now = new Date();
+                                    const betTime = new Date(bet.timestamp);
+                                    const diffSeconds = Math.floor((now - betTime) / 1000);
+                                    
+                                    if(diffSeconds < 60) {
+                                        bet.timeAgo = `${diffSeconds} sec ago`;
+                                    } else if(diffSeconds < 3600) {
+                                        bet.timeAgo = `${Math.floor(diffSeconds / 60)} min ago`;
+                                    } else if(diffSeconds < 86400) {
+                                        bet.timeAgo = `${Math.floor(diffSeconds / 3600)} hour ago`;
+                                    } else {
+                                        bet.timeAgo = `${Math.floor(diffSeconds / 86400)} day ago`;
+                                    }
+                                    
+                                    allBets.push(bet);
+                                });
+                            }
+                        });
+                    });
+                });
+                
+                // Sort by timestamp (newest first)
+                allBets.sort((a, b) => b.timestamp - a.timestamp);
+                
+                // Apply current filter
+                filterBets();
+                
+                // Update pagination
+                updatePagination();
+            }).catch(error => {
+                console.error("Error loading bets:", error);
+            });
+        }
+        
+        // Filter bets based on current tab
+        function filterBets() {
+            if(currentTab === 'all') {
+                filteredBets = [...allBets];
+            } else {
+                filteredBets = allBets.filter(bet => bet.gameType === currentTab);
+            }
+            
+            // Display first page
+            displayPage(1);
+        }
+        
+        // Display specific page of bets
+        function displayPage(page) {
+            currentPage = page;
+            const startIdx = (page - 1) * itemsPerPage;
+            const endIdx = startIdx + itemsPerPage;
+            const pageBets = filteredBets.slice(startIdx, endIdx);
+            
+            const historyBody = document.getElementById('history-body');
+            historyBody.innerHTML = '';
+            
+            if(pageBets.length === 0) {
+                document.getElementById('no-history').style.display = 'block';
+                historyBody.style.display = 'none';
+            } else {
+                document.getElementById('no-history').style.display = 'none';
+                historyBody.style.display = 'table-row-group';
+                
+                pageBets.forEach(bet => {
+                    const row = document.createElement('tr');
+                    
+                    // Determine bet type display
+                    let betType = '';
+                    if(bet.type === 'number') {
+                        betType = `Number ${bet.number}`;
+                    } else if(bet.type === 'color') {
+                        betType = bet.color.charAt(0).toUpperCase() + bet.color.slice(1);
+                    } else if(bet.type === 'size') {
+                        betType = bet.size.charAt(0).toUpperCase() + bet.size.slice(1);
+                    }
+                    
+                    // Determine result display
+                    let resultDisplay = '-';
+                    if(bet.result) {
+                        let colorClass = '';
+                        if(bet.result.color === 'green') colorClass = 'color-green';
+                        else if(bet.result.color === 'violet') colorClass = 'color-violet';
+                        else if(bet.result.color === 'red') colorClass = 'color-red';
+                        
+                        resultDisplay = `
+                            ${bet.result.number} | 
+                            <span class="color-indicator ${colorClass}"></span>${bet.result.color} | 
+                            ${bet.result.size}
+                        `;
+                    }
+                    
+                    // Determine win/loss display
+                    let winLossDisplay = '-';
+                    if(bet.status === 'won') {
+                        winLossDisplay = `+₹${bet.winAmount.toFixed(2)}`;
+                    } else if(bet.status === 'lost') {
+                        winLossDisplay = `-₹${bet.amount.toFixed(2)}`;
+                    }
+                    
+                    // Determine status badge
+                    let statusBadge = '';
+                    if(bet.status === 'won') {
+                        statusBadge = `<span class="status-badge status-won">Won</span>`;
+                    } else if(bet.status === 'lost') {
+                        statusBadge = `<span class="status-badge status-lost">Lost</span>`;
+                    } else {
+                        statusBadge = `<span class="status-badge status-pending">Pending</span>`;
+                    }
+                    
+                    // Determine game name
+                    let gameName = '';
+                    switch(bet.gameType) {
+                        case 'wingo30': gameName = 'WinGo 30s'; break;
+                        case 'wingo1': gameName = 'WinGo 1m'; break;
+                        case 'wingo3': gameName = 'WinGo 3m'; break;
+                        case 'wingo5': gameName = 'WinGo 5m'; break;
+                        default: gameName = bet.gameType;
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${bet.period}</td>
+                        <td>${gameName}</td>
+                        <td>${betType}</td>
+                        <td>₹${bet.amount.toFixed(2)}</td>
+                        <td>${resultDisplay}</td>
+                        <td>${winLossDisplay}</td>
+                        <td>${statusBadge}</td>
+                    `;
+                    
+                    historyBody.appendChild(row);
+                });
+            }
+            
+            // Update active page button
+            document.querySelectorAll('.page-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const pageBtn = document.getElementById(`page-${page}`);
+            if(pageBtn) {
+                pageBtn.classList.add('active');
+            }
+        }
+        
+        // Update pagination buttons
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredBets.length / itemsPerPage);
+            
+            // Hide all page buttons first
+            document.querySelectorAll('.page-btn').forEach(btn => {
+                if(btn.id && btn.id.startsWith('page-')) {
+                    btn.style.display = 'none';
+                }
+            });
+            
+            // Show only relevant page buttons
+            const maxVisiblePages = 3;
+            let startPage = Math.max(1, currentPage - 1);
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if(endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            for(let i = startPage; i <= endPage; i++) {
+                let pageBtn = document.getElementById(`page-${i}`);
+                if(!pageBtn) {
+                    pageBtn = document.createElement('div');
+                    pageBtn.className = 'page-btn';
+                    pageBtn.id = `page-${i}`;
+                    pageBtn.textContent = i;
+                    pageBtn.onclick = () => displayPage(i);
+                    
+                    const pagination = document.querySelector('.pagination');
+                    const prevBtn = pagination.querySelector('.page-btn:first-child');
+                    pagination.insertBefore(pageBtn, prevBtn.nextSibling);
+                }
+                
+                pageBtn.style.display = 'block';
+                pageBtn.classList.toggle('active', i === currentPage);
+            }
+        }
+        
+        // Change page
+        function changePage(delta) {
+            const newPage = currentPage + delta;
+            const totalPages = Math.ceil(filteredBets.length / itemsPerPage);
+            
+            if(newPage >= 1 && newPage <= totalPages) {
+                displayPage(newPage);
+            }
+        }
+        
+        // Show specific tab
+        function showTab(tab) {
+            currentTab = tab;
+            currentPage = 1;
+            
+            // Update active tab
+            document.querySelectorAll('.history-tab').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.querySelector(`.history-tab[onclick="showTab('${tab}')"]`).classList.add('active');
+            
+            // Filter and display bets
+            filterBets();
+        }
+        
+        // Set up real-time updates
+        function setupRealtimeUpdates() {
+            database.ref('bets').on('child_added', () => {
+                loadUserBets();
+            });
+            
+            database.ref('bets').on('child_changed', () => {
+                loadUserBets();
+            });
+        }
+        
+        // Initialize real-time updates
+        setupRealtimeUpdates();
+    </script>
+</body>
+</html>
