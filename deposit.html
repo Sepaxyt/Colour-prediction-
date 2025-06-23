@@ -34,7 +34,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 500px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -51,27 +51,32 @@
         .logo {
             display: flex;
             align-items: center;
-        }
-        
-        .logo-img {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
             font-weight: bold;
-            color: white;
-            margin-right: 10px;
-        }
-        
-        .logo h1 {
-            font-size: 1.5rem;
             background: linear-gradient(to right, var(--secondary), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        
+        .notification-btn {
+            color: var(--light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .back-btn {
@@ -89,8 +94,6 @@
         .wallet-container {
             display: flex;
             flex-direction: column;
-            max-width: 600px;
-            margin: 0 auto;
         }
         
         .balance-card {
@@ -187,88 +190,6 @@
             border-color: var(--secondary);
         }
         
-        .payment-methods {
-            margin-bottom: 20px;
-        }
-        
-        .method-tabs {
-            display: flex;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
-        }
-        
-        .method-tab {
-            padding: 10px 15px;
-            cursor: pointer;
-            position: relative;
-        }
-        
-        .method-tab.active {
-            color: var(--secondary);
-        }
-        
-        .method-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--secondary);
-        }
-        
-        .method-content {
-            display: none;
-        }
-        
-        .method-content.active {
-            display: block;
-        }
-        
-        .qr-code {
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .qr-code img {
-            width: 200px;
-            height: 200px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 10px;
-            background: white;
-        }
-        
-        .upi-details {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .upi-id {
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 10px;
-            word-break: break-all;
-        }
-        
-        .copy-btn {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            margin: 0 auto;
-        }
-        
-        .copy-btn i {
-            margin-right: 5px;
-        }
-        
         .submit-btn {
             width: 100%;
             padding: 15px;
@@ -308,6 +229,11 @@
         
         .history-item:last-child {
             border-bottom: none;
+        }
+        
+        .history-date {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
         }
         
         .history-amount {
@@ -402,12 +328,12 @@
                 <i class="fas fa-arrow-left"></i> Back
             </a>
             
-            <div class="logo">
-                <div class="logo-img">53</div>
-                <h1>53 Club</h1>
-            </div>
+            <div class="logo">53 Club</div>
             
-            <div style="width: 60px;"> <!-- Spacer for alignment --> </div>
+            <a href="notification.html" class="notification-btn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notification-count">0</span>
+            </a>
         </header>
         
         <div class="wallet-container">
@@ -444,29 +370,6 @@
                     <div class="amount-btn" onclick="setAmount(10000)">₹10000</div>
                 </div>
                 
-                <div class="payment-methods">
-                    <div class="method-tabs">
-                        <div class="method-tab active" onclick="switchMethod('qr')">QR Payment</div>
-                        <div class="method-tab" onclick="switchMethod('upi')">UPI Payment</div>
-                    </div>
-                    
-                    <div class="method-content active" id="qr-method">
-                        <div class="qr-code">
-                            <img src="https://i.ibb.co/Q3cMkBsX/Navi-QR-AMAN-16062025221135723.png" alt="Payment QR Code" id="qr-image">
-                            <p>Scan this QR code to make payment</p>
-                        </div>
-                    </div>
-                    
-                    <div class="method-content" id="upi-method">
-                        <div class="upi-details">
-                            <div class="upi-id">UPI ID: <span id="upi-id">53club@upi</span></div>
-                            <button class="copy-btn" onclick="copyUPI()">
-                                <i class="far fa-copy"></i> Copy UPI ID
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
                 <button class="submit-btn" id="deposit-btn" onclick="processDeposit()">
                     Confirm Deposit
                 </button>
@@ -476,7 +379,6 @@
                 <h3 class="section-title"><i class="fas fa-history"></i> Deposit History</h3>
                 
                 <div id="deposit-history">
-                    <!-- History items will be loaded here -->
                     <div class="history-item">
                         <div class="history-date">No deposits yet</div>
                         <div class="history-amount history-pending">₹0.00</div>
@@ -516,6 +418,9 @@
             
             // Load deposit history
             loadDepositHistory();
+            
+            // Load notifications count
+            loadNotificationCount();
         }
         
         // Load user balance
@@ -573,6 +478,14 @@
             });
         }
         
+        // Load notification count
+        function loadNotificationCount() {
+            database.ref('notifications/' + userPhone).orderByChild('read').equalTo(false).on('value', (snapshot) => {
+                const count = snapshot.numChildren();
+                document.getElementById('notification-count').textContent = count > 0 ? count : '';
+            });
+        }
+        
         // Set amount from quick buttons
         function setAmount(amount) {
             document.getElementById('deposit-amount').value = amount;
@@ -586,33 +499,10 @@
             });
         }
         
-        // Switch between payment methods
-        function switchMethod(method) {
-            document.querySelectorAll('.method-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            document.querySelectorAll('.method-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            document.querySelector(`.method-tab[onclick="switchMethod('${method}')"]`).classList.add('active');
-            document.getElementById(`${method}-method`).classList.add('active');
-        }
-        
-        // Copy UPI ID
-        function copyUPI() {
-            const upiId = document.getElementById('upi-id').textContent;
-            navigator.clipboard.writeText(upiId).then(() => {
-                showToast('UPI ID copied to clipboard!', 'success');
-            });
-        }
-        
         // Process deposit
         function processDeposit() {
             const channel = document.getElementById('deposit-channel').value;
             const amount = parseInt(document.getElementById('deposit-amount').value);
-            const method = document.querySelector('.method-tab.active').textContent.replace(' Payment', '').toLowerCase();
             
             if(!channel) {
                 showToast('Please select a game channel', 'error');
@@ -624,10 +514,6 @@
                 return;
             }
             
-            const btn = document.getElementById('deposit-btn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span> Processing...';
-            
             // Generate a random transaction ID
             const transactionId = 'TXN' + Date.now() + Math.floor(Math.random() * 1000);
             
@@ -635,7 +521,6 @@
             const depositData = {
                 amount: amount,
                 channel: channel,
-                method: method,
                 status: 'pending',
                 timestamp: Date.now()
             };
@@ -643,36 +528,12 @@
             // Save to Firebase
             database.ref('deposits/' + userPhone + '/' + transactionId).set(depositData)
                 .then(() => {
-                    // Simulate payment processing (in real app, this would be actual payment gateway)
-                    setTimeout(() => {
-                        // Randomly determine success (70% chance)
-                        const isSuccess = Math.random() > 0.3;
-                        
-                        if(isSuccess) {
-                            // Update deposit status
-                            database.ref('deposits/' + userPhone + '/' + transactionId + '/status').set('success');
-                            
-                            // Update user balance
-                            database.ref('users/' + userPhone + '/balance').transaction((currentBalance) => {
-                                return (currentBalance || 0) + amount;
-                            });
-                            
-                            showToast(`Deposit of ₹${amount} successful!`, 'success');
-                        } else {
-                            // Update deposit status
-                            database.ref('deposits/' + userPhone + '/' + transactionId + '/status').set('failed');
-                            showToast('Deposit failed. Please try again.', 'error');
-                        }
-                        
-                        btn.disabled = false;
-                        btn.textContent = 'Confirm Deposit';
-                    }, 2000);
+                    // Redirect to payment page with transaction details
+                    window.location.href = `payment.html?txn=${transactionId}&amount=${amount}&phone=${userPhone}`;
                 })
                 .catch((error) => {
                     console.error('Error processing deposit:', error);
                     showToast('Error processing deposit. Please try again.', 'error');
-                    btn.disabled = false;
-                    btn.textContent = 'Confirm Deposit';
                 });
         }
         
