@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 Club - Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .back-btn {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn i {
+            margin-right: 5px;
+        }
+        
+        .settings-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .avatar-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary);
+        }
+        
+        .change-avatar-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--secondary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .user-info {
+            text-align: center;
+        }
+        
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .user-id {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .settings-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .settings-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .settings-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .settings-action {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .settings-action i {
+            margin-left: 5px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .modal-body label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .modal-body input {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .modal-btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .modal-btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="profile.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            
+            <div class="logo">53 Club</div>
+            
+            <div style="width: 60px;"></div>
+        </header>
+        
+        <div class="settings-container">
+            <div class="profile-section">
+                <div class="avatar-container">
+                    <img id="user-avatar" class="avatar" src="https://i.ibb.co/4Y3N8Xt/default-avatar.png" alt="User Avatar">
+                    <div class="change-avatar-btn" onclick="document.getElementById('avatar-input').click()">
+                        <i class="fas fa-camera"></i>
+                        <input type="file" id="avatar-input" accept="image/*" style="display: none;" onchange="uploadAvatar()">
+                    </div>
+                </div>
+                
+                <div class="user-info">
+                    <div class="user-name" id="user-name">Loading...</div>
+                    <div class="user-id">UID: <span id="user-uid">Loading...</span></div>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-title">Account Information</div>
+                
+                <div class="settings-row">
+                    <div class="settings-label">Nickname</div>
+                    <div class="settings-value" id="nickname-value">MemberNNGTVK1D</div>
+                </div>
+                
+                <div class="settings-row">
+                    <div class="settings-label">UID</div>
+                    <div class="settings-value" id="uid-value">566969</div>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-title">Security Information</div>
+                
+                <div class="settings-row">
+                    <div class="settings-label">Login Password</div>
+                    <a href="#" class="settings-action" onclick="changePassword()">
+                        Edit <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                
+                <div class="settings-row">
+                    <div class="settings-label">Bind Email</div>
+                    <a href="#" class="settings-action" onclick="bindEmail()">
+                        To Bind <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-title">Application</div>
+                
+                <div class="settings-row">
+                    <div class="settings-label">Current Version</div>
+                    <div class="settings-value">1.0.9</div>
+                </div>
+                
+                <div class="settings-row">
+                    <div class="settings-label">Check for Updates</div>
+                    <a href="#" class="settings-action" onclick="checkUpdates()">
+                        Update <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Change Password Modal -->
+    <div class="modal" id="password-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Change Password</h3>
+                <button class="close-modal" onclick="closeModal('password-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="current-password" placeholder="Enter current password">
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="new-password" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirm-password" placeholder="Confirm new password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal('password-modal')">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="updatePassword()">Update Password</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bind Email Modal -->
+    <div class="modal" id="email-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Bind Email Address</h3>
+                <button class="close-modal" onclick="closeModal('email-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email-address" placeholder="Enter your email address">
+                </div>
+                <div class="form-group">
+                    <label>Verification Code</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="verification-code" placeholder="Enter verification code" style="flex: 1;">
+                        <button class="modal-btn modal-btn-secondary" id="send-code-btn" onclick="sendVerificationCode()">Send Code</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal('email-modal')">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="bindEmailAddress()">Bind Email</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.appspot.com",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        const storage = firebase.storage();
+        
+        let currentUser = null;
+        
+        // Check if user is logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                loadUserProfile();
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+        
+        // Load user profile from database
+        function loadUserProfile() {
+            database.ref('users/' + currentUser.uid).once('value').then((snapshot) => {
+                const userData = snapshot.val();
+                
+                if (userData) {
+                    // Display user information
+                    document.getElementById('user-name').textContent = userData.name || 'User';
+                    document.getElementById('nickname-value').textContent = userData.nickname || 'Member' + Math.random().toString(36).substr(2, 8).toUpperCase();
+                    document.getElementById('uid-value').textContent = userData.uid || currentUser.uid.substr(0, 6);
+                    document.getElementById('user-uid').textContent = userData.uid || currentUser.uid.substr(0, 6);
+                    
+                    // Load avatar if exists
+                    if (userData.avatar) {
+                        document.getElementById('user-avatar').src = userData.avatar;
+                    }
+                }
+            });
+        }
+        
+        // Upload new avatar
+        function uploadAvatar() {
+            const fileInput = document.getElementById('avatar-input');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            // Show loading state
+            const avatarImg = document.getElementById('user-avatar');
+            avatarImg.src = 'https://i.ibb.co/4Y3N8Xt/default-avatar.png';
+            
+            // Upload file to Firebase Storage
+            const storageRef = storage.ref('avatars/' + currentUser.uid + '/' + file.name);
+            const uploadTask = storageRef.put(file);
+            
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    // Progress monitoring can be added here
+                }, 
+                (error) => {
+                    showToast('Error uploading avatar: ' + error.message, 'error');
+                }, 
+                () => {
+                    // Upload completed successfully
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        // Update user profile with new avatar URL
+                        database.ref('users/' + currentUser.uid).update({
+                            avatar: downloadURL
+                        }).then(() => {
+                            avatarImg.src = downloadURL;
+                            showToast('Avatar updated successfully!', 'success');
+                        });
+                    });
+                }
+            );
+        }
+        
+        // Change password
+        function changePassword() {
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+            document.getElementById('password-modal').style.display = 'flex';
+        }
+        
+        function updatePassword() {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showToast('Please fill all fields', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showToast('New passwords do not match', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            // Reauthenticate user
+            const credential = firebase.auth.EmailAuthProvider.credential(
+                currentUser.email,
+                currentPassword
+            );
+            
+            currentUser.reauthenticateWithCredential(credential)
+                .then(() => {
+                    // Update password
+                    currentUser.updatePassword(newPassword)
+                        .then(() => {
+                            showToast('Password updated successfully!', 'success');
+                            closeModal('password-modal');
+                        })
+                        .catch((error) => {
+                            showToast('Error updating password: ' + error.message, 'error');
+                        });
+                })
+                .catch((error) => {
+                    showToast('Current password is incorrect', 'error');
+                });
+        }
+        
+        // Bind email
+        function bindEmail() {
+            document.getElementById('email-address').value = '';
+            document.getElementById('verification-code').value = '';
+            document.getElementById('email-modal').style.display = 'flex';
+        }
+        
+        function sendVerificationCode() {
+            const email = document.getElementById('email-address').value;
+            
+            if (!email) {
+                showToast('Please enter email address', 'error');
+                return;
+            }
+            
+            // In a real app, you would send a verification code to the email
+            // For demo purposes, we'll just show a toast
+            showToast('Verification code sent to ' + email, 'success');
+            
+            // Disable send button for 60 seconds
+            const sendBtn = document.getElementById('send-code-btn');
+            sendBtn.disabled = true;
+            
+            let seconds = 60;
+            const timer = setInterval(() => {
+                sendBtn.textContent = `Resend (${seconds})`;
+                seconds--;
+                
+                if (seconds < 0) {
+                    clearInterval(timer);
+                    sendBtn.textContent = 'Send Code';
+                    sendBtn.disabled = false;
+                }
+            }, 1000);
+        }
+        
+        function bindEmailAddress() {
+            const email = document.getElementById('email-address').value;
+            const code = document.getElementById('verification-code').value;
+            
+            if (!email || !code) {
+                showToast('Please fill all fields', 'error');
+                return;
+            }
+            
+            // In a real app, you would verify the code
+            // For demo purposes, we'll just update the email
+            currentUser.updateEmail(email)
+                .then(() => {
+                    // Update in database
+                    database.ref('users/' + currentUser.uid).update({
+                        email: email
+                    }).then(() => {
+                        showToast('Email bound successfully!', 'success');
+                        closeModal('email-modal');
+                    });
+                })
+                .catch((error) => {
+                    showToast('Error binding email: ' + error.message, 'error');
+                });
+        }
+        
+        // Check for updates
+        function checkUpdates() {
+            showToast('You are using the latest version', 'info');
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
