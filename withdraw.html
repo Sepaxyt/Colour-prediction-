@@ -303,8 +303,8 @@
         
         .modal-content {
             background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            padding: 25px;
             border-radius: 12px;
+            padding: 25px;
             width: 90%;
             max-width: 500px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -802,30 +802,31 @@
                     // Save to Firebase
                     database.ref('withdrawals/' + userPhone + '/' + transactionId).set(withdrawalData)
                         .then(() => {
-                            // Simulate withdrawal processing (in real app, this would be actual bank processing)
-                            setTimeout(() => {
-                                // Randomly determine success (80% chance)
-                                const isSuccess = Math.random() > 0.2;
-                                
-                                if(isSuccess) {
-                                    // Update withdrawal status
-                                    database.ref('withdrawals/' + userPhone + '/' + transactionId + '/status').set('success');
-                                    
-                                    // Update user balance
-                                    database.ref('users/' + userPhone + '/balance').transaction((currentBalance) => {
-                                        return (currentBalance || 0) - amount;
-                                    });
-                                    
-                                    showToast(`Withdrawal of ₹${amount} requested successfully!`, 'success');
-                                } else {
-                                    // Update withdrawal status
-                                    database.ref('withdrawals/' + userPhone + '/' + transactionId + '/status').set('failed');
-                                    showToast('Withdrawal failed. Please try again.', 'error');
-                                }
-                                
-                                btn.disabled = false;
-                                btn.textContent = 'Request Withdrawal';
-                            }, 3000);
+                            // Send notification to admin
+                            database.ref('adminNotifications').push({
+                                type: 'withdrawal',
+                                userId: userPhone,
+                                transactionId: transactionId,
+                                amount: amount,
+                                bankDetails: bankDetails,
+                                status: 'pending',
+                                timestamp: Date.now(),
+                                read: false
+                            });
+                            
+                            // Create notification for user
+                            createNotification(
+                                'Withdrawal Requested',
+                                `Your withdrawal request of ₹${amount} has been submitted for processing.`,
+                                'info'
+                            );
+                            
+                            showToast(`Withdrawal of ₹${amount} requested successfully!`, 'success');
+                            
+                            // Reset form
+                            document.getElementById('withdraw-amount').value = '';
+                            btn.disabled = false;
+                            btn.textContent = 'Request Withdrawal';
                         })
                         .catch((error) => {
                             console.error('Error processing withdrawal:', error);
@@ -834,6 +835,19 @@
                             btn.textContent = 'Request Withdrawal';
                         });
                 });
+            });
+        }
+        
+        // Create notification
+        function createNotification(title, message, type) {
+            const notificationId = 'NOT' + Date.now();
+            
+            database.ref('notifications/' + userPhone + '/' + notificationId).set({
+                title: title,
+                message: message,
+                type: type,
+                timestamp: Date.now(),
+                read: false
             });
         }
         
