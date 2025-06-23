@@ -12,6 +12,7 @@
             --primary: #6a11cb;
             --secondary: #4a6bff;
             --dark: #121212;
+            --darker: #0a0a0a;
             --light: #f8f9fa;
             --gray: #6c757d;
             --success: #28a745;
@@ -31,8 +32,8 @@
         }
         
         body {
-            background: #f5f5f5;
-            color: #333;
+            background: var(--darker);
+            color: var(--light);
             min-height: 100vh;
         }
         
@@ -48,16 +49,24 @@
             align-items: center;
             padding: 15px 0;
             margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
         .logo {
             font-weight: bold;
             font-size: 20px;
             color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo i {
+            font-size: 24px;
         }
         
         .back-btn {
-            color: #333;
+            color: var(--light);
             text-decoration: none;
             font-size: 14px;
             display: flex;
@@ -69,11 +78,11 @@
         }
         
         .history-container {
-            background: white;
+            background: var(--dark);
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             padding: 15px;
             margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         
         .history-header {
@@ -82,25 +91,26 @@
             align-items: center;
             margin-bottom: 15px;
             flex-wrap: wrap;
+            gap: 10px;
         }
         
         .history-title {
             font-size: 18px;
             font-weight: 600;
-            margin-bottom: 10px;
         }
         
         .history-tabs {
             display: flex;
             gap: 5px;
-            background: #f0f0f0;
+            background: rgba(255,255,255,0.05);
             border-radius: 8px;
             padding: 3px;
-            margin-bottom: 10px;
+            overflow-x: auto;
+            max-width: 100%;
         }
         
         .history-tab {
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
@@ -108,29 +118,38 @@
         }
         
         .history-tab.active {
-            background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: var(--primary);
+            color: white;
             font-weight: 500;
+        }
+        
+        .history-table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
         }
         
         .history-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
+            min-width: 700px;
         }
         
         .history-table th {
             text-align: left;
-            padding: 10px;
+            padding: 12px 10px;
             color: var(--gray);
             font-weight: 500;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             white-space: nowrap;
+            background: rgba(255,255,255,0.03);
         }
         
         .history-table td {
             padding: 12px 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             white-space: nowrap;
         }
         
@@ -138,26 +157,30 @@
             border-bottom: none;
         }
         
+        .history-table tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+        
         .status-badge {
             display: inline-block;
-            padding: 3px 8px;
+            padding: 4px 8px;
             border-radius: 4px;
             font-size: 12px;
             font-weight: 500;
         }
         
         .status-won {
-            background-color: rgba(40, 167, 69, 0.1);
+            background-color: rgba(40, 167, 69, 0.15);
             color: var(--success);
         }
         
         .status-lost {
-            background-color: rgba(220, 53, 69, 0.1);
+            background-color: rgba(220, 53, 69, 0.15);
             color: var(--danger);
         }
         
         .status-pending {
-            background-color: rgba(255, 193, 7, 0.1);
+            background-color: rgba(255, 193, 7, 0.15);
             color: var(--warning);
         }
         
@@ -189,11 +212,13 @@
         }
         
         .page-btn {
-            padding: 5px 10px;
-            border-radius: 5px;
-            background: #f0f0f0;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.05);
             cursor: pointer;
             font-size: 12px;
+            border: none;
+            color: var(--light);
         }
         
         .page-btn.active {
@@ -213,22 +238,23 @@
             align-items: center;
         }
         
-        @media (max-width: 768px) {
-            .history-table {
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-            
-            .history-tabs {
-                overflow-x: auto;
-                width: 100%;
-                padding-bottom: 5px;
-            }
-            
-            .history-tabs::-webkit-scrollbar {
-                display: none;
-            }
+        .win-amount {
+            color: var(--success);
+        }
+        
+        .loss-amount {
+            color: var(--danger);
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .history-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .history-tabs {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
     </style>
 </head>
@@ -238,7 +264,10 @@
             <a href="main.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
-            <div class="logo">53 Club</div>
+            <div class="logo">
+                <i class="fas fa-dice"></i>
+                <span>53 Club</span>
+            </div>
             <div style="width: 24px;"></div>
         </header>
         
@@ -254,119 +283,90 @@
                 </div>
             </div>
             
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>Period</th>
-                        <th>Game</th>
-                        <th>Bet Type</th>
-                        <th>Amount</th>
-                        <th>Result</th>
-                        <th>Win/Loss</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="history-body">
-                    <!-- Sample data matching the screenshot -->
-                    <tr>
-                        <td>20250623195058356281</td>
-                        <td>WinGo 30s</td>
-                        <td>Big</td>
-                        <td>¥1.00</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                    </tr>
-                    <tr>
-                        <td>20250623195058356281</td>
-                        <td>WinGo 30s</td>
-                        <td>Green</td>
-                        <td>¥1101.00</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                    </tr>
-                    <tr>
-                        <td>20250623195058356281</td>
-                        <td>WinGo 30s</td>
-                        <td>Number 6</td>
-                        <td>¥1.00</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                    </tr>
-                    <tr>
-                        <td>20250623153907778</td>
-                        <td>WinGo 30s</td>
-                        <td>Green</td>
-                        <td>¥20.00</td>
-                        <td class="result-cell"><span class="color-indicator color-green"></span>Green</td>
-                        <td style="color: var(--success);">+¥194.04</td>
-                        <td><span class="status-badge status-won">Won</span></td>
-                    </tr>
-                    <tr>
-                        <td>20250623153907778</td>
-                        <td>WinGo 30s</td>
-                        <td>Small</td>
-                        <td>¥10.00</td>
-                        <td class="result-cell"><span class="color-indicator color-red"></span>Red</td>
-                        <td style="color: var(--danger);">-¥10.00</td>
-                        <td><span class="status-badge status-lost">Lost</span></td>
-                    </tr>
-                    <tr>
-                        <td>20250623153907778</td>
-                        <td>WinGo 30s</td>
-                        <td>Big</td>
-                        <td>¥10.00</td>
-                        <td class="result-cell"><span class="color-indicator color-green"></span>Green</td>
-                        <td style="color: var(--success);">+¥19.60</td>
-                        <td><span class="status-badge status-won">Won</span></td>
-                    </tr>
-                    <tr>
-                        <td>2025062314291639</td>
-                        <td>WinGo 30s</td>
-                        <td>Number 9</td>
-                        <td>¥100.00</td>
-                        <td class="result-cell">7 | <span class="color-indicator color-red"></span>Red</td>
-                        <td style="color: var(--danger);">-¥100.00</td>
-                        <td><span class="status-badge status-lost">Lost</span></td>
-                    </tr>
-                    <tr>
-                        <td>2025062314291639</td>
-                        <td>WinGo 30s</td>
-                        <td>Number 2</td>
-                        <td>¥1.00</td>
-                        <td class="result-cell">7 | <span class="color-indicator color-red"></span>Red</td>
-                        <td style="color: var(--danger);">-¥1.00</td>
-                        <td><span class="status-badge status-lost">Lost</span></td>
-                    </tr>
-                    <tr>
-                        <td>2025062314290638</td>
-                        <td>WinGo 30s</td>
-                        <td>Number 7</td>
-                        <td>¥10.00</td>
-                        <td class="result-cell">3 | <span class="color-indicator color-red"></span>Red</td>
-                        <td style="color: var(--danger);">-¥10.00</td>
-                        <td><span class="status-badge status-lost">Lost</span></td>
-                    </tr>
-                    <tr>
-                        <td>2025062314281637</td>
-                        <td>WinGo 30s</td>
-                        <td>Red</td>
-                        <td>¥5.00</td>
-                        <td class="result-cell">0 | <span class="color-indicator color-green"></span>Green</td>
-                        <td style="color: var(--danger);">-¥5.00</td>
-                        <td><span class="status-badge status-lost">Lost</span></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Game</th>
+                            <th>Bet Type</th>
+                            <th>Amount</th>
+                            <th>Result</th>
+                            <th>Win/Loss</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <!-- Sample data -->
+                        <tr>
+                            <td>WinGo 30s</td>
+                            <td>Big</td>
+                            <td>¥1.00</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>WinGo 30s</td>
+                            <td>Green</td>
+                            <td>¥1101.00</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>WinGo 30s</td>
+                            <td>Number 6</td>
+                            <td>¥1.00</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>WinGo 30s</td>
+                            <td>Green</td>
+                            <td>¥20.00</td>
+                            <td class="result-cell"><span class="color-indicator color-green"></span>Green</td>
+                            <td class="win-amount">+¥194.04</td>
+                            <td><span class="status-badge status-won">Won</span></td>
+                        </tr>
+                        <tr>
+                            <td>WinGo 30s</td>
+                            <td>Small</td>
+                            <td>¥10.00</td>
+                            <td class="result-cell"><span class="color-indicator color-red"></span>Red</td>
+                            <td class="loss-amount">-¥10.00</td>
+                            <td><span class="status-badge status-lost">Lost</span></td>
+                        </tr>
+                        <tr>
+                            <td>WinGo 30s</td>
+                            <td>Big</td>
+                            <td>¥10.00</td>
+                            <td class="result-cell"><span class="color-indicator color-green"></span>Green</td>
+                            <td class="win-amount">+¥19.60</td>
+                            <td><span class="status-badge status-won">Won</span></td>
+                        </tr>
+                        <tr>
+                            <td>WinGo 30s</td>
+                            <td>Number 9</td>
+                            <td>¥100.00</td>
+                            <td class="result-cell">7 | <span class="color-indicator color-red"></span>Red</td>
+                            <td class="loss-amount">-¥100.00</td>
+                            <td><span class="status-badge status-lost">Lost</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="no-history" class="no-history" style="display: none;">
+                No history found
+            </div>
             
             <div class="pagination">
-                <div class="page-btn" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i></div>
-                <div class="page-btn active">1</div>
-                <div class="page-btn">2</div>
-                <div class="page-btn">3</div>
-                <div class="page-btn" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></div>
+                <button class="page-btn" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </div>
@@ -416,15 +416,12 @@
                     const gameType = gameTypeSnapshot.key;
                     
                     gameTypeSnapshot.forEach(periodSnapshot => {
-                        const period = periodSnapshot.key;
-                        
                         periodSnapshot.forEach(userSnapshot => {
                             if(userSnapshot.key === userPhone) {
                                 userSnapshot.forEach(betSnapshot => {
                                     const bet = betSnapshot.val();
                                     bet.id = betSnapshot.key;
                                     bet.gameType = gameType;
-                                    bet.period = period;
                                     
                                     allBets.push(bet);
                                 });
@@ -470,10 +467,8 @@
             
             if(pageBets.length === 0) {
                 document.getElementById('no-history').style.display = 'block';
-                historyBody.style.display = 'none';
             } else {
                 document.getElementById('no-history').style.display = 'none';
-                historyBody.style.display = 'table-row-group';
                 
                 pageBets.forEach(bet => {
                     const row = document.createElement('tr');
@@ -508,10 +503,13 @@
                     
                     // Determine win/loss display
                     let winLossDisplay = '-';
+                    let winLossClass = '';
                     if(bet.status === 'won') {
-                        winLossDisplay = `<span style="color: var(--success);">+¥${bet.winAmount.toFixed(2)}</span>`;
+                        winLossDisplay = `+¥${bet.winAmount.toFixed(2)}`;
+                        winLossClass = 'win-amount';
                     } else if(bet.status === 'lost') {
-                        winLossDisplay = `<span style="color: var(--danger);">-¥${bet.amount.toFixed(2)}</span>`;
+                        winLossDisplay = `-¥${bet.amount.toFixed(2)}`;
+                        winLossClass = 'loss-amount';
                     }
                     
                     // Determine status badge
@@ -535,12 +533,11 @@
                     }
                     
                     row.innerHTML = `
-                        <td>${bet.period}</td>
                         <td>${gameName}</td>
                         <td>${betType}</td>
                         <td>¥${bet.amount.toFixed(2)}</td>
                         <td>${resultDisplay}</td>
-                        <td>${winLossDisplay}</td>
+                        <td class="${winLossClass}">${winLossDisplay}</td>
                         <td>${statusBadge}</td>
                     `;
                     
@@ -549,14 +546,14 @@
             }
             
             // Update active page button
-            document.querySelectorAll('.page-btn').forEach(btn => {
-                btn.classList.remove('active');
+            document.querySelectorAll('.page-btn').forEach((btn, index) => {
+                if(index > 0 && index < 4) { // Skip prev/next buttons
+                    btn.classList.remove('active');
+                    if(index === currentPage) {
+                        btn.classList.add('active');
+                    }
+                }
             });
-            
-            const pageBtn = document.getElementById(`page-${page}`);
-            if(pageBtn) {
-                pageBtn.classList.add('active');
-            }
         }
         
         // Change page
