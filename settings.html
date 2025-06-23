@@ -440,7 +440,6 @@
         </div>
     </div>
     
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -459,64 +458,75 @@
             measurementId: "G-S3M36PLB9Y"
         };
         
-        // Initialize Firebase
+        // Initialize Firebase only once
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
+        } else {
+            firebase.app(); // if already initialized, use that one
         }
         
         const auth = firebase.auth();
         const database = firebase.database();
         const storage = firebase.storage();
         
-        let currentUser = null;
-        
-        // Check if user is logged in
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                currentUser = user;
-                loadUserProfile();
-            } else {
-                // If not logged in, redirect to login page
-                window.location.href = "login.html";
-            }
+        // Wait for DOM to load before initializing
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication state
+            auth.onAuthStateChanged(function(user) {
+                if (user) {
+                    // User is signed in
+                    console.log("User is signed in:", user.uid);
+                    loadUserProfile(user);
+                } else {
+                    // No user is signed in, redirect to login
+                    console.log("No user signed in, redirecting to login");
+                    window.location.href = "login.html";
+                }
+            });
         });
         
-        // Load user profile from database
-        function loadUserProfile() {
-            if (!currentUser) return;
+        // Load user profile data
+        function loadUserProfile(user) {
+            if (!user) {
+                console.error("No user provided to load profile");
+                return;
+            }
             
-            database.ref('users/' + currentUser.uid).once('value').then((snapshot) => {
+            // Set default values first
+            document.getElementById('user-name').textContent = user.displayName || 'User';
+            document.getElementById('nickname-value').textContent = user.displayName || 'Member' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            document.getElementById('uid-value').textContent = user.uid.substr(0, 6);
+            document.getElementById('user-uid').textContent = user.uid.substr(0, 6);
+            
+            // Try to load from database
+            database.ref('users/' + user.uid).once('value').then(function(snapshot) {
                 const userData = snapshot.val();
                 
                 if (userData) {
-                    // Display user information
-                    document.getElementById('user-name').textContent = userData.name || 'User';
-                    document.getElementById('nickname-value').textContent = userData.nickname || 'Member' + Math.random().toString(36).substr(2, 8).toUpperCase();
-                    document.getElementById('uid-value').textContent = userData.uid || currentUser.uid.substr(0, 6);
-                    document.getElementById('user-uid').textContent = userData.uid || currentUser.uid.substr(0, 6);
-                    
-                    // Load avatar if exists
+                    // Update with database values if they exist
+                    if (userData.name) {
+                        document.getElementById('user-name').textContent = userData.name;
+                    }
+                    if (userData.nickname) {
+                        document.getElementById('nickname-value').textContent = userData.nickname;
+                    }
                     if (userData.avatar) {
                         document.getElementById('user-avatar').src = userData.avatar;
                     }
                 } else {
-                    // Create basic user data if doesn't exist
-                    database.ref('users/' + currentUser.uid).set({
-                        name: currentUser.displayName || 'User',
-                        email: currentUser.email || '',
-                        uid: currentUser.uid.substr(0, 6),
+                    // Create user data if it doesn't exist
+                    database.ref('users/' + user.uid).set({
+                        name: user.displayName || 'User',
+                        email: user.email || '',
+                        uid: user.uid.substr(0, 6),
                         createdAt: firebase.database.ServerValue.TIMESTAMP
+                    }).catch(function(error) {
+                        console.error("Error creating user data:", error);
                     });
-                    
-                    // Set default values
-                    document.getElementById('user-name').textContent = currentUser.displayName || 'User';
-                    document.getElementById('nickname-value').textContent = 'Member' + Math.random().toString(36).substr(2, 8).toUpperCase();
-                    document.getElementById('uid-value').textContent = currentUser.uid.substr(0, 6);
-                    document.getElementById('user-uid').textContent = currentUser.uid.substr(0, 6);
                 }
-            }).catch((error) => {
-                console.error("Error loading user profile:", error);
-                showToast('Error loading profile data', 'error');
+            }).catch(function(error) {
+                console.error("Error loading user data:", error);
+                showToast('Error loading profile', 'error');
             });
         }
         
@@ -525,51 +535,51 @@
             const fileInput = document.getElementById('avatar-input');
             const file = fileInput.files[0];
             
-            if (!file) return;
+            if (!file) {
+                console.log("No file selected");
+                return;
+            }
+            
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('Please sign in to upload avatar', 'error');
+                return;
+            }
             
             // Show loading state
             const avatarImg = document.getElementById('user-avatar');
             avatarImg.src = 'https://i.ibb.co/4Y3N8Xt/default-avatar.png';
             
-            // Upload file to Firebase Storage
-            const storageRef = storage.ref('avatars/' + currentUser.uid + '/' + file.name);
-            const uploadTask = storageRef.put(file);
+            // Create storage reference
+            const storageRef = storage.ref('avatars/' + user.uid + '/' + file.name);
             
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    // Progress monitoring can be added here
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');
-                }, 
-                (error) => {
-                    showToast('Error uploading avatar: ' + error.message, 'error');
-                }, 
-                () => {
-                    // Upload completed successfully
-                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                        // Update user profile with new avatar URL
-                        database.ref('users/' + currentUser.uid).update({
-                            avatar: downloadURL
-                        }).then(() => {
-                            avatarImg.src = downloadURL;
-                            showToast('Avatar updated successfully!', 'success');
-                        }).catch((error) => {
-                            showToast('Error updating profile: ' + error.message, 'error');
-                        });
-                    }).catch((error) => {
-                        showToast('Error getting download URL: ' + error.message, 'error');
-                    });
-                }
-            );
+            // Upload file
+            storageRef.put(file).then(function(snapshot) {
+                return snapshot.ref.getDownloadURL();
+            }).then(function(downloadURL) {
+                // Update user profile with new avatar URL
+                return database.ref('users/' + user.uid).update({
+                    avatar: downloadURL
+                });
+            }).then(function() {
+                // Update avatar image
+                avatarImg.src = downloadURL;
+                showToast('Avatar updated successfully!', 'success');
+            }).catch(function(error) {
+                console.error("Error uploading avatar:", error);
+                showToast('Error uploading avatar', 'error');
+            });
         }
         
-        // Change password
+        // Change password functions
         function changePassword() {
-            if (!currentUser || !currentUser.email) {
-                showToast('You must be logged in with email to change password', 'error');
+            const user = auth.currentUser;
+            if (!user || !user.email) {
+                showToast('You must be signed in with email to change password', 'error');
                 return;
             }
             
+            // Clear fields and show modal
             document.getElementById('current-password').value = '';
             document.getElementById('new-password').value = '';
             document.getElementById('confirm-password').value = '';
@@ -581,6 +591,7 @@
             const newPassword = document.getElementById('new-password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             
+            // Validate inputs
             if (!currentPassword || !newPassword || !confirmPassword) {
                 showToast('Please fill all fields', 'error');
                 return;
@@ -596,30 +607,34 @@
                 return;
             }
             
+            const user = auth.currentUser;
+            if (!user || !user.email) {
+                showToast('User not authenticated properly', 'error');
+                return;
+            }
+            
             // Reauthenticate user
             const credential = firebase.auth.EmailAuthProvider.credential(
-                currentUser.email,
+                user.email,
                 currentPassword
             );
             
-            currentUser.reauthenticateWithCredential(credential)
-                .then(() => {
-                    // Update password
-                    return currentUser.updatePassword(newPassword);
-                })
-                .then(() => {
-                    showToast('Password updated successfully!', 'success');
-                    closeModal('password-modal');
-                })
-                .catch((error) => {
-                    console.error("Error updating password:", error);
-                    showToast('Error: ' + error.message, 'error');
-                });
+            user.reauthenticateWithCredential(credential).then(function() {
+                // Update password
+                return user.updatePassword(newPassword);
+            }).then(function() {
+                showToast('Password updated successfully!', 'success');
+                closeModal('password-modal');
+            }).catch(function(error) {
+                console.error("Error updating password:", error);
+                showToast('Error: ' + error.message, 'error');
+            });
         }
         
-        // Bind email
+        // Email binding functions
         function bindEmail() {
-            document.getElementById('email-address').value = currentUser.email || '';
+            const user = auth.currentUser;
+            document.getElementById('email-address').value = user ? (user.email || '') : '';
             document.getElementById('verification-code').value = '';
             document.getElementById('email-modal').style.display = 'flex';
         }
@@ -632,8 +647,8 @@
                 return;
             }
             
-            // In a real app, you would send a verification code to the email
-            // For demo purposes, we'll just show a toast
+            // In a real app, you would send a verification code here
+            // For demo, we'll just simulate it
             showToast('Verification code sent to ' + email, 'success');
             
             // Disable send button for 60 seconds
@@ -641,7 +656,7 @@
             sendBtn.disabled = true;
             
             let seconds = 60;
-            const timer = setInterval(() => {
+            const timer = setInterval(function() {
                 sendBtn.textContent = `Resend (${seconds})`;
                 seconds--;
                 
@@ -662,23 +677,26 @@
                 return;
             }
             
-            // In a real app, you would verify the code
-            // For demo purposes, we'll just update the email
-            currentUser.updateEmail(email)
-                .then(() => {
-                    // Update in database
-                    return database.ref('users/' + currentUser.uid).update({
-                        email: email
-                    });
-                })
-                .then(() => {
-                    showToast('Email bound successfully!', 'success');
-                    closeModal('email-modal');
-                })
-                .catch((error) => {
-                    console.error("Error binding email:", error);
-                    showToast('Error: ' + error.message, 'error');
+            const user = auth.currentUser;
+            if (!user) {
+                showToast('User not authenticated', 'error');
+                return;
+            }
+            
+            // In a real app, verify the code first
+            // For demo, we'll just update the email
+            user.updateEmail(email).then(function() {
+                // Update in database
+                return database.ref('users/' + user.uid).update({
+                    email: email
                 });
+            }).then(function() {
+                showToast('Email bound successfully!', 'success');
+                closeModal('email-modal');
+            }).catch(function(error) {
+                console.error("Error binding email:", error);
+                showToast('Error: ' + error.message, 'error');
+            });
         }
         
         // Check for updates
@@ -693,23 +711,28 @@
         
         // Show toast notification
         function showToast(message, type = 'success') {
-            // Remove any existing toasts first
+            // Remove any existing toasts
             const existingToasts = document.querySelectorAll('.toast');
             existingToasts.forEach(toast => toast.remove());
             
-            const icons = {
-                success: '<i class="fas fa-check-circle toast-icon"></i>',
-                error: '<i class="fas fa-exclamation-circle toast-icon"></i>',
-                warning: '<i class="fas fa-exclamation-triangle toast-icon"></i>',
-                info: '<i class="fas fa-info-circle toast-icon"></i>'
-            };
-            
+            // Create new toast
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `${icons[type] || ''} ${message}`;
+            
+            // Add icon based on type
+            let icon = '';
+            switch(type) {
+                case 'success': icon = '<i class="fas fa-check-circle toast-icon"></i>'; break;
+                case 'error': icon = '<i class="fas fa-exclamation-circle toast-icon"></i>'; break;
+                case 'warning': icon = '<i class="fas fa-exclamation-triangle toast-icon"></i>'; break;
+                case 'info': icon = '<i class="fas fa-info-circle toast-icon"></i>'; break;
+            }
+            
+            toast.innerHTML = `${icon} ${message}`;
             document.body.appendChild(toast);
             
-            setTimeout(() => {
+            // Remove after 3 seconds
+            setTimeout(function() {
                 toast.remove();
             }, 3000);
         }
