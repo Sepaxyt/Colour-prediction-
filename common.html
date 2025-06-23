@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>53 Club - WinGo 30sec</title>
+    <title>53 Club - WinGo 30s</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -96,31 +96,6 @@
         
         .balance-btn:hover {
             background: var(--highlight);
-        }
-        
-        .game-tabs {
-            display: flex;
-            background: var(--secondary);
-            border-radius: 10px;
-            padding: 5px;
-            margin: 10px 0;
-            border: 1px solid var(--accent);
-        }
-        
-        .game-tab {
-            flex: 1;
-            text-align: center;
-            padding: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        
-        .game-tab.active {
-            background: var(--accent);
-            font-weight: 500;
-            color: var(--highlight);
         }
         
         .timer-section {
@@ -427,7 +402,6 @@
             cursor: not-allowed;
         }
         
-        /* Result Popup */
         .result-popup {
             position: fixed;
             top: 50%;
@@ -543,7 +517,6 @@
             display: block;
         }
         
-        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -588,7 +561,6 @@
             font-size: 1.2rem;
         }
         
-        /* Custom amount input */
         .custom-amount {
             display: none;
             margin-top: 10px;
@@ -596,13 +568,6 @@
             padding: 10px;
             border-radius: 8px;
             border: 1px solid var(--accent);
-        }
-        
-        .custom-amount-label {
-            font-size: 12px;
-            color: var(--gray);
-            margin-bottom: 5px;
-            display: block;
         }
         
         .custom-amount-input {
@@ -637,7 +602,6 @@
             background: #0095e0;
         }
         
-        /* Last 5 seconds warning */
         .timer-warning {
             color: var(--danger);
             animation: blink 1s infinite;
@@ -649,7 +613,6 @@
             100% { opacity: 1; }
         }
         
-        /* My History Status Indicators */
         .status-won {
             color: var(--green);
         }
@@ -666,7 +629,7 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo">53 CLUB</div>
+            <div class="logo">53 CLUB - WinGo 30s</div>
             <div style="width: 24px;"></div>
         </header>
         
@@ -681,16 +644,9 @@
             </div>
         </div>
         
-        <div class="game-tabs">
-            <div class="game-tab active" onclick="window.location.href='wingo30.html'">WinGo 30sec</div>
-            <div class="game-tab" onclick="window.location.href='wingo1.html'">WinGo 1 Min</div>
-            <div class="game-tab" onclick="window.location.href='wingo3.html'">WinGo 3 Min</div>
-            <div class="game-tab" onclick="window.location.href='wingo5.html'">WinGo 5 Min</div>
-        </div>
-        
         <div class="timer-section">
             <div class="timer-title">How to play</div>
-            <div class="timer-countdown" id="countdown-timer">0:16</div>
+            <div class="timer-countdown" id="countdown-timer">0:30</div>
             <div class="period-display" id="period-number">20250623100050911</div>
         </div>
         
@@ -729,8 +685,7 @@
                 <div class="multiplier-btn" onclick="setMultiplier(100)">₹100</div>
             </div>
             <div class="custom-amount" id="custom-amount">
-                <label class="custom-amount-label">Enter Amount (₹)</label>
-                <input type="number" class="custom-amount-input" id="custom-amount-input" placeholder="Enter amount in rupees" min="1">
+                <input type="number" class="custom-amount-input" id="custom-amount-input" placeholder="Enter amount in ₹" min="1">
                 <button class="custom-amount-btn" onclick="setCustomAmount()">Set Amount</button>
             </div>
             <div style="text-align: center; margin-top: 5px;">
@@ -750,7 +705,7 @@
         <div class="history-section">
             <div class="history-header">
                 <div class="history-title">Game History</div>
-                <div class="history-view-all" onclick="window.location.href='history30.html'">View All</div>
+                <div class="history-view-all" onclick="window.location.href='history-wingo30.html'">View All</div>
             </div>
             
             <div class="history-tabs">
@@ -835,7 +790,7 @@
             authDomain: "club-b8f03.firebaseapp.com",
             databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
             projectId: "club-b8f03",
-            storageBucket: "club-b8f03.appspot.com",
+            storageBucket: "club-b8f03.firebasestorage.app",
             messagingSenderId: "115909846985",
             appId: "1:115909846985:web:6f42fbb224935c513cea18",
             measurementId: "G-S3M36PLB9Y"
@@ -845,7 +800,6 @@
         const database = firebase.database();
         
         // Game state variables
-        const currentGame = 'wingo30';
         let selectedOption = null;
         let selectedNumber = null;
         let currentMultiplier = 1;
@@ -856,6 +810,7 @@
         let isBettingClosed = false;
         let currentHistoryPage = 1;
         const HISTORY_PER_PAGE = 10;
+        const GAME_TYPE = 'wingo30';
         
         // Check if user is logged in
         const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
@@ -905,7 +860,7 @@
             const now = new Date();
             const kolkataTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
             
-            // Calculate seconds remaining
+            // Calculate seconds remaining (30 second game)
             secondsRemaining = 30 - (kolkataTime.getSeconds() % 30);
             if(secondsRemaining === 0) secondsRemaining = 30;
             
@@ -939,16 +894,16 @@
             const month = String(kolkataTime.getMonth() + 1).padStart(2, '0');
             const day = String(kolkataTime.getDate()).padStart(2, '0');
             
-            // Calculate period number for 30sec game
+            // For 30 second game, period increments every 30 seconds
             const periodNumber = Math.floor((kolkataTime.getHours() * 3600 + kolkataTime.getMinutes() * 60 + kolkataTime.getSeconds()) / 30);
             currentPeriod = `${year}${month}${day}${String(100000 + periodNumber).slice(1)}`;
             
             document.getElementById('period-number').textContent = currentPeriod;
             
             // Save the period to database if not exists
-            database.ref('games/' + currentGame + '/periods/' + currentPeriod).once('value').then((snapshot) => {
+            database.ref('games/' + GAME_TYPE + '/periods/' + currentPeriod).once('value').then((snapshot) => {
                 if(!snapshot.exists()) {
-                    database.ref('games/' + currentGame + '/periods/' + currentPeriod).set({
+                    database.ref('games/' + GAME_TYPE + '/periods/' + currentPeriod).set({
                         startTime: Date.now(),
                         status: 'open'
                     });
@@ -975,7 +930,7 @@
         // End current period and determine results
         function endPeriod() {
             // Close the period for new bets
-            database.ref('games/' + currentGame + '/periods/' + currentPeriod).update({
+            database.ref('games/' + GAME_TYPE + '/periods/' + currentPeriod).update({
                 status: 'closed'
             });
             
@@ -993,7 +948,7 @@
             const resultSize = resultNumber >= 5 ? 'big' : 'small';
             
             // Save result to database
-            database.ref('games/' + currentGame + '/periods/' + currentPeriod).update({
+            database.ref('games/' + GAME_TYPE + '/periods/' + currentPeriod).update({
                 resultNumber: resultNumber,
                 resultColor: resultColor,
                 resultSize: resultSize,
@@ -1018,7 +973,7 @@
         
         // Process all bets for the completed period
         function processBets(resultNumber, resultColor, resultSize) {
-            database.ref('bets/' + currentGame + '/' + currentPeriod).once('value').then((snapshot) => {
+            database.ref('bets/' + GAME_TYPE + '/' + currentPeriod).once('value').then((snapshot) => {
                 const bets = snapshot.val();
                 
                 if(bets) {
@@ -1052,7 +1007,7 @@
                                 });
                                 
                                 // Update bet status
-                                database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userId + '/' + betId).update({
+                                database.ref('bets/' + GAME_TYPE + '/' + currentPeriod + '/' + userId + '/' + betId).update({
                                     status: 'won',
                                     winAmount: payout
                                 });
@@ -1068,7 +1023,7 @@
                                 });
                             } else {
                                 // Mark bet as lost
-                                database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userId + '/' + betId).update({
+                                database.ref('bets/' + GAME_TYPE + '/' + currentPeriod + '/' + userId + '/' + betId).update({
                                     status: 'lost',
                                     winAmount: 0
                                 });
@@ -1126,10 +1081,10 @@
                 timestamp: Date.now()
             };
             
-            database.ref('history/' + currentGame).push(historyItem);
+            database.ref('history/' + GAME_TYPE).push(historyItem);
             
             // Keep only last 29 history items
-            database.ref('history/' + currentGame).orderByChild('timestamp').limitToLast(29).once('value').then((snapshot) => {
+            database.ref('history/' + GAME_TYPE).orderByChild('timestamp').limitToLast(29).once('value').then((snapshot) => {
                 const items = [];
                 snapshot.forEach(child => {
                     items.push({
@@ -1144,7 +1099,7 @@
                     const toDelete = items.slice(0, items.length - 29);
                     
                     toDelete.forEach(item => {
-                        database.ref('history/' + currentGame + '/' + item.key).remove();
+                        database.ref('history/' + GAME_TYPE + '/' + item.key).remove();
                     });
                 }
             });
@@ -1152,7 +1107,7 @@
         
         // Load game history
         function loadGameHistory() {
-            database.ref('history/' + currentGame).orderByChild('timestamp').limitToLast(HISTORY_PER_PAGE).once('value').then((snapshot) => {
+            database.ref('history/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_PER_PAGE).once('value').then((snapshot) => {
                 const historyBody = document.getElementById('history-body');
                 historyBody.innerHTML = '';
                 
@@ -1184,7 +1139,7 @@
         
         // Load my betting history
         function loadMyHistory() {
-            database.ref('bets/' + currentGame).orderByChild('timestamp').limitToLast(HISTORY_PER_PAGE).once('value').then((snapshot) => {
+            database.ref('bets/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_PER_PAGE).once('value').then((snapshot) => {
                 const myHistoryBody = document.getElementById('my-history-body');
                 myHistoryBody.innerHTML = '';
                 
@@ -1239,7 +1194,7 @@
         // Set up real-time game listeners
         function setupGameListeners() {
             // Listen for new periods
-            database.ref('games/' + currentGame + '/periods').limitToLast(1).on('child_added', (snapshot) => {
+            database.ref('games/' + GAME_TYPE + '/periods').limitToLast(1).on('child_added', (snapshot) => {
                 if(snapshot.key !== currentPeriod) {
                     currentPeriod = snapshot.key;
                     document.getElementById('period-number').textContent = currentPeriod;
@@ -1247,12 +1202,12 @@
             });
             
             // Listen for history updates
-            database.ref('history/' + currentGame).limitToLast(1).on('child_added', () => {
+            database.ref('history/' + GAME_TYPE).limitToLast(1).on('child_added', () => {
                 loadGameHistory();
             });
             
             // Listen for my bet updates
-            database.ref('bets/' + currentGame).on('child_added', () => {
+            database.ref('bets/' + GAME_TYPE).on('child_added', () => {
                 loadMyHistory();
             });
         }
@@ -1433,7 +1388,7 @@
                     betData.size = selectedOption;
                 }
                 
-                database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userPhone).push(betData);
+                database.ref('bets/' + GAME_TYPE + '/' + currentPeriod + '/' + userPhone).push(betData);
                 
                 showToast('Bet placed successfully!', 'success');
                 
@@ -1503,7 +1458,6 @@
         function updatePaginationUI() {
             document.getElementById('page-info').textContent = `Page ${currentHistoryPage}`;
             document.getElementById('prev-page').disabled = currentHistoryPage === 1;
-            // Note: Next button disabled state would need to check if there are more pages
         }
         
         // Show toast notification
