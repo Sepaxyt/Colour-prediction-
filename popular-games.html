@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DG Club - WinGo</title>
+    <title>53 Club - WinGo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -31,8 +31,8 @@
         }
         
         body {
-            background: #f5f5f5;
-            color: #333;
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
             min-height: 100vh;
         }
         
@@ -40,8 +40,6 @@
             max-width: 500px;
             margin: 0 auto;
             padding: 10px;
-            background: white;
-            min-height: 100vh;
         }
         
         header {
@@ -49,97 +47,121 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
         }
         
         .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
             font-weight: bold;
-            font-size: 18px;
-            color: var(--primary);
+            color: white;
+            margin-right: 8px;
+        }
+        
+        .logo h1 {
+            font-size: 1.2rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .profile-btn {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
         }
         
         .balance-display {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .balance-amount {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--success);
         }
         
         .balance-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         
         .balance-btn {
-            background: var(--primary);
-            color: white;
+            background: rgba(255, 255, 255, 0.1);
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             padding: 5px 10px;
-            font-size: 12px;
+            color: var(--light);
+            font-size: 0.7rem;
             cursor: pointer;
         }
         
         .game-tabs {
             display: flex;
-            background: #f0f0f0;
-            border-radius: 10px;
-            padding: 5px;
-            margin: 10px 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .game-tab {
-            flex: 1;
-            text-align: center;
-            padding: 8px;
+            padding: 8px 12px;
             cursor: pointer;
-            font-size: 12px;
-            border-radius: 8px;
+            font-size: 0.8rem;
+            border-bottom: 2px solid transparent;
         }
         
         .game-tab.active {
-            background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-bottom: 2px solid var(--secondary);
+            color: var(--secondary);
             font-weight: 500;
         }
         
-        .timer-section {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin: 10px 0;
+        .timer-display {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 10px;
             position: relative;
         }
         
         .timer-title {
-            font-size: 14px;
+            font-size: 0.8rem;
             color: var(--gray);
             margin-bottom: 5px;
         }
         
         .timer-countdown {
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: var(--primary);
+            color: var(--warning);
         }
         
         .period-display {
             position: absolute;
-            right: 15px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 12px;
+            font-size: 0.7rem;
             color: var(--gray);
         }
         
@@ -147,19 +169,17 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 8px;
-            margin: 15px 0;
+            margin-bottom: 10px;
         }
         
         .number-cell {
-            background: white;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
             padding: 12px 5px;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
             font-weight: 500;
-            position: relative;
-            border: 1px solid #eee;
         }
         
         .number-cell.green {
@@ -175,167 +195,167 @@
         }
         
         .number-cell.active {
-            background: var(--primary);
+            background: var(--secondary);
             color: white;
         }
         
-        .bet-section {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin: 10px 0;
-        }
-        
-        .bet-title {
-            font-size: 14px;
-            margin-bottom: 10px;
-            color: var(--gray);
-        }
-        
         .bet-options {
-            display: flex;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
             margin-bottom: 10px;
         }
         
         .bet-option {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
+            padding: 12px;
+            text-align: center;
             cursor: pointer;
-            font-weight: 500;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            border: 1px solid #eee;
+            transition: all 0.2s ease;
+        }
+        
+        .bet-option.green {
+            border-left: 4px solid var(--green);
+        }
+        
+        .bet-option.violet {
+            border-left: 4px solid var(--violet);
+        }
+        
+        .bet-option.red {
+            border-left: 4px solid var(--red);
         }
         
         .bet-option.active {
             background: var(--primary);
-            color: white;
+            box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
         }
         
-        .multiplier-section {
-            display: none;
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin: 10px 0;
+        .bet-option-title {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
         }
         
-        .multiplier-title {
-            font-size: 14px;
-            margin-bottom: 10px;
-            color: var(--gray);
+        .bet-option-value {
+            font-weight: 600;
         }
         
-        .multiplier-grid {
+        .bet-controls {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 8px;
-        }
-        
-        .multiplier-btn {
-            padding: 8px;
-            text-align: center;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            background: #f0f0f0;
-        }
-        
-        .multiplier-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .bet-confirm {
-            display: none;
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin: 10px 0;
-        }
-        
-        .confirm-title {
-            font-size: 14px;
             margin-bottom: 10px;
         }
         
-        .confirm-amount {
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 15px;
+        .bet-multiplier {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
         }
         
-        .confirm-btns {
-            display: flex;
-            gap: 10px;
+        .bet-multiplier.active {
+            background: var(--primary);
+            box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
         }
         
-        .confirm-btn {
-            flex: 1;
-            padding: 10px;
+        .amount-input {
+            grid-column: span 6;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 12px;
+            border: none;
+            color: white;
+            text-align: center;
+            font-size: 1rem;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .action-btn {
+            padding: 12px;
             border-radius: 8px;
             border: none;
             font-weight: 500;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
         
-        .confirm-btn.cancel {
-            background: #f0f0f0;
-            color: #333;
-        }
-        
-        .confirm-btn.submit {
-            background: var(--primary);
+        .action-btn.primary {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
             color: white;
         }
         
-        .history-section {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin: 10px 0;
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .game-history {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
         }
         
         .history-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .history-title {
-            font-size: 14px;
+            font-size: 0.9rem;
             font-weight: 500;
         }
         
-        .history-view-all {
-            font-size: 12px;
-            color: var(--primary);
+        .history-tabs {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .history-tab {
+            font-size: 0.7rem;
+            padding: 3px 6px;
+            border-radius: 4px;
             cursor: pointer;
+        }
+        
+        .history-tab.active {
+            background: var(--primary);
         }
         
         .history-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 0.7rem;
         }
         
         .history-table th {
             text-align: left;
-            padding: 5px 0;
+            padding: 5px;
             color: var(--gray);
             font-weight: normal;
         }
         
         .history-table td {
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
+            padding: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .color-indicator {
@@ -356,6 +376,92 @@
         
         .color-red {
             background-color: var(--red);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        
+        .page-btn {
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+        
+        .page-btn.active {
+            background: var(--primary);
+        }
+        
+        /* Result Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+        
+        .modal-result {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .modal-win {
+            color: var(--success);
+        }
+        
+        .modal-lose {
+            color: var(--danger);
+        }
+        
+        .modal-period {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+        
+        .modal-details {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .close-modal {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
         }
         
         /* Toast Notification */
@@ -407,18 +513,23 @@
 <body>
     <div class="container">
         <header>
-            <div class="logo">DG CLUB</div>
+            <a href="profile.html" class="profile-btn">
+                <i class="fas fa-user"></i>
+            </a>
+            
+            <div class="logo">
+                <div class="logo-img">53</div>
+                <h1>53 Club</h1>
+            </div>
+            
             <div style="width: 24px;"></div>
         </header>
         
         <div class="balance-display">
-            <div>
-                <div style="font-size: 12px; color: var(--gray);">Wallet balance</div>
-                <div class="balance-amount" id="user-balance">₹0.00</div>
-            </div>
+            <div class="balance-amount" id="user-balance">₹0.00</div>
             <div class="balance-actions">
-                <button class="balance-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>
                 <button class="balance-btn" onclick="window.location.href='deposit.html'">Deposit</button>
+                <button class="balance-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>
             </div>
         </div>
         
@@ -429,10 +540,10 @@
             <div class="game-tab" onclick="switchGame('wingo5')">WinGo 5 Min</div>
         </div>
         
-        <div class="timer-section">
-            <div class="timer-title">How to play</div>
-            <div class="timer-countdown" id="countdown-timer">0:16</div>
-            <div class="period-display" id="period-number">20250623100050911</div>
+        <div class="timer-display">
+            <div class="timer-title">Time remaining</div>
+            <div class="timer-countdown" id="countdown-timer">00:30</div>
+            <div class="period-display" id="period-number">20250623100050913</div>
         </div>
         
         <div class="number-grid" id="number-grid">
@@ -448,42 +559,56 @@
             <div class="number-cell red" onclick="selectNumber(9)">9</div>
         </div>
         
-        <div class="bet-section">
-            <div class="bet-title">Select Bet</div>
-            <div class="bet-options">
-                <div class="bet-option" onclick="selectBetOption('big')">Big</div>
-                <div class="bet-option" onclick="selectBetOption('small')">Small</div>
-                <div class="bet-option" onclick="selectBetOption('green')">Green</div>
-                <div class="bet-option" onclick="selectBetOption('violet')">Violet</div>
-                <div class="bet-option" onclick="selectBetOption('red')">Red</div>
+        <div class="bet-options">
+            <div class="bet-option green" onclick="selectBetOption('green')">
+                <div class="bet-option-title">Green</div>
+                <div class="bet-option-value">9.8x</div>
+            </div>
+            <div class="bet-option violet" onclick="selectBetOption('violet')">
+                <div class="bet-option-title">Violet</div>
+                <div class="bet-option-value">4.5x</div>
+            </div>
+            <div class="bet-option red" onclick="selectBetOption('red')">
+                <div class="bet-option-title">Red</div>
+                <div class="bet-option-value">1.98x</div>
+            </div>
+            <div class="bet-option" onclick="selectBetOption('big')">
+                <div class="bet-option-title">Big</div>
+                <div class="bet-option-value">1.98x</div>
+            </div>
+            <div class="bet-option" onclick="selectBetOption('small')">
+                <div class="bet-option-title">Small</div>
+                <div class="bet-option-value">1.98x</div>
+            </div>
+            <div class="bet-option" onclick="selectBetOption('number')">
+                <div class="bet-option-title">Number</div>
+                <div class="bet-option-value">8x</div>
             </div>
         </div>
         
-        <div class="multiplier-section" id="multiplier-section">
-            <div class="multiplier-title">Select Multiplier</div>
-            <div class="multiplier-grid">
-                <div class="multiplier-btn" onclick="setMultiplier(1)">X1</div>
-                <div class="multiplier-btn" onclick="setMultiplier(5)">X5</div>
-                <div class="multiplier-btn" onclick="setMultiplier(10)">X10</div>
-                <div class="multiplier-btn" onclick="setMultiplier(20)">X20</div>
-                <div class="multiplier-btn" onclick="setMultiplier(50)">X50</div>
-                <div class="multiplier-btn" onclick="setMultiplier(100)">X100</div>
-            </div>
+        <input type="number" class="amount-input" id="bet-amount" placeholder="Enter amount" value="1" min="1">
+        
+        <div class="bet-controls">
+            <div class="bet-multiplier" onclick="setAmount(10)">+10</div>
+            <div class="bet-multiplier" onclick="setAmount(100)">+100</div>
+            <div class="bet-multiplier" onclick="setAmount(500)">+500</div>
+            <div class="bet-multiplier" onclick="setAmount(1000)">+1000</div>
+            <div class="bet-multiplier" onclick="setAmount(5000)">+5000</div>
+            <div class="bet-multiplier" onclick="setAmount(10000)">+10000</div>
         </div>
         
-        <div class="bet-confirm" id="bet-confirm">
-            <div class="confirm-title">Confirm Bet</div>
-            <div class="confirm-amount" id="confirm-amount">₹1.00 on Big</div>
-            <div class="confirm-btns">
-                <button class="confirm-btn cancel" onclick="cancelBet()">Cancel</button>
-                <button class="confirm-btn submit" onclick="placeBet()">Submit</button>
-            </div>
+        <div class="action-buttons">
+            <button class="action-btn primary" onclick="placeBet()">Place Bet</button>
+            <button class="action-btn secondary" onclick="clearBets()">Clear</button>
         </div>
         
-        <div class="history-section">
+        <div class="game-history">
             <div class="history-header">
                 <div class="history-title">Game History</div>
-                <div class="history-view-all" onclick="window.location.href='history.html'">View All</div>
+                <div class="history-tabs">
+                    <div class="history-tab active" onclick="showHistoryTab('recent')">Recent</div>
+                    <div class="history-tab" onclick="showHistoryTab('mybets')">My Bets</div>
+                </div>
             </div>
             
             <table class="history-table">
@@ -499,6 +624,25 @@
                     <!-- History items will be added here dynamically -->
                 </tbody>
             </table>
+            
+            <div class="pagination">
+                <div class="page-btn active">1</div>
+                <div class="page-btn">2</div>
+                <div class="page-btn">3</div>
+                <div class="page-btn">4</div>
+                <div class="page-btn">5</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Result Modal -->
+    <div class="modal" id="result-modal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="result-title">Result</h3>
+            <div class="modal-period" id="result-period">Period: 20250623100050912</div>
+            <div class="modal-result" id="result-outcome">Win!</div>
+            <div class="modal-details" id="result-details">Number: 7 | Big | Red</div>
+            <button class="close-modal" onclick="closeResultModal()">OK</button>
         </div>
     </div>
     
@@ -526,11 +670,17 @@
         let currentGame = 'wingo30';
         let selectedOption = null;
         let selectedNumber = null;
-        let currentMultiplier = 1;
+        let currentAmount = 1;
         let userBalance = 0;
         let currentPeriod = '';
         let countdownInterval;
         let secondsRemaining = 30;
+        let gameIntervals = {
+            'wingo30': 30,
+            'wingo1': 60,
+            'wingo3': 180,
+            'wingo5': 300
+        };
         
         // Check if user is logged in
         const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
@@ -585,16 +735,13 @@
             const hours = String(kolkataTime.getHours()).padStart(2, '0');
             const minutes = String(kolkataTime.getMinutes()).padStart(2, '0');
             const seconds = String(kolkataTime.getSeconds()).padStart(2, '0');
-            const milliseconds = String(kolkataTime.getMilliseconds()).padStart(3, '0');
             
-            // Base period number (changes every 30 seconds)
-            const periodBase = `${year}${month}${day}${hours}${minutes}${Math.floor(seconds / 30)}`;
+            // Base period number (changes every interval)
+            const intervalSeconds = gameIntervals[currentGame];
+            const intervalCount = Math.floor(kolkataTime.getTime() / (intervalSeconds * 1000));
             
-            // Last 3 digits increment every 30 seconds
-            const periodIncrement = Math.floor((kolkataTime.getTime() / 30000) % 1000);
-            const periodIncrementStr = String(periodIncrement).padStart(3, '0');
-            
-            currentPeriod = `${periodBase}${periodIncrementStr}`;
+            // Generate unique period number for each game type
+            currentPeriod = `${year}${month}${day}${hours}${minutes}${String(intervalCount).padStart(6, '0')}`;
             document.getElementById('period-number').textContent = currentPeriod;
             
             // Save the period to database if not exists
@@ -602,7 +749,8 @@
                 if(!snapshot.exists()) {
                     database.ref('games/' + currentGame + '/periods/' + currentPeriod).set({
                         startTime: Date.now(),
-                        status: 'open'
+                        status: 'open',
+                        gameType: currentGame
                     });
                 }
             });
@@ -613,11 +761,7 @@
             clearInterval(countdownInterval);
             
             // Reset seconds remaining based on game type
-            if(currentGame === 'wingo30') secondsRemaining = 30;
-            else if(currentGame === 'wingo1') secondsRemaining = 60;
-            else if(currentGame === 'wingo3') secondsRemaining = 180;
-            else if(currentGame === 'wingo5') secondsRemaining = 300;
-            
+            secondsRemaining = gameIntervals[currentGame];
             updateTimerDisplay();
             
             countdownInterval = setInterval(() => {
@@ -637,7 +781,14 @@
             let seconds = secondsRemaining % 60;
             
             document.getElementById('countdown-timer').textContent = 
-                `${minutes}:${String(seconds).padStart(2, '0')}`;
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+            // Change color when time is running out
+            if(secondsRemaining <= 10) {
+                document.getElementById('countdown-timer').style.color = 'var(--danger)';
+            } else {
+                document.getElementById('countdown-timer').style.color = 'var(--warning)';
+            }
         }
         
         // End current period and determine results
@@ -666,78 +817,81 @@
                 resultColor: resultColor,
                 resultSize: resultSize,
                 endTime: Date.now()
+            }).then(() => {
+                // Process all bets for this period
+                processBets(resultNumber, resultColor, resultSize);
+                
+                // Add to history
+                addToHistory(currentPeriod, resultNumber, resultSize, resultColor);
+                
+                // Start new period
+                setTimeout(() => {
+                    updatePeriodNumber();
+                    startCountdown();
+                    secondsRemaining = gameIntervals[currentGame];
+                    updateTimerDisplay();
+                }, 5000);
             });
-            
-            // Process all bets for this period
-            processBets(resultNumber, resultColor, resultSize);
-            
-            // Add to history
-            addToHistory(currentPeriod, resultNumber, resultSize, resultColor);
-            
-            // Start new period
-            setTimeout(() => {
-                updatePeriodNumber();
-                startCountdown();
-                secondsRemaining = currentGame === 'wingo30' ? 30 : 
-                                  currentGame === 'wingo1' ? 60 : 
-                                  currentGame === 'wingo3' ? 180 : 300;
-                updateTimerDisplay();
-            }, 5000);
         }
         
         // Process all bets for the completed period
         function processBets(resultNumber, resultColor, resultSize) {
-            database.ref('bets/' + currentGame + '/' + currentPeriod).once('value').then((snapshot) => {
+            database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userPhone).once('value').then((snapshot) => {
                 const bets = snapshot.val();
                 
                 if(bets) {
-                    Object.keys(bets).forEach(userId => {
-                        const userBets = bets[userId];
+                    Object.keys(bets).forEach(betId => {
+                        const bet = bets[betId];
+                        let winAmount = 0;
+                        let won = false;
                         
-                        Object.keys(userBets).forEach(betId => {
-                            const bet = userBets[betId];
-                            let winAmount = 0;
-                            
-                            // Check if bet won
-                            if(bet.type === 'number' && bet.number === resultNumber) {
-                                winAmount = bet.amount * 8; // 8x for number
-                            } 
-                            else if(bet.type === 'color' && bet.color === resultColor) {
-                                if(resultColor === 'green') winAmount = bet.amount * 9.8;
-                                else if(resultColor === 'violet') winAmount = bet.amount * 4.5;
-                                else if(resultColor === 'red') winAmount = bet.amount * 1.98;
-                            }
-                            else if(bet.type === 'size' && bet.size === resultSize) {
-                                winAmount = bet.amount * 1.98; // 1.98x for big/small
-                            }
-                            
-                            // Update user balance and bet status
-                            if(winAmount > 0) {
-                                // Deduct 1% commission
-                                const payout = winAmount * 0.99;
-                                
-                                database.ref('users/' + userId + '/balance').transaction((balance) => {
-                                    return (balance || 0) + payout;
-                                });
-                                
-                                // Update bet status
-                                database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userId + '/' + betId).update({
-                                    status: 'won',
-                                    winAmount: payout
-                                });
-                                
-                                // Update user stats
-                                database.ref('users/' + userId + '/totalWins').transaction((wins) => {
-                                    return (wins || 0) + 1;
-                                });
-                            } else {
-                                // Mark bet as lost
-                                database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userId + '/' + betId).update({
-                                    status: 'lost',
-                                    winAmount: 0
-                                });
+                        // Check if bet won
+                        if(bet.type === 'number' && bet.number === resultNumber) {
+                            winAmount = bet.amount * 8; // 8x for number
+                            won = true;
+                        } 
+                        else if(bet.type === 'color' && bet.color === resultColor) {
+                            if(resultColor === 'green') winAmount = bet.amount * 9.8;
+                            else if(resultColor === 'violet') winAmount = bet.amount * 4.5;
+                            else if(resultColor === 'red') winAmount = bet.amount * 1.98;
+                            won = true;
+                        }
+                        else if(bet.type === 'size' && bet.size === resultSize) {
+                            winAmount = bet.amount * 1.98; // 1.98x for big/small
+                            won = true;
+                        }
+                        
+                        // Update bet status
+                        database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userPhone + '/' + betId).update({
+                            status: won ? 'won' : 'lost',
+                            winAmount: winAmount,
+                            result: {
+                                number: resultNumber,
+                                color: resultColor,
+                                size: resultSize
                             }
                         });
+                        
+                        // If user won, update balance
+                        if(won) {
+                            // Deduct 1% commission
+                            const payout = winAmount * 0.99;
+                            
+                            database.ref('users/' + userPhone + '/balance').transaction((balance) => {
+                                return (balance || 0) + payout;
+                            });
+                            
+                            // Update user stats
+                            database.ref('users/' + userPhone + '/totalWins').transaction((wins) => {
+                                return (wins || 0) + 1;
+                            });
+                            
+                            // Show win modal
+                            showResultModal(true, currentPeriod, resultNumber, resultSize, resultColor, payout);
+                        } else {
+                            // Show loss modal if user placed this bet
+                            showResultModal(false, currentPeriod, resultNumber, resultSize, resultColor, 0);
+                        }
                     });
                 }
             });
@@ -750,10 +904,34 @@
                 number: number,
                 size: size,
                 color: color,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                gameType: currentGame
             };
             
+            // Add to general history
             database.ref('history/' + currentGame).push(historyItem);
+            
+            // Keep only last 50 history items
+            database.ref('history/' + currentGame).orderByChild('timestamp').once('value').then((snapshot) => {
+                const historyItems = [];
+                snapshot.forEach(childSnapshot => {
+                    historyItems.push({
+                        key: childSnapshot.key,
+                        timestamp: childSnapshot.val().timestamp
+                    });
+                });
+                
+                // Sort by timestamp (oldest first)
+                historyItems.sort((a, b) => a.timestamp - b.timestamp);
+                
+                // Delete older items if more than 50
+                if(historyItems.length > 50) {
+                    const itemsToDelete = historyItems.length - 50;
+                    for(let i = 0; i < itemsToDelete; i++) {
+                        database.ref('history/' + currentGame + '/' + historyItems[i].key).remove();
+                    }
+                }
+            });
         }
         
         // Load game history
@@ -788,11 +966,39 @@
             });
         }
         
+        // Load user bets
+        function loadUserBets() {
+            database.ref('bets/' + currentGame).orderByKey().limitToLast(10).once('value').then((snapshot) => {
+                const historyBody = document.getElementById('history-body');
+                historyBody.innerHTML = '';
+                
+                snapshot.forEach(periodSnapshot => {
+                    periodSnapshot.forEach(userSnapshot => {
+                        if(userSnapshot.key === userPhone) {
+                            userSnapshot.forEach(betSnapshot => {
+                                const bet = betSnapshot.val();
+                                const row = document.createElement('tr');
+                                
+                                row.innerHTML = `
+                                    <td>${periodSnapshot.key}</td>
+                                    <td>${bet.type === 'number' ? bet.number : '-'}</td>
+                                    <td>${bet.type === 'size' ? bet.size : '-'}</td>
+                                    <td>${bet.type === 'color' ? bet.color : '-'}</td>
+                                `;
+                                
+                                historyBody.appendChild(row);
+                            });
+                        }
+                    });
+                });
+            });
+        }
+        
         // Set up real-time game listeners
         function setupGameListeners() {
             // Listen for new periods
             database.ref('games/' + currentGame + '/periods').limitToLast(1).on('child_added', (snapshot) => {
-                if(snapshot.key !== currentPeriod) {
+                if(snapshot.key !== currentPeriod && snapshot.val().gameType === currentGame) {
                     currentPeriod = snapshot.key;
                     document.getElementById('period-number').textContent = currentPeriod;
                 }
@@ -815,21 +1021,17 @@
             
             if(gameType === 'wingo30') {
                 document.querySelector('.game-tab:nth-child(1)').classList.add('active');
-                secondsRemaining = 30;
             } else if(gameType === 'wingo1') {
                 document.querySelector('.game-tab:nth-child(2)').classList.add('active');
-                secondsRemaining = 60;
             } else if(gameType === 'wingo3') {
                 document.querySelector('.game-tab:nth-child(3)').classList.add('active');
-                secondsRemaining = 180;
             } else if(gameType === 'wingo5') {
                 document.querySelector('.game-tab:nth-child(4)').classList.add('active');
-                secondsRemaining = 300;
             }
             
-            // Reset timer
+            // Reset timer with new interval
             clearInterval(countdownInterval);
-            updateTimerDisplay();
+            updatePeriodNumber();
             startCountdown();
             
             // Load history for new game
@@ -851,18 +1053,17 @@
             selectedNumber = null;
             
             // Highlight selected option
-            document.querySelectorAll('.bet-option').forEach(el => {
-                if(el.textContent.toLowerCase() === option) {
-                    el.classList.add('active');
-                }
-            });
-            
-            // Show multiplier section
-            document.getElementById('multiplier-section').style.display = 'block';
-            document.getElementById('bet-confirm').style.display = 'none';
-            
-            // Reset multiplier to 1
-            setMultiplier(1);
+            if(option === 'green' || option === 'violet' || option === 'red') {
+                document.querySelector(`.bet-option.${option}`).classList.add('active');
+            } else if(option === 'big' || option === 'small') {
+                document.querySelectorAll('.bet-option').forEach(el => {
+                    if(el.textContent.includes(option.charAt(0).toUpperCase() + option.slice(1))) {
+                        el.classList.add('active');
+                    }
+                });
+            } else if(option === 'number') {
+                // Number selection will be handled separately
+            }
         }
         
         // Select specific number
@@ -881,50 +1082,12 @@
             
             // Highlight selected number
             document.querySelectorAll('.number-cell')[number].classList.add('active');
-            
-            // Show multiplier section
-            document.getElementById('multiplier-section').style.display = 'block';
-            document.getElementById('bet-confirm').style.display = 'none';
-            
-            // Reset multiplier to 1
-            setMultiplier(1);
         }
         
-        // Set bet multiplier
-        function setMultiplier(multiplier) {
-            currentMultiplier = multiplier;
-            
-            // Update UI
-            document.querySelectorAll('.multiplier-btn').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            document.querySelectorAll('.multiplier-btn').forEach((el, index) => {
-                const values = [1, 5, 10, 20, 50, 100];
-                if(values[index] === multiplier) {
-                    el.classList.add('active');
-                }
-            });
-            
-            // Show confirm section
-            document.getElementById('bet-confirm').style.display = 'block';
-            
-            // Update confirm amount display
-            let betType = '';
-            if(selectedOption === 'number') {
-                betType = `Number ${selectedNumber}`;
-            } else {
-                betType = selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1);
-            }
-            
-            const amount = (currentMultiplier).toLocaleString('en-IN', {
-                style: 'currency',
-                currency: 'INR',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-            
-            document.getElementById('confirm-amount').textContent = `${amount} on ${betType}`;
+        // Set bet amount
+        function setAmount(amount) {
+            currentAmount = parseInt(document.getElementById('bet-amount').value) + amount;
+            document.getElementById('bet-amount').value = currentAmount;
         }
         
         // Place bet
@@ -934,20 +1097,27 @@
                 return;
             }
             
-            if(userBalance < currentMultiplier) {
+            currentAmount = parseInt(document.getElementById('bet-amount').value) || 1;
+            
+            if(currentAmount < 1) {
+                showToast('Minimum bet amount is ₹1', 'error');
+                return;
+            }
+            
+            if(userBalance < currentAmount) {
                 showToast('Insufficient balance', 'error');
                 return;
             }
             
             // Deduct amount from balance
-            const newBalance = userBalance - currentMultiplier;
+            const newBalance = userBalance - currentAmount;
             
             database.ref('users/' + userPhone + '/balance').set(newBalance).then(() => {
                 // Create bet record
                 const betData = {
                     type: selectedOption === 'number' ? 'number' : 
                           ['green', 'violet', 'red'].includes(selectedOption) ? 'color' : 'size',
-                    amount: currentMultiplier,
+                    amount: currentAmount,
                     timestamp: Date.now(),
                     status: 'pending'
                 };
@@ -962,21 +1132,22 @@
                 
                 database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userPhone).push(betData);
                 
-                showToast('Bet placed successfully!', 'success');
+                showToast(`Bet placed for ₹${currentAmount}!`, 'success');
                 
                 // Clear selections
-                cancelBet();
+                clearBets();
             }).catch(error => {
                 console.error('Error placing bet:', error);
                 showToast('Error placing bet', 'error');
             });
         }
         
-        // Cancel bet
-        function cancelBet() {
+        // Clear all bet selections
+        function clearBets() {
             selectedOption = null;
             selectedNumber = null;
-            currentMultiplier = 1;
+            currentAmount = 1;
+            document.getElementById('bet-amount').value = 1;
             
             document.querySelectorAll('.bet-option').forEach(el => {
                 el.classList.remove('active');
@@ -985,9 +1156,50 @@
             document.querySelectorAll('.number-cell').forEach(el => {
                 el.classList.remove('active');
             });
+        }
+        
+        // Show history tab
+        function showHistoryTab(tab) {
+            document.querySelectorAll('.history-tab').forEach(el => {
+                el.classList.remove('active');
+            });
             
-            document.getElementById('multiplier-section').style.display = 'none';
-            document.getElementById('bet-confirm').style.display = 'none';
+            if(tab === 'recent') {
+                document.querySelector('.history-tab:nth-child(1)').classList.add('active');
+                loadGameHistory();
+            } else {
+                document.querySelector('.history-tab:nth-child(2)').classList.add('active');
+                loadUserBets();
+            }
+        }
+        
+        // Show result modal
+        function showResultModal(isWin, period, number, size, color, amount) {
+            const modal = document.getElementById('result-modal');
+            const title = document.getElementById('result-title');
+            const periodEl = document.getElementById('result-period');
+            const outcome = document.getElementById('result-outcome');
+            const details = document.getElementById('result-details');
+            
+            if(isWin) {
+                title.textContent = "Congratulations!";
+                outcome.textContent = "You Won!";
+                outcome.className = "modal-result modal-win";
+                details.textContent = `Number: ${number} | ${size} | ${color} | Won: ₹${amount.toFixed(2)}`;
+            } else {
+                title.textContent = "Result";
+                outcome.textContent = "You Lost";
+                outcome.className = "modal-result modal-lose";
+                details.textContent = `Number: ${number} | ${size} | ${color}`;
+            }
+            
+            periodEl.textContent = `Period: ${period}`;
+            modal.style.display = 'flex';
+        }
+        
+        // Close result modal
+        function closeResultModal() {
+            document.getElementById('result-modal').style.display = 'none';
         }
         
         // Show toast notification
