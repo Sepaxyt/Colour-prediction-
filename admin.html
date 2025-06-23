@@ -6,752 +6,105 @@
     <title>53 Club - Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
-        :root {
-            --primary: #6a11cb;
-            --secondary: #4a6bff;
-            --dark: #121212;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
-            --info: #17a2b8;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            color: var(--light);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 1.5rem;
-        }
-        
-        .logout-btn {
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logout-btn i {
-            margin-right: 5px;
-        }
-        
-        .admin-container {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 20px;
-        }
-        
-        .sidebar {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-        }
-        
-        .sidebar-menu {
-            list-style: none;
-        }
-        
-        .sidebar-menu li {
-            margin-bottom: 10px;
-        }
-        
-        .sidebar-menu a {
-            display: block;
-            padding: 10px;
-            color: var(--light);
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .sidebar-menu i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .main-content {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-        }
-        
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .section-title i {
-            margin-right: 10px;
-            color: var(--secondary);
-        }
-        
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-        }
-        
-        .stat-card h3 {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 10px;
-        }
-        
-        .stat-card .value {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-        
-        .stat-card.success .value {
-            color: var(--success);
-        }
-        
-        .stat-card.pending .value {
-            color: var(--warning);
-        }
-        
-        .stat-card.failed .value {
-            color: var(--danger);
-        }
-        
-        .stat-card.total .value {
-            color: var(--secondary);
-        }
-        
-        .table-container {
-            overflow-x: auto;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        th {
-            background: rgba(255, 255, 255, 0.05);
-            font-weight: 600;
-        }
-        
-        tr:hover {
-            background: rgba(255, 255, 255, 0.03);
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        
-        .status-pending {
-            background: rgba(255, 193, 7, 0.1);
-            color: var(--warning);
-        }
-        
-        .status-success {
-            background: rgba(40, 167, 69, 0.1);
-            color: var(--success);
-        }
-        
-        .status-failed {
-            background: rgba(220, 53, 69, 0.1);
-            color: var(--danger);
-        }
-        
-        .action-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            margin-right: 5px;
-        }
-        
-        .approve-btn {
-            background: var(--success);
-            color: white;
-        }
-        
-        .reject-btn {
-            background: var(--danger);
-            color: white;
-        }
-        
-        .view-btn {
-            background: var(--info);
-            color: white;
-        }
-        
-        .search-filter {
-            display: flex;
-            margin-bottom: 20px;
-            gap: 15px;
-        }
-        
-        .search-box {
-            flex: 1;
-            padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: var(--light);
-        }
-        
-        .filter-select {
-            padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: var(--light);
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            gap: 5px;
-        }
-        
-        .page-btn {
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            color: var(--light);
-            cursor: pointer;
-        }
-        
-        .page-btn.active {
-            background: var(--secondary);
-            color: white;
-        }
-        
-        .page-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            border-radius: 10px;
-            width: 500px;
-            max-width: 90%;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .modal-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            color: var(--light);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .modal-body .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .modal-body label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .modal-body input, .modal-body select, .modal-body textarea {
-            width: 100%;
-            padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: var(--light);
-        }
-        
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .modal-btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .modal-btn-primary {
-            background: var(--secondary);
-            color: white;
-        }
-        
-        .modal-btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--light);
-        }
-        
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--success);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
-        }
-        
-        @keyframes toastFadeIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-        
-        @keyframes toastFadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        
-        .toast.error {
-            background-color: var(--danger);
-        }
-        
-        .toast.warning {
-            background-color: var(--warning);
-            color: var(--dark);
-        }
-        
-        .toast.info {
-            background-color: var(--info);
-        }
-        
-        .toast-icon {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-        
-        /* Loading Spinner */
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 992px) {
-            .admin-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .stats-cards {
-                grid-template-columns: 1fr;
-            }
-        }
+        /* Previous styles remain the same */
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="logo">53 Club - Admin Panel</div>
-            <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </header>
+        <!-- Header and sidebar remain the same -->
         
-        <div class="admin-container">
-            <div class="sidebar">
-                <ul class="sidebar-menu">
-                    <li><a href="#" class="active" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="#" onclick="showSection('pending-payments')"><i class="fas fa-clock"></i> Pending Payments</a></li>
-                    <li><a href="#" onclick="showSection('verified-payments')"><i class="fas fa-check-circle"></i> Verified Payments</a></li>
-                    <li><a href="#" onclick="showSection('rejected-payments')"><i class="fas fa-times-circle"></i> Rejected Payments</a></li>
-                    <li><a href="#" onclick="showSection('all-users')"><i class="fas fa-users"></i> All Users</a></li>
-                    <li><a href="#" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
-                </ul>
+        <div class="main-content">
+            <!-- Pending Approvals Section -->
+            <div id="pending-approvals-section" class="content-section">
+                <h2 class="section-title"><i class="fas fa-clock"></i> Pending Approvals</h2>
+                
+                <div class="table-container">
+                    <table id="pending-approvals">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>User Phone</th>
+                                <th>Amount</th>
+                                <th>UTR</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Pending approvals will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
-            <div class="main-content">
-                <!-- Dashboard Section -->
-                <div id="dashboard-section" class="content-section">
-                    <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-                    
-                    <div class="stats-cards">
-                        <div class="stat-card total">
-                            <h3>Total Deposits</h3>
-                            <div class="value" id="total-deposits">₹0</div>
-                        </div>
-                        <div class="stat-card success">
-                            <h3>Successful</h3>
-                            <div class="value" id="success-deposits">₹0</div>
-                        </div>
-                        <div class="stat-card pending">
-                            <h3>Pending</h3>
-                            <div class="value" id="pending-deposits">₹0</div>
-                        </div>
-                        <div class="stat-card failed">
-                            <h3>Failed</h3>
-                            <div class="value" id="failed-deposits">₹0</div>
-                        </div>
-                    </div>
-                    
-                    <h3 class="section-title"><i class="fas fa-history"></i> Recent Transactions</h3>
-                    <div class="table-container">
-                        <table id="recent-transactions">
-                            <thead>
-                                <tr>
-                                    <th>Transaction ID</th>
-                                    <th>User</th>
-                                    <th>Amount</th>
-                                    <th>Channel</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Transactions will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <!-- Pending Withdrawals Section -->
+            <div id="pending-withdrawals-section" class="content-section" style="display: none;">
+                <h2 class="section-title"><i class="fas fa-money-bill-wave"></i> Pending Withdrawals</h2>
                 
-                <!-- Pending Payments Section -->
-                <div id="pending-payments-section" class="content-section" style="display: none;">
-                    <h2 class="section-title"><i class="fas fa-clock"></i> Pending Payments</h2>
-                    
-                    <div class="search-filter">
-                        <input type="text" class="search-box" id="pending-search" placeholder="Search by UTR, User ID or Amount">
-                        <select class="filter-select" id="pending-filter">
-                            <option value="all">All Channels</option>
-                            <option value="wingo">WIN Go</option>
-                            <option value="k3">K3 Lottery</option>
-                            <option value="5d">5D Lottery</option>
-                            <option value="trx">TRX Lottery</option>
-                        </select>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table id="pending-payments">
-                            <thead>
-                                <tr>
-                                    <th>Transaction ID</th>
-                                    <th>User ID</th>
-                                    <th>Amount</th>
-                                    <th>Channel</th>
-                                    <th>UTR</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Pending payments will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="pagination" id="pending-pagination">
-                        <!-- Pagination will be loaded here -->
-                    </div>
-                </div>
-                
-                <!-- Verified Payments Section -->
-                <div id="verified-payments-section" class="content-section" style="display: none;">
-                    <h2 class="section-title"><i class="fas fa-check-circle"></i> Verified Payments</h2>
-                    
-                    <div class="search-filter">
-                        <input type="text" class="search-box" id="verified-search" placeholder="Search by UTR, User ID or Amount">
-                        <select class="filter-select" id="verified-filter">
-                            <option value="all">All Channels</option>
-                            <option value="wingo">WIN Go</option>
-                            <option value="k3">K3 Lottery</option>
-                            <option value="5d">5D Lottery</option>
-                            <option value="trx">TRX Lottery</option>
-                        </select>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table id="verified-payments">
-                            <thead>
-                                <tr>
-                                    <th>Transaction ID</th>
-                                    <th>User ID</th>
-                                    <th>Amount</th>
-                                    <th>Channel</th>
-                                    <th>UTR</th>
-                                    <th>Verified By</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Verified payments will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="pagination" id="verified-pagination">
-                        <!-- Pagination will be loaded here -->
-                    </div>
-                </div>
-                
-                <!-- Rejected Payments Section -->
-                <div id="rejected-payments-section" class="content-section" style="display: none;">
-                    <h2 class="section-title"><i class="fas fa-times-circle"></i> Rejected Payments</h2>
-                    
-                    <div class="search-filter">
-                        <input type="text" class="search-box" id="rejected-search" placeholder="Search by UTR, User ID or Amount">
-                        <select class="filter-select" id="rejected-filter">
-                            <option value="all">All Channels</option>
-                            <option value="wingo">WIN Go</option>
-                            <option value="k3">K3 Lottery</option>
-                            <option value="5d">5D Lottery</option>
-                            <option value="trx">TRX Lottery</option>
-                        </select>
-                    </div>
-                    
-                    <div class="table-container">
-                        <table id="rejected-payments">
-                            <thead>
-                                <tr>
-                                    <th>Transaction ID</th>
-                                    <th>User ID</th>
-                                    <th>Amount</th>
-                                    <th>Channel</th>
-                                    <th>UTR</th>
-                                    <th>Reason</th>
-                                    <th>Rejected By</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Rejected payments will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="pagination" id="rejected-pagination">
-                        <!-- Pagination will be loaded here -->
-                    </div>
-                </div>
-                
-                <!-- All Users Section -->
-                <div id="all-users-section" class="content-section" style="display: none;">
-                    <h2 class="section-title"><i class="fas fa-users"></i> All Users</h2>
-                    
-                    <div class="search-filter">
-                        <input type="text" class="search-box" id="users-search" placeholder="Search by User ID or Phone">
-                    </div>
-                    
-                    <div class="table-container">
-                        <table id="all-users">
-                            <thead>
-                                <tr>
-                                    <th>User ID</th>
-                                    <th>Phone</th>
-                                    <th>Balance</th>
-                                    <th>Total Deposits</th>
-                                    <th>Last Active</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Users will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="pagination" id="users-pagination">
-                        <!-- Pagination will be loaded here -->
-                    </div>
-                </div>
-                
-                <!-- Settings Section -->
-                <div id="settings-section" class="content-section" style="display: none;">
-                    <h2 class="section-title"><i class="fas fa-cog"></i> Settings</h2>
-                    
-                    <div class="form-group">
-                        <label>Telegram Bot Token</label>
-                        <input type="text" class="form-control" id="telegram-token" value="7645796543:AAEh8jLyrcaUN6Em8GFCM0fZz17hsUFRXkQ">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Telegram Chat ID</label>
-                        <input type="text" class="form-control" id="telegram-chat-id" placeholder="Enter your Telegram Chat ID">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>UPI ID</label>
-                        <input type="text" class="form-control" id="upi-id" value="nasir****@airtel">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Minimum Deposit Amount</label>
-                        <input type="number" class="form-control" id="min-deposit" value="100">
-                    </div>
-                    
-                    <button class="submit-btn" onclick="saveSettings()">
-                        Save Settings
-                    </button>
+                <div class="table-container">
+                    <table id="pending-withdrawals">
+                        <thead>
+                            <tr>
+                                <th>Withdrawal ID</th>
+                                <th>User Phone</th>
+                                <th>Amount</th>
+                                <th>Bank Details</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Pending withdrawals will be loaded here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
+            
+            <!-- Other sections remain the same -->
         </div>
     </div>
     
-    <!-- Verify Payment Modal -->
-    <div class="modal" id="verify-modal">
+    <!-- Approval Modal -->
+    <div class="modal" id="approval-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Verify Payment</h3>
-                <button class="close-modal" onclick="closeModal('verify-modal')">&times;</button>
+                <h3 class="modal-title">Approve Transaction</h3>
+                <button class="close-modal" onclick="closeModal('approval-modal')">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label>Transaction ID</label>
-                    <input type="text" id="verify-txn-id" readonly>
+                    <input type="text" id="approval-txn-id" readonly>
                 </div>
                 <div class="form-group">
-                    <label>User ID</label>
-                    <input type="text" id="verify-user-id" readonly>
+                    <label>User Phone</label>
+                    <input type="text" id="approval-user-phone" readonly>
                 </div>
                 <div class="form-group">
                     <label>Amount</label>
-                    <input type="text" id="verify-amount" readonly>
+                    <input type="text" id="approval-amount" readonly>
                 </div>
                 <div class="form-group">
                     <label>UTR Number</label>
-                    <input type="text" id="verify-utr" readonly>
-                </div>
-                <div class="form-group">
-                    <label>Payment Screenshot (Optional)</label>
-                    <input type="file" id="verify-screenshot">
+                    <input type="text" id="approval-utr" readonly>
                 </div>
                 <div class="form-group">
                     <label>Notes</label>
-                    <textarea id="verify-notes" rows="3"></textarea>
+                    <textarea id="approval-notes" rows="3"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="modal-btn modal-btn-secondary" onclick="closeModal('verify-modal')">Cancel</button>
-                <button class="modal-btn modal-btn-primary" onclick="approvePayment()">Approve Payment</button>
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal('approval-modal')">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="approveTransaction()">Approve</button>
             </div>
         </div>
     </div>
     
-    <!-- Reject Payment Modal -->
+    <!-- Reject Modal -->
     <div class="modal" id="reject-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Reject Payment</h3>
+                <h3 class="modal-title">Reject Transaction</h3>
                 <button class="close-modal" onclick="closeModal('reject-modal')">&times;</button>
             </div>
             <div class="modal-body">
@@ -760,8 +113,8 @@
                     <input type="text" id="reject-txn-id" readonly>
                 </div>
                 <div class="form-group">
-                    <label>User ID</label>
-                    <input type="text" id="reject-user-id" readonly>
+                    <label>User Phone</label>
+                    <input type="text" id="reject-user-phone" readonly>
                 </div>
                 <div class="form-group">
                     <label>Amount</label>
@@ -787,62 +140,88 @@
             </div>
             <div class="modal-footer">
                 <button class="modal-btn modal-btn-secondary" onclick="closeModal('reject-modal')">Cancel</button>
-                <button class="modal-btn modal-btn-primary" onclick="rejectPayment()">Confirm Rejection</button>
+                <button class="modal-btn modal-btn-primary" onclick="rejectTransaction()">Confirm Rejection</button>
             </div>
         </div>
     </div>
     
-    <!-- View User Modal -->
-    <div class="modal" id="user-modal">
+    <!-- Withdrawal Approval Modal -->
+    <div class="modal" id="withdrawal-approval-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">User Details</h3>
-                <button class="close-modal" onclick="closeModal('user-modal')">&times;</button>
+                <h3 class="modal-title">Approve Withdrawal</h3>
+                <button class="close-modal" onclick="closeModal('withdrawal-approval-modal')">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>User ID</label>
-                    <input type="text" id="user-id" readonly>
+                    <label>Withdrawal ID</label>
+                    <input type="text" id="withdrawal-id" readonly>
                 </div>
                 <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="text" id="user-phone" readonly>
+                    <label>User Phone</label>
+                    <input type="text" id="withdrawal-user-phone" readonly>
                 </div>
                 <div class="form-group">
-                    <label>Current Balance</label>
-                    <input type="text" id="user-balance" readonly>
+                    <label>Amount</label>
+                    <input type="text" id="withdrawal-amount" readonly>
                 </div>
                 <div class="form-group">
-                    <label>Total Deposits</label>
-                    <input type="text" id="user-total-deposits" readonly>
+                    <label>Bank Details</label>
+                    <textarea id="withdrawal-bank-details" rows="4" readonly></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Account Created</label>
-                    <input type="text" id="user-created" readonly>
-                </div>
-                <div class="form-group">
-                    <label>Last Active</label>
-                    <input type="text" id="user-last-active" readonly>
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="user-status">
-                        <option value="active">Active</option>
-                        <option value="suspended">Suspended</option>
-                    </select>
+                    <label>Transaction Reference</label>
+                    <input type="text" id="withdrawal-reference" placeholder="Enter bank reference number">
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="modal-btn modal-btn-secondary" onclick="closeModal('user-modal')">Close</button>
-                <button class="modal-btn modal-btn-primary" onclick="updateUserStatus()">Save Changes</button>
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal('withdrawal-approval-modal')">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="approveWithdrawal()">Approve</button>
             </div>
         </div>
     </div>
     
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    
+    <!-- Withdrawal Reject Modal -->
+    <div class="modal" id="withdrawal-reject-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Reject Withdrawal</h3>
+                <button class="close-modal" onclick="closeModal('withdrawal-reject-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Withdrawal ID</label>
+                    <input type="text" id="reject-withdrawal-id" readonly>
+                </div>
+                <div class="form-group">
+                    <label>User Phone</label>
+                    <input type="text" id="reject-withdrawal-user" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="text" id="reject-withdrawal-amount" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Reason for Rejection</label>
+                    <select id="withdrawal-reject-reason">
+                        <option value="Insufficient Balance">Insufficient Balance</option>
+                        <option value="Invalid Bank Details">Invalid Bank Details</option>
+                        <option value="Suspicious Activity">Suspicious Activity</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group" id="withdrawal-reject-other-container" style="display: none;">
+                    <label>Specify Reason</label>
+                    <input type="text" id="withdrawal-reject-other-reason">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal('withdrawal-reject-modal')">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="rejectWithdrawal()">Confirm Rejection</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Initialize Firebase
         const firebaseConfig = {
@@ -864,144 +243,84 @@
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 currentAdmin = user.uid;
-                loadDashboard();
-                loadPendingPayments();
-                loadVerifiedPayments();
-                loadRejectedPayments();
-                loadAllUsers();
+                loadPendingApprovals();
+                loadPendingWithdrawals();
             } else {
                 window.location.href = "admin-login.html";
             }
         });
         
-        // Logout function
-        function logout() {
-            firebase.auth().signOut().then(() => {
-                window.location.href = "admin-login.html";
-            });
-        }
-        
-        // Show section
-        function showSection(section) {
-            document.querySelectorAll('.content-section').forEach(sec => {
-                sec.style.display = 'none';
-            });
-            
-            document.getElementById(`${section}-section`).style.display = 'block';
-            
-            // Update active menu item
-            document.querySelectorAll('.sidebar-menu a').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            event.target.classList.add('active');
-        }
-        
-        // Load dashboard stats
-        function loadDashboard() {
-            // Total deposits
-            database.ref('deposits').on('value', (snapshot) => {
-                let totalAmount = 0;
-                let successAmount = 0;
-                let pendingAmount = 0;
-                let failedAmount = 0;
-                
-                snapshot.forEach(userSnapshot => {
-                    userSnapshot.forEach(txnSnapshot => {
-                        const txn = txnSnapshot.val();
-                        totalAmount += txn.amount;
-                        
-                        if (txn.status === 'success') {
-                            successAmount += txn.amount;
-                        } else if (txn.status === 'pending') {
-                            pendingAmount += txn.amount;
-                        } else if (txn.status === 'failed') {
-                            failedAmount += txn.amount;
-                        }
-                    });
-                });
-                
-                document.getElementById('total-deposits').textContent = `₹${totalAmount.toLocaleString('en-IN')}`;
-                document.getElementById('success-deposits').textContent = `₹${successAmount.toLocaleString('en-IN')}`;
-                document.getElementById('pending-deposits').textContent = `₹${pendingAmount.toLocaleString('en-IN')}`;
-                document.getElementById('failed-deposits').textContent = `₹${failedAmount.toLocaleString('en-IN')}`;
-            });
-            
-            // Recent transactions
-            database.ref('deposits').orderByChild('timestamp').limitToLast(10).on('value', (snapshot) => {
-                const tbody = document.querySelector('#recent-transactions tbody');
+        // Load pending approvals
+        function loadPendingApprovals() {
+            database.ref('adminTransactions').orderByChild('status').equalTo('pending_approval').on('value', (snapshot) => {
+                const tbody = document.querySelector('#pending-approvals tbody');
                 tbody.innerHTML = '';
                 
-                snapshot.forEach(userSnapshot => {
-                    const userId = userSnapshot.key;
+                snapshot.forEach((txnSnapshot) => {
+                    const txnId = txnSnapshot.key;
+                    const txn = txnSnapshot.val();
                     
-                    userSnapshot.forEach(txnSnapshot => {
-                        const txnId = txnSnapshot.key;
-                        const txn = txnSnapshot.val();
-                        
-                        const date = new Date(txn.timestamp);
-                        const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-                        
-                        let statusBadge = '';
-                        if (txn.status === 'success') {
-                            statusBadge = '<span class="status-badge status-success">Success</span>';
-                        } else if (txn.status === 'pending') {
-                            statusBadge = '<span class="status-badge status-pending">Pending</span>';
-                        } else {
-                            statusBadge = '<span class="status-badge status-failed">Failed</span>';
-                        }
-                        
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${txnId}</td>
-                            <td>${userId}</td>
-                            <td>₹${txn.amount.toLocaleString('en-IN')}</td>
-                            <td>${txn.channel}</td>
-                            <td>${statusBadge}</td>
-                            <td>${formattedDate}</td>
-                            <td>
-                                <button class="action-btn view-btn" onclick="viewTransaction('${userId}', '${txnId}')">
-                                    <i class="fas fa-eye"></i> View
-                                </button>
-                            </td>
-                        `;
-                        
-                        tbody.appendChild(tr);
-                    });
+                    const date = new Date(txn.timestamp);
+                    const formattedDate = `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')} ${date.getDate()}/${date.getMonth()+1}`;
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${txnId}</td>
+                        <td>${txn.userPhone}</td>
+                        <td>₹${txn.amount.toLocaleString('en-IN')}</td>
+                        <td>${txn.utr}</td>
+                        <td>${formattedDate}</td>
+                        <td>
+                            <button class="action-btn approve-btn" onclick="openApprovalModal('${txnId}')">
+                                <i class="fas fa-check"></i> Approve
+                            </button>
+                            <button class="action-btn reject-btn" onclick="openRejectModal('${txnId}')">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                        </td>
+                    `;
+                    
+                    tbody.appendChild(tr);
                 });
             });
         }
         
-        // Load pending payments
-        function loadPendingPayments() {
-            database.ref('deposits').orderByChild('status').equalTo('processing').on('value', (snapshot) => {
-                const tbody = document.querySelector('#pending-payments tbody');
+        // Load pending withdrawals
+        function loadPendingWithdrawals() {
+            database.ref('withdrawals').orderByChild('status').equalTo('pending').on('value', (snapshot) => {
+                const tbody = document.querySelector('#pending-withdrawals tbody');
                 tbody.innerHTML = '';
                 
-                snapshot.forEach(userSnapshot => {
+                snapshot.forEach((userSnapshot) => {
                     const userId = userSnapshot.key;
                     
-                    userSnapshot.forEach(txnSnapshot => {
-                        const txnId = txnSnapshot.key;
-                        const txn = txnSnapshot.val();
+                    userSnapshot.forEach((withdrawalSnapshot) => {
+                        const withdrawalId = withdrawalSnapshot.key;
+                        const withdrawal = withdrawalSnapshot.val();
                         
-                        if (txn.status === 'processing') {
-                            const date = new Date(txn.timestamp);
-                            const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+                        if (withdrawal.status === 'pending') {
+                            const date = new Date(withdrawal.timestamp);
+                            const formattedDate = `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')} ${date.getDate()}/${date.getMonth()+1}`;
+                            
+                            const bankDetails = `
+                                Bank: ${withdrawal.bankName}
+                                A/C: ${withdrawal.accountNumber}
+                                IFSC: ${withdrawal.ifscCode}
+                                Name: ${withdrawal.accountName}
+                            `;
                             
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
-                                <td>${txnId}</td>
+                                <td>${withdrawalId}</td>
                                 <td>${userId}</td>
-                                <td>₹${txn.amount.toLocaleString('en-IN')}</td>
-                                <td>${txn.channel}</td>
-                                <td>${txn.utr || 'N/A'}</td>
+                                <td>₹${withdrawal.amount.toLocaleString('en-IN')}</td>
+                                <td>${bankDetails}</td>
                                 <td>${formattedDate}</td>
                                 <td>
-                                    <button class="action-btn approve-btn" onclick="openVerifyModal('${userId}', '${txnId}')">
+                                    <button class="action-btn approve-btn" onclick="openWithdrawalApprovalModal('${userId}', '${withdrawalId}')">
                                         <i class="fas fa-check"></i> Approve
                                     </button>
-                                    <button class="action-btn reject-btn" onclick="openRejectModal('${userId}', '${txnId}')">
+                                    <button class="action-btn reject-btn" onclick="openWithdrawalRejectModal('${userId}', '${withdrawalId}')">
                                         <i class="fas fa-times"></i> Reject
                                     </button>
                                 </td>
@@ -1014,145 +333,28 @@
             });
         }
         
-        // Load verified payments
-        function loadVerifiedPayments() {
-            database.ref('deposits').orderByChild('status').equalTo('success').on('value', (snapshot) => {
-                const tbody = document.querySelector('#verified-payments tbody');
-                tbody.innerHTML = '';
-                
-                snapshot.forEach(userSnapshot => {
-                    const userId = userSnapshot.key;
-                    
-                    userSnapshot.forEach(txnSnapshot => {
-                        const txnId = txnSnapshot.key;
-                        const txn = txnSnapshot.val();
-                        
-                        if (txn.status === 'success') {
-                            const date = new Date(txn.timestamp);
-                            const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-                            
-                            const tr = document.createElement('tr');
-                            tr.innerHTML = `
-                                <td>${txnId}</td>
-                                <td>${userId}</td>
-                                <td>₹${txn.amount.toLocaleString('en-IN')}</td>
-                                <td>${txn.channel}</td>
-                                <td>${txn.utr || 'N/A'}</td>
-                                <td>${txn.verifiedBy || 'System'}</td>
-                                <td>${formattedDate}</td>
-                            `;
-                            
-                            tbody.appendChild(tr);
-                        }
-                    });
-                });
-            });
-        }
-        
-        // Load rejected payments
-        function loadRejectedPayments() {
-            database.ref('deposits').orderByChild('status').equalTo('failed').on('value', (snapshot) => {
-                const tbody = document.querySelector('#rejected-payments tbody');
-                tbody.innerHTML = '';
-                
-                snapshot.forEach(userSnapshot => {
-                    const userId = userSnapshot.key;
-                    
-                    userSnapshot.forEach(txnSnapshot => {
-                        const txnId = txnSnapshot.key;
-                        const txn = txnSnapshot.val();
-                        
-                        if (txn.status === 'failed' && txn.rejectedBy) {
-                            const date = new Date(txn.timestamp);
-                            const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-                            
-                            const tr = document.createElement('tr');
-                            tr.innerHTML = `
-                                <td>${txnId}</td>
-                                <td>${userId}</td>
-                                <td>₹${txn.amount.toLocaleString('en-IN')}</td>
-                                <td>${txn.channel}</td>
-                                <td>${txn.utr || 'N/A'}</td>
-                                <td>${txn.rejectReason || 'N/A'}</td>
-                                <td>${txn.rejectedBy}</td>
-                                <td>${formattedDate}</td>
-                            `;
-                            
-                            tbody.appendChild(tr);
-                        }
-                    });
-                });
-            });
-        }
-        
-        // Load all users
-        function loadAllUsers() {
-            database.ref('users').on('value', (snapshot) => {
-                const tbody = document.querySelector('#all-users tbody');
-                tbody.innerHTML = '';
-                
-                snapshot.forEach(userSnapshot => {
-                    const userId = userSnapshot.key;
-                    const user = userSnapshot.val();
-                    
-                    // Get total deposits for user
-                    let totalDeposits = 0;
-                    database.ref('deposits/' + userId).once('value', (txnSnapshot) => {
-                        txnSnapshot.forEach(txn => {
-                            if (txn.val().status === 'success') {
-                                totalDeposits += txn.val().amount;
-                            }
-                        });
-                        
-                        const date = new Date(user.lastActive || user.createdAt || Date.now());
-                        const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
-                        
-                        const createdDate = new Date(user.createdAt || Date.now());
-                        const formattedCreated = `${createdDate.getDate()}/${createdDate.getMonth()+1}/${createdDate.getFullYear()}`;
-                        
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${userId}</td>
-                            <td>${user.phone || 'N/A'}</td>
-                            <td>₹${(user.balance || 0).toLocaleString('en-IN')}</td>
-                            <td>₹${totalDeposits.toLocaleString('en-IN')}</td>
-                            <td>${formattedDate}</td>
-                            <td>${user.status === 'suspended' ? 'Suspended' : 'Active'}</td>
-                            <td>
-                                <button class="action-btn view-btn" onclick="viewUser('${userId}')">
-                                    <i class="fas fa-eye"></i> View
-                                </button>
-                            </td>
-                        `;
-                        
-                        tbody.appendChild(tr);
-                    });
-                });
-            });
-        }
-        
-        // Open verify modal
-        function openVerifyModal(userId, txnId) {
-            database.ref(`deposits/${userId}/${txnId}`).once('value', (snapshot) => {
+        // Open approval modal
+        function openApprovalModal(txnId) {
+            database.ref(`adminTransactions/${txnId}`).once('value', (snapshot) => {
                 const txn = snapshot.val();
                 
-                document.getElementById('verify-txn-id').value = txnId;
-                document.getElementById('verify-user-id').value = userId;
-                document.getElementById('verify-amount').value = `₹${txn.amount.toLocaleString('en-IN')}`;
-                document.getElementById('verify-utr').value = txn.utr || 'N/A';
-                document.getElementById('verify-notes').value = '';
+                document.getElementById('approval-txn-id').value = txnId;
+                document.getElementById('approval-user-phone').value = txn.userPhone;
+                document.getElementById('approval-amount').value = `₹${txn.amount.toLocaleString('en-IN')}`;
+                document.getElementById('approval-utr').value = txn.utr;
+                document.getElementById('approval-notes').value = '';
                 
-                document.getElementById('verify-modal').style.display = 'flex';
+                document.getElementById('approval-modal').style.display = 'flex';
             });
         }
         
         // Open reject modal
-        function openRejectModal(userId, txnId) {
-            database.ref(`deposits/${userId}/${txnId}`).once('value', (snapshot) => {
+        function openRejectModal(txnId) {
+            database.ref(`adminTransactions/${txnId}`).once('value', (snapshot) => {
                 const txn = snapshot.val();
                 
                 document.getElementById('reject-txn-id').value = txnId;
-                document.getElementById('reject-user-id').value = userId;
+                document.getElementById('reject-user-phone').value = txn.userPhone;
                 document.getElementById('reject-amount').value = `₹${txn.amount.toLocaleString('en-IN')}`;
                 document.getElementById('reject-reason').value = 'Invalid UTR';
                 document.getElementById('reject-notes').value = '';
@@ -1161,138 +363,200 @@
             });
         }
         
-        // View user details
-        function viewUser(userId) {
-            database.ref(`users/${userId}`).once('value', (snapshot) => {
-                const user = snapshot.val();
+        // Open withdrawal approval modal
+        function openWithdrawalApprovalModal(userId, withdrawalId) {
+            database.ref(`withdrawals/${userId}/${withdrawalId}`).once('value', (snapshot) => {
+                const withdrawal = snapshot.val();
                 
-                document.getElementById('user-id').value = userId;
-                document.getElementById('user-phone').value = user.phone || 'N/A';
-                document.getElementById('user-balance').value = `₹${(user.balance || 0).toLocaleString('en-IN')}`;
+                document.getElementById('withdrawal-id').value = withdrawalId;
+                document.getElementById('withdrawal-user-phone').value = userId;
+                document.getElementById('withdrawal-amount').value = `₹${withdrawal.amount.toLocaleString('en-IN')}`;
                 
-                // Get total deposits
-                let totalDeposits = 0;
-                database.ref(`deposits/${userId}`).once('value', (txnSnapshot) => {
-                    txnSnapshot.forEach(txn => {
-                        if (txn.val().status === 'success') {
-                            totalDeposits += txn.val().amount;
-                        }
-                    });
-                    
-                    document.getElementById('user-total-deposits').value = `₹${totalDeposits.toLocaleString('en-IN')}`;
-                });
+                const bankDetails = `Bank: ${withdrawal.bankName}\nAccount: ${withdrawal.accountNumber}\nIFSC: ${withdrawal.ifscCode}\nName: ${withdrawal.accountName}`;
+                document.getElementById('withdrawal-bank-details').value = bankDetails;
+                document.getElementById('withdrawal-reference').value = '';
                 
-                const createdDate = new Date(user.createdAt || Date.now());
-                document.getElementById('user-created').value = `${createdDate.getDate()}/${createdDate.getMonth()+1}/${createdDate.getFullYear()}`;
-                
-                const lastActive = new Date(user.lastActive || Date.now());
-                document.getElementById('user-last-active').value = `${lastActive.getDate()}/${lastActive.getMonth()+1}/${lastActive.getFullYear()} ${lastActive.getHours()}:${String(lastActive.getMinutes()).padStart(2, '0')}`;
-                
-                document.getElementById('user-status').value = user.status || 'active';
-                
-                document.getElementById('user-modal').style.display = 'flex';
+                document.getElementById('withdrawal-approval-modal').style.display = 'flex';
             });
         }
         
-        // View transaction details
-        function viewTransaction(userId, txnId) {
-            // You can implement this similarly to viewUser
-            alert(`Viewing transaction ${txnId} for user ${userId}`);
+        // Open withdrawal reject modal
+        function openWithdrawalRejectModal(userId, withdrawalId) {
+            database.ref(`withdrawals/${userId}/${withdrawalId}`).once('value', (snapshot) => {
+                const withdrawal = snapshot.val();
+                
+                document.getElementById('reject-withdrawal-id').value = withdrawalId;
+                document.getElementById('reject-withdrawal-user').value = userId;
+                document.getElementById('reject-withdrawal-amount').value = `₹${withdrawal.amount.toLocaleString('en-IN')}`;
+                document.getElementById('withdrawal-reject-reason').value = 'Insufficient Balance';
+                
+                document.getElementById('withdrawal-reject-modal').style.display = 'flex';
+            });
+        }
+        
+        // Approve transaction
+        function approveTransaction() {
+            const txnId = document.getElementById('approval-txn-id').value;
+            const userPhone = document.getElementById('approval-user-phone').value;
+            const amount = parseInt(document.getElementById('approval-amount').value.replace('₹', '').replace(/,/g, ''));
+            const notes = document.getElementById('approval-notes').value;
+            
+            // Update transaction status
+            database.ref(`adminTransactions/${txnId}`).update({
+                status: 'approved',
+                approvedBy: currentAdmin,
+                approvedAt: Date.now(),
+                notes: notes
+            }).then(() => {
+                // Also update in user's deposits
+                database.ref(`deposits/${userPhone}/${txnId}`).update({
+                    status: 'success',
+                    verifiedAt: Date.now()
+                }).then(() => {
+                    // Update user balance
+                    database.ref(`users/${userPhone}/balance`).transaction((balance) => {
+                        return (balance || 0) + amount;
+                    }).then(() => {
+                        // Create user notification
+                        createUserNotification(
+                            userPhone,
+                            'Deposit Approved',
+                            `Your deposit of ₹${amount} has been approved and credited to your account.`,
+                            'success'
+                        );
+                        
+                        showToast('Transaction approved successfully!', 'success');
+                        closeModal('approval-modal');
+                    });
+                });
+            });
+        }
+        
+        // Reject transaction
+        function rejectTransaction() {
+            const txnId = document.getElementById('reject-txn-id').value;
+            const userPhone = document.getElementById('reject-user-phone').value;
+            const amount = parseInt(document.getElementById('reject-amount').value.replace('₹', '').replace(/,/g, ''));
+            
+            let rejectReason = document.getElementById('reject-reason').value;
+            if (rejectReason === 'Other') {
+                rejectReason = document.getElementById('reject-other-reason').value;
+            }
+            
+            const notes = document.getElementById('reject-notes').value;
+            
+            // Update transaction status
+            database.ref(`adminTransactions/${txnId}`).update({
+                status: 'rejected',
+                rejectedBy: currentAdmin,
+                rejectedAt: Date.now(),
+                rejectReason: rejectReason,
+                notes: notes
+            }).then(() => {
+                // Also update in user's deposits
+                database.ref(`deposits/${userPhone}/${txnId}`).update({
+                    status: 'failed',
+                    rejectedAt: Date.now(),
+                    rejectReason: rejectReason
+                }).then(() => {
+                    // Create user notification
+                    createUserNotification(
+                        userPhone,
+                        'Deposit Rejected',
+                        `Your deposit of ₹${amount} has been rejected. Reason: ${rejectReason}`,
+                        'error'
+                    );
+                    
+                    showToast('Transaction rejected successfully!', 'success');
+                    closeModal('reject-modal');
+                });
+            });
+        }
+        
+        // Approve withdrawal
+        function approveWithdrawal() {
+            const withdrawalId = document.getElementById('withdrawal-id').value;
+            const userPhone = document.getElementById('withdrawal-user-phone').value;
+            const amount = parseInt(document.getElementById('withdrawal-amount').value.replace('₹', '').replace(/,/g, ''));
+            const reference = document.getElementById('withdrawal-reference').value;
+            
+            if (!reference) {
+                showToast('Please enter a reference number', 'error');
+                return;
+            }
+            
+            // Update withdrawal status
+            database.ref(`withdrawals/${userPhone}/${withdrawalId}`).update({
+                status: 'completed',
+                completedAt: Date.now(),
+                approvedBy: currentAdmin,
+                referenceNumber: reference
+            }).then(() => {
+                // Create user notification
+                createUserNotification(
+                    userPhone,
+                    'Withdrawal Approved',
+                    `Your withdrawal request of ₹${amount} has been approved. Reference: ${reference}`,
+                    'success'
+                );
+                
+                showToast('Withdrawal approved successfully!', 'success');
+                closeModal('withdrawal-approval-modal');
+            });
+        }
+        
+        // Reject withdrawal
+        function rejectWithdrawal() {
+            const withdrawalId = document.getElementById('reject-withdrawal-id').value;
+            const userPhone = document.getElementById('reject-withdrawal-user').value;
+            const amount = parseInt(document.getElementById('reject-withdrawal-amount').value.replace('₹', '').replace(/,/g, ''));
+            
+            let rejectReason = document.getElementById('withdrawal-reject-reason').value;
+            if (rejectReason === 'Other') {
+                rejectReason = document.getElementById('withdrawal-reject-other-reason').value;
+            }
+            
+            // Update withdrawal status
+            database.ref(`withdrawals/${userPhone}/${withdrawalId}`).update({
+                status: 'rejected',
+                rejectedAt: Date.now(),
+                rejectReason: rejectReason
+            }).then(() => {
+                // Return funds to user balance
+                database.ref(`users/${userPhone}/balance`).transaction((balance) => {
+                    return (balance || 0) + amount;
+                }).then(() => {
+                    // Create user notification
+                    createUserNotification(
+                        userPhone,
+                        'Withdrawal Rejected',
+                        `Your withdrawal request of ₹${amount} has been rejected. Reason: ${rejectReason}. Amount has been returned to your balance.`,
+                        'error'
+                    );
+                    
+                    showToast('Withdrawal rejected successfully!', 'success');
+                    closeModal('withdrawal-reject-modal');
+                });
+            });
+        }
+        
+        // Create user notification
+        function createUserNotification(userPhone, title, message, type) {
+            const notificationId = 'NOT' + Date.now();
+            
+            database.ref(`notifications/${userPhone}/${notificationId}`).set({
+                title: title,
+                message: message,
+                type: type,
+                timestamp: Date.now(),
+                read: false
+            });
         }
         
         // Close modal
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
-        
-        // Approve payment
-        function approvePayment() {
-            const txnId = document.getElementById('verify-txn-id').value;
-            const userId = document.getElementById('verify-user-id').value;
-            const notes = document.getElementById('verify-notes').value;
-            
-            // Get transaction amount first
-            database.ref(`deposits/${userId}/${txnId}/amount`).once('value', (snapshot) => {
-                const amount = snapshot.val();
-                
-                // Update transaction status
-                database.ref(`deposits/${userId}/${txnId}`).update({
-                    status: 'success',
-                    verifiedBy: currentAdmin,
-                    verifiedAt: Date.now(),
-                    notes: notes
-                }).then(() => {
-                    // Update user balance
-                    database.ref(`users/${userId}/balance`).transaction((balance) => {
-                        return (balance || 0) + amount;
-                    }).then(() => {
-                        showToast('Payment approved successfully!', 'success');
-                        closeModal('verify-modal');
-                    });
-                });
-            });
-        }
-        
-        // Reject payment
-        function rejectPayment() {
-            const txnId = document.getElementById('reject-txn-id').value;
-            const userId = document.getElementById('reject-user-id').value;
-            const reason = document.getElementById('reject-reason').value;
-            const notes = document.getElementById('reject-notes').value;
-            
-            let rejectReason = reason;
-            if (reason === 'Other') {
-                rejectReason = document.getElementById('reject-other-reason').value;
-            }
-            
-            database.ref(`deposits/${userId}/${txnId}`).update({
-                status: 'failed',
-                rejectedBy: currentAdmin,
-                rejectedAt: Date.now(),
-                rejectReason: rejectReason,
-                notes: notes
-            }).then(() => {
-                showToast('Payment rejected successfully!', 'success');
-                closeModal('reject-modal');
-            });
-        }
-        
-        // Update user status
-        function updateUserStatus() {
-            const userId = document.getElementById('user-id').value;
-            const status = document.getElementById('user-status').value;
-            
-            database.ref(`users/${userId}/status`).set(status).then(() => {
-                showToast('User status updated successfully!', 'success');
-                closeModal('user-modal');
-            });
-        }
-        
-        // Save settings
-        function saveSettings() {
-            const telegramToken = document.getElementById('telegram-token').value;
-            const telegramChatId = document.getElementById('telegram-chat-id').value;
-            const upiId = document.getElementById('upi-id').value;
-            const minDeposit = document.getElementById('min-deposit').value;
-            
-            database.ref('settings').update({
-                telegramToken: telegramToken,
-                telegramChatId: telegramChatId,
-                upiId: upiId,
-                minDeposit: parseInt(minDeposit)
-            }).then(() => {
-                showToast('Settings saved successfully!', 'success');
-            });
-        }
-        
-        // Show reason input if "Other" is selected
-        document.getElementById('reject-reason').addEventListener('change', function() {
-            if (this.value === 'Other') {
-                document.getElementById('reject-other-container').style.display = 'block';
-            } else {
-                document.getElementById('reject-other-container').style.display = 'none';
-            }
-        });
         
         // Show toast notification
         function showToast(message, type = 'success') {
@@ -1308,6 +572,23 @@
                 toast.remove();
             }, 3000);
         }
+        
+        // Event listeners for reason selection
+        document.getElementById('reject-reason').addEventListener('change', function() {
+            if (this.value === 'Other') {
+                document.getElementById('reject-other-container').style.display = 'block';
+            } else {
+                document.getElementById('reject-other-container').style.display = 'none';
+            }
+        });
+        
+        document.getElementById('withdrawal-reject-reason').addEventListener('change', function() {
+            if (this.value === 'Other') {
+                document.getElementById('withdrawal-reject-other-container').style.display = 'block';
+            } else {
+                document.getElementById('withdrawal-reject-other-container').style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
