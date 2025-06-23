@@ -276,6 +276,83 @@
             font-size: 1.2rem;
         }
         
+        /* Gift Code Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--light);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
         /* Responsive styles */
         @media (max-width: 768px) {
             .profile-stats {
@@ -372,11 +449,33 @@
                     <div class="action-desc">View VIP benefits and rewards</div>
                 </div>
                 
+                <div class="action-card" onclick="showGiftCodeModal()">
+                    <div class="action-title"><i class="fas fa-gift"></i> Redeem Gift Code</div>
+                    <div class="action-desc">Claim your gift code rewards</div>
+                </div>
+                
                 <div class="action-card" onclick="window.location.href='settings.html'">
                     <div class="action-title"><i class="fas fa-cog"></i> Settings</div>
                     <div class="action-desc">Manage your account settings</div>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- Gift Code Modal -->
+    <div class="modal" id="gift-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideGiftCodeModal()">&times;</span>
+            <h3 class="modal-title"><i class="fas fa-gift"></i> Redeem Gift Code</h3>
+            
+            <div class="form-group">
+                <label class="form-label">Enter Gift Code</label>
+                <input type="text" class="form-control" id="gift-code" placeholder="e.g. 53CLUB-XXXXXX">
+            </div>
+            
+            <button class="submit-btn" onclick="redeemGiftCode()">
+                <i class="fas fa-gift"></i> Claim Reward
+            </button>
         </div>
     </div>
     
@@ -444,6 +543,10 @@
                     } else {
                         document.getElementById('phone-number').textContent = `+${userPhone}`;
                     }
+                    
+                    // Set account status
+                    document.getElementById('account-status').textContent = userData.status === 'suspended' ? 'Suspended' : 'Active';
+                    document.getElementById('account-status').style.color = userData.status === 'suspended' ? 'var(--danger)' : 'var(--success)';
                     
                     // Save UID if not already set
                     if(!userData.uid) {
@@ -517,6 +620,85 @@
             }).catch((err) => {
                 showToast('Failed to copy', 'error');
                 console.error('Could not copy text: ', err);
+            });
+        }
+        
+        // Show gift code modal
+        function showGiftCodeModal() {
+            document.getElementById('gift-modal').style.display = 'flex';
+            document.getElementById('gift-code').focus();
+        }
+        
+        // Hide gift code modal
+        function hideGiftCodeModal() {
+            document.getElementById('gift-modal').style.display = 'none';
+        }
+        
+        // Redeem gift code
+        function redeemGiftCode() {
+            const giftCode = document.getElementById('gift-code').value.trim().toUpperCase();
+            
+            if(!giftCode || !giftCode.startsWith('53CLUB-')) {
+                showToast('Please enter a valid gift code starting with 53CLUB-', 'error');
+                return;
+            }
+            
+            // Check if user has already claimed this code
+            database.ref('giftCodeClaims/' + userPhone + '/' + giftCode).once('value').then((snapshot) => {
+                if(snapshot.exists()) {
+                    showToast('You have already claimed this gift code', 'error');
+                    return;
+                }
+                
+                // Check if gift code exists and is valid
+                database.ref('giftCodes/' + giftCode).once('value').then((codeSnapshot) => {
+                    const codeData = codeSnapshot.val();
+                    
+                    if(!codeData || codeData.claimed || codeData.uses >= codeData.maxUses) {
+                        showToast('Invalid or expired gift code', 'error');
+                        return;
+                    }
+                    
+                    // Add balance to user
+                    database.ref('users/' + userPhone + '/balance').transaction((balance) => {
+                        return (balance || 0) + codeData.amount;
+                    }).then(() => {
+                        // Mark code as claimed by this user
+                        database.ref('giftCodeClaims/' + userPhone + '/' + giftCode).set({
+                            claimedAt: Date.now(),
+                            amount: codeData.amount
+                        });
+                        
+                        // Update code usage
+                        database.ref('giftCodes/' + giftCode).update({
+                            uses: codeData.uses + 1,
+                            claimed: (codeData.uses + 1) >= codeData.maxUses
+                        });
+                        
+                        // Create notification
+                        createNotification(
+                            'Gift Code Redeemed',
+                            `You have successfully redeemed gift code ${giftCode} for ₹${codeData.amount}`,
+                            'success'
+                        );
+                        
+                        showToast(`Success! ₹${codeData.amount} added to your balance`, 'success');
+                        hideGiftCodeModal();
+                    });
+                });
+            });
+        }
+        
+        // Create notification
+        function createNotification(title, message, type) {
+            const notificationId = 'NOT' + Date.now();
+            
+            database.ref('notifications/' + userPhone + '/' + notificationId).set({
+                title: title,
+                message: message,
+                type: type,
+                timestamp: Date.now(),
+                read: false
             });
         }
         
