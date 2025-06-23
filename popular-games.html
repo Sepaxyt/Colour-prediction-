@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DG Club - WinGo 30sec</title>
+    <title>DG Club - WinGo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -31,78 +31,48 @@
         }
         
         body {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            color: var(--light);
+            background: #f5f5f5;
+            color: #333;
             min-height: 100vh;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 500px;
             margin: 0 auto;
             padding: 10px;
+            background: white;
+            min-height: 100vh;
         }
         
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 10px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
         }
         
         .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
             font-weight: bold;
-            color: white;
-            margin-right: 8px;
-        }
-        
-        .logo h1 {
-            font-size: 1.2rem;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .profile-btn {
-            color: var(--light);
-            text-decoration: none;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .profile-btn i {
-            margin-right: 5px;
+            font-size: 18px;
+            color: var(--primary);
         }
         
         .balance-display {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 10px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .balance-amount {
-            font-weight: 600;
-            color: var(--success);
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary);
         }
         
         .balance-actions {
@@ -111,242 +81,261 @@
         }
         
         .balance-btn {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--primary);
+            color: white;
             border: none;
-            border-radius: 6px;
-            padding: 4px 8px;
-            color: var(--light);
-            font-size: 0.7rem;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 12px;
             cursor: pointer;
         }
         
         .game-tabs {
             display: flex;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: #f0f0f0;
+            border-radius: 10px;
+            padding: 5px;
+            margin: 10px 0;
         }
         
         .game-tab {
-            padding: 8px 12px;
+            flex: 1;
+            text-align: center;
+            padding: 8px;
             cursor: pointer;
-            font-size: 0.8rem;
-            border-bottom: 2px solid transparent;
+            font-size: 12px;
+            border-radius: 8px;
         }
         
         .game-tab.active {
-            border-bottom: 2px solid var(--secondary);
-            color: var(--secondary);
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             font-weight: 500;
         }
         
-        .timer-display {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            margin-bottom: 10px;
+        .timer-section {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 10px 0;
             position: relative;
         }
         
         .timer-title {
-            font-size: 0.8rem;
+            font-size: 14px;
             color: var(--gray);
             margin-bottom: 5px;
         }
         
         .timer-countdown {
-            font-size: 1.5rem;
+            font-size: 24px;
             font-weight: bold;
-            color: var(--warning);
+            color: var(--primary);
         }
         
         .period-display {
             position: absolute;
-            right: 10px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 0.7rem;
+            font-size: 12px;
             color: var(--gray);
-        }
-        
-        .bet-options {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        
-        .bet-option {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .bet-option:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .bet-option.active {
-            background: var(--primary);
-            box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
-        }
-        
-        .bet-option.green {
-            border-left: 4px solid var(--green);
-        }
-        
-        .bet-option.violet {
-            border-left: 4px solid var(--violet);
-        }
-        
-        .bet-option.red {
-            border-left: 4px solid var(--red);
-        }
-        
-        .bet-option-title {
-            font-size: 0.8rem;
-            margin-bottom: 5px;
-        }
-        
-        .bet-option-value {
-            font-weight: 600;
         }
         
         .number-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 5px;
-            margin-bottom: 10px;
+            gap: 8px;
+            margin: 15px 0;
         }
         
         .number-cell {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            padding: 12px 5px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-weight: 500;
+            position: relative;
+            border: 1px solid #eee;
         }
         
-        .number-cell:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .number-cell.green {
+            color: var(--green);
+        }
+        
+        .number-cell.violet {
+            color: var(--violet);
+        }
+        
+        .number-cell.red {
+            color: var(--red);
         }
         
         .number-cell.active {
-            background: var(--secondary);
-            box-shadow: 0 0 10px rgba(74, 107, 255, 0.5);
+            background: var(--primary);
+            color: white;
         }
         
-        .bet-controls {
+        .bet-section {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 10px 0;
+        }
+        
+        .bet-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+        
+        .bet-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .bet-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+        
+        .bet-option.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .multiplier-section {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 10px 0;
+        }
+        
+        .multiplier-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+        
+        .multiplier-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 5px;
-            margin-bottom: 10px;
+            gap: 8px;
         }
         
-        .bet-multiplier {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
+        .multiplier-btn {
             padding: 8px;
             text-align: center;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            font-size: 12px;
+            background: #f0f0f0;
         }
         
-        .bet-multiplier:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .bet-multiplier.active {
+        .multiplier-btn.active {
             background: var(--primary);
-            box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
+            color: white;
         }
         
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
+        .bet-confirm {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 10px 0;
+        }
+        
+        .confirm-title {
+            font-size: 14px;
             margin-bottom: 10px;
         }
         
-        .action-btn {
+        .confirm-amount {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .confirm-btns {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .confirm-btn {
+            flex: 1;
             padding: 10px;
             border-radius: 8px;
             border: none;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
         
-        .action-btn.primary {
-            background: linear-gradient(to right, var(--secondary), var(--primary));
+        .confirm-btn.cancel {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .confirm-btn.submit {
+            background: var(--primary);
             color: white;
         }
         
-        .action-btn.secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--light);
-        }
-        
-        .action-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        .game-history {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
+        .history-section {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 10px 0;
         }
         
         .history-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         
         .history-title {
-            font-size: 0.9rem;
+            font-size: 14px;
             font-weight: 500;
         }
         
-        .history-tabs {
-            display: flex;
-            gap: 5px;
-        }
-        
-        .history-tab {
-            font-size: 0.7rem;
-            padding: 3px 6px;
-            border-radius: 4px;
+        .history-view-all {
+            font-size: 12px;
+            color: var(--primary);
             cursor: pointer;
-        }
-        
-        .history-tab.active {
-            background: var(--primary);
         }
         
         .history-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.7rem;
+            font-size: 12px;
         }
         
         .history-table th {
             text-align: left;
-            padding: 5px;
+            padding: 5px 0;
             color: var(--gray);
             font-weight: normal;
         }
         
         .history-table td {
-            padding: 5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
         }
         
         .color-indicator {
@@ -367,25 +356,6 @@
         
         .color-red {
             background-color: var(--red);
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin-top: 8px;
-        }
-        
-        .page-btn {
-            padding: 3px 8px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            font-size: 0.7rem;
-        }
-        
-        .page-btn.active {
-            background: var(--primary);
         }
         
         /* Toast Notification */
@@ -432,39 +402,23 @@
             margin-right: 10px;
             font-size: 1.2rem;
         }
-        
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .bet-options {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .bet-controls {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="profile.html" class="profile-btn">
-                <i class="fas fa-user"></i>
-            </a>
-            
-            <div class="logo">
-                <div class="logo-img">DG</div>
-                <h1>DG Club</h1>
-            </div>
-            
+            <div class="logo">DG CLUB</div>
             <div style="width: 24px;"></div>
         </header>
         
         <div class="balance-display">
-            <div class="balance-amount" id="user-balance">₹0.00</div>
+            <div>
+                <div style="font-size: 12px; color: var(--gray);">Wallet balance</div>
+                <div class="balance-amount" id="user-balance">₹0.00</div>
+            </div>
             <div class="balance-actions">
-                <button class="balance-btn" onclick="window.location.href='deposit.html'">Deposit</button>
                 <button class="balance-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>
+                <button class="balance-btn" onclick="window.location.href='deposit.html'">Deposit</button>
             </div>
         </div>
         
@@ -475,73 +429,61 @@
             <div class="game-tab" onclick="switchGame('wingo5')">WinGo 5 Min</div>
         </div>
         
-        <div class="timer-display">
-            <div class="timer-title">Time remaining</div>
-            <div class="timer-countdown" id="countdown-timer">00:25</div>
-            <div class="period-display" id="period-number">20250623100050913</div>
-        </div>
-        
-        <div class="bet-options">
-            <div class="bet-option green" onclick="selectBetOption('green')">
-                <div class="bet-option-title">Green</div>
-                <div class="bet-option-value">9.8x</div>
-            </div>
-            <div class="bet-option violet" onclick="selectBetOption('violet')">
-                <div class="bet-option-title">Violet</div>
-                <div class="bet-option-value">4.5x</div>
-            </div>
-            <div class="bet-option red" onclick="selectBetOption('red')">
-                <div class="bet-option-title">Red</div>
-                <div class="bet-option-value">1.98x</div>
-            </div>
-            <div class="bet-option" onclick="selectBetOption('big')">
-                <div class="bet-option-title">Big</div>
-                <div class="bet-option-value">1.98x</div>
-            </div>
-            <div class="bet-option" onclick="selectBetOption('small')">
-                <div class="bet-option-title">Small</div>
-                <div class="bet-option-value">1.98x</div>
-            </div>
-            <div class="bet-option" onclick="selectBetOption('number')">
-                <div class="bet-option-title">Number</div>
-                <div class="bet-option-value">8x</div>
-            </div>
+        <div class="timer-section">
+            <div class="timer-title">How to play</div>
+            <div class="timer-countdown" id="countdown-timer">0:16</div>
+            <div class="period-display" id="period-number">20250623100050911</div>
         </div>
         
         <div class="number-grid" id="number-grid">
-            <div class="number-cell" onclick="selectNumber(0)">0</div>
-            <div class="number-cell" onclick="selectNumber(1)">1</div>
-            <div class="number-cell" onclick="selectNumber(2)">2</div>
-            <div class="number-cell" onclick="selectNumber(3)">3</div>
-            <div class="number-cell" onclick="selectNumber(4)">4</div>
-            <div class="number-cell" onclick="selectNumber(5)">5</div>
-            <div class="number-cell" onclick="selectNumber(6)">6</div>
-            <div class="number-cell" onclick="selectNumber(7)">7</div>
-            <div class="number-cell" onclick="selectNumber(8)">8</div>
-            <div class="number-cell" onclick="selectNumber(9)">9</div>
+            <div class="number-cell green" onclick="selectNumber(0)">0</div>
+            <div class="number-cell red" onclick="selectNumber(1)">1</div>
+            <div class="number-cell green" onclick="selectNumber(2)">2</div>
+            <div class="number-cell red" onclick="selectNumber(3)">3</div>
+            <div class="number-cell green" onclick="selectNumber(4)">4</div>
+            <div class="number-cell violet" onclick="selectNumber(5)">5</div>
+            <div class="number-cell green" onclick="selectNumber(6)">6</div>
+            <div class="number-cell red" onclick="selectNumber(7)">7</div>
+            <div class="number-cell green" onclick="selectNumber(8)">8</div>
+            <div class="number-cell red" onclick="selectNumber(9)">9</div>
         </div>
         
-        <div class="bet-controls">
-            <div class="bet-multiplier" onclick="setMultiplier(1)">X1</div>
-            <div class="bet-multiplier" onclick="setMultiplier(5)">X5</div>
-            <div class="bet-multiplier" onclick="setMultiplier(10)">X10</div>
-            <div class="bet-multiplier" onclick="setMultiplier(20)">X20</div>
-            <div class="bet-multiplier" onclick="setMultiplier(50)">X50</div>
-            <div class="bet-multiplier" onclick="setMultiplier(100)">X100</div>
+        <div class="bet-section">
+            <div class="bet-title">Select Bet</div>
+            <div class="bet-options">
+                <div class="bet-option" onclick="selectBetOption('big')">Big</div>
+                <div class="bet-option" onclick="selectBetOption('small')">Small</div>
+                <div class="bet-option" onclick="selectBetOption('green')">Green</div>
+                <div class="bet-option" onclick="selectBetOption('violet')">Violet</div>
+                <div class="bet-option" onclick="selectBetOption('red')">Red</div>
+            </div>
         </div>
         
-        <div class="action-buttons">
-            <button class="action-btn primary" onclick="placeBet()">Place Bet</button>
-            <button class="action-btn secondary" onclick="clearBets()">Clear</button>
+        <div class="multiplier-section" id="multiplier-section">
+            <div class="multiplier-title">Select Multiplier</div>
+            <div class="multiplier-grid">
+                <div class="multiplier-btn" onclick="setMultiplier(1)">X1</div>
+                <div class="multiplier-btn" onclick="setMultiplier(5)">X5</div>
+                <div class="multiplier-btn" onclick="setMultiplier(10)">X10</div>
+                <div class="multiplier-btn" onclick="setMultiplier(20)">X20</div>
+                <div class="multiplier-btn" onclick="setMultiplier(50)">X50</div>
+                <div class="multiplier-btn" onclick="setMultiplier(100)">X100</div>
+            </div>
         </div>
         
-        <div class="game-history">
+        <div class="bet-confirm" id="bet-confirm">
+            <div class="confirm-title">Confirm Bet</div>
+            <div class="confirm-amount" id="confirm-amount">₹1.00 on Big</div>
+            <div class="confirm-btns">
+                <button class="confirm-btn cancel" onclick="cancelBet()">Cancel</button>
+                <button class="confirm-btn submit" onclick="placeBet()">Submit</button>
+            </div>
+        </div>
+        
+        <div class="history-section">
             <div class="history-header">
                 <div class="history-title">Game History</div>
-                <div class="history-tabs">
-                    <div class="history-tab active" onclick="showHistoryTab('recent')">Recent</div>
-                    <div class="history-tab" onclick="showHistoryTab('mybets')">My Bets</div>
-                </div>
+                <div class="history-view-all" onclick="window.location.href='history.html'">View All</div>
             </div>
             
             <table class="history-table">
@@ -557,14 +499,6 @@
                     <!-- History items will be added here dynamically -->
                 </tbody>
             </table>
-            
-            <div class="pagination">
-                <div class="page-btn active">1</div>
-                <div class="page-btn">2</div>
-                <div class="page-btn">3</div>
-                <div class="page-btn">4</div>
-                <div class="page-btn">5</div>
-            </div>
         </div>
     </div>
     
@@ -703,14 +637,7 @@
             let seconds = secondsRemaining % 60;
             
             document.getElementById('countdown-timer').textContent = 
-                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                
-            // Change color when time is running out
-            if(secondsRemaining <= 10) {
-                document.getElementById('countdown-timer').style.color = 'var(--danger)';
-            } else {
-                document.getElementById('countdown-timer').style.color = 'var(--warning)';
-            }
+                `${minutes}:${String(seconds).padStart(2, '0')}`;
         }
         
         // End current period and determine results
@@ -861,34 +788,6 @@
             });
         }
         
-        // Load user bets
-        function loadUserBets() {
-            database.ref('bets/' + currentGame).orderByKey().limitToLast(10).once('value').then((snapshot) => {
-                const historyBody = document.getElementById('history-body');
-                historyBody.innerHTML = '';
-                
-                snapshot.forEach(periodSnapshot => {
-                    periodSnapshot.forEach(userSnapshot => {
-                        if(userSnapshot.key === userPhone) {
-                            userSnapshot.forEach(betSnapshot => {
-                                const bet = betSnapshot.val();
-                                const row = document.createElement('tr');
-                                
-                                row.innerHTML = `
-                                    <td>${periodSnapshot.key}</td>
-                                    <td>${bet.type === 'number' ? bet.number : '-'}</td>
-                                    <td>${bet.type === 'size' ? bet.size : '-'}</td>
-                                    <td>${bet.type === 'color' ? bet.color : '-'}</td>
-                                `;
-                                
-                                historyBody.appendChild(row);
-                            });
-                        }
-                    });
-                });
-            });
-        }
-        
         // Set up real-time game listeners
         function setupGameListeners() {
             // Listen for new periods
@@ -897,6 +796,11 @@
                     currentPeriod = snapshot.key;
                     document.getElementById('period-number').textContent = currentPeriod;
                 }
+            });
+            
+            // Listen for history updates
+            database.ref('history/' + currentGame).limitToLast(1).on('child_added', () => {
+                loadGameHistory();
             });
         }
         
@@ -947,17 +851,18 @@
             selectedNumber = null;
             
             // Highlight selected option
-            if(option === 'green' || option === 'violet' || option === 'red') {
-                document.querySelector(`.bet-option.${option}`).classList.add('active');
-            } else if(option === 'big' || option === 'small') {
-                document.querySelectorAll('.bet-option').forEach(el => {
-                    if(el.textContent.includes(option.charAt(0).toUpperCase() + option.slice(1))) {
-                        el.classList.add('active');
-                    }
-                });
-            } else if(option === 'number') {
-                // Number selection will be handled separately
-            }
+            document.querySelectorAll('.bet-option').forEach(el => {
+                if(el.textContent.toLowerCase() === option) {
+                    el.classList.add('active');
+                }
+            });
+            
+            // Show multiplier section
+            document.getElementById('multiplier-section').style.display = 'block';
+            document.getElementById('bet-confirm').style.display = 'none';
+            
+            // Reset multiplier to 1
+            setMultiplier(1);
         }
         
         // Select specific number
@@ -976,6 +881,13 @@
             
             // Highlight selected number
             document.querySelectorAll('.number-cell')[number].classList.add('active');
+            
+            // Show multiplier section
+            document.getElementById('multiplier-section').style.display = 'block';
+            document.getElementById('bet-confirm').style.display = 'none';
+            
+            // Reset multiplier to 1
+            setMultiplier(1);
         }
         
         // Set bet multiplier
@@ -983,15 +895,36 @@
             currentMultiplier = multiplier;
             
             // Update UI
-            document.querySelectorAll('.bet-multiplier').forEach(el => {
+            document.querySelectorAll('.multiplier-btn').forEach(el => {
                 el.classList.remove('active');
             });
             
-            document.querySelector(`.bet-multiplier:nth-child(${multiplier === 1 ? 1 : 
-                                 multiplier === 5 ? 2 : 
-                                 multiplier === 10 ? 3 : 
-                                 multiplier === 20 ? 4 : 
-                                 multiplier === 50 ? 5 : 6})`).classList.add('active');
+            document.querySelectorAll('.multiplier-btn').forEach((el, index) => {
+                const values = [1, 5, 10, 20, 50, 100];
+                if(values[index] === multiplier) {
+                    el.classList.add('active');
+                }
+            });
+            
+            // Show confirm section
+            document.getElementById('bet-confirm').style.display = 'block';
+            
+            // Update confirm amount display
+            let betType = '';
+            if(selectedOption === 'number') {
+                betType = `Number ${selectedNumber}`;
+            } else {
+                betType = selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1);
+            }
+            
+            const amount = (currentMultiplier).toLocaleString('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            
+            document.getElementById('confirm-amount').textContent = `${amount} on ${betType}`;
         }
         
         // Place bet
@@ -1032,15 +965,15 @@
                 showToast('Bet placed successfully!', 'success');
                 
                 // Clear selections
-                clearBets();
+                cancelBet();
             }).catch(error => {
                 console.error('Error placing bet:', error);
                 showToast('Error placing bet', 'error');
             });
         }
         
-        // Clear all bet selections
-        function clearBets() {
+        // Cancel bet
+        function cancelBet() {
             selectedOption = null;
             selectedNumber = null;
             currentMultiplier = 1;
@@ -1053,22 +986,8 @@
                 el.classList.remove('active');
             });
             
-            document.querySelector('.bet-multiplier:nth-child(1)').classList.add('active');
-        }
-        
-        // Show history tab
-        function showHistoryTab(tab) {
-            document.querySelectorAll('.history-tab').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            if(tab === 'recent') {
-                document.querySelector('.history-tab:nth-child(1)').classList.add('active');
-                loadGameHistory();
-            } else {
-                document.querySelector('.history-tab:nth-child(2)').classList.add('active');
-                loadUserBets();
-            }
+            document.getElementById('multiplier-section').style.display = 'none';
+            document.getElementById('bet-confirm').style.display = 'none';
         }
         
         // Show toast notification
