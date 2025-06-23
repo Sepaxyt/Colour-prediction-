@@ -388,15 +388,11 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
-        // Telegram bot details
-        const TELEGRAM_BOT_TOKEN = '7645796543:AAEh8jLyrcaUN6Em8GFCM0fZz17hsUFRXkQ';
-        const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID'; // Replace with your actual chat ID
-        
         // Get parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
         const transactionId = urlParams.get('txn');
         const amount = parseInt(urlParams.get('amount'));
-        const userPhone = urlParams.get('phone');
+        const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
         
         // Set payment amount
         document.getElementById('payment-amount').textContent = `₹${amount.toLocaleString('en-IN')}`;
@@ -486,55 +482,19 @@
             // Update transaction in Firebase
             database.ref('deposits/' + userPhone + '/' + transactionId).update({
                 utr: utrNumber,
-                status: 'processing'
+                status: 'pending_approval',
+                timestamp: Date.now()
             })
             .then(() => {
-                // Send UTR to Telegram bot
-                sendToTelegram(utrNumber, amount, userPhone);
+                // Notify admin
+                notifyAdmin(utrNumber, amount, userPhone, transactionId);
                 
-                // Simulate verification (in real app, this would verify with payment gateway)
+                showToast('Payment submitted for verification!', 'success');
+                
+                // Redirect to wallet after delay
                 setTimeout(() => {
-                    // 80% chance of success
-                    const isSuccess = Math.random() > 0.2;
-                    
-                    if(isSuccess) {
-                        // Update transaction status
-                        database.ref('deposits/' + userPhone + '/' + transactionId + '/status').set('success');
-                        
-                        // Update user balance
-                        database.ref('users/' + userPhone + '/balance').transaction((currentBalance) => {
-                            return (currentBalance || 0) + amount;
-                        });
-                        
-                        // Create success notification
-                        createNotification(
-                            'Payment Successful',
-                            `Your payment of ₹${amount} has been successfully processed. UTR: ${utrNumber}`,
-                            'success'
-                        );
-                        
-                        showToast('Payment verified successfully!', 'success');
-                        
-                        // Redirect back to wallet after delay
-                        setTimeout(() => {
-                            window.location.href = 'wallet.html';
-                        }, 1500);
-                    } else {
-                        // Update transaction status
-                        database.ref('deposits/' + userPhone + '/' + transactionId + '/status').set('failed');
-                        
-                        // Create failed notification
-                        createNotification(
-                            'Payment Failed',
-                            `Your payment of ₹${amount} failed verification. Please contact support. UTR: ${utrNumber}`,
-                            'failed'
-                        );
-                        
-                        showToast('Payment verification failed. Please contact support.', 'error');
-                        btn.disabled = false;
-                        btn.textContent = 'Verify Payment';
-                    }
-                }, 2000);
+                    window.location.href = 'wallet.html';
+                }, 1500);
             })
             .catch((error) => {
                 console.error('Error updating transaction:', error);
@@ -544,7 +504,30 @@
             });
         }
         
-        // Create notification
+        // Notify admin about new payment
+        function notifyAdmin(utr, amount, phone, txnId) {
+            // Create admin notification
+            database.ref('adminNotifications').push().set({
+                type: 'deposit_approval',
+                userPhone: phone,
+                amount: amount,
+                utr: utr,
+                transactionId: txnId,
+                timestamp: Date.now(),
+                status: 'pending'
+            });
+            
+            // Also update the transaction in admin view
+            database.ref('adminTransactions').child(txnId).set({
+                userPhone: phone,
+                amount: amount,
+                utr: utr,
+                status: 'pending_approval',
+                timestamp: Date.now()
+            });
+        }
+        
+        // Create user notification
         function createNotification(title, message, type) {
             const notificationId = 'NOT' + Date.now();
             
@@ -554,33 +537,6 @@
                 type: type,
                 timestamp: Date.now(),
                 read: false
-            });
-        }
-        
-        // Send UTR to Telegram bot
-        function sendToTelegram(utr, amount, phone) {
-            const message = `New Payment Received\n\n` +
-                           `Amount: ₹${amount}\n` +
-                           `UTR: ${utr}\n` +
-                           `User: ${phone}\n` +
-                           `Transaction ID: ${transactionId}`;
-            
-            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: message
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Message sent to Telegram:', data);
-            })
-            .catch(error => {
-                console.error('Error sending to Telegram:', error);
             });
         }
         
