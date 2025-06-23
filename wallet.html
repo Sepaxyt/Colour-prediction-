@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 Club - Wallet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .notification-btn {
+            color: var(--light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .back-btn {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn i {
+            margin-right: 5px;
+        }
+        
+        .wallet-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .balance-title {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+        }
+        
+        .balance-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .deposit-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .amount-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .amount-btn {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .amount-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .amount-btn.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .history-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-date {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .history-amount {
+            font-weight: 500;
+        }
+        
+        .history-success {
+            color: var(--success);
+        }
+        
+        .history-pending {
+            color: var(--warning);
+        }
+        
+        .history-failed {
+            color: var(--danger);
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .amount-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="main.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            
+            <div class="logo">53 Club</div>
+            
+            <a href="notification.html" class="notification-btn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notification-count">0</span>
+            </a>
+        </header>
+        
+        <div class="wallet-container">
+            <div class="balance-card">
+                <div class="balance-title">Your Current Balance</div>
+                <div class="balance-amount" id="current-balance">₹0.00</div>
+            </div>
+            
+            <div class="deposit-section">
+                <h3 class="section-title"><i class="fas fa-wallet"></i> Deposit Funds</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Select Channel</label>
+                    <select class="form-control" id="deposit-channel">
+                        <option value="">Select a game channel</option>
+                        <option value="wingo">WIN Go</option>
+                        <option value="k3">K3 Lottery</option>
+                        <option value="5d">5D Lottery</option>
+                        <option value="trx">TRX Lottery</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Deposit Amount (₹)</label>
+                    <input type="number" class="form-control" id="deposit-amount" placeholder="Enter amount (min ₹100)" min="100">
+                </div>
+                
+                <div class="amount-buttons">
+                    <div class="amount-btn" onclick="setAmount(100)">₹100</div>
+                    <div class="amount-btn" onclick="setAmount(500)">₹500</div>
+                    <div class="amount-btn" onclick="setAmount(1000)">₹1000</div>
+                    <div class="amount-btn" onclick="setAmount(2000)">₹2000</div>
+                    <div class="amount-btn" onclick="setAmount(5000)">₹5000</div>
+                    <div class="amount-btn" onclick="setAmount(10000)">₹10000</div>
+                </div>
+                
+                <button class="submit-btn" id="deposit-btn" onclick="processDeposit()">
+                    Confirm Deposit
+                </button>
+            </div>
+            
+            <div class="history-section">
+                <h3 class="section-title"><i class="fas fa-history"></i> Deposit History</h3>
+                
+                <div id="deposit-history">
+                    <div class="history-item">
+                        <div class="history-date">No deposits yet</div>
+                        <div class="history-amount history-pending">₹0.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.firebasestorage.app",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Check if user is logged in
+        const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
+        if(!userPhone) {
+            window.location.href = "index.html";
+        } else {
+            // Load user balance
+            loadBalance();
+            
+            // Load deposit history
+            loadDepositHistory();
+            
+            // Load notifications count
+            loadNotificationCount();
+        }
+        
+        // Load user balance
+        function loadBalance() {
+            database.ref('users/' + userPhone + '/balance').on('value', (snapshot) => {
+                const balance = snapshot.val() || 0;
+                document.getElementById('current-balance').textContent = 
+                    '₹' + balance.toLocaleString('en-IN', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+            });
+        }
+        
+        // Load deposit history
+        function loadDepositHistory() {
+            database.ref('deposits/' + userPhone).orderByChild('timestamp').limitToLast(5).on('value', (snapshot) => {
+                const deposits = snapshot.val();
+                const historyContainer = document.getElementById('deposit-history');
+                
+                if(deposits) {
+                    historyContainer.innerHTML = '';
+                    
+                    // Convert to array and reverse to show newest first
+                    const depositsArray = Object.entries(deposits).reverse();
+                    
+                    depositsArray.forEach(([key, deposit]) => {
+                        const historyItem = document.createElement('div');
+                        historyItem.className = 'history-item';
+                        
+                        const date = new Date(deposit.timestamp);
+                        const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+                        
+                        let statusClass = 'history-pending';
+                        if(deposit.status === 'success') statusClass = 'history-success';
+                        if(deposit.status === 'failed') statusClass = 'history-failed';
+                        
+                        historyItem.innerHTML = `
+                            <div class="history-date">${formattedDate}</div>
+                            <div class="history-amount ${statusClass}">
+                                ₹${deposit.amount.toLocaleString('en-IN')} (${deposit.channel})
+                            </div>
+                        `;
+                        
+                        historyContainer.appendChild(historyItem);
+                    });
+                } else {
+                    historyContainer.innerHTML = `
+                        <div class="history-item">
+                            <div class="history-date">No deposits yet</div>
+                            <div class="history-amount history-pending">₹0.00</div>
+                        </div>
+                    `;
+                }
+            });
+        }
+        
+        // Load notification count
+        function loadNotificationCount() {
+            database.ref('notifications/' + userPhone).orderByChild('read').equalTo(false).on('value', (snapshot) => {
+                const count = snapshot.numChildren();
+                document.getElementById('notification-count').textContent = count > 0 ? count : '';
+            });
+        }
+        
+        // Set amount from quick buttons
+        function setAmount(amount) {
+            document.getElementById('deposit-amount').value = amount;
+            
+            // Highlight the selected button
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(parseInt(btn.textContent.replace('₹', '')) === amount) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // Process deposit
+        function processDeposit() {
+            const channel = document.getElementById('deposit-channel').value;
+            const amount = parseInt(document.getElementById('deposit-amount').value);
+            
+            if(!channel) {
+                showToast('Please select a game channel', 'error');
+                return;
+            }
+            
+            if(!amount || amount < 100) {
+                showToast('Minimum deposit amount is ₹100', 'error');
+                return;
+            }
+            
+            // Generate a random transaction ID
+            const transactionId = 'TXN' + Date.now() + Math.floor(Math.random() * 1000);
+            
+            // Create deposit record
+            const depositData = {
+                amount: amount,
+                channel: channel,
+                status: 'pending',
+                timestamp: Date.now()
+            };
+            
+            // Save to Firebase
+            database.ref('deposits/' + userPhone + '/' + transactionId).set(depositData)
+                .then(() => {
+                    // Redirect to payment page with transaction details
+                    window.location.href = `payment.html?txn=${transactionId}&amount=${amount}&phone=${userPhone}`;
+                })
+                .catch((error) => {
+                    console.error('Error processing deposit:', error);
+                    showToast('Error processing deposit. Please try again.', 'error');
+                });
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
