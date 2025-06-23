@@ -381,6 +381,41 @@
             color: var(--light);
         }
         
+        /* Gift Code Modal */
+        .gift-code-form {
+            margin-top: 20px;
+        }
+        
+        .gift-code-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .gift-code-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .gift-code {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .gift-code-amount {
+            color: var(--success);
+        }
+        
+        .gift-code-uses {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
         /* Toast Notification */
         .toast {
             position: fixed;
@@ -477,6 +512,7 @@
                     <li><a href="#" onclick="showSection('rejected-payments')"><i class="fas fa-times-circle"></i> Rejected Payments</a></li>
                     <li><a href="#" onclick="showSection('pending-withdrawals')"><i class="fas fa-money-bill-wave"></i> Pending Withdrawals</a></li>
                     <li><a href="#" onclick="showSection('all-users')"><i class="fas fa-users"></i> All Users</a></li>
+                    <li><a href="#" onclick="showSection('gift-codes')"><i class="fas fa-gift"></i> Gift Codes</a></li>
                     <li><a href="#" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
                 </ul>
             </div>
@@ -704,6 +740,32 @@
                     
                     <div class="pagination" id="users-pagination">
                         <!-- Pagination will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Gift Codes Section -->
+                <div id="gift-codes-section" class="content-section" style="display: none;">
+                    <h2 class="section-title"><i class="fas fa-gift"></i> Gift Codes</h2>
+                    
+                    <div class="gift-code-form">
+                        <div class="form-group">
+                            <label>Gift Code Amount (₹)</label>
+                            <input type="number" class="form-control" id="gift-amount" placeholder="Enter amount">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Max Uses</label>
+                            <input type="number" class="form-control" id="gift-max-uses" placeholder="Number of times code can be used" value="1">
+                        </div>
+                        
+                        <button class="submit-btn" onclick="generateGiftCode()">
+                            <i class="fas fa-gift"></i> Generate Gift Code
+                        </button>
+                    </div>
+                    
+                    <h3 class="section-title"><i class="fas fa-list"></i> Active Gift Codes</h3>
+                    <div class="gift-code-list" id="gift-code-list">
+                        <!-- Gift codes will be loaded here -->
                     </div>
                 </div>
                 
@@ -987,6 +1049,7 @@
                 loadRejectedPayments();
                 loadPendingWithdrawals();
                 loadAllUsers();
+                loadGiftCodes();
                 loadSettings();
             } else {
                 window.location.href = "admin-login.html";
@@ -1135,7 +1198,7 @@
         
         // Load pending payments
         function loadPendingPayments() {
-            database.ref('deposits').orderByChild('status').equalTo('processing').on('value', (snapshot) => {
+            database.ref('deposits').on('value', (snapshot) => {
                 const tbody = document.querySelector('#pending-payments tbody');
                 tbody.innerHTML = '';
                 
@@ -1177,7 +1240,7 @@
         
         // Load verified payments
         function loadVerifiedPayments() {
-            database.ref('deposits').orderByChild('status').equalTo('success').on('value', (snapshot) => {
+            database.ref('deposits').on('value', (snapshot) => {
                 const tbody = document.querySelector('#verified-payments tbody');
                 tbody.innerHTML = '';
                 
@@ -1212,7 +1275,7 @@
         
         // Load rejected payments
         function loadRejectedPayments() {
-            database.ref('deposits').orderByChild('status').equalTo('failed').on('value', (snapshot) => {
+            database.ref('deposits').on('value', (snapshot) => {
                 const tbody = document.querySelector('#rejected-payments tbody');
                 tbody.innerHTML = '';
                 
@@ -1248,7 +1311,7 @@
         
         // Load pending withdrawals
         function loadPendingWithdrawals() {
-            database.ref('withdrawals').orderByChild('status').equalTo('pending').on('value', (snapshot) => {
+            database.ref('withdrawals').on('value', (snapshot) => {
                 const tbody = document.querySelector('#pending-withdrawals tbody');
                 tbody.innerHTML = '';
                 
@@ -1336,6 +1399,36 @@
                         
                         tbody.appendChild(tr);
                     });
+                });
+            });
+        }
+        
+        // Load gift codes
+        function loadGiftCodes() {
+            database.ref('giftCodes').orderByChild('createdAt').on('value', (snapshot) => {
+                const giftCodeList = document.getElementById('gift-code-list');
+                giftCodeList.innerHTML = '';
+                
+                snapshot.forEach(codeSnapshot => {
+                    const codeId = codeSnapshot.key;
+                    const code = codeSnapshot.val();
+                    
+                    if (!code.claimed) {
+                        const codeItem = document.createElement('div');
+                        codeItem.className = 'gift-code-item';
+                        codeItem.innerHTML = `
+                            <div>
+                                <div class="gift-code">${codeId}</div>
+                                <div class="gift-code-amount">₹${code.amount.toLocaleString('en-IN')}</div>
+                                <div class="gift-code-uses">Used ${code.uses || 0} of ${code.maxUses || 1} times</div>
+                            </div>
+                            <button class="action-btn reject-btn" onclick="deactivateGiftCode('${codeId}')">
+                                <i class="fas fa-times"></i> Deactivate
+                            </button>
+                        `;
+                        
+                        giftCodeList.appendChild(codeItem);
+                    }
                 });
             });
         }
@@ -1679,6 +1772,46 @@
                 
                 showToast('User status updated successfully!', 'success');
                 closeModal('user-modal');
+            });
+        }
+        
+        // Generate gift code
+        function generateGiftCode() {
+            const amount = parseInt(document.getElementById('gift-amount').value);
+            const maxUses = parseInt(document.getElementById('gift-max-uses').value) || 1;
+            
+            if (!amount || amount < 1) {
+                showToast('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            // Generate random code
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '53CLUB-';
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            // Save gift code
+            database.ref(`giftCodes/${code}`).set({
+                amount: amount,
+                maxUses: maxUses,
+                uses: 0,
+                claimed: false,
+                createdAt: Date.now(),
+                createdBy: currentAdmin
+            }).then(() => {
+                showToast(`Gift code ${code} generated successfully! Amount: ₹${amount}`, 'success');
+                document.getElementById('gift-amount').value = '';
+            });
+        }
+        
+        // Deactivate gift code
+        function deactivateGiftCode(codeId) {
+            database.ref(`giftCodes/${codeId}`).update({
+                claimed: true
+            }).then(() => {
+                showToast(`Gift code ${codeId} deactivated`, 'success');
             });
         }
         
