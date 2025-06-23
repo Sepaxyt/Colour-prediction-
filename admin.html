@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 Club - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+        
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logout-btn i {
+            margin-right: 5px;
+        }
+        
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 10px;
+            color: var(--light);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+        
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .stat-card.success .value {
+            color: var(--success);
+        }
+        
+        .stat-card.pending .value {
+            color: var(--warning);
+        }
+        
+        .stat-card.failed .value {
+            color: var(--danger);
+        }
+        
+        .stat-card.total .value {
+            color: var(--secondary);
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status-failed {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+        
+        .approve-btn {
+            background: var(--success);
+            color: white;
+        }
+        
+        .reject-btn {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .view-btn {
+            background: var(--info);
+            color: white;
+        }
+        
+        .search-filter {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        
+        .search-box {
+            flex: 1;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+        
+        .page-btn {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: var(--light);
+            cursor: pointer;
+        }
+        
+        .page-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .page-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            border-radius: 10px;
+            width: 500px;
+            max-width: 90%;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .modal-body label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .modal-body input, .modal-body select, .modal-body textarea {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .modal-btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .modal-btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 992px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">53 Club - Admin Panel</div>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </header>
+        
+        <div class="admin-container">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#" onclick="showSection('pending-payments')"><i class="fas fa-clock"></i> Pending Payments</a></li>
+                    <li><a href="#" onclick="showSection('verified-payments')"><i class="fas fa-check-circle"></i> Verified Payments</a></li>
+                    <li><a href="#" onclick="showSection('rejected-payments')"><i class="fas fa-times-circle"></i> Rejected Payments</a></li>
+                    <li><a href="#" onclick="showSection('all-users')"><i class="fas fa-users"></i> All Users</a></li>
+                    <li><a href="#" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+            
+            <div class="main-content">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section" class="content-section">
+                    <h2 class="section-title"><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                    
+                    <div class="stats-cards">
+                        <div class="stat-card total">
+                            <h3>Total Deposits</h3>
+                            <div class="value" id="total-deposits">₹0</div>
+                        </div>
+                        <div class="stat-card success">
+                            <h3>Successful</h3>
+                            <div class="value" id="success-deposits">₹0</div>
+                        </div>
+                        <div class="stat-card pending">
+                            <h3>Pending</h3>
+                            <div class="value" id="pending-deposits">₹0</div>
+                        </div>
+                        <div class="stat-card failed">
+                            <h3>Failed</h3>
+                            <div class="value" id="failed-deposits">₹0</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="section-title"><i class="fas fa-history"></i> Recent Transactions</h3>
+                    <div class="table-container">
+                        <table id="recent-transactions">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>User</th>
+                                    <th>Amount</th>
+                                    <th>Channel</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Transactions will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Pending Payments Section -->
+                <div id="pending-payments-section" class="content-section" style="display: none;">
+                    <h2 class="section-title"><i class="fas fa-clock"></i> Pending Payments</h2>
+                    
+                    <div class="search-filter">
+                        <input type="text" class="search-box" id="pending-search" placeholder="Search by UTR, User ID or Amount">
+                        <select class="filter-select" id="pending-filter">
+                            <option value="all">All Channels</option>
+                            <option value="wingo">WIN Go</option>
+                            <option value="k3">K3 Lottery</option>
+                            <option value="5d">5D Lottery</option>
+                            <option value="trx">TRX Lottery</option>
+                        </select>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="pending-payments">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>User ID</th>
+                                    <th>Amount</th>
+                                    <th>Channel</th>
+                                    <th>UTR</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Pending payments will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination" id="pending-pagination">
+                        <!-- Pagination will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Verified Payments Section -->
+                <div id="verified-payments-section" class="content-section" style="display: none;">
+                    <h2 class="section-title"><i class="fas fa-check-circle"></i> Verified Payments</h2>
+                    
+                    <div class="search-filter">
+                        <input type="text" class="search-box" id="verified-search" placeholder="Search by UTR, User ID or Amount">
+                        <select class="filter-select" id="verified-filter">
+                            <option value="all">All Channels</option>
+                            <option value="wingo">WIN Go</option>
+                            <option value="k3">K3 Lottery</option>
+                            <option value="5d">5D Lottery</option>
+                            <option value="trx">TRX Lottery</option>
+                        </select>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="verified-payments">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>User ID</th>
+                                    <th>Amount</th>
+                                    <th>Channel</th>
+                                    <th>UTR</th>
+                                    <th>Verified By</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Verified payments will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination" id="verified-pagination">
+                        <!-- Pagination will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Rejected Payments Section -->
+                <div id="rejected-payments-section" class="content-section" style="display: none;">
+                    <h2 class="section-title"><i class="fas fa-times-circle"></i> Rejected Payments</h2>
+                    
+                    <div class="search-filter">
+                        <input type="text" class="search-box" id="rejected-search" placeholder="Search by UTR, User ID or Amount">
+                        <select class="filter-select" id="rejected-filter">
+                            <option value="all">All Channels</option>
+                            <option value="wingo">WIN Go</option>
+                            <option value="k3">K3 Lottery</option>
+                            <option value="5d">5D Lottery</option>
+                            <option value="trx">TRX Lottery</option>
+                        </select>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="rejected-payments">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>User ID</th>
+                                    <th>Amount</th>
+                                    <th>Channel</th>
+                                    <th>UTR</th>
+                                    <th>Reason</th>
+                                    <th>Rejected By</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rejected payments will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination" id="rejected-pagination">
+                        <!-- Pagination will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- All Users Section -->
+                <div id="all-users-section" class="content-section" style="display: none;">
+                    <h2 class="section-title"><i class="fas fa-users"></i> All Users</h2>
+                    
+                    <div class="search-filter">
+                        <input type="text" class="search-box" id="users-search" placeholder="Search by User ID or Phone">
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="all-users">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Phone</th>
+                                    <th>Balance</th>
+                                    <th>Total Deposits</th>
+                                    <th>Last Active</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination" id="users-pagination">
+                        <!-- Pagination will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Settings Section -->
+                <div id="settings-section" class="content-section" style="display: none;">
+                    <h2 class="section-title"><i class="fas fa-cog"></i> Settings</h2>
+                    
+                    <div class="form-group">
+                        <label>Telegram Bot Token</label>
+                        <input type="text" class="form-control" id="telegram-token" value="7645796543:AAEh8jLyrcaUN6Em8GFCM0fZz17hsUFRXkQ">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Telegram Chat ID</label>
+                        <input type="text" class="form-control" id="telegram-chat-id" placeholder="Enter your Telegram Chat ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>UPI ID</label>
+                        <input type="text" class="form-control" id="upi-id" value="nasir****@airtel">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Minimum Deposit Amount</label>
+                        <input type="number" class="form-control" id="min-deposit" value="100">
+                    </div>
+                    
+                    <button class="submit-btn" onclick="saveSettings()">
+                        Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Verify Payment Modal -->
+    <div class="modal" id="verify-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Verify Payment</h3>
+                <button class="close-modal" onclick="closeModal('verify-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Transaction ID</label>
+                    <input type="text" id="verify-txn-id" readonly>
+                </div>
+                <div class="form-group">
+                    <label>User ID</label>
+                    <input type="text" id="verify-user-id" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="text" id="verify-amount" readonly>
+                </div>
+                <div class="form-group">
+                    <label>UTR Number</label>
+                    <input type="text" id="verify-utr" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Payment Screenshot (Optional)</label>
+                    <input type="file" id="verify-screenshot">
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="verify-notes" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal('verify-modal')">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="approvePayment()">Approve Payment</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reject Payment Modal -->
+    <div class="modal" id="reject-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Reject Payment</h3>
+                <button class="close-modal" onclick="closeModal('reject-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Transaction ID</label>
+                    <input type="text" id="reject-txn-id" readonly>
+                </div>
+                <div class="form-group">
+                    <label>User ID</label>
+                    <input type="text" id="reject-user-id" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="text" id="reject-amount" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Reason for Rejection</label>
+                    <select id="reject-reason">
+                        <option value="Invalid UTR">Invalid UTR</option>
+                        <option value="Incorrect Amount">Incorrect Amount</option>
+                        <option value="Fake Payment">Fake Payment</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group" id="reject-other-container" style="display: none;">
+                    <label>Specify Reason</label>
+                    <input type="text" id="reject-other-reason">
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="reject-notes" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal('reject-modal')">Cancel</button>
+                <button class="modal-btn modal-btn-primary" onclick="rejectPayment()">Confirm Rejection</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- View User Modal -->
+    <div class="modal" id="user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">User Details</h3>
+                <button class="close-modal" onclick="closeModal('user-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>User ID</label>
+                    <input type="text" id="user-id" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="user-phone" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Current Balance</label>
+                    <input type="text" id="user-balance" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Total Deposits</label>
+                    <input type="text" id="user-total-deposits" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Account Created</label>
+                    <input type="text" id="user-created" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Last Active</label>
+                    <input type="text" id="user-last-active" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="user-status">
+                        <option value="active">Active</option>
+                        <option value="suspended">Suspended</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal('user-modal')">Close</button>
+                <button class="modal-btn modal-btn-primary" onclick="updateUserStatus()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.firebasestorage.app",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        let currentAdmin = null;
+        
+        // Check if admin is logged in
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                currentAdmin = user.uid;
+                loadDashboard();
+                loadPendingPayments();
+                loadVerifiedPayments();
+                loadRejectedPayments();
+                loadAllUsers();
+            } else {
+                window.location.href = "admin-login.html";
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = "admin-login.html";
+            });
+        }
+        
+        // Show section
+        function showSection(section) {
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.style.display = 'none';
+            });
+            
+            document.getElementById(`${section}-section`).style.display = 'block';
+            
+            // Update active menu item
+            document.querySelectorAll('.sidebar-menu a').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+        }
+        
+        // Load dashboard stats
+        function loadDashboard() {
+            // Total deposits
+            database.ref('deposits').on('value', (snapshot) => {
+                let totalAmount = 0;
+                let successAmount = 0;
+                let pendingAmount = 0;
+                let failedAmount = 0;
+                
+                snapshot.forEach(userSnapshot => {
+                    userSnapshot.forEach(txnSnapshot => {
+                        const txn = txnSnapshot.val();
+                        totalAmount += txn.amount;
+                        
+                        if (txn.status === 'success') {
+                            successAmount += txn.amount;
+                        } else if (txn.status === 'pending') {
+                            pendingAmount += txn.amount;
+                        } else if (txn.status === 'failed') {
+                            failedAmount += txn.amount;
+                        }
+                    });
+                });
+                
+                document.getElementById('total-deposits').textContent = `₹${totalAmount.toLocaleString('en-IN')}`;
+                document.getElementById('success-deposits').textContent = `₹${successAmount.toLocaleString('en-IN')}`;
+                document.getElementById('pending-deposits').textContent = `₹${pendingAmount.toLocaleString('en-IN')}`;
+                document.getElementById('failed-deposits').textContent = `₹${failedAmount.toLocaleString('en-IN')}`;
+            });
+            
+            // Recent transactions
+            database.ref('deposits').orderByChild('timestamp').limitToLast(10).on('value', (snapshot) => {
+                const tbody = document.querySelector('#recent-transactions tbody');
+                tbody.innerHTML = '';
+                
+                snapshot.forEach(userSnapshot => {
+                    const userId = userSnapshot.key;
+                    
+                    userSnapshot.forEach(txnSnapshot => {
+                        const txnId = txnSnapshot.key;
+                        const txn = txnSnapshot.val();
+                        
+                        const date = new Date(txn.timestamp);
+                        const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+                        
+                        let statusBadge = '';
+                        if (txn.status === 'success') {
+                            statusBadge = '<span class="status-badge status-success">Success</span>';
+                        } else if (txn.status === 'pending') {
+                            statusBadge = '<span class="status-badge status-pending">Pending</span>';
+                        } else {
+                            statusBadge = '<span class="status-badge status-failed">Failed</span>';
+                        }
+                        
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${txnId}</td>
+                            <td>${userId}</td>
+                            <td>₹${txn.amount.toLocaleString('en-IN')}</td>
+                            <td>${txn.channel}</td>
+                            <td>${statusBadge}</td>
+                            <td>${formattedDate}</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewTransaction('${userId}', '${txnId}')">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </td>
+                        `;
+                        
+                        tbody.appendChild(tr);
+                    });
+                });
+            });
+        }
+        
+        // Load pending payments
+        function loadPendingPayments() {
+            database.ref('deposits').orderByChild('status').equalTo('processing').on('value', (snapshot) => {
+                const tbody = document.querySelector('#pending-payments tbody');
+                tbody.innerHTML = '';
+                
+                snapshot.forEach(userSnapshot => {
+                    const userId = userSnapshot.key;
+                    
+                    userSnapshot.forEach(txnSnapshot => {
+                        const txnId = txnSnapshot.key;
+                        const txn = txnSnapshot.val();
+                        
+                        if (txn.status === 'processing') {
+                            const date = new Date(txn.timestamp);
+                            const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+                            
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${txnId}</td>
+                                <td>${userId}</td>
+                                <td>₹${txn.amount.toLocaleString('en-IN')}</td>
+                                <td>${txn.channel}</td>
+                                <td>${txn.utr || 'N/A'}</td>
+                                <td>${formattedDate}</td>
+                                <td>
+                                    <button class="action-btn approve-btn" onclick="openVerifyModal('${userId}', '${txnId}')">
+                                        <i class="fas fa-check"></i> Approve
+                                    </button>
+                                    <button class="action-btn reject-btn" onclick="openRejectModal('${userId}', '${txnId}')">
+                                        <i class="fas fa-times"></i> Reject
+                                    </button>
+                                </td>
+                            `;
+                            
+                            tbody.appendChild(tr);
+                        }
+                    });
+                });
+            });
+        }
+        
+        // Load verified payments
+        function loadVerifiedPayments() {
+            database.ref('deposits').orderByChild('status').equalTo('success').on('value', (snapshot) => {
+                const tbody = document.querySelector('#verified-payments tbody');
+                tbody.innerHTML = '';
+                
+                snapshot.forEach(userSnapshot => {
+                    const userId = userSnapshot.key;
+                    
+                    userSnapshot.forEach(txnSnapshot => {
+                        const txnId = txnSnapshot.key;
+                        const txn = txnSnapshot.val();
+                        
+                        if (txn.status === 'success') {
+                            const date = new Date(txn.timestamp);
+                            const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+                            
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${txnId}</td>
+                                <td>${userId}</td>
+                                <td>₹${txn.amount.toLocaleString('en-IN')}</td>
+                                <td>${txn.channel}</td>
+                                <td>${txn.utr || 'N/A'}</td>
+                                <td>${txn.verifiedBy || 'System'}</td>
+                                <td>${formattedDate}</td>
+                            `;
+                            
+                            tbody.appendChild(tr);
+                        }
+                    });
+                });
+            });
+        }
+        
+        // Load rejected payments
+        function loadRejectedPayments() {
+            database.ref('deposits').orderByChild('status').equalTo('failed').on('value', (snapshot) => {
+                const tbody = document.querySelector('#rejected-payments tbody');
+                tbody.innerHTML = '';
+                
+                snapshot.forEach(userSnapshot => {
+                    const userId = userSnapshot.key;
+                    
+                    userSnapshot.forEach(txnSnapshot => {
+                        const txnId = txnSnapshot.key;
+                        const txn = txnSnapshot.val();
+                        
+                        if (txn.status === 'failed' && txn.rejectedBy) {
+                            const date = new Date(txn.timestamp);
+                            const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+                            
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${txnId}</td>
+                                <td>${userId}</td>
+                                <td>₹${txn.amount.toLocaleString('en-IN')}</td>
+                                <td>${txn.channel}</td>
+                                <td>${txn.utr || 'N/A'}</td>
+                                <td>${txn.rejectReason || 'N/A'}</td>
+                                <td>${txn.rejectedBy}</td>
+                                <td>${formattedDate}</td>
+                            `;
+                            
+                            tbody.appendChild(tr);
+                        }
+                    });
+                });
+            });
+        }
+        
+        // Load all users
+        function loadAllUsers() {
+            database.ref('users').on('value', (snapshot) => {
+                const tbody = document.querySelector('#all-users tbody');
+                tbody.innerHTML = '';
+                
+                snapshot.forEach(userSnapshot => {
+                    const userId = userSnapshot.key;
+                    const user = userSnapshot.val();
+                    
+                    // Get total deposits for user
+                    let totalDeposits = 0;
+                    database.ref('deposits/' + userId).once('value', (txnSnapshot) => {
+                        txnSnapshot.forEach(txn => {
+                            if (txn.val().status === 'success') {
+                                totalDeposits += txn.val().amount;
+                            }
+                        });
+                        
+                        const date = new Date(user.lastActive || user.createdAt || Date.now());
+                        const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+                        
+                        const createdDate = new Date(user.createdAt || Date.now());
+                        const formattedCreated = `${createdDate.getDate()}/${createdDate.getMonth()+1}/${createdDate.getFullYear()}`;
+                        
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${userId}</td>
+                            <td>${user.phone || 'N/A'}</td>
+                            <td>₹${(user.balance || 0).toLocaleString('en-IN')}</td>
+                            <td>₹${totalDeposits.toLocaleString('en-IN')}</td>
+                            <td>${formattedDate}</td>
+                            <td>${user.status === 'suspended' ? 'Suspended' : 'Active'}</td>
+                            <td>
+                                <button class="action-btn view-btn" onclick="viewUser('${userId}')">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                            </td>
+                        `;
+                        
+                        tbody.appendChild(tr);
+                    });
+                });
+            });
+        }
+        
+        // Open verify modal
+        function openVerifyModal(userId, txnId) {
+            database.ref(`deposits/${userId}/${txnId}`).once('value', (snapshot) => {
+                const txn = snapshot.val();
+                
+                document.getElementById('verify-txn-id').value = txnId;
+                document.getElementById('verify-user-id').value = userId;
+                document.getElementById('verify-amount').value = `₹${txn.amount.toLocaleString('en-IN')}`;
+                document.getElementById('verify-utr').value = txn.utr || 'N/A';
+                document.getElementById('verify-notes').value = '';
+                
+                document.getElementById('verify-modal').style.display = 'flex';
+            });
+        }
+        
+        // Open reject modal
+        function openRejectModal(userId, txnId) {
+            database.ref(`deposits/${userId}/${txnId}`).once('value', (snapshot) => {
+                const txn = snapshot.val();
+                
+                document.getElementById('reject-txn-id').value = txnId;
+                document.getElementById('reject-user-id').value = userId;
+                document.getElementById('reject-amount').value = `₹${txn.amount.toLocaleString('en-IN')}`;
+                document.getElementById('reject-reason').value = 'Invalid UTR';
+                document.getElementById('reject-notes').value = '';
+                
+                document.getElementById('reject-modal').style.display = 'flex';
+            });
+        }
+        
+        // View user details
+        function viewUser(userId) {
+            database.ref(`users/${userId}`).once('value', (snapshot) => {
+                const user = snapshot.val();
+                
+                document.getElementById('user-id').value = userId;
+                document.getElementById('user-phone').value = user.phone || 'N/A';
+                document.getElementById('user-balance').value = `₹${(user.balance || 0).toLocaleString('en-IN')}`;
+                
+                // Get total deposits
+                let totalDeposits = 0;
+                database.ref(`deposits/${userId}`).once('value', (txnSnapshot) => {
+                    txnSnapshot.forEach(txn => {
+                        if (txn.val().status === 'success') {
+                            totalDeposits += txn.val().amount;
+                        }
+                    });
+                    
+                    document.getElementById('user-total-deposits').value = `₹${totalDeposits.toLocaleString('en-IN')}`;
+                });
+                
+                const createdDate = new Date(user.createdAt || Date.now());
+                document.getElementById('user-created').value = `${createdDate.getDate()}/${createdDate.getMonth()+1}/${createdDate.getFullYear()}`;
+                
+                const lastActive = new Date(user.lastActive || Date.now());
+                document.getElementById('user-last-active').value = `${lastActive.getDate()}/${lastActive.getMonth()+1}/${lastActive.getFullYear()} ${lastActive.getHours()}:${String(lastActive.getMinutes()).padStart(2, '0')}`;
+                
+                document.getElementById('user-status').value = user.status || 'active';
+                
+                document.getElementById('user-modal').style.display = 'flex';
+            });
+        }
+        
+        // View transaction details
+        function viewTransaction(userId, txnId) {
+            // You can implement this similarly to viewUser
+            alert(`Viewing transaction ${txnId} for user ${userId}`);
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Approve payment
+        function approvePayment() {
+            const txnId = document.getElementById('verify-txn-id').value;
+            const userId = document.getElementById('verify-user-id').value;
+            const notes = document.getElementById('verify-notes').value;
+            
+            // Get transaction amount first
+            database.ref(`deposits/${userId}/${txnId}/amount`).once('value', (snapshot) => {
+                const amount = snapshot.val();
+                
+                // Update transaction status
+                database.ref(`deposits/${userId}/${txnId}`).update({
+                    status: 'success',
+                    verifiedBy: currentAdmin,
+                    verifiedAt: Date.now(),
+                    notes: notes
+                }).then(() => {
+                    // Update user balance
+                    database.ref(`users/${userId}/balance`).transaction((balance) => {
+                        return (balance || 0) + amount;
+                    }).then(() => {
+                        showToast('Payment approved successfully!', 'success');
+                        closeModal('verify-modal');
+                    });
+                });
+            });
+        }
+        
+        // Reject payment
+        function rejectPayment() {
+            const txnId = document.getElementById('reject-txn-id').value;
+            const userId = document.getElementById('reject-user-id').value;
+            const reason = document.getElementById('reject-reason').value;
+            const notes = document.getElementById('reject-notes').value;
+            
+            let rejectReason = reason;
+            if (reason === 'Other') {
+                rejectReason = document.getElementById('reject-other-reason').value;
+            }
+            
+            database.ref(`deposits/${userId}/${txnId}`).update({
+                status: 'failed',
+                rejectedBy: currentAdmin,
+                rejectedAt: Date.now(),
+                rejectReason: rejectReason,
+                notes: notes
+            }).then(() => {
+                showToast('Payment rejected successfully!', 'success');
+                closeModal('reject-modal');
+            });
+        }
+        
+        // Update user status
+        function updateUserStatus() {
+            const userId = document.getElementById('user-id').value;
+            const status = document.getElementById('user-status').value;
+            
+            database.ref(`users/${userId}/status`).set(status).then(() => {
+                showToast('User status updated successfully!', 'success');
+                closeModal('user-modal');
+            });
+        }
+        
+        // Save settings
+        function saveSettings() {
+            const telegramToken = document.getElementById('telegram-token').value;
+            const telegramChatId = document.getElementById('telegram-chat-id').value;
+            const upiId = document.getElementById('upi-id').value;
+            const minDeposit = document.getElementById('min-deposit').value;
+            
+            database.ref('settings').update({
+                telegramToken: telegramToken,
+                telegramChatId: telegramChatId,
+                upiId: upiId,
+                minDeposit: parseInt(minDeposit)
+            }).then(() => {
+                showToast('Settings saved successfully!', 'success');
+            });
+        }
+        
+        // Show reason input if "Other" is selected
+        document.getElementById('reject-reason').addEventListener('change', function() {
+            if (this.value === 'Other') {
+                document.getElementById('reject-other-container').style.display = 'block';
+            } else {
+                document.getElementById('reject-other-container').style.display = 'none';
+            }
+        });
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
