@@ -440,6 +440,7 @@
         </div>
     </div>
     
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -458,7 +459,11 @@
             measurementId: "G-S3M36PLB9Y"
         };
         
-        firebase.initializeApp(firebaseConfig);
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
         const auth = firebase.auth();
         const database = firebase.database();
         const storage = firebase.storage();
@@ -471,12 +476,15 @@
                 currentUser = user;
                 loadUserProfile();
             } else {
+                // If not logged in, redirect to login page
                 window.location.href = "login.html";
             }
         });
         
         // Load user profile from database
         function loadUserProfile() {
+            if (!currentUser) return;
+            
             database.ref('users/' + currentUser.uid).once('value').then((snapshot) => {
                 const userData = snapshot.val();
                 
@@ -491,7 +499,24 @@
                     if (userData.avatar) {
                         document.getElementById('user-avatar').src = userData.avatar;
                     }
+                } else {
+                    // Create basic user data if doesn't exist
+                    database.ref('users/' + currentUser.uid).set({
+                        name: currentUser.displayName || 'User',
+                        email: currentUser.email || '',
+                        uid: currentUser.uid.substr(0, 6),
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    });
+                    
+                    // Set default values
+                    document.getElementById('user-name').textContent = currentUser.displayName || 'User';
+                    document.getElementById('nickname-value').textContent = 'Member' + Math.random().toString(36).substr(2, 8).toUpperCase();
+                    document.getElementById('uid-value').textContent = currentUser.uid.substr(0, 6);
+                    document.getElementById('user-uid').textContent = currentUser.uid.substr(0, 6);
                 }
+            }).catch((error) => {
+                console.error("Error loading user profile:", error);
+                showToast('Error loading profile data', 'error');
             });
         }
         
@@ -513,6 +538,8 @@
             uploadTask.on('state_changed', 
                 (snapshot) => {
                     // Progress monitoring can be added here
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
                 }, 
                 (error) => {
                     showToast('Error uploading avatar: ' + error.message, 'error');
@@ -526,7 +553,11 @@
                         }).then(() => {
                             avatarImg.src = downloadURL;
                             showToast('Avatar updated successfully!', 'success');
+                        }).catch((error) => {
+                            showToast('Error updating profile: ' + error.message, 'error');
                         });
+                    }).catch((error) => {
+                        showToast('Error getting download URL: ' + error.message, 'error');
                     });
                 }
             );
@@ -534,6 +565,11 @@
         
         // Change password
         function changePassword() {
+            if (!currentUser || !currentUser.email) {
+                showToast('You must be logged in with email to change password', 'error');
+                return;
+            }
+            
             document.getElementById('current-password').value = '';
             document.getElementById('new-password').value = '';
             document.getElementById('confirm-password').value = '';
@@ -569,23 +605,21 @@
             currentUser.reauthenticateWithCredential(credential)
                 .then(() => {
                     // Update password
-                    currentUser.updatePassword(newPassword)
-                        .then(() => {
-                            showToast('Password updated successfully!', 'success');
-                            closeModal('password-modal');
-                        })
-                        .catch((error) => {
-                            showToast('Error updating password: ' + error.message, 'error');
-                        });
+                    return currentUser.updatePassword(newPassword);
+                })
+                .then(() => {
+                    showToast('Password updated successfully!', 'success');
+                    closeModal('password-modal');
                 })
                 .catch((error) => {
-                    showToast('Current password is incorrect', 'error');
+                    console.error("Error updating password:", error);
+                    showToast('Error: ' + error.message, 'error');
                 });
         }
         
         // Bind email
         function bindEmail() {
-            document.getElementById('email-address').value = '';
+            document.getElementById('email-address').value = currentUser.email || '';
             document.getElementById('verification-code').value = '';
             document.getElementById('email-modal').style.display = 'flex';
         }
@@ -633,15 +667,17 @@
             currentUser.updateEmail(email)
                 .then(() => {
                     // Update in database
-                    database.ref('users/' + currentUser.uid).update({
+                    return database.ref('users/' + currentUser.uid).update({
                         email: email
-                    }).then(() => {
-                        showToast('Email bound successfully!', 'success');
-                        closeModal('email-modal');
                     });
                 })
+                .then(() => {
+                    showToast('Email bound successfully!', 'success');
+                    closeModal('email-modal');
+                })
                 .catch((error) => {
-                    showToast('Error binding email: ' + error.message, 'error');
+                    console.error("Error binding email:", error);
+                    showToast('Error: ' + error.message, 'error');
                 });
         }
         
@@ -657,12 +693,20 @@
         
         // Show toast notification
         function showToast(message, type = 'success') {
+            // Remove any existing toasts first
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+            
+            const icons = {
+                success: '<i class="fas fa-check-circle toast-icon"></i>',
+                error: '<i class="fas fa-exclamation-circle toast-icon"></i>',
+                warning: '<i class="fas fa-exclamation-triangle toast-icon"></i>',
+                info: '<i class="fas fa-info-circle toast-icon"></i>'
+            };
+            
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
-                ${message}
-            `;
+            toast.innerHTML = `${icons[type] || ''} ${message}`;
             document.body.appendChild(toast);
             
             setTimeout(() => {
