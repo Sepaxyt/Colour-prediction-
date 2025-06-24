@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DG CLUB</title>
+    <title>53 CLUB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -613,8 +613,8 @@
     <div class="container">
         <header>
             <div class="logo">
-                <div class="logo-img">DG</div>
-                <h1>DG CLUB</h1>
+                <div class="logo-img">53</div>
+                <h1>53 CLUB</h1>
             </div>
             
             <div style="width: 40px;"></div>
@@ -628,7 +628,7 @@
         </div>
         
         <div class="welcome-message">
-            Welcome to the DGCLUB Games! Greetings, Gamers and Enthusiasts! The DGCLUB
+            Welcome to the 53 CLUB Games! Greetings, Gamers and Enthusiasts!
         </div>
         
         <hr>
@@ -998,7 +998,7 @@
                     
                     // Process bets for this period
                     processBets(winningNumber, color, bigSmall).then(() => {
-                        // Clean up old history (keep only last 10)
+                        // Clean up old history (keep only last 20)
                         cleanupOldHistory();
                         resolve();
                     });
@@ -1006,7 +1006,7 @@
             });
         }
         
-        // Clean up old history (keep only last 10 records)
+        // Clean up old history (keep only last 20 records)
         function cleanupOldHistory() {
             database.ref('gameResults').orderByChild('periodNumber').once('value').then((snapshot) => {
                 const results = snapshot.val();
@@ -1019,9 +1019,9 @@
                     // Sort by period number (ascending)
                     resultsArray.sort((a, b) => a.periodNumber - b.periodNumber);
                     
-                    // Delete all but the last 10
-                    if (resultsArray.length > 10) {
-                        const toDelete = resultsArray.slice(0, resultsArray.length - 10);
+                    // Delete all but the last 20
+                    if (resultsArray.length > 20) {
+                        const toDelete = resultsArray.slice(0, resultsArray.length - 20);
                         toDelete.forEach(item => {
                             database.ref('gameResults/' + item.key).remove();
                         });
@@ -1059,8 +1059,8 @@
                 historyBody.appendChild(historyRow);
             }
             
-            // Keep only the last 10 history items
-            while(historyBody.children.length > 10) {
+            // Keep only the last 20 history items
+            while(historyBody.children.length > 20) {
                 historyBody.removeChild(historyBody.lastChild);
             }
             
@@ -1072,7 +1072,7 @@
                 color: color
             });
             
-            if(gameHistory.length > 10) {
+            if(gameHistory.length > 20) {
                 gameHistory.pop();
             }
         }
@@ -1253,7 +1253,7 @@
         
         // Load game history from database
         function loadGameHistory() {
-            database.ref('gameResults').orderByChild('periodNumber').limitToLast(10).once('value').then((snapshot) => {
+            database.ref('gameResults').orderByChild('periodNumber').limitToLast(20).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
