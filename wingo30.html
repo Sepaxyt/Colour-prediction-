@@ -21,6 +21,7 @@
             --red: #ff4757;
             --green: #2ed573;
             --violet: #9c88ff;
+            --gold: #ffd700;
         }
         
         * {
@@ -82,6 +83,11 @@
             font-weight: bold;
             text-align: center;
             margin: 15px 0;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         
         .wallet-actions {
@@ -91,23 +97,34 @@
         }
         
         .wallet-btn {
-            padding: 8px 15px;
-            border-radius: 6px;
+            padding: 12px 20px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .withdraw-btn {
-            background-color: rgba(220, 53, 69, 0.2);
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(220, 53, 69, 0.3));
             color: var(--danger);
             border: 1px solid var(--danger);
         }
         
+        .withdraw-btn:hover {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.3), rgba(220, 53, 69, 0.4));
+        }
+        
         .deposit-btn {
-            background-color: rgba(40, 167, 69, 0.2);
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(40, 167, 69, 0.3));
             color: var(--success);
             border: 1px solid var(--success);
+        }
+        
+        .deposit-btn:hover {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.3), rgba(40, 167, 69, 0.4));
         }
         
         .welcome-message {
@@ -127,20 +144,35 @@
         }
         
         .game-tab {
-            padding: 8px 15px;
-            border-radius: 6px;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
         .game-tab.active {
             background: linear-gradient(to right, var(--secondary), var(--primary));
             color: white;
+            box-shadow: 0 4px 12px rgba(74, 107, 255, 0.3);
         }
         
         .game-tab:hover:not(.active) {
             background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .game-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 3px;
         }
         
         .game-info {
@@ -158,17 +190,31 @@
         }
         
         .timer {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             background: rgba(255, 255, 255, 0.05);
-            padding: 10px 20px;
-            border-radius: 8px;
-            min-width: 100px;
+            padding: 15px 30px;
+            border-radius: 12px;
+            min-width: 120px;
             text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .timer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
         }
         
         .period-id {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--gray);
             text-align: center;
             margin-bottom: 20px;
@@ -178,35 +224,59 @@
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
+            gap: 10px;
         }
         
         .color-option {
-            padding: 10px 15px;
-            border-radius: 6px;
+            padding: 12px 15px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
             flex: 1;
-            margin: 0 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid transparent;
         }
         
         .color-option.green {
-            background-color: rgba(46, 213, 115, 0.2);
+            background: linear-gradient(135deg, rgba(46, 213, 115, 0.1), rgba(46, 213, 115, 0.2));
             color: var(--green);
-            border: 1px solid var(--green);
+            border-color: var(--green);
+        }
+        
+        .color-option.green:hover {
+            background: linear-gradient(135deg, rgba(46, 213, 115, 0.2), rgba(46, 213, 115, 0.3));
         }
         
         .color-option.violet {
-            background-color: rgba(156, 136, 255, 0.2);
+            background: linear-gradient(135deg, rgba(156, 136, 255, 0.1), rgba(156, 136, 255, 0.2));
             color: var(--violet);
-            border: 1px solid var(--violet);
+            border-color: var(--violet);
+        }
+        
+        .color-option.violet:hover {
+            background: linear-gradient(135deg, rgba(156, 136, 255, 0.2), rgba(156, 136, 255, 0.3));
         }
         
         .color-option.red {
-            background-color: rgba(255, 71, 87, 0.2);
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.1), rgba(255, 71, 87, 0.2));
             color: var(--red);
-            border: 1px solid var(--red);
+            border-color: var(--red);
+        }
+        
+        .color-option.red:hover {
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.2), rgba(255, 71, 87, 0.3));
+        }
+        
+        .color-option .odds {
+            font-size: 0.8rem;
+            background: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
         }
         
         .number-grid {
@@ -218,42 +288,75 @@
         
         .number-item {
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            padding: 10px;
+            border-radius: 8px;
+            padding: 12px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
         }
         
         .number-item:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .number-item .odds {
+            font-size: 0.7rem;
+            color: var(--gold);
+            margin-top: 5px;
         }
         
         .bet-options {
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
+            gap: 10px;
         }
         
         .bet-option {
-            padding: 8px 15px;
-            border-radius: 6px;
+            padding: 12px 15px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid transparent;
         }
         
         .bet-option.big {
-            background-color: rgba(74, 107, 255, 0.2);
+            background: linear-gradient(135deg, rgba(74, 107, 255, 0.1), rgba(74, 107, 255, 0.2));
             color: var(--secondary);
-            border: 1px solid var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .bet-option.big:hover {
+            background: linear-gradient(135deg, rgba(74, 107, 255, 0.2), rgba(74, 107, 255, 0.3));
         }
         
         .bet-option.small {
-            background-color: rgba(106, 17, 203, 0.2);
+            background: linear-gradient(135deg, rgba(106, 17, 203, 0.1), rgba(106, 17, 203, 0.2));
             color: var(--primary);
-            border: 1px solid var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .bet-option.small:hover {
+            background: linear-gradient(135deg, rgba(106, 17, 203, 0.2), rgba(106, 17, 203, 0.3));
+        }
+        
+        .bet-option .odds {
+            font-size: 0.8rem;
+            background: rgba(0,0,0,0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
         }
         
         .random-options {
@@ -261,22 +364,24 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 8px;
         }
         
         .random-option {
-            width: 15%;
-            padding: 8px 5px;
-            margin-bottom: 10px;
+            width: calc(33.33% - 5px);
+            padding: 12px 5px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
+            border-radius: 8px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         
         .random-option:hover {
             background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
         
         hr {
@@ -293,10 +398,17 @@
             margin-bottom: 15px;
         }
         
+        .history-tabs {
+            display: flex;
+            gap: 15px;
+        }
+        
         .history-tab {
             font-size: 0.9rem;
             color: var(--gray);
             cursor: pointer;
+            padding: 5px 0;
+            position: relative;
         }
         
         .history-tab.active {
@@ -304,29 +416,54 @@
             font-weight: 600;
         }
         
+        .history-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        
         .history-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.9rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            overflow: hidden;
         }
         
         .history-table th {
             text-align: left;
-            padding: 8px 5px;
+            padding: 12px 15px;
             color: var(--gray);
             font-weight: 500;
+            background: rgba(0,0,0,0.2);
         }
         
         .history-table td {
-            padding: 8px 5px;
+            padding: 12px 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .history-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .history-table tr:hover {
+            background: rgba(255,255,255,0.03);
         }
         
         .dot {
             display: inline-block;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
         }
         
         .dot.red {
@@ -342,7 +479,7 @@
         }
         
         .waiting {
-            color: var(--warning);
+            color: var(--gray);
             font-style: italic;
         }
         
@@ -406,7 +543,7 @@
         }
         
         .modal-content {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            background: linear-gradient(135deg, #1a1a1a, #121212);
             padding: 25px;
             border-radius: 12px;
             width: 90%;
@@ -414,6 +551,12 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .modal-title {
@@ -426,6 +569,7 @@
         
         .modal-title i {
             margin-right: 10px;
+            color: var(--gold);
         }
         
         .close-modal {
@@ -435,6 +579,11 @@
             font-size: 1.5rem;
             color: var(--gray);
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--light);
         }
         
         .bet-amount-container {
@@ -451,6 +600,13 @@
             font-size: 1.2rem;
             text-align: center;
             margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .bet-amount-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.3);
         }
         
         .bet-buttons {
@@ -491,17 +647,23 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
         
         .submit-bet:hover {
             opacity: 0.9;
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(74, 107, 255, 0.3);
         }
         
         .submit-bet:disabled {
             background: var(--gray);
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
         
         .bet-details {
@@ -509,6 +671,7 @@
             padding: 15px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .bet-detail-item {
@@ -539,14 +702,15 @@
         }
         
         .result-content {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            padding: 25px;
+            background: linear-gradient(135deg, #1a1a1a, #121212);
+            padding: 30px;
             border-radius: 12px;
             width: 90%;
             max-width: 350px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
+            animation: modalFadeIn 0.3s ease;
         }
         
         .result-icon {
@@ -556,10 +720,23 @@
         
         .result-icon.win {
             color: var(--green);
+            animation: bounce 0.5s ease;
         }
         
         .result-icon.loss {
             color: var(--red);
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
         }
         
         .result-title {
@@ -570,12 +747,16 @@
         .result-message {
             margin-bottom: 20px;
             font-size: 1.1rem;
+            color: var(--gray);
         }
         
         .result-amount {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
         }
         
         .result-win {
@@ -587,11 +768,11 @@
         }
         
         .close-result {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background: linear-gradient(to right, var(--secondary), var(--primary));
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -600,6 +781,8 @@
         
         .close-result:hover {
             opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(74, 107, 255, 0.3);
         }
         
         /* Responsive styles */
@@ -609,7 +792,40 @@
             }
             
             .random-option {
-                width: 30%;
+                width: calc(50% - 4px);
+            }
+            
+            .game-tabs {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .game-tab {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .color-options, .bet-options {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .wallet-balance {
+                font-size: 1.5rem;
+            }
+            
+            .timer {
+                font-size: 1.5rem;
+                padding: 12px 20px;
+            }
+            
+            .number-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .random-option {
+                width: 100%;
             }
         }
     </style>
@@ -628,8 +844,12 @@
         <div class="wallet-balance" id="wallet-balance">₹0.00</div>
         
         <div class="wallet-actions">
-            <div class="wallet-btn withdraw-btn" onclick="window.location.href='withdraw.html'">Withdraw</div>
-            <div class="wallet-btn deposit-btn" onclick="window.location.href='deposit.html'">Deposit</div>
+            <div class="wallet-btn withdraw-btn" onclick="window.location.href='withdraw.html'">
+                <i class="fas fa-rupee-sign"></i> Withdraw
+            </div>
+            <div class="wallet-btn deposit-btn" onclick="window.location.href='deposit.html'">
+                <i class="fas fa-wallet"></i> Deposit
+            </div>
         </div>
         
         <div class="welcome-message">
@@ -639,13 +859,13 @@
         <hr>
         
         <div class="game-tabs">
-            <div class="game-tab active" onclick="switchGame('wingo30')">WinGo 30sec</div>
-            <div class="game-tab" onclick="switchGame('wingo60')">WinGo 1 Min</div>
-            <div class="game-tab" onclick="switchGame('wingo180')">WinGo 3 Min</div>
-            <div class="game-tab" onclick="switchGame('wingo300')">WinGo 5 Min</div>
+            <div class="game-tab active">WinGo 30sec</div>
+            <div class="game-tab">WinGo 1 Min</div>
+            <div class="game-tab">WinGo 3 Min</div>
+            <div class="game-tab">WinGo 5 Min</div>
         </div>
         
-        <div class="game-info" id="game-info">
+        <div class="game-info">
             How to play WinGo 30sec
         </div>
         
@@ -658,34 +878,70 @@
         <div class="color-options">
             <div class="color-option green" onclick="openBetModal('green', 'Green', 2.0)">
                 Green
+                <span class="odds">2.0x</span>
             </div>
             <div class="color-option violet" onclick="openBetModal('violet', 'Violet', 4.5)">
                 Violet
+                <span class="odds">4.5x</span>
             </div>
             <div class="color-option red" onclick="openBetModal('red', 'Red', 2.0)">
                 Red
+                <span class="odds">2.0x</span>
             </div>
         </div>
         
         <div class="number-grid">
-            <div class="number-item" onclick="openBetModal('0', '0', 9.0)">0</div>
-            <div class="number-item" onclick="openBetModal('1', '1', 9.0)">1</div>
-            <div class="number-item" onclick="openBetModal('2', '2', 9.0)">2</div>
-            <div class="number-item" onclick="openBetModal('3', '3', 9.0)">3</div>
-            <div class="number-item" onclick="openBetModal('4', '4', 9.0)">4</div>
-            <div class="number-item" onclick="openBetModal('5', '5', 9.0)">5</div>
-            <div class="number-item" onclick="openBetModal('6', '6', 9.0)">6</div>
-            <div class="number-item" onclick="openBetModal('7', '7', 9.0)">7</div>
-            <div class="number-item" onclick="openBetModal('8', '8', 9.0)">8</div>
+            <div class="number-item" onclick="openBetModal('0', '0', 9.0)">
+                0
+                <div class="odds">9.0x</div>
+            </div>
+            <div class="number-item" onclick="openBetModal('1', '1', 9.0)">
+                1
+                <div class="odds">9.0x</div>
+            </div>
+            <div class="number-item" onclick="openBetModal('2', '2', 9.0)">
+                2
+                <div class="odds">9.0x</div>
+            </div>
+            <div class="number-item" onclick="openBetModal('3', '3', 9.0)">
+                3
+                <div class="odds">9.0x</div>
+            </div>
+            <div class="number-item" onclick="openBetModal('4', '4', 9.0)">
+                4
+                <div class="odds">9.0x</div>
+            </div>
+            <div class="number-item" onclick="openBetModal('5', '5', 9.0)">
+                5
+                <div class="odds">9.0x</div>
+            </div>
+            <div class="number-item" onclick="openBetModal('6', '6', 9.0)">
+                6
+                <div class="odds">9.0x</div>
+            </div>
+            <div class="number-item" onclick="openBetModal('7', '7', 9.0)">
+                7
+                <div class="odds">9.0x</div>
+            </div>
+            <div class="number-item" onclick="openBetModal('8', '8', 9.0)">
+                8
+                <div class="odds">9.0x</div>
+            </div>
         </div>
         
         <div class="bet-options">
-            <div class="bet-option big" onclick="openBetModal('big', 'Big', 2.0)">Big</div>
-            <div class="bet-option small" onclick="openBetModal('small', 'Small', 2.0)">Small</div>
+            <div class="bet-option big" onclick="openBetModal('big', 'Big', 2.0)">
+                Big (5-8)
+                <span class="odds">2.0x</span>
+            </div>
+            <div class="bet-option small" onclick="openBetModal('small', 'Small', 2.0)">
+                Small (0-4)
+                <span class="odds">2.0x</span>
+            </div>
         </div>
         
         <div style="margin: 20px 0;">
-            <h3>Random</h3>
+            <h3>Quick Bet</h3>
             <div class="random-options">
                 <div class="random-option" onclick="placeRandomBet(1, 10)">X1 (₹10)</div>
                 <div class="random-option" onclick="placeRandomBet(5, 50)">X5 (₹50)</div>
@@ -699,10 +955,11 @@
         <hr>
         
         <div class="game-history-header">
-            <h3>Game history</h3>
-            <div>
-                <span class="history-tab active">Chart</span>
-                <span class="history-tab">Follow Strategy</span>
+            <h3>Game History</h3>
+            <div class="history-tabs">
+                <span class="history-tab active">Recent</span>
+                <span class="history-tab">Chart</span>
+                <span class="history-tab">Strategy</span>
             </div>
         </div>
         
@@ -711,13 +968,16 @@
                 <tr>
                     <th>Period</th>
                     <th>Number</th>
-                    <th>Big Small</th>
+                    <th>Big/Small</th>
                     <th>Color</th>
                 </tr>
             </thead>
             <tbody id="history-body">
                 <tr>
-                    <td colspan="4" class="waiting">Waiting for next result...</td>
+                    <td class="waiting">Waiting...</td>
+                    <td class="waiting">-</td>
+                    <td class="waiting">-</td>
+                    <td class="waiting">-</td>
                 </tr>
             </tbody>
         </table>
@@ -758,7 +1018,7 @@
             </div>
             
             <button class="submit-bet" id="submit-bet" onclick="placeBet()" disabled>
-                Place Bet
+                <i class="fas fa-check-circle"></i> Place Bet
             </button>
         </div>
     </div>
@@ -776,7 +1036,9 @@
             <div class="result-amount" id="result-amount">
                 +₹0.00
             </div>
-            <button class="close-result" onclick="hideResultModal()">Close</button>
+            <button class="close-result" onclick="hideResultModal()">
+                <i class="fas fa-times"></i> Close
+            </button>
         </div>
     </div>
     
@@ -802,7 +1064,7 @@
         
         // Game state variables
         let currentPeriod = "";
-        let currentPeriodNumber = 100000; // Start with 100000 to ensure large gap
+        let currentPeriodNumber = 0;
         let timeLeft = 30;
         let timerInterval;
         let currentBetType = "";
@@ -814,8 +1076,7 @@
         let userPhone = "";
         let isGameRunning = false;
         let resultModalTimeout;
-        let currentGame = "wingo30";
-        let userBets = {};
+        let userBets = {}; // Track user's bets for the current period
         
         // Check if user is logged in
         function checkAuth() {
@@ -836,52 +1097,46 @@
                     
                     // Set up bet result listener
                     setupBetResultListener();
+                    
+                    // Set up user bets listener
+                    setupUserBetsListener();
                 });
             }
         }
         
-        // Switch between different game modes
-        function switchGame(gameType) {
-            currentGame = gameType;
-            
-            // Update active tab
-            document.querySelectorAll('.game-tab').forEach(tab => {
-                tab.classList.remove('active');
+        // Set up listener for user's current period bets
+        function setupUserBetsListener() {
+            database.ref('bets').on('value', (snapshot) => {
+                const allBets = snapshot.val();
+                if (allBets && allBets[currentPeriod] && allBets[currentPeriod][userPhone]) {
+                    userBets = allBets[currentPeriod][userPhone];
+                } else {
+                    userBets = {};
+                }
             });
-            event.target.classList.add('active');
-            
-            // Update game info
-            let gameInfo = "";
-            let gameDuration = 30;
-            
-            switch(gameType) {
-                case "wingo30":
-                    gameInfo = "How to play WinGo 30sec";
-                    gameDuration = 30;
-                    break;
-                case "wingo60":
-                    gameInfo = "How to play WinGo 1 Min";
-                    gameDuration = 60;
-                    break;
-                case "wingo180":
-                    gameInfo = "How to play WinGo 3 Min";
-                    gameDuration = 180;
-                    break;
-                case "wingo300":
-                    gameInfo = "How to play WinGo 5 Min";
-                    gameDuration = 300;
-                    break;
+        }
+        
+        // Check if user has already placed a bet of the same type
+        function hasAlreadyBet(type, value) {
+            for (const betId in userBets) {
+                const bet = userBets[betId];
+                if (bet.type === type && bet.value === value) {
+                    return true;
+                }
             }
-            
-            document.getElementById('game-info').textContent = gameInfo;
-            
-            // Reset game with new duration
-            clearInterval(timerInterval);
-            timeLeft = gameDuration;
-            updateTimerDisplay();
-            
-            // Initialize new game
-            initGame();
+            return false;
+        }
+        
+        // Check if user is trying to place opposite bets (big/small)
+        function isOppositeBet(type, value) {
+            if (type === 'bigSmall') {
+                if (value === 'big') {
+                    return hasAlreadyBet('bigSmall', 'small');
+                } else if (value === 'small') {
+                    return hasAlreadyBet('bigSmall', 'big');
+                }
+            }
+            return false;
         }
         
         // Get server time offset to sync client and server times
@@ -910,29 +1165,24 @@
             // Clear any existing timer
             clearInterval(timerInterval);
             
-            // Get the last period number from database for this game
-            database.ref('gameSettings/' + currentGame + '/lastPeriodNumber').once('value').then((snapshot) => {
+            // Get the last period number from database
+            database.ref('gameSettings/lastPeriodNumber').once('value').then((snapshot) => {
                 const lastPeriod = snapshot.val();
-                currentPeriodNumber = lastPeriod ? lastPeriod + 1 : 100000;
+                currentPeriodNumber = lastPeriod ? lastPeriod : 1;
                 
                 // Check if we have an active period
-                database.ref('gameSettings/' + currentGame + '/currentPeriod').once('value').then((periodSnapshot) => {
+                database.ref('gameSettings/currentPeriod').once('value').then((periodSnapshot) => {
                     const activePeriod = periodSnapshot.val();
                     
-                    if (activePeriod && activePeriod.periodNumber === currentPeriodNumber - 1) {
+                    if (activePeriod && activePeriod.periodNumber === currentPeriodNumber) {
                         // We're in the middle of a period
                         const periodStartTime = activePeriod.startTime;
                         const now = getServerTime();
                         const elapsed = Math.floor((now - periodStartTime) / 1000);
                         
-                        let gameDuration = 30;
-                        if (currentGame === "wingo60") gameDuration = 60;
-                        else if (currentGame === "wingo180") gameDuration = 180;
-                        else if (currentGame === "wingo300") gameDuration = 300;
-                        
-                        if (elapsed < gameDuration) {
+                        if (elapsed < 30) {
                             // Current period is still active
-                            timeLeft = gameDuration - elapsed;
+                            timeLeft = 30 - elapsed;
                             currentPeriod = activePeriod.periodId;
                             document.getElementById('period-id').textContent = currentPeriod;
                             
@@ -950,19 +1200,13 @@
                     } else {
                         // No active period, start a new one
                         generatePeriodId();
-                        
-                        let gameDuration = 30;
-                        if (currentGame === "wingo60") gameDuration = 60;
-                        else if (currentGame === "wingo180") gameDuration = 180;
-                        else if (currentGame === "wingo300") gameDuration = 300;
-                        
-                        timeLeft = gameDuration;
+                        timeLeft = 30;
                         startTimer();
                         
                         // Schedule next period
                         setTimeout(() => {
                             endCurrentPeriod();
-                        }, gameDuration * 1000);
+                        }, 30000);
                     }
                 });
             });
@@ -977,21 +1221,15 @@
             generateResult().then(() => {
                 // Start new round
                 currentPeriodNumber++;
-                
-                let gameDuration = 30;
-                if (currentGame === "wingo60") gameDuration = 60;
-                else if (currentGame === "wingo180") gameDuration = 180;
-                else if (currentGame === "wingo300") gameDuration = 300;
-                
-                database.ref('gameSettings/' + currentGame + '/lastPeriodNumber').set(currentPeriodNumber);
+                database.ref('gameSettings/lastPeriodNumber').set(currentPeriodNumber);
                 generatePeriodId();
-                timeLeft = gameDuration;
+                timeLeft = 30;
                 startTimer();
                 
                 // Schedule next period end
                 setTimeout(() => {
                     endCurrentPeriod();
-                }, gameDuration * 1000);
+                }, 30000);
                 
                 isGameRunning = false;
             });
@@ -1009,15 +1247,11 @@
                 periodNumber: currentPeriodNumber,
                 periodId: currentPeriod,
                 startTime: getServerTime(),
-                status: 'open',
-                gameType: currentGame
+                status: 'open'
             };
             
-            database.ref('gameSettings/' + currentGame + '/currentPeriod').set(periodData);
-            database.ref('gamePeriods/' + currentGame + '/' + currentPeriod).set(periodData);
-            
-            // Reset user bets for new period
-            userBets = {};
+            database.ref('gameSettings/currentPeriod').set(periodData);
+            database.ref('gamePeriods/' + currentPeriod).set(periodData);
         }
         
         // Start the countdown timer
@@ -1037,9 +1271,14 @@
         
         // Update timer display
         function updateTimerDisplay() {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            document.getElementById('timer').textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('timer').textContent = `0:${String(timeLeft).padStart(2, '0')}`;
+            
+            // Change color when time is running out
+            if (timeLeft <= 5) {
+                document.getElementById('timer').style.color = 'var(--red)';
+            } else {
+                document.getElementById('timer').style.color = 'var(--light)';
+            }
         }
         
         // Generate random result for current period
@@ -1066,11 +1305,10 @@
                     number: winningNumber,
                     color: color,
                     bigSmall: bigSmall,
-                    timestamp: getServerTime(),
-                    gameType: currentGame
+                    timestamp: getServerTime()
                 };
                 
-                database.ref('gameResults/' + currentGame + '/' + currentPeriod).set(resultData).then(() => {
+                database.ref('gameResults/' + currentPeriod).set(resultData).then(() => {
                     // Add to history
                     addToHistory(currentPeriod, winningNumber, bigSmall, color);
                     
@@ -1086,7 +1324,7 @@
         
         // Clean up old history (keep only last 5 records)
         function cleanupOldHistory() {
-            database.ref('gameResults/' + currentGame).orderByChild('periodNumber').once('value').then((snapshot) => {
+            database.ref('gameResults').orderByChild('periodNumber').once('value').then((snapshot) => {
                 const results = snapshot.val();
                 if (results) {
                     const resultsArray = Object.keys(results).map(key => ({
@@ -1101,7 +1339,7 @@
                     if (resultsArray.length > 5) {
                         const toDelete = resultsArray.slice(0, resultsArray.length - 5);
                         toDelete.forEach(item => {
-                            database.ref('gameResults/' + currentGame + '/' + item.key).remove();
+                            database.ref('gameResults/' + item.key).remove();
                         });
                     }
                 }
@@ -1110,12 +1348,8 @@
         
         // Add result to history table
         function addToHistory(period, number, bigSmall, color) {
-            const historyBody = document.getElementById('history-body');
-            
-            // Clear waiting message if it exists
-            if (historyBody.firstChild && historyBody.firstChild.querySelector('.waiting')) {
-                historyBody.removeChild(historyBody.firstChild);
-            }
+            // First clear any undefined rows
+            clearUndefinedHistoryRows();
             
             const historyRow = document.createElement('tr');
             
@@ -1137,6 +1371,7 @@
             `;
             
             // Insert at the beginning of the table
+            const historyBody = document.getElementById('history-body');
             if(historyBody.firstChild) {
                 historyBody.insertBefore(historyRow, historyBody.firstChild);
             } else {
@@ -1159,21 +1394,36 @@
             if(gameHistory.length > 5) {
                 gameHistory.pop();
             }
+        }
+        
+        // Clear any undefined rows from history
+        function clearUndefinedHistoryRows() {
+            const historyBody = document.getElementById('history-body');
+            const rows = historyBody.getElementsByTagName('tr');
             
-            // Add waiting row if we have less than 5 results
-            if (historyBody.children.length < 5) {
-                const waitingRow = document.createElement('tr');
-                waitingRow.innerHTML = `
-                    <td colspan="4" class="waiting">Waiting for next result...</td>
-                `;
-                historyBody.appendChild(waitingRow);
+            for (let i = rows.length - 1; i >= 0; i--) {
+                const cells = rows[i].getElementsByTagName('td');
+                let hasUndefined = false;
+                let hasWaiting = false;
+                
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.includes('undefined') || cells[j].classList.contains('waiting')) {
+                        hasUndefined = true;
+                        hasWaiting = cells[j].classList.contains('waiting');
+                        break;
+                    }
+                }
+                
+                if (hasUndefined && !hasWaiting) {
+                    historyBody.removeChild(rows[i]);
+                }
             }
         }
         
         // Process all bets for the current period
         function processBets(winningNumber, winningColor, winningBigSmall) {
             return new Promise((resolve) => {
-                database.ref('bets/' + currentGame + '/' + currentPeriod).once('value').then((snapshot) => {
+                database.ref('bets/' + currentPeriod).once('value').then((snapshot) => {
                     const bets = snapshot.val();
                     let processedBets = 0;
                     
@@ -1216,7 +1466,7 @@
                                     winningBigSmall: winningBigSmall
                                 };
                                 
-                                database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userId + '/' + betId).update(updates).then(() => {
+                                database.ref('bets/' + currentPeriod + '/' + userId + '/' + betId).update(updates).then(() => {
                                     processedBets++;
                                     
                                     // Update user balance if winner
@@ -1258,7 +1508,7 @@
         
         // Set up listener for bet results
         function setupBetResultListener() {
-            database.ref('bets/' + currentGame).on('child_added', (periodSnapshot) => {
+            database.ref('bets').on('child_added', (periodSnapshot) => {
                 const period = periodSnapshot.key;
                 const bets = periodSnapshot.val();
                 
@@ -1267,12 +1517,12 @@
                         const bet = bets[userPhone][betId];
                         
                         // Listen for bet status changes
-                        database.ref('bets/' + currentGame + '/' + period + '/' + userPhone + '/' + betId + '/status').on('value', (statusSnapshot) => {
+                        database.ref('bets/' + period + '/' + userPhone + '/' + betId + '/status').on('value', (statusSnapshot) => {
                             const status = statusSnapshot.val();
                             
                             if(status === 'won' || status === 'lost') {
                                 // Get the full bet data
-                                database.ref('bets/' + currentGame + '/' + period + '/' + userPhone + '/' + betId).once('value').then((betSnapshot) => {
+                                database.ref('bets/' + period + '/' + userPhone + '/' + betId).once('value').then((betSnapshot) => {
                                     const fullBet = betSnapshot.val();
                                     
                                     if(fullBet.processed && !fullBet.notificationShown) {
@@ -1286,7 +1536,7 @@
                                         }, 3000);
                                         
                                         // Mark notification as shown
-                                        database.ref('bets/' + currentGame + '/' + period + '/' + userPhone + '/' + betId + '/notificationShown').set(true);
+                                        database.ref('bets/' + period + '/' + userPhone + '/' + betId + '/notificationShown').set(true);
                                     }
                                 });
                             }
@@ -1346,7 +1596,7 @@
         
         // Load game history from database
         function loadGameHistory() {
-            database.ref('gameResults/' + currentGame).orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
+            database.ref('gameResults').orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
@@ -1363,22 +1613,15 @@
                     resultsArray.forEach(result => {
                         addToHistory(result.key, result.number, result.bigSmall, result.color);
                     });
-                    
-                    // Add waiting row if we have less than 5 results
-                    if (resultsArray.length < 5) {
-                        const historyBody = document.getElementById('history-body');
-                        const waitingRow = document.createElement('tr');
-                        waitingRow.innerHTML = `
-                            <td colspan="4" class="waiting">Waiting for next result...</td>
-                        `;
-                        historyBody.appendChild(waitingRow);
-                    }
                 } else {
-                    // No results yet, show waiting message
+                    // Show waiting message if no history yet
                     const historyBody = document.getElementById('history-body');
                     historyBody.innerHTML = `
                         <tr>
-                            <td colspan="4" class="waiting">Waiting for next result...</td>
+                            <td class="waiting">Waiting for results...</td>
+                            <td class="waiting">-</td>
+                            <td class="waiting">-</td>
+                            <td class="waiting">-</td>
                         </tr>
                     `;
                 }
@@ -1407,20 +1650,24 @@
         
         // Open bet modal
         function openBetModal(type, name, odds) {
-            // Check if user has already placed a conflicting bet
-            if (type === 'big' && userBets['small']) {
-                showToast('You already placed a Small bet for this period', 'error');
+            // Check if user has already placed this bet
+            let betType = '';
+            if(['green', 'red', 'violet'].includes(type)) {
+                betType = 'color';
+            } else if(['big', 'small'].includes(type)) {
+                betType = 'bigSmall';
+            } else {
+                betType = 'number';
+            }
+            
+            if (hasAlreadyBet(betType, type)) {
+                showToast('You have already placed this bet', 'error');
                 return;
             }
             
-            if (type === 'small' && userBets['big']) {
-                showToast('You already placed a Big bet for this period', 'error');
-                return;
-            }
-            
-            // Check if user already placed this exact bet
-            if (userBets[type]) {
-                showToast('You already placed this bet for this period', 'error');
+            // Check for opposite bets (big/small)
+            if (betType === 'bigSmall' && isOppositeBet(betType, type)) {
+                showToast('Cannot place opposite bets (Big/Small)', 'error');
                 return;
             }
             
@@ -1490,16 +1737,25 @@
                 return;
             }
             
-            // Check if user already placed this bet
-            if (userBets[currentBetType]) {
-                showToast('You already placed this type of bet for this period', 'error');
+            // Determine bet type category
+            let typeCategory = '';
+            if(['green', 'red', 'violet'].includes(currentBetType)) {
+                typeCategory = 'color';
+            } else if(['big', 'small'].includes(currentBetType)) {
+                typeCategory = 'bigSmall';
+            } else {
+                typeCategory = 'number';
+            }
+            
+            // Check if user has already placed this bet (double check)
+            if (hasAlreadyBet(typeCategory, currentBetType)) {
+                showToast('You have already placed this bet', 'error');
                 return;
             }
             
-            // Check for conflicting bets (Big/Small)
-            if ((currentBetType === 'big' && userBets['small']) || 
-                (currentBetType === 'small' && userBets['big'])) {
-                showToast('Cannot place conflicting bets (Big/Small)', 'error');
+            // Check for opposite bets (big/small)
+            if (typeCategory === 'bigSmall' && isOppositeBet(typeCategory, currentBetType)) {
+                showToast('Cannot place opposite bets (Big/Small)', 'error');
                 return;
             }
             
@@ -1510,18 +1766,8 @@
                 // Generate unique bet ID
                 const betId = 'BET' + Date.now();
                 
-                // Determine bet type category
-                let typeCategory = '';
-                if(['green', 'red', 'violet'].includes(currentBetType)) {
-                    typeCategory = 'color';
-                } else if(['big', 'small'].includes(currentBetType)) {
-                    typeCategory = 'bigSmall';
-                } else {
-                    typeCategory = 'number';
-                }
-                
                 // Save bet to database
-                database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userPhone + '/' + betId).set({
+                database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + betId).set({
                     amount: amount,
                     type: typeCategory,
                     value: currentBetType,
@@ -1531,9 +1777,6 @@
                     processed: false,
                     notificationShown: false
                 });
-                
-                // Track user's bets for this period
-                userBets[currentBetType] = true;
                 
                 // Create notification
                 createNotification(
@@ -1582,24 +1825,20 @@
             }).then(() => {
                 // Save all bets
                 for(let i = 0; i < count; i++) {
-                    // Filter out conflicting bets
-                    const availableBets = betTypes.filter(bet => {
-                        if (bet.category === 'bigSmall') {
-                            if (userBets['big'] && bet.type === 'small') return false;
-                            if (userBets['small'] && bet.type === 'big') return false;
-                        }
-                        return !userBets[bet.type];
-                    });
-                    
-                    if (availableBets.length === 0) {
-                        showToast('No more available bet types for this period', 'warning');
-                        break;
-                    }
-                    
-                    const randomType = availableBets[Math.floor(Math.random() * availableBets.length)];
+                    const randomType = betTypes[Math.floor(Math.random() * betTypes.length)];
                     const betId = 'BET' + Date.now() + Math.floor(Math.random() * 1000);
                     
-                    database.ref('bets/' + currentGame + '/' + currentPeriod + '/' + userPhone + '/' + betId).set({
+                    // Skip if user has already placed this bet type
+                    if (hasAlreadyBet(randomType.category, randomType.type)) {
+                        continue;
+                    }
+                    
+                    // Skip opposite bets (big/small)
+                    if (randomType.category === 'bigSmall' && isOppositeBet(randomType.category, randomType.type)) {
+                        continue;
+                    }
+                    
+                    database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + betId).set({
                         amount: amount,
                         type: randomType.category,
                         value: randomType.type,
@@ -1609,9 +1848,6 @@
                         processed: false,
                         notificationShown: false
                     });
-                    
-                    // Track user's bets for this period
-                    userBets[randomType.type] = true;
                 }
                 
                 showToast(`Placed ${count} random bets of ₹${amount} each (Total: ₹${totalAmount})`, 'success');
