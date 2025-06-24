@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>53 Club - WinGo Games</title>
+    <title>53 CLUB - WinGo 30s</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         
         :root {
-            --primary: #6a11cb;
-            --secondary: #4a6bff;
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #00a8ff;
             --dark: #121212;
             --light: #f8f9fa;
             --gray: #6c757d;
@@ -18,6 +20,10 @@
             --danger: #dc3545;
             --warning: #ffc107;
             --info: #17a2b8;
+            --green: #28a745;
+            --violet: #4b0082;
+            --red: #dc3545;
+            --blue: #007bff;
         }
         
         * {
@@ -28,15 +34,17 @@
         }
         
         body {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            color: var(--light);
+            background: #121212;
+            color: #fff;
             min-height: 100vh;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 500px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
+            background: var(--primary);
+            min-height: 100vh;
         }
         
         header {
@@ -44,578 +52,488 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
+            border-bottom: 1px solid var(--accent);
         }
         
         .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo-img {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
             font-weight: bold;
-            color: white;
-            margin-right: 10px;
+            font-size: 18px;
+            color: var(--highlight);
         }
         
-        .logo h1 {
-            font-size: 1.5rem;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-        
-        .balance {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 8px 15px;
-            border-radius: 20px;
-            margin-right: 15px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-        }
-        
-        .balance i {
-            margin-right: 8px;
-            color: var(--success);
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-        
-        .user-menu {
-            position: absolute;
-            top: 50px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 8px;
-            padding: 10px 0;
-            min-width: 180px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-            z-index: 100;
-        }
-        
-        .user-menu.active {
-            display: block;
-        }
-        
-        .user-menu a {
-            display: block;
-            padding: 8px 15px;
-            color: var(--light);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .user-menu a:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--secondary);
-        }
-        
-        .user-menu a i {
-            margin-right: 8px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        .banner {
-            height: 180px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .banner-content {
-            text-align: center;
-            z-index: 2;
-            padding: 20px;
-        }
-        
-        .banner h2 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, white, #f0f0f0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .banner p {
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 15px;
-        }
-        
-        .banner .btn {
-            padding: 8px 20px;
-            background: white;
-            color: var(--primary);
-            border: none;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .banner .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .banner-pattern {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
-            background-image: radial-gradient(circle, white 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        
-        .categories {
-            display: flex;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            scrollbar-width: none;
-        }
-        
-        .categories::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .category {
-            padding: 8px 15px;
-            margin-right: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .category.active {
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
-        }
-        
-        .category:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Auto Slider Styles */
-        .auto-slider {
-            height: 180px;
-            position: relative;
-            margin-bottom: 30px;
-            overflow: hidden;
-            border-radius: 12px;
-        }
-        
-        .auto-slider-container {
-            display: flex;
-            height: 100%;
-            transition: transform 0.5s ease;
-        }
-        
-        .auto-slide {
-            min-width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        
-        .auto-slide::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-        }
-        
-        .auto-slider-dots {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            z-index: 1;
-        }
-        
-        .auto-slider-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            margin: 0 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .auto-slider-dot.active {
-            background: white;
-            width: 20px;
-            border-radius: 4px;
-        }
-        
-        /* Game Card Styles */
-        .games-section {
-            margin-bottom: 30px;
-        }
-        
-        .section-header {
+        .balance-display {
+            background: var(--secondary);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            border: 1px solid var(--accent);
         }
         
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 600;
+        .balance-amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--highlight);
         }
         
-        .see-all {
-            color: var(--secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
+        .balance-actions {
+            display: flex;
+            gap: 10px;
         }
         
-        .games-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
-        .game-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        
-        .game-thumbnail {
-            height: 150px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        
-        .game-thumbnail::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
-        }
-        
-        .game-title {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            z-index: 1;
-            color: white;
-        }
-        
-        .game-info {
-            padding: 15px;
-        }
-        
-        .game-description {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-bottom: 10px;
-        }
-        
-        .play-btn {
-            width: 100%;
-            padding: 8px;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
+        .balance-btn {
+            background: var(--accent);
             color: white;
             border: none;
             border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .balance-btn:hover {
+            background: var(--highlight);
+        }
+        
+        .timer-section {
+            background: var(--secondary);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            position: relative;
+            border: 1px solid var(--accent);
+        }
+        
+        .timer-title {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .timer-countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--highlight);
+        }
+        
+        .period-display {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: var(--gray);
+        }
+        
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+        
+        .number-cell {
+            background: var(--secondary);
+            border-radius: 8px;
+            padding: 12px 5px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+            border: 1px solid var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .number-cell:hover {
+            transform: translateY(-2px);
+        }
+        
+        .number-cell.green {
+            color: var(--green);
+        }
+        
+        .number-cell.violet {
+            color: var(--violet);
+        }
+        
+        .number-cell.red {
+            color: var(--red);
+        }
+        
+        .number-cell.active {
+            background: var(--highlight);
+            color: white;
+        }
+        
+        .bet-section {
+            background: var(--secondary);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid var(--accent);
+        }
+        
+        .bet-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+        
+        .bet-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .bet-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            border: 1px solid var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .bet-option:hover {
+            transform: translateY(-2px);
+        }
+        
+        .bet-option.active {
+            background: var(--highlight);
+            color: white;
+        }
+        
+        .multiplier-section {
+            display: none;
+            background: var(--secondary);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid var(--accent);
+        }
+        
+        .multiplier-title {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+        
+        .multiplier-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .multiplier-btn {
+            padding: 8px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            background: var(--primary);
+            border: 1px solid var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .multiplier-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .multiplier-btn.active {
+            background: var(--highlight);
+            color: white;
+        }
+        
+        .amount-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .amount-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .amount-display {
+            flex-grow: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .rules-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        
+        .rules-checkbox input {
+            margin-right: 8px;
+        }
+        
+        .rules-link {
+            color: var(--highlight);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        .bet-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .confirm-btns {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .confirm-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
         
-        .play-btn:hover {
-            opacity: 0.9;
+        .confirm-btn:hover {
+            transform: translateY(-2px);
         }
         
-        /* Winning Info Styles */
-        .winning-info {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+        .confirm-btn.cancel {
+            background: var(--primary);
+            color: #fff;
+            border: 1px solid var(--accent);
+        }
+        
+        .confirm-btn.submit {
+            background: var(--highlight);
+            color: white;
+        }
+        
+        .history-section {
+            background: var(--secondary);
+            border-radius: 10px;
             padding: 15px;
-            margin-bottom: 30px;
+            margin: 10px 0;
+            border: 1px solid var(--accent);
         }
         
-        .winning-info-header {
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .history-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .history-tabs {
+            display: flex;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--accent);
+        }
+        
+        .history-tab {
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .history-tab.active {
+            border-bottom: 2px solid var(--highlight);
+            color: var(--highlight);
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        .history-table th {
+            text-align: left;
+            padding: 5px 0;
+            color: var(--gray);
+            font-weight: normal;
+        }
+        
+        .history-table td {
+            padding: 5px 0;
+            border-bottom: 1px solid var(--accent);
+        }
+        
+        .color-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .color-green {
+            background-color: var(--green);
+        }
+        
+        .color-violet {
+            background-color: var(--violet);
+        }
+        
+        .color-red {
+            background-color: var(--red);
+        }
+        
+        .status-won {
+            color: var(--green);
+        }
+        
+        .status-lost {
+            color: var(--red);
+        }
+        
+        .status-pending {
+            color: var(--warning);
+        }
+        
+        .result-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--secondary);
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            z-index: 1001;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid var(--accent);
+            display: none;
+        }
+        
+        .result-popup.show {
+            display: block;
+            animation: popupFadeIn 0.3s ease;
+        }
+        
+        @keyframes popupFadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            position: relative;
         }
         
-        .winning-title {
-            font-size: 1.1rem;
-            font-weight: 600;
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--highlight);
+        }
+        
+        .result-close {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .result-content {
+            margin-bottom: 15px;
+        }
+        
+        .result-period {
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .result-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
         
-        .winning-title i {
-            margin-right: 10px;
-            color: var(--warning);
+        .result-details {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
         }
         
-        .refresh-indicator {
-            font-size: 0.8rem;
+        .result-detail {
+            text-align: center;
+        }
+        
+        .result-detail-label {
+            font-size: 12px;
             color: var(--gray);
         }
         
-        .winners-container {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
+        .result-detail-value {
+            font-weight: bold;
         }
         
-        .winners-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .winner-card {
-            background: rgba(106, 17, 203, 0.1);
-            border-radius: 8px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease;
-            border-left: 3px solid var(--secondary);
-        }
-        
-        .winner-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .winner-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
+        .result-footer {
             display: flex;
             justify-content: center;
-            align-items: center;
+        }
+        
+        .result-ok {
+            background: var(--highlight);
             color: white;
-            font-weight: bold;
-            margin-right: 10px;
-            flex-shrink: 0;
-        }
-        
-        .winner-details {
-            flex: 1;
-            overflow: hidden;
-        }
-        
-        .winner-name {
-            font-size: 0.9rem;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
             font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            cursor: pointer;
         }
         
-        .winner-amount {
-            font-size: 0.8rem;
-            color: var(--success);
-            font-weight: 600;
-        }
-        
-        .winner-game {
-            font-size: 0.7rem;
-            color: var(--gray);
-            margin-top: 2px;
-        }
-        
-        .big-winners {
-            margin-top: 20px;
-        }
-        
-        .big-winners-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--warning);
-            display: flex;
-            align-items: center;
-        }
-        
-        .big-winners-title i {
-            margin-right: 10px;
-        }
-        
-        .big-winners-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        
-        .big-winner-card {
-            background: rgba(74, 107, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border-left: 3px solid var(--warning);
-        }
-        
-        .big-winner-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .big-winner-card::before {
-            content: '';
-            position: absolute;
+        .overlay {
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(106, 17, 203, 0.05), rgba(74, 107, 255, 0.05));
-            z-index: -1;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
         }
         
-        .big-winner-rank {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 0.8rem;
-            color: var(--warning);
-            font-weight: 600;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2px 8px;
-            border-radius: 10px;
+        .overlay.show {
+            display: block;
         }
         
-        .big-winner-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-weight: bold;
-            margin-right: 15px;
-            float: left;
-        }
-        
-        .big-winner-details {
-            overflow: hidden;
-        }
-        
-        .big-winner-name {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .big-winner-game {
-            font-size: 0.8rem;
-            color: var(--gray);
-            margin-bottom: 5px;
-        }
-        
-        .big-winner-amount {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--success);
-        }
-        
-        footer {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            text-align: center;
-            margin-top: 40px;
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-        
-        .footer-links a {
-            color: var(--gray);
-            margin: 0 10px;
-            text-decoration: none;
-        }
-        
-        .footer-links a:hover {
-            color: var(--light);
-        }
-        
-        .disclaimer {
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
-        
-        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -660,180 +578,166 @@
             font-size: 1.2rem;
         }
         
-        /* Animation for winners */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .timer-warning {
+            color: var(--danger);
+            animation: blink 1s infinite;
         }
         
-        .winner-card {
-            animation: fadeIn 0.5s ease;
-        }
-        
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .banner h2 {
-                font-size: 1.4rem;
-            }
-            
-            .winners-list {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-            
-            .big-winners-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .user-info {
-                margin-top: 15px;
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .balance {
-                margin-right: 0;
-            }
-            
-            .banner {
-                height: 150px;
-            }
-            
-            .banner h2 {
-                font-size: 1.2rem;
-            }
-            
-            .winners-list {
-                grid-template-columns: 1fr 1fr;
-            }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">
-                <div class="logo-img">53</div>
-                <h1>53 Club</h1>
-            </div>
-            
-            <div class="user-info">
-                <div class="balance">
-                    <i class="fas fa-wallet"></i>
-                    <span id="user-balance">₹0.00</span>
-                </div>
-                
-                <div class="user-avatar" id="user-avatar" onclick="toggleUserMenu()">
-                    <i class="fas fa-ellipsis-v"></i>
-                </div>
-                
-                <div class="user-menu" id="user-menu">
-                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
-                    <a href="wallet.html"><i class="fas fa-wallet"></i> Wallet</a>
-                    <a href="transactions.html"><i class="fas fa-exchange-alt"></i> Transactions</a>
-                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </div>
-            </div>
+            <div class="logo">53 CLUB - WinGo 30s</div>
+            <div style="width: 24px;"></div>
         </header>
         
-        <div class="banner">
-            <div class="banner-pattern"></div>
-            <div class="banner-content">
-                <h2>Welcome to 53 Club!</h2>
-                <p>Get 28% bonus on your first deposit</p>
-                <button class="btn" onclick="window.location.href='deposit.html'">Deposit Now</button>
+        <div class="balance-display">
+            <div>
+                <div style="font-size: 12px; color: var(--gray);">Wallet balance</div>
+                <div class="balance-amount" id="user-balance">₹0.00</div>
+            </div>
+            <div class="balance-actions">
+                <button class="balance-btn" onclick="window.location.href='withdraw.html'">Withdraw</button>
+                <button class="balance-btn" onclick="window.location.href='deposit.html'">Deposit</button>
             </div>
         </div>
         
-        <div class="categories">
-            <div class="category active">All</div>
-            <div class="category">Lottery</div>
-            <div class="category">Original</div>
-            <div class="category">Slots</div>
-            <div class="category">Casino</div>
-            <div class="category">Sports</div>
+        <div class="timer-section">
+            <div class="timer-title">How to play</div>
+            <div class="timer-countdown" id="countdown-timer">0:30</div>
+            <div class="period-display" id="period-number">20250623100050911</div>
         </div>
         
-        <!-- Auto Slider for Featured Games -->
-        <div class="auto-slider">
-            <div class="auto-slider-container" id="auto-slider">
-                <!-- Slides will be loaded dynamically from JSON -->
-            </div>
-            
-            <div class="auto-slider-dots" id="auto-slider-dots">
-                <!-- Dots will be loaded dynamically -->
-            </div>
+        <div class="number-grid" id="number-grid">
+            <div class="number-cell green" onclick="selectNumber(0)">0</div>
+            <div class="number-cell red" onclick="selectNumber(1)">1</div>
+            <div class="number-cell green" onclick="selectNumber(2)">2</div>
+            <div class="number-cell red" onclick="selectNumber(3)">3</div>
+            <div class="number-cell green" onclick="selectNumber(4)">4</div>
+            <div class="number-cell violet" onclick="selectNumber(5)">5</div>
+            <div class="number-cell green" onclick="selectNumber(6)">6</div>
+            <div class="number-cell red" onclick="selectNumber(7)">7</div>
+            <div class="number-cell green" onclick="selectNumber(8)">8</div>
+            <div class="number-cell red" onclick="selectNumber(9)">9</div>
         </div>
         
-        <!-- WinGo Games Section -->
-        <div class="games-section">
-            <div class="section-header">
-                <h3 class="section-title">WinGo Games</h3>
-                <a href="wingo-games.html" class="see-all">See All</a>
-            </div>
-            
-            <div class="games-container" id="wingo-games">
-                <!-- WinGo games will be loaded dynamically -->
-            </div>
-        </div>
-        
-        <!-- Popular Games Section -->
-        <div class="games-section">
-            <div class="section-header">
-                <h3 class="section-title">Popular Games</h3>
-                <a href="popular-games.html" class="see-all">See All</a>
-            </div>
-            
-            <div class="games-container" id="popular-games">
-                <!-- Popular games will be loaded dynamically -->
+        <div class="bet-section">
+            <div class="bet-title">Select Bet</div>
+            <div class="bet-options">
+                <div class="bet-option" onclick="selectBetOption('big')">Big</div>
+                <div class="bet-option" onclick="selectBetOption('small')">Small</div>
+                <div class="bet-option" onclick="selectBetOption('green')">Green</div>
+                <div class="bet-option" onclick="selectBetOption('violet')">Violet</div>
+                <div class="bet-option" onclick="selectBetOption('red')">Red</div>
             </div>
         </div>
         
-        <!-- Winning Information Section -->
-        <div class="winning-info">
-            <div class="winning-info-header">
-                <h3 class="winning-title"><i class="fas fa-trophy"></i> Winning Information</h3>
-                <div class="refresh-indicator" id="refresh-timer">Auto-refreshing in 5s</div>
+        <div class="multiplier-section" id="multiplier-section">
+            <div class="multiplier-title">Select Amount</div>
+            <div class="multiplier-grid">
+                <div class="multiplier-btn" onclick="setMultiplier(1)">₹1</div>
+                <div class="multiplier-btn" onclick="setMultiplier(10)">₹10</div>
+                <div class="multiplier-btn" onclick="setMultiplier(100)">₹100</div>
+                <div class="multiplier-btn" onclick="setMultiplier(1000)">₹1000</div>
             </div>
             
-            <div class="winners-container">
-                <div class="winners-list" id="winners-list">
-                    <!-- Winners will be loaded dynamically -->
-                </div>
+            <div class="amount-controls">
+                <button class="amount-btn" onclick="adjustAmount(-1)">-</button>
+                <div class="amount-display" id="amount-display">₹1</div>
+                <button class="amount-btn" onclick="adjustAmount(1)">+</button>
             </div>
             
-            <div class="big-winners">
-                <h4 class="big-winners-title"><i class="fas fa-crown"></i> Today's Big Winners</h4>
-                
-                <div class="big-winners-grid" id="big-winners">
-                    <!-- Big winners will be loaded dynamically -->
-                </div>
+            <div class="rules-checkbox">
+                <input type="checkbox" id="agree-rules" checked>
+                <label for="agree-rules">I agree to 《Pre-sale rules》</label>
+            </div>
+            
+            <div class="bet-summary">
+                <div>Total amount</div>
+                <div id="total-amount">₹1.00</div>
+            </div>
+            
+            <div class="confirm-btns">
+                <button class="confirm-btn cancel" onclick="cancelBet()">Cancel</button>
+                <button class="confirm-btn submit" onclick="placeBet()">Confirm</button>
             </div>
         </div>
         
-        <footer>
-            <div class="footer-links">
-                <a href="about.html">About Us</a>
-                <a href="terms.html">Terms & Conditions</a>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="contact.html">Contact Us</a>
-                <a href="help.html">Help Center</a>
+        <div class="history-section">
+            <div class="history-header">
+                <div class="history-title">Game History</div>
             </div>
             
-            <div class="disclaimer">
-                <p>53 Club mainly features online video games, slots and casino. We work with more than 10,000 video games, slot and casino providers, all of whom are certified as fair gambling, support fast deposits and withdrawals, and friendly service. Gambling is Addictive, Please Play It Wisely, 53 Club Only Accepts Customers over the Age of 18.</p>
+            <div class="history-tabs">
+                <div class="history-tab active" onclick="showGameHistory()">Results</div>
+                <div class="history-tab" onclick="showMyHistory()">My Bets</div>
             </div>
             
-            <p>&copy; 2023 53 Club. All Rights Reserved.</p>
-        </footer>
+            <table class="history-table" id="game-history-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Number</th>
+                        <th>Big/Small</th>
+                        <th>Color</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <!-- History items will be added here dynamically -->
+                </tbody>
+            </table>
+            
+            <table class="history-table" id="my-history-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Bet</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="my-history-body">
+                    <!-- My history items will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
     </div>
+    
+    <!-- Result Popup -->
+    <div class="result-popup" id="result-popup">
+        <div class="result-header">
+            <div class="result-title" id="result-title">You Won!</div>
+            <button class="result-close" onclick="closeResultPopup()">&times;</button>
+        </div>
+        <div class="result-content">
+            <div class="result-period" id="result-period">Period: 20250623100050911</div>
+            <div class="result-number" id="result-number">
+                <span class="color-indicator" id="result-color-indicator"></span>
+                <span id="result-number-value">5</span>
+            </div>
+            <div class="result-details">
+                <div class="result-detail">
+                    <div class="result-detail-label">Color</div>
+                    <div class="result-detail-value" id="result-color">Violet</div>
+                </div>
+                <div class="result-detail">
+                    <div class="result-detail-label">Size</div>
+                    <div class="result-detail-value" id="result-size">Big</div>
+                </div>
+            </div>
+        </div>
+        <div class="result-footer">
+            <button class="result-ok" onclick="closeResultPopup()">OK</button>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -855,319 +759,649 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
+        // Game state variables
+        let selectedOption = null;
+        let selectedNumber = null;
+        let currentMultiplier = 1;
+        let userBalance = 0;
+        let currentPeriod = '';
+        let countdownInterval;
+        let secondsRemaining = 30;
+        let isBettingClosed = false;
+        const GAME_TYPE = 'wingo30';
+        const HISTORY_LIMIT = 10;
+        
         // Check if user is logged in
         const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
         if(!userPhone) {
             window.location.href = "index.html";
+        } else {
+            // Load user balance
+            loadUserBalance();
+            
+            // Initialize game
+            initGame();
+            
+            // Load game history
+            loadGameHistory();
+            loadMyHistory();
         }
         
-        // Game data JSON structure with your provided images
-        const gameData = {
-            featuredBanners: [
-                {
-                    id: "banner1",
-                    image: "https://i.ibb.co/27qvcHJH/Banner-20250117222909yv6t.jpg"
-                },
-                {
-                    id: "banner2",
-                    image: "https://i.ibb.co/n8Rfxnnm/Banner-202501172229382rs9.jpg"
-                },
-                {
-                    id: "banner3",
-                    image: "https://i.ibb.co/8nbjPn8Y/Banner-20250117222949rbe6.jpg"
-                },
-                {
-                    id: "banner4",
-                    image: "https://i.ibb.co/Gv8cvNsw/Banner-20250117223036ogqj.jpg"
-                },
-                {
-                    id: "banner5",
-                    image: "https://i.ibb.co/6cmc3tL5/Banner-20250117223118sxi7.jpg"
-                }
-            ],
-            wingoGames: [
-                {
-                    id: "wingo30",
-                    title: "WinGo 30 Seconds",
-                    image: "https://i.ibb.co/GfZgdQgD/lotterycategory-202501081300366bjd.png",
-                    description: "Fast-paced 30 second lottery game with quick results"
-                },
-                {
-                    id: "wingo1",
-                    title: "WinGo 1 Minute",
-                    image: "https://i.ibb.co/8D3fksgB/lotterycategory-20250108130042mug3.png",
-                    description: "Exciting 1 minute lottery game with bigger prizes"
-                },
-                {
-                    id: "wingo3",
-                    title: "WinGo 3 Minutes",
-                    image: "https://i.ibb.co/Y7PSCL39/lotterycategory-20250108130049l1jl.png",
-                    description: "Strategic 3 minute game with higher multipliers"
-                },
-                {
-                    id: "wingo5",
-                    title: "WinGo 5 Minutes",
-                    image: "https://i.ibb.co/b5K58SSr/lotterycategory-20250108130057tmo2.png",
-                    description: "Premium 5 minute game with massive jackpots"
-                }
-            ],
-            popularGames: [
-                {
-                    id: "k3",
-                    title: "K3 Lottery",
-                    image: "https://i.ibb.co/8D3fksgB/lotterycategory-20250108130042mug3.png",
-                    description: "Classic K3 lottery game with daily draws"
-                },
-                {
-                    id: "5d",
-                    title: "5D Lottery",
-                    image: "https://i.ibb.co/Y7PSCL39/lotterycategory-20250108130049l1jl.png",
-                    description: "5D lottery with huge jackpot prizes"
-                },
-                {
-                    id: "trx",
-                    title: "TRX Lottery",
-                    image: "https://i.ibb.co/b5K58SSr/lotterycategory-20250108130057tmo2.png",
-                    description: "TRX blockchain-based lottery game"
-                },
-                {
-                    id: "slots",
-                    title: "Mega Slots",
-                    image: "https://i.ibb.co/GfZgdQgD/lotterycategory-202501081300366bjd.png",
-                    description: "Exciting slot machine with big bonuses"
-                }
-            ]
-        };
-        
-        // Random names for winners
-        const randomNames = [
-            "Mem™DEE", "Mem™OWY", "Mem™VCL", "Mem™WSV", "Mem™WCM", "Mem™BWA",
-            "Mem™B75", "Axa**pq2", "B.R***LA", "Mem™SVZ", "Mem™4PI", "Mem™ZSF",
-            "Mem™FHN", "Mem™S2B", "Mem™GJN", "Mem™KLP", "Mem™QWE", "Mem™RTY",
-            "Mem™UIO", "Mem™PAS", "Mem™DFG", "Mem™HJK", "Mem™LZX", "Mem™CVB",
-            "Mem™NMQ", "Mem™WER", "Mem™SDF", "Mem™XCV", "Mem™FGH", "Mem™VBN"
-        ];
-        
-        // Random game names for winners
-        const randomGameNames = [
-            "WIN Go 30s", "WIN Go 1m", "WIN Go 3m", "WIN Go 5m",
-            "K3 Lottery", "5D Lottery", "TRX Lottery", "Mega Slots"
-        ];
-        
-        // Auto slider functionality
-        let currentSlide = 0;
-        let slideInterval;
-        
-        function startSlider() {
-            slideInterval = setInterval(() => {
-                currentSlide = (currentSlide + 1) % document.querySelectorAll('.auto-slide').length;
-                updateSlider();
-            }, 5000); // Change slide every 5 seconds
+        // Initialize game
+        function initGame() {
+            // Start countdown timer
+            startCountdown();
             
-            // Update timer display
-            updateRefreshTimer();
+            // Set up real-time listeners
+            setupGameListeners();
         }
         
-        function updateSlider() {
-            const slider = document.getElementById('auto-slider');
-            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            const dots = document.querySelectorAll('.auto-slider-dot');
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-        }
-        
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlider();
-            resetInterval();
-        }
-        
-        function resetInterval() {
-            clearInterval(slideInterval);
-            startSlider();
-        }
-        
-        // Load game data
-        function loadGameData() {
-            // Load featured banners
-            const autoSlider = document.getElementById('auto-slider');
-            const sliderDots = document.getElementById('auto-slider-dots');
-            
-            autoSlider.innerHTML = '';
-            sliderDots.innerHTML = '';
-            
-            gameData.featuredBanners.forEach((banner, index) => {
-                autoSlider.innerHTML += `
-                    <div class="auto-slide" style="background-image: url('${banner.image}')"></div>
-                `;
-                
-                sliderDots.innerHTML += `
-                    <div class="auto-slider-dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>
-                `;
-            });
-            
-            // Load WinGo games
-            const wingoGamesContainer = document.getElementById('wingo-games');
-            wingoGamesContainer.innerHTML = '';
-            
-            gameData.wingoGames.forEach(game => {
-                wingoGamesContainer.innerHTML += `
-                    <div class="game-card">
-                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
-                            <div class="game-title">${game.title}</div>
-                        </div>
-                        <div class="game-info">
-                            <div class="game-description">${game.description}</div>
-                            <button class="play-btn" onclick="openGame('${game.id}')">Play Now</button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            // Load popular games
-            const popularGamesContainer = document.getElementById('popular-games');
-            popularGamesContainer.innerHTML = '';
-            
-            gameData.popularGames.forEach(game => {
-                popularGamesContainer.innerHTML += `
-                    <div class="game-card">
-                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
-                            <div class="game-title">${game.title}</div>
-                        </div>
-                        <div class="game-info">
-                            <div class="game-description">${game.description}</div>
-                            <button class="play-btn" onclick="openGame('${game.id}')">Play Now</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-        
-        // Load user balance from Firebase
+        // Load user balance
         function loadUserBalance() {
-            database.ref('users/' + userPhone + '/balance').once('value').then((snapshot) => {
+            database.ref('users/' + userPhone + '/balance').on('value', (snapshot) => {
                 const balance = snapshot.val() || 0;
-                document.getElementById('user-balance').textContent = '₹' + balance.toLocaleString('en-IN', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-            }).catch((error) => {
-                console.error("Error loading balance:", error);
-                document.getElementById('user-balance').textContent = '₹0.00';
+                userBalance = parseFloat(balance);
+                updateBalanceDisplay();
             });
         }
         
-        // Generate random winners
-        function generateRandomWinners() {
-            // Recent winners (6 random entries)
-            const recentWinners = [];
-            const usedNames = new Set();
-            
-            for (let i = 0; i < 6; i++) {
-                let name;
-                do {
-                    name = randomNames[Math.floor(Math.random() * randomNames.length)];
-                } while (usedNames.has(name));
-                
-                usedNames.add(name);
-                
-                recentWinners.push({
-                    id: name,
-                    amount: (Math.random() * 500 + 10).toFixed(2),
-                    game: randomGameNames[Math.floor(Math.random() * randomGameNames.length)]
-                });
-            }
-            
-            const winnersList = document.getElementById('winners-list');
-            winnersList.innerHTML = '';
-            
-            recentWinners.forEach(winner => {
-                const winnerCard = document.createElement('div');
-                winnerCard.className = 'winner-card';
-                winnerCard.innerHTML = `
-                    <div class="winner-avatar">${winner.id.charAt(4)}</div>
-                    <div class="winner-details">
-                        <div class="winner-name">${winner.id}</div>
-                        <div class="winner-amount">₹${winner.amount}</div>
-                        <div class="winner-game">${winner.game}</div>
-                    </div>
-                `;
-                winnersList.appendChild(winnerCard);
-            });
-            
-            // Big winners (5 random entries)
-            const bigWinners = [];
-            const usedBigNames = new Set();
-            
-            for (let i = 0; i < 5; i++) {
-                let name;
-                do {
-                    name = randomNames[Math.floor(Math.random() * randomNames.length)];
-                } while (usedBigNames.has(name) || usedNames.has(name));
-                
-                usedBigNames.add(name);
-                usedNames.add(name);
-                
-                bigWinners.push({
-                    id: name,
-                    amount: (Math.random() * 10000000 + 1000000).toFixed(2),
-                    rank: 'NO' + (i + 1),
-                    game: randomGameNames[Math.floor(Math.random() * randomGameNames.length)]
-                });
-            }
-            
-            const bigWinnersGrid = document.getElementById('big-winners');
-            bigWinnersGrid.innerHTML = '';
-            
-            bigWinners.forEach(winner => {
-                const bigWinnerCard = document.createElement('div');
-                bigWinnerCard.className = 'big-winner-card';
-                bigWinnerCard.innerHTML = `
-                    <div class="big-winner-rank">${winner.rank}</div>
-                    <div class="big-winner-avatar">${winner.id.charAt(4)}</div>
-                    <div class="big-winner-details">
-                        <div class="big-winner-name">${winner.id}</div>
-                        <div class="big-winner-game">${winner.game}</div>
-                        <div class="big-winner-amount">₹${parseFloat(winner.amount).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
-                    </div>
-                `;
-                bigWinnersGrid.appendChild(bigWinnerCard);
-            });
+        // Update balance display
+        function updateBalanceDisplay() {
+            document.getElementById('user-balance').textContent = 
+                '₹' + userBalance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
         
-        // Update refresh timer display
-        function updateRefreshTimer() {
-            let seconds = 5;
-            const timerElement = document.getElementById('refresh-timer');
+        // Start countdown timer
+        function startCountdown() {
+            clearInterval(countdownInterval);
             
-            const timerInterval = setInterval(() => {
-                seconds--;
-                timerElement.textContent = `Auto-refreshing in ${seconds}s`;
-                
-                if (seconds <= 0) {
-                    clearInterval(timerInterval);
-                    generateRandomWinners();
-                    updateRefreshTimer(); // Restart the timer
+            // Get current Kolkata time
+            const now = new Date();
+            const kolkataTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+            
+            // Calculate seconds remaining (30 second game)
+            const currentSeconds = kolkataTime.getSeconds();
+            secondsRemaining = 30 - (currentSeconds % 30);
+            if(secondsRemaining === 30) secondsRemaining = 30;
+            
+            // Generate period number
+            updatePeriodNumber();
+            updateTimerDisplay();
+            
+            // Start the countdown after ensuring we're at the exact 30-second mark
+            setTimeout(() => {
+                countdownInterval = setInterval(() => {
+                    secondsRemaining--;
+                    updateTimerDisplay();
+                    
+                    // Check if betting should be closed (last 5 seconds)
+                    if(secondsRemaining <= 5 && !isBettingClosed) {
+                        isBettingClosed = true;
+                        showToast('Betting closed for this period', 'warning');
+                    }
+                    
+                    if(secondsRemaining <= 0) {
+                        clearInterval(countdownInterval);
+                        endPeriod();
+                    }
+                }, 1000);
+            }, (30 - (currentSeconds % 30)) * 1000 - (now.getTime() % 1000));
+        }
+        
+        // Update period number based on Kolkata timezone
+        function updatePeriodNumber() {
+            const now = new Date();
+            const kolkataTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+            
+            const year = kolkataTime.getFullYear();
+            const month = String(kolkataTime.getMonth() + 1).padStart(2, '0');
+            const day = String(kolkataTime.getDate()).padStart(2, '0');
+            
+            // For 30 second game, period increments every 30 seconds
+            const periodNumber = Math.floor((kolkataTime.getHours() * 3600 + kolkataTime.getMinutes() * 60 + kolkataTime.getSeconds()) / 30);
+            currentPeriod = `${year}${month}${day}${String(100000 + periodNumber).slice(1)}`;
+            
+            document.getElementById('period-number').textContent = currentPeriod;
+            
+            // Save the period to database if not exists
+            database.ref('games/' + GAME_TYPE + '/periods/' + currentPeriod).once('value').then((snapshot) => {
+                if(!snapshot.exists()) {
+                    database.ref('games/' + GAME_TYPE + '/periods/' + currentPeriod).set({
+                        startTime: Date.now(),
+                        status: 'open'
+                    });
+                    
+                    // Schedule the result generation for this period (even if page is closed)
+                    const timeUntilResult = secondsRemaining * 1000;
+                    setTimeout(() => {
+                        generatePeriodResult(currentPeriod);
+                    }, timeUntilResult);
                 }
-            }, 1000);
+            });
         }
         
-        // Open game
-        function openGame(gameId) {
-            const game = [...gameData.wingoGames, ...gameData.popularGames].find(g => g.id === gameId);
-            if (game) {
-                if (gameId.startsWith('wingo')) {
-                    // Redirect to WinGo game page
-                    window.location.href = `${gameId}.html`;
-                } else {
-                    showToast(`Opening ${game.title}...`, 'success');
-                    // For other games, you can add specific redirects here
-                }
+        // Update timer display
+        function updateTimerDisplay() {
+            let minutes = Math.floor(secondsRemaining / 60);
+            let seconds = secondsRemaining % 60;
+            
+            const timerElement = document.getElementById('countdown-timer');
+            timerElement.textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+            
+            // Add warning class for last 5 seconds
+            if(secondsRemaining <= 5) {
+                timerElement.classList.add('timer-warning');
             } else {
-                showToast('Game is loading...', 'info');
+                timerElement.classList.remove('timer-warning');
             }
+        }
+        
+        // Generate result for a period (this will run even if page is closed)
+        function generatePeriodResult(period) {
+            // Generate random result (0-9)
+            const resultNumber = Math.floor(Math.random() * 10);
+            
+            // Determine color based on number
+            let resultColor;
+            if(resultNumber === 0) resultColor = 'green';
+            else if(resultNumber === 5) resultColor = 'violet';
+            else if([1, 3, 7, 9].includes(resultNumber)) resultColor = 'red';
+            else resultColor = 'green';
+            
+            // Determine big/small
+            const resultSize = resultNumber >= 5 ? 'big' : 'small';
+            
+            // Save result to database
+            database.ref('games/' + GAME_TYPE + '/periods/' + period).update({
+                resultNumber: resultNumber,
+                resultColor: resultColor,
+                resultSize: resultSize,
+                endTime: Date.now(),
+                status: 'completed'
+            }).then(() => {
+                // Process all bets for this period
+                processBets(period, resultNumber, resultColor, resultSize);
+                
+                // Add to history
+                addToHistory(period, resultNumber, resultSize, resultColor);
+            });
+        }
+        
+        // End current period and determine results
+        function endPeriod() {
+            // Close the period for new bets
+            database.ref('games/' + GAME_TYPE + '/periods/' + currentPeriod).update({
+                status: 'closed'
+            });
+            
+            // Generate random result (0-9)
+            const resultNumber = Math.floor(Math.random() * 10);
+            
+            // Determine color based on number
+            let resultColor;
+            if(resultNumber === 0) resultColor = 'green';
+            else if(resultNumber === 5) resultColor = 'violet';
+            else if([1, 3, 7, 9].includes(resultNumber)) resultColor = 'red';
+            else resultColor = 'green';
+            
+            // Determine big/small
+            const resultSize = resultNumber >= 5 ? 'big' : 'small';
+            
+            // Save result to database
+            database.ref('games/' + GAME_TYPE + '/periods/' + currentPeriod).update({
+                resultNumber: resultNumber,
+                resultColor: resultColor,
+                resultSize: resultSize,
+                endTime: Date.now(),
+                status: 'completed'
+            }).then(() => {
+                // Process all bets for this period
+                processBets(currentPeriod, resultNumber, resultColor, resultSize);
+                
+                // Add to history
+                addToHistory(currentPeriod, resultNumber, resultSize, resultColor);
+                
+                // Reset betting flag
+                isBettingClosed = false;
+                
+                // Start new period
+                setTimeout(() => {
+                    updatePeriodNumber();
+                    startCountdown();
+                }, 5000);
+            });
+        }
+        
+        // Process all bets for the completed period
+        function processBets(period, resultNumber, resultColor, resultSize) {
+            database.ref('bets/' + GAME_TYPE + '/' + period).once('value').then((snapshot) => {
+                const bets = snapshot.val();
+                
+                if(bets) {
+                    Object.keys(bets).forEach(userId => {
+                        const userBets = bets[userId];
+                        
+                        Object.keys(userBets).forEach(betId => {
+                            const bet = userBets[betId];
+                            let winAmount = 0;
+                            
+                            // Check if bet won
+                            if(bet.type === 'number' && bet.number === resultNumber) {
+                                winAmount = bet.amount * 8; // 8x for number
+                            } 
+                            else if(bet.type === 'color' && bet.color === resultColor) {
+                                if(resultColor === 'green') winAmount = bet.amount * 9.8;
+                                else if(resultColor === 'violet') winAmount = bet.amount * 4.5;
+                                else if(resultColor === 'red') winAmount = bet.amount * 1.98;
+                            }
+                            else if(bet.type === 'size' && bet.size === resultSize) {
+                                winAmount = bet.amount * 1.98; // 1.98x for big/small
+                            }
+                            
+                            // Update user balance and bet status
+                            if(winAmount > 0) {
+                                // Deduct 1% commission
+                                const payout = winAmount * 0.99;
+                                
+                                database.ref('users/' + userId + '/balance').transaction((balance) => {
+                                    return (balance || 0) + payout;
+                                });
+                                
+                                // Update bet status
+                                database.ref('bets/' + GAME_TYPE + '/' + period + '/' + userId + '/' + betId).update({
+                                    status: 'won',
+                                    winAmount: payout
+                                });
+                                
+                                // Show win popup if it's the current user and page is open
+                                if(userId === userPhone) {
+                                    showResultPopup(true, period, resultNumber, resultColor, resultSize, payout);
+                                }
+                                
+                                // Update user stats
+                                database.ref('users/' + userId + '/totalWins').transaction((wins) => {
+                                    return (wins || 0) + 1;
+                                });
+                            } else {
+                                // Mark bet as lost
+                                database.ref('bets/' + GAME_TYPE + '/' + period + '/' + userId + '/' + betId).update({
+                                    status: 'lost',
+                                    winAmount: 0
+                                });
+                                
+                                // Show loss popup if it's the current user and page is open
+                                if(userId === userPhone) {
+                                    showResultPopup(false, period, resultNumber, resultColor, resultSize, 0);
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+        }
+        
+        // Show result popup
+        function showResultPopup(isWin, period, number, color, size, winAmount) {
+            const popup = document.getElementById('result-popup');
+            const overlay = document.getElementById('overlay');
+            
+            document.getElementById('result-title').textContent = isWin ? 'You Won!' : 'You Lost';
+            document.getElementById('result-period').textContent = `Period: ${period}`;
+            document.getElementById('result-number-value').textContent = number;
+            
+            const colorIndicator = document.getElementById('result-color-indicator');
+            colorIndicator.className = 'color-indicator';
+            if(color === 'green') colorIndicator.classList.add('color-green');
+            else if(color === 'violet') colorIndicator.classList.add('color-violet');
+            else if(color === 'red') colorIndicator.classList.add('color-red');
+            
+            document.getElementById('result-color').textContent = color.charAt(0).toUpperCase() + color.slice(1);
+            document.getElementById('result-size').textContent = size.charAt(0).toUpperCase() + size.slice(1);
+            
+            if(isWin) {
+                document.getElementById('result-title').textContent += ` ₹${winAmount.toFixed(2)}`;
+            }
+            
+            popup.classList.add('show');
+            overlay.classList.add('show');
+        }
+        
+        // Close result popup
+        function closeResultPopup() {
+            document.getElementById('result-popup').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+        }
+        
+        // Add result to history
+        function addToHistory(period, number, size, color) {
+            const historyItem = {
+                period: period,
+                number: number,
+                size: size,
+                color: color,
+                timestamp: Date.now()
+            };
+            
+            database.ref('history/' + GAME_TYPE).push(historyItem);
+            
+            // Keep only last HISTORY_LIMIT history items
+            database.ref('history/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_LIMIT).once('value').then((snapshot) => {
+                const items = [];
+                snapshot.forEach(child => {
+                    items.push({
+                        key: child.key,
+                        timestamp: child.val().timestamp
+                    });
+                });
+                
+                // If we have more than HISTORY_LIMIT items, delete the oldest ones
+                if(items.length > HISTORY_LIMIT) {
+                    items.sort((a, b) => a.timestamp - b.timestamp);
+                    const toDelete = items.slice(0, items.length - HISTORY_LIMIT);
+                    
+                    toDelete.forEach(item => {
+                        database.ref('history/' + GAME_TYPE + '/' + item.key).remove();
+                    });
+                }
+            });
+        }
+        
+        // Load game history
+        function loadGameHistory() {
+            database.ref('history/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_LIMIT).once('value').then((snapshot) => {
+                const historyBody = document.getElementById('history-body');
+                historyBody.innerHTML = '';
+                
+                const historyItems = [];
+                snapshot.forEach(childSnapshot => {
+                    historyItems.push(childSnapshot.val());
+                });
+                
+                // Display in reverse order (newest first)
+                historyItems.reverse().forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    let colorClass = '';
+                    if(item.color === 'green') colorClass = 'color-green';
+                    else if(item.color === 'violet') colorClass = 'color-violet';
+                    else if(item.color === 'red') colorClass = 'color-red';
+                    
+                    row.innerHTML = `
+                        <td>${item.period}</td>
+                        <td>${item.number}</td>
+                        <td>${item.size}</td>
+                        <td><span class="color-indicator ${colorClass}"></span>${item.color}</td>
+                    `;
+                    
+                    historyBody.appendChild(row);
+                });
+            });
+        }
+        
+        // Load my betting history
+        function loadMyHistory() {
+            database.ref('bets/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_LIMIT).once('value').then((snapshot) => {
+                const myHistoryBody = document.getElementById('my-history-body');
+                myHistoryBody.innerHTML = '';
+                
+                const myBets = [];
+                
+                snapshot.forEach(periodSnapshot => {
+                    periodSnapshot.forEach(userSnapshot => {
+                        if(userSnapshot.key === userPhone) {
+                            userSnapshot.forEach(betSnapshot => {
+                                const bet = betSnapshot.val();
+                                bet.period = periodSnapshot.key;
+                                bet.id = betSnapshot.key;
+                                myBets.push(bet);
+                            });
+                        }
+                    });
+                });
+                
+                // Sort by timestamp (newest first)
+                myBets.sort((a, b) => b.timestamp - a.timestamp);
+                
+                // Display only the most recent bets
+                myBets.slice(0, HISTORY_LIMIT).forEach(bet => {
+                    const row = document.createElement('tr');
+                    
+                    let betType = '';
+                    if(bet.type === 'number') {
+                        betType = `Number ${bet.number}`;
+                    } else if(bet.type === 'color') {
+                        betType = bet.color.charAt(0).toUpperCase() + bet.color.slice(1);
+                    } else if(bet.type === 'size') {
+                        betType = bet.size.charAt(0).toUpperCase() + bet.size.slice(1);
+                    }
+                    
+                    let statusClass = '';
+                    if(bet.status === 'won') statusClass = 'status-won';
+                    else if(bet.status === 'lost') statusClass = 'status-lost';
+                    else if(bet.status === 'pending') statusClass = 'status-pending';
+                    
+                    row.innerHTML = `
+                        <td>${bet.period}</td>
+                        <td>${betType}</td>
+                        <td>₹${bet.amount.toFixed(2)}</td>
+                        <td class="${statusClass}">${bet.status ? bet.status.charAt(0).toUpperCase() + bet.status.slice(1) : 'Pending'}</td>
+                    `;
+                    
+                    myHistoryBody.appendChild(row);
+                });
+            });
+        }
+        
+        // Set up real-time game listeners
+        function setupGameListeners() {
+            // Listen for new periods
+            database.ref('games/' + GAME_TYPE + '/periods').limitToLast(1).on('child_added', (snapshot) => {
+                if(snapshot.key !== currentPeriod) {
+                    currentPeriod = snapshot.key;
+                    document.getElementById('period-number').textContent = currentPeriod;
+                }
+            });
+            
+            // Listen for history updates
+            database.ref('history/' + GAME_TYPE).limitToLast(1).on('child_added', () => {
+                loadGameHistory();
+            });
+            
+            // Listen for my bet updates
+            database.ref('bets/' + GAME_TYPE).on('child_added', () => {
+                loadMyHistory();
+            });
+        }
+        
+        // Select bet option (color, big/small)
+        function selectBetOption(option) {
+            if(isBettingClosed) {
+                showToast('Betting is closed for this period', 'error');
+                return;
+            }
+            
+            // Clear previous selections
+            document.querySelectorAll('.bet-option').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.number-cell').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            selectedOption = option;
+            selectedNumber = null;
+            
+            // Highlight selected option
+            document.querySelectorAll('.bet-option').forEach(el => {
+                if(el.textContent.toLowerCase() === option) {
+                    el.classList.add('active');
+                }
+            });
+            
+            // Show multiplier section
+            document.getElementById('multiplier-section').style.display = 'block';
+            
+            // Reset multiplier to 1
+            setMultiplier(1);
+        }
+        
+        // Select specific number
+        function selectNumber(number) {
+            if(isBettingClosed) {
+                showToast('Betting is closed for this period', 'error');
+                return;
+            }
+            
+            // Clear previous selections
+            document.querySelectorAll('.number-cell').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.bet-option').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            selectedOption = 'number';
+            selectedNumber = number;
+            
+            // Highlight selected number
+            document.querySelectorAll('.number-cell')[number].classList.add('active');
+            
+            // Show multiplier section
+            document.getElementById('multiplier-section').style.display = 'block';
+            
+            // Reset multiplier to 1
+            setMultiplier(1);
+        }
+        
+        // Set bet multiplier
+        function setMultiplier(multiplier) {
+            currentMultiplier = multiplier;
+            updateAmountDisplay();
+            
+            // Update UI
+            document.querySelectorAll('.multiplier-btn').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.multiplier-btn').forEach((el, index) => {
+                const values = [1, 10, 100, 1000];
+                if(values[index] === multiplier) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        
+        // Adjust amount by increment/decrement
+        function adjustAmount(change) {
+            let newAmount = currentMultiplier + change;
+            
+            // Ensure amount doesn't go below 1
+            if(newAmount < 1) newAmount = 1;
+            
+            // Ensure amount doesn't exceed user balance
+            if(newAmount > userBalance) {
+                showToast('Insufficient balance', 'error');
+                newAmount = userBalance;
+            }
+            
+            setMultiplier(newAmount);
+        }
+        
+        // Update amount display
+        function updateAmountDisplay() {
+            document.getElementById('amount-display').textContent = `₹${currentMultiplier}`;
+            document.getElementById('total-amount').textContent = `₹${currentMultiplier.toFixed(2)}`;
+        }
+        
+        // Place bet
+        function placeBet() {
+            if(isBettingClosed) {
+                showToast('Betting is closed for this period', 'error');
+                return;
+            }
+            
+            if(!selectedOption && !selectedNumber) {
+                showToast('Please select a bet option', 'error');
+                return;
+            }
+            
+            if(!document.getElementById('agree-rules').checked) {
+                showToast('Please agree to the rules', 'error');
+                return;
+            }
+            
+            if(userBalance < currentMultiplier) {
+                showToast('Insufficient balance', 'error');
+                return;
+            }
+            
+            // Deduct amount from balance
+            const newBalance = userBalance - currentMultiplier;
+            
+            database.ref('users/' + userPhone + '/balance').set(newBalance).then(() => {
+                // Create bet record
+                const betData = {
+                    type: selectedOption === 'number' ? 'number' : 
+                          ['green', 'violet', 'red'].includes(selectedOption) ? 'color' : 'size',
+                    amount: currentMultiplier,
+                    timestamp: Date.now(),
+                    status: 'pending'
+                };
+                
+                if(selectedOption === 'number') {
+                    betData.number = selectedNumber;
+                } else if(['green', 'violet', 'red'].includes(selectedOption)) {
+                    betData.color = selectedOption;
+                } else if(['big', 'small'].includes(selectedOption)) {
+                    betData.size = selectedOption;
+                }
+                
+                database.ref('bets/' + GAME_TYPE + '/' + currentPeriod + '/' + userPhone).push(betData);
+                
+                showToast('Bet placed successfully!', 'success');
+                
+                // Clear selections
+                cancelBet();
+            }).catch(error => {
+                console.error('Error placing bet:', error);
+                showToast('Error placing bet', 'error');
+            });
+        }
+        
+        // Cancel bet
+        function cancelBet() {
+            selectedOption = null;
+            selectedNumber = null;
+            currentMultiplier = 1;
+            
+            document.querySelectorAll('.bet-option').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.number-cell').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            document.getElementById('multiplier-section').style.display = 'none';
+            updateAmountDisplay();
+        }
+        
+        // Show game history tab
+        function showGameHistory() {
+            document.getElementById('game-history-table').style.display = 'table';
+            document.getElementById('my-history-table').style.display = 'none';
+            document.querySelector('.history-tab:nth-child(1)').classList.add('active');
+            document.querySelector('.history-tab:nth-child(2)').classList.remove('active');
+        }
+        
+        // Show my history tab
+        function showMyHistory() {
+            document.getElementById('game-history-table').style.display = 'none';
+            document.getElementById('my-history-table').style.display = 'table';
+            document.querySelector('.history-tab:nth-child(1)').classList.remove('active');
+            document.querySelector('.history-tab:nth-child(2)').classList.add('active');
         }
         
         // Show toast notification
@@ -1184,40 +1418,6 @@
                 toast.remove();
             }, 3000);
         }
-        
-        // User menu toggle
-        function toggleUserMenu() {
-            document.getElementById('user-menu').classList.toggle('active');
-        }
-        
-        // Close user menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const userMenu = document.getElementById('user-menu');
-            const userAvatar = document.getElementById('user-avatar');
-            
-            if(userMenu.classList.contains('active') && !userAvatar.contains(event.target) && !userMenu.contains(event.target)) {
-                userMenu.classList.remove('active');
-            }
-        });
-        
-        // Logout function
-        function logout() {
-            localStorage.removeItem('userLoggedIn');
-            localStorage.removeItem('userPhone');
-            localStorage.removeItem('loginExpiry');
-            sessionStorage.removeItem('userLoggedIn');
-            sessionStorage.removeItem('userPhone');
-            
-            window.location.href = "index.html";
-        }
-        
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            loadGameData();
-            loadUserBalance();
-            generateRandomWinners();
-            startSlider();
-        });
     </script>
 </body>
 </html>
