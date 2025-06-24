@@ -623,8 +623,8 @@
         <div class="wallet-balance" id="wallet-balance">₹0.00</div>
         
         <div class="wallet-actions">
-            <div class="wallet-btn withdraw-btn">Withdraw</div>
-            <div class="wallet-btn deposit-btn">Deposit</div>
+            <div class="wallet-btn withdraw-btn" onclick="window.location.href='withdraw.html'">Withdraw</div>
+            <div class="wallet-btn deposit-btn" onclick="window.location.href='deposit.html'">Deposit</div>
         </div>
         
         <div class="welcome-message">
@@ -672,7 +672,6 @@
             <div class="number-item" onclick="openBetModal('6', '6', 9.0)">6</div>
             <div class="number-item" onclick="openBetModal('7', '7', 9.0)">7</div>
             <div class="number-item" onclick="openBetModal('8', '8', 9.0)">8</div>
-            <div class="number-item" onclick="openBetModal('9', '9', 9.0)">9</div>
         </div>
         
         <div class="bet-options">
@@ -770,9 +769,6 @@
             <div class="result-amount" id="result-amount">
                 +₹0.00
             </div>
-            <button class="close-result" onclick="hideResultModal()">
-                Close
-            </button>
         </div>
     </div>
     
@@ -809,6 +805,7 @@
         let serverTimeOffset = 0;
         let userPhone = "";
         let isGameRunning = false;
+        let resultModalTimeout;
         
         // Check if user is logged in
         function checkAuth() {
@@ -971,14 +968,14 @@
         // Generate random result for current period
         function generateResult() {
             return new Promise((resolve) => {
-                const winningNumber = Math.floor(Math.random() * 10); // 0-9
+                const winningNumber = Math.floor(Math.random() * 9); // 0-8 (removed 9 as requested)
                 let color;
                 
                 if(winningNumber === 0) {
                     color = 'green';
                 } else if(winningNumber === 5) {
                     color = 'violet';
-                } else if([1, 3, 7, 9].includes(winningNumber)) {
+                } else if([1, 3, 7].includes(winningNumber)) {
                     color = 'red';
                 } else {
                     color = 'green';
@@ -1183,6 +1180,12 @@
                                     if(fullBet.processed && !fullBet.notificationShown) {
                                         // Show win/loss modal
                                         showResultModal(fullBet);
+                                        
+                                        // Auto-hide after 3 seconds
+                                        clearTimeout(resultModalTimeout);
+                                        resultModalTimeout = setTimeout(() => {
+                                            hideResultModal();
+                                        }, 3000);
                                         
                                         // Mark notification as shown
                                         database.ref('bets/' + period + '/' + userPhone + '/' + betId + '/notificationShown').set(true);
@@ -1408,7 +1411,6 @@
                 {type: '6', name: '6', odds: 9.0, category: 'number'},
                 {type: '7', name: '7', odds: 9.0, category: 'number'},
                 {type: '8', name: '8', odds: 9.0, category: 'number'},
-                {type: '9', name: '9', odds: 9.0, category: 'number'},
                 {type: 'green', name: 'Green', odds: 2.0, category: 'color'},
                 {type: 'red', name: 'Red', odds: 2.0, category: 'color'},
                 {type: 'violet', name: 'Violet', odds: 4.5, category: 'color'},
