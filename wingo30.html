@@ -682,12 +682,12 @@
         <div style="margin: 20px 0;">
             <h3>Random</h3>
             <div class="random-options">
-                <div class="random-option" onclick="placeRandomBet(1)">X1</div>
-                <div class="random-option" onclick="placeRandomBet(5)">X5</div>
-                <div class="random-option" onclick="placeRandomBet(10)">X10</div>
-                <div class="random-option" onclick="placeRandomBet(20)">X20</div>
-                <div class="random-option" onclick="placeRandomBet(50)">X50</div>
-                <div class="random-option" onclick="placeRandomBet(100)">X100</div>
+                <div class="random-option" onclick="placeRandomBet(1, 10)">X1 (₹10)</div>
+                <div class="random-option" onclick="placeRandomBet(5, 50)">X5 (₹50)</div>
+                <div class="random-option" onclick="placeRandomBet(10, 100)">X10 (₹100)</div>
+                <div class="random-option" onclick="placeRandomBet(20, 200)">X20 (₹200)</div>
+                <div class="random-option" onclick="placeRandomBet(50, 500)">X50 (₹500)</div>
+                <div class="random-option" onclick="placeRandomBet(100, 1000)">X100 (₹1000)</div>
             </div>
         </div>
         
@@ -769,6 +769,7 @@
             <div class="result-amount" id="result-amount">
                 +₹0.00
             </div>
+            <button class="close-result" onclick="hideResultModal()">Close</button>
         </div>
     </div>
     
@@ -968,7 +969,7 @@
         // Generate random result for current period
         function generateResult() {
             return new Promise((resolve) => {
-                const winningNumber = Math.floor(Math.random() * 9); // 0-8 (removed 9 as requested)
+                const winningNumber = Math.floor(Math.random() * 9); // 0-8
                 let color;
                 
                 if(winningNumber === 0) {
@@ -998,7 +999,7 @@
                     
                     // Process bets for this period
                     processBets(winningNumber, color, bigSmall).then(() => {
-                        // Clean up old history (keep only last 20)
+                        // Clean up old history (keep only last 5)
                         cleanupOldHistory();
                         resolve();
                     });
@@ -1006,7 +1007,7 @@
             });
         }
         
-        // Clean up old history (keep only last 20 records)
+        // Clean up old history (keep only last 5 records)
         function cleanupOldHistory() {
             database.ref('gameResults').orderByChild('periodNumber').once('value').then((snapshot) => {
                 const results = snapshot.val();
@@ -1019,9 +1020,9 @@
                     // Sort by period number (ascending)
                     resultsArray.sort((a, b) => a.periodNumber - b.periodNumber);
                     
-                    // Delete all but the last 20
-                    if (resultsArray.length > 20) {
-                        const toDelete = resultsArray.slice(0, resultsArray.length - 20);
+                    // Delete all but the last 5
+                    if (resultsArray.length > 5) {
+                        const toDelete = resultsArray.slice(0, resultsArray.length - 5);
                         toDelete.forEach(item => {
                             database.ref('gameResults/' + item.key).remove();
                         });
@@ -1032,6 +1033,9 @@
         
         // Add result to history table
         function addToHistory(period, number, bigSmall, color) {
+            // First clear any undefined rows
+            clearUndefinedHistoryRows();
+            
             const historyRow = document.createElement('tr');
             
             // Create color dot
@@ -1059,8 +1063,8 @@
                 historyBody.appendChild(historyRow);
             }
             
-            // Keep only the last 20 history items
-            while(historyBody.children.length > 20) {
+            // Keep only the last 5 history items
+            while(historyBody.children.length > 5) {
                 historyBody.removeChild(historyBody.lastChild);
             }
             
@@ -1072,8 +1076,30 @@
                 color: color
             });
             
-            if(gameHistory.length > 20) {
+            if(gameHistory.length > 5) {
                 gameHistory.pop();
+            }
+        }
+        
+        // Clear any undefined rows from history
+        function clearUndefinedHistoryRows() {
+            const historyBody = document.getElementById('history-body');
+            const rows = historyBody.getElementsByTagName('tr');
+            
+            for (let i = rows.length - 1; i >= 0; i--) {
+                const cells = rows[i].getElementsByTagName('td');
+                let hasUndefined = false;
+                
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.includes('undefined')) {
+                        hasUndefined = true;
+                        break;
+                    }
+                }
+                
+                if (hasUndefined) {
+                    historyBody.removeChild(rows[i]);
+                }
             }
         }
         
@@ -1253,19 +1279,19 @@
         
         // Load game history from database
         function loadGameHistory() {
-            database.ref('gameResults').orderByChild('periodNumber').limitToLast(20).once('value').then((snapshot) => {
+            database.ref('gameResults').orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
+                    // Clear existing history
+                    document.getElementById('history-body').innerHTML = '';
+                    gameHistory = [];
+                    
                     // Convert to array and sort by period number (descending)
                     const resultsArray = Object.keys(results).map(key => ({
                         key: key,
                         ...results[key]
                     })).sort((a, b) => b.periodNumber - a.periodNumber);
-                    
-                    // Clear existing history
-                    document.getElementById('history-body').innerHTML = '';
-                    gameHistory = [];
                     
                     resultsArray.forEach(result => {
                         addToHistory(result.key, result.number, result.bigSmall, result.color);
@@ -1404,8 +1430,8 @@
             });
         }
         
-        // Place random bets
-        function placeRandomBet(count) {
+        // Place random bets with specified amount
+        function placeRandomBet(count, amount) {
             if(count <= 0) return;
             
             const betTypes = [
@@ -1425,25 +1451,7 @@
                 {type: 'small', name: 'Small', odds: 2.0, category: 'bigSmall'}
             ];
             
-            const amounts = [10, 20, 50, 100, 200, 500];
-            
-            let totalAmount = 0;
-            const bets = [];
-            
-            for(let i = 0; i < count; i++) {
-                const randomType = betTypes[Math.floor(Math.random() * betTypes.length)];
-                const randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
-                
-                bets.push({
-                    type: randomType.category,
-                    value: randomType.type,
-                    name: randomType.name,
-                    odds: randomType.odds,
-                    amount: randomAmount
-                });
-                
-                totalAmount += randomAmount;
-            }
+            let totalAmount = count * amount;
             
             if(totalAmount > userBalance) {
                 showToast('Insufficient balance for random bets', 'error');
@@ -1455,22 +1463,23 @@
                 return (balance || 0) - totalAmount;
             }).then(() => {
                 // Save all bets
-                bets.forEach((bet) => {
+                for(let i = 0; i < count; i++) {
+                    const randomType = betTypes[Math.floor(Math.random() * betTypes.length)];
                     const betId = 'BET' + Date.now() + Math.floor(Math.random() * 1000);
                     
                     database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + betId).set({
-                        amount: bet.amount,
-                        type: bet.type,
-                        value: bet.value,
-                        odds: bet.odds,
+                        amount: amount,
+                        type: randomType.category,
+                        value: randomType.type,
+                        odds: randomType.odds,
                         timestamp: Date.now(),
                         status: 'pending',
                         processed: false,
                         notificationShown: false
                     });
-                });
+                }
                 
-                showToast(`Placed ${count} random bets totaling ₹${totalAmount.toFixed(2)}`, 'success');
+                showToast(`Placed ${count} random bets of ₹${amount} each (Total: ₹${totalAmount})`, 'success');
             });
         }
         
