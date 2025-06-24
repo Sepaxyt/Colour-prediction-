@@ -832,7 +832,7 @@
         
         // Game state variables
         let currentPeriod = "";
-        let currentPeriodNumber = 100000; // Starting from 1 lakh
+        let currentPeriodNumber = 0;
         let timeLeft = 30;
         let timerInterval;
         let currentBetType = "";
@@ -847,6 +847,31 @@
         let userBets = {}; // Track user's bets for current period
         let gameMode = '30sec'; // Default game mode
         let gameDuration = 30; // Default duration in seconds
+        let gameStartTime = 0;
+        
+        // Game mode configurations
+        const gameModes = {
+            '30sec': {
+                duration: 30,
+                startPeriodNumber: 220,
+                prefix: '30S'
+            },
+            '1min': {
+                duration: 60,
+                startPeriodNumber: 320,
+                prefix: '1M'
+            },
+            '3min': {
+                duration: 180,
+                startPeriodNumber: 430,
+                prefix: '3M'
+            },
+            '5min': {
+                duration: 300,
+                startPeriodNumber: 530,
+                prefix: '5M'
+            }
+        };
         
         // Check if user is logged in
         function checkAuth() {
@@ -874,6 +899,7 @@
         // Change game mode
         function changeGameMode(mode) {
             gameMode = mode;
+            gameDuration = gameModes[mode].duration;
             
             // Update active tab
             document.querySelectorAll('.game-tab').forEach(tab => {
@@ -884,25 +910,7 @@
             // Update game info
             document.getElementById('game-info').textContent = `How to play WinGo ${mode}`;
             
-            // Set game duration based on mode
-            switch(mode) {
-                case '30sec':
-                    gameDuration = 30;
-                    break;
-                case '1min':
-                    gameDuration = 60;
-                    break;
-                case '3min':
-                    gameDuration = 180;
-                    break;
-                case '5min':
-                    gameDuration = 300;
-                    break;
-                default:
-                    gameDuration = 30;
-            }
-            
-            // Restart the game with new settings
+            // Initialize the game with new mode
             initGame();
         }
         
@@ -927,6 +935,18 @@
             return Date.now() + serverTimeOffset;
         }
         
+        // Generate a period ID based on current date and period number
+        function generatePeriodId(periodNumber) {
+            const now = new Date(getServerTime());
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const prefix = gameModes[gameMode].prefix;
+            
+            // Format: YYYYMMDD + prefix + period number (padded to 3 digits)
+            return `${year}${month}${day}${prefix}${String(periodNumber).padStart(3, '0')}`;
+        }
+        
         // Initialize the game
         function initGame() {
             // Clear any existing timer
@@ -935,7 +955,7 @@
             // Get the last period number from database for this game mode
             database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).once('value').then((snapshot) => {
                 const lastPeriod = snapshot.val();
-                currentPeriodNumber = lastPeriod ? lastPeriod + 1 : 100000;
+                currentPeriodNumber = lastPeriod ? lastPeriod + 1 : gameModes[gameMode].startPeriodNumber;
                 
                 // Check if we have an active period
                 database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then((periodSnapshot) => {
@@ -943,9 +963,9 @@
                     
                     if (activePeriod && activePeriod.periodNumber === currentPeriodNumber) {
                         // We're in the middle of a period
-                        const periodStartTime = activePeriod.startTime;
+                        gameStartTime = activePeriod.startTime;
                         const now = getServerTime();
-                        const elapsed = Math.floor((now - periodStartTime) / 1000);
+                        const elapsed = Math.floor((now - gameStartTime) / 1000);
                         
                         if (elapsed < gameDuration) {
                             // Current period is still active
@@ -966,11 +986,31 @@
                         }
                     } else {
                         // No active period, start a new one
-                        generatePeriodId();
+                        currentPeriod = generatePeriodId(currentPeriodNumber);
+                        document.getElementById('period-id').textContent = currentPeriod;
+                        
+                        // Save the new period to database
+                        const periodData = {
+                            periodNumber: currentPeriodNumber,
+                            periodId: currentPeriod,
+                            startTime: getServerTime(),
+                            status: 'open',
+                            gameMode: gameMode
+                        };
+                        
+                        gameStartTime = periodData.startTime;
+                        
+                        database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
+                        database.ref(`gamePeriods/${gameMode}/` + currentPeriod).set(periodData);
+                        
+                        // Reset user bets for new period
+                        userBets = {};
+                        
+                        // Start the countdown timer
                         timeLeft = gameDuration;
                         startTimer();
                         
-                        // Schedule next period
+                        // Schedule next period end
                         setTimeout(() => {
                             endCurrentPeriod();
                         }, gameDuration * 1000);
@@ -986,10 +1026,32 @@
             
             // Generate result for current period
             generateResult().then(() => {
-                // Start new round
+                // Increment period number
                 currentPeriodNumber++;
                 database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).set(currentPeriodNumber);
-                generatePeriodId();
+                
+                // Generate new period ID
+                currentPeriod = generatePeriodId(currentPeriodNumber);
+                document.getElementById('period-id').textContent = currentPeriod;
+                
+                // Save the new period to database
+                const periodData = {
+                    periodNumber: currentPeriodNumber,
+                    periodId: currentPeriod,
+                    startTime: getServerTime(),
+                    status: 'open',
+                    gameMode: gameMode
+                };
+                
+                gameStartTime = periodData.startTime;
+                
+                database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
+                database.ref(`gamePeriods/${gameMode}/` + currentPeriod).set(periodData);
+                
+                // Reset user bets for new period
+                userBets = {};
+                
+                // Start the countdown timer
                 timeLeft = gameDuration;
                 startTimer();
                 
@@ -1000,29 +1062,6 @@
                 
                 isGameRunning = false;
             });
-        }
-        
-        // Generate period ID based on sequential number
-        function generatePeriodId() {
-            // Pad the period number with leading zeros to make it 8 digits
-            const paddedPeriod = String(currentPeriodNumber).padStart(8, '0');
-            currentPeriod = paddedPeriod;
-            document.getElementById('period-id').textContent = currentPeriod;
-            
-            // Save the new period to database
-            const periodData = {
-                periodNumber: currentPeriodNumber,
-                periodId: currentPeriod,
-                startTime: getServerTime(),
-                status: 'open',
-                gameMode: gameMode
-            };
-            
-            database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
-            database.ref(`gamePeriods/${gameMode}/` + currentPeriod).set(periodData);
-            
-            // Reset user bets for new period
-            userBets = {};
         }
         
         // Start the countdown timer
