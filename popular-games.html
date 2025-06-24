@@ -386,6 +386,79 @@
             font-size: 1.2rem;
         }
         
+        /* Result Modal */
+        .result-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .result-content {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .result-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .result-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .result-number.red {
+            color: var(--red);
+        }
+        
+        .result-number.green {
+            color: var(--green);
+        }
+        
+        .result-number.violet {
+            color: var(--violet);
+        }
+        
+        .result-win {
+            color: var(--success);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .result-loss {
+            color: var(--danger);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .close-result {
+            padding: 10px 20px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+        
         /* Bet Modal */
         .modal {
             display: none;
@@ -519,84 +592,6 @@
             color: var(--success);
         }
         
-        /* Win/Loss Modal */
-        .result-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .result-content {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            padding: 25px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 350px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-        
-        .result-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-        }
-        
-        .result-icon.win {
-            color: var(--green);
-        }
-        
-        .result-icon.loss {
-            color: var(--red);
-        }
-        
-        .result-title {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-        
-        .result-message {
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-        
-        .result-amount {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        
-        .result-win {
-            color: var(--green);
-        }
-        
-        .result-loss {
-            color: var(--red);
-        }
-        
-        .close-result {
-            padding: 10px 20px;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .close-result:hover {
-            opacity: 0.9;
-        }
-        
         /* Responsive styles */
         @media (max-width: 768px) {
             .number-grid {
@@ -623,8 +618,8 @@
         <div class="wallet-balance" id="wallet-balance">₹0.00</div>
         
         <div class="wallet-actions">
-            <div class="wallet-btn withdraw-btn" onclick="window.location.href='withdraw.html'">Withdraw</div>
-            <div class="wallet-btn deposit-btn" onclick="window.location.href='deposit.html'">Deposit</div>
+            <a href="withdraw.html" class="wallet-btn withdraw-btn">Withdraw</a>
+            <a href="deposit.html" class="wallet-btn deposit-btn">Deposit</a>
         </div>
         
         <div class="welcome-message">
@@ -756,18 +751,13 @@
         </div>
     </div>
     
-    <!-- Win/Loss Modal -->
+    <!-- Result Modal -->
     <div class="result-modal" id="result-modal">
         <div class="result-content">
-            <div class="result-icon" id="result-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h3 class="result-title" id="result-title">You Won!</h3>
-            <div class="result-message" id="result-message">
-                Congratulations! Your bet was successful.
-            </div>
-            <div class="result-amount" id="result-amount">
-                +₹0.00
+            <h2 class="result-title">Round Result</h2>
+            <div class="result-number" id="result-number">0</div>
+            <div id="result-message">
+                <!-- Win/loss message will be inserted here -->
             </div>
         </div>
     </div>
@@ -783,7 +773,7 @@
             authDomain: "club-b8f03.firebaseapp.com",
             databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
             projectId: "club-b8f03",
-            storageBucket: "club-b8f03.firebasestorage.app",
+            storageBucket: "club-b8f03.appspot.com",
             messagingSenderId: "115909846985",
             appId: "1:115909846985:web:6f42fbb224935c513cea18",
             measurementId: "G-S3M36PLB9Y"
@@ -797,133 +787,85 @@
         let currentPeriodNumber = 0;
         let timeLeft = 30;
         let timerInterval;
+        let gameInterval;
         let currentBetType = "";
         let currentBetOdds = 0;
         let currentBetName = "";
         let userBalance = 0;
         let gameHistory = [];
-        let serverTimeOffset = 0;
-        let userPhone = "";
-        let isGameRunning = false;
-        let resultModalTimeout;
+        let userBets = [];
+        let gameRunning = false;
+        let lastRoundTime = 0;
         
         // Check if user is logged in
-        function checkAuth() {
-            userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
-            if(!userPhone) {
-                window.location.href = "index.html";
-            } else {
-                // Get server time offset first
-                getServerTimeOffset().then(() => {
-                    // Initialize the game after we have server time
-                    initGame();
-                    
-                    // Set up real-time balance listener
-                    setupRealtimeUpdates();
-                    
-                    // Load game history
-                    loadGameHistory();
-                    
-                    // Set up bet result listener
-                    setupBetResultListener();
-                });
-            }
-        }
-        
-        // Get server time offset to sync client and server times
-        function getServerTimeOffset() {
-            return new Promise((resolve) => {
-                const startTime = Date.now();
-                
-                database.ref('.info/serverTimeOffset').once('value').then((snapshot) => {
-                    serverTimeOffset = snapshot.val();
-                    resolve();
-                }).catch(() => {
-                    // If we can't get server time, assume no offset
-                    serverTimeOffset = 0;
-                    resolve();
-                });
-            });
-        }
-        
-        // Get current server time
-        function getServerTime() {
-            return Date.now() + serverTimeOffset;
+        const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
+        if(!userPhone) {
+            window.location.href = "index.html";
+        } else {
+            // Initialize the game
+            initGame();
+            
+            // Set up real-time balance listener
+            setupRealtimeUpdates();
+            
+            // Load game history
+            loadGameHistory();
+            
+            // Listen for user's bets
+            setupBetsListener();
         }
         
         // Initialize the game
         function initGame() {
-            // Clear any existing timer
-            clearInterval(timerInterval);
-            
             // Get the last period number from database
             database.ref('gameSettings/lastPeriodNumber').once('value').then((snapshot) => {
                 const lastPeriod = snapshot.val();
                 currentPeriodNumber = lastPeriod ? lastPeriod : 1;
                 
-                // Check if we have an active period
-                database.ref('gameSettings/currentPeriod').once('value').then((periodSnapshot) => {
-                    const activePeriod = periodSnapshot.val();
+                // Get the last round time
+                database.ref('gameSettings/lastRoundTime').once('value').then((timeSnapshot) => {
+                    lastRoundTime = timeSnapshot.val() || 0;
                     
-                    if (activePeriod && activePeriod.periodNumber === currentPeriodNumber) {
-                        // We're in the middle of a period
-                        const periodStartTime = activePeriod.startTime;
-                        const now = getServerTime();
-                        const elapsed = Math.floor((now - periodStartTime) / 1000);
-                        
-                        if (elapsed < 30) {
-                            // Current period is still active
-                            timeLeft = 30 - elapsed;
-                            currentPeriod = activePeriod.periodId;
-                            document.getElementById('period-id').textContent = currentPeriod;
-                            
-                            // Start the countdown timer
-                            startTimer();
-                            
-                            // Schedule next period
-                            setTimeout(() => {
-                                endCurrentPeriod();
-                            }, timeLeft * 1000);
-                        } else {
-                            // Current period should have ended already
-                            endCurrentPeriod();
-                        }
-                    } else {
-                        // No active period, start a new one
-                        generatePeriodId();
-                        timeLeft = 30;
-                        startTimer();
-                        
-                        // Schedule next period
-                        setTimeout(() => {
-                            endCurrentPeriod();
-                        }, 30000);
-                    }
+                    // Calculate time since last round
+                    const timeSinceLastRound = Date.now() - lastRoundTime;
+                    const timeUntilNextRound = 30000 - (timeSinceLastRound % 30000);
+                    
+                    // Generate initial period ID
+                    generatePeriodId();
+                    
+                    // Start the countdown timer
+                    startTimer(timeUntilNextRound);
+                    
+                    // Start the game loop
+                    startGameLoop();
                 });
             });
         }
         
-        // End the current period and start a new one
-        function endCurrentPeriod() {
-            if (isGameRunning) return;
-            isGameRunning = true;
+        // Start the game loop
+        function startGameLoop() {
+            if(gameRunning) return;
+            gameRunning = true;
             
-            // Generate result for current period
-            generateResult().then(() => {
+            // Clear any existing interval
+            if(gameInterval) clearInterval(gameInterval);
+            
+            // Set up periodic game rounds
+            gameInterval = setInterval(() => {
+                // Generate result for current period
+                generateResult();
+                
                 // Start new round
                 currentPeriodNumber++;
                 database.ref('gameSettings/lastPeriodNumber').set(currentPeriodNumber);
+                database.ref('gameSettings/lastRoundTime').set(Date.now());
                 generatePeriodId();
                 timeLeft = 30;
-                startTimer();
+                updateTimerDisplay();
                 
-                // Schedule next period end
-                setTimeout(() => {
-                    endCurrentPeriod();
-                }, 30000);
-                
-                isGameRunning = false;
-            });
+                // Clear user bets for new round
+                userBets = [];
+            }, 30000);
         }
         
         // Generate period ID based on sequential number
@@ -934,20 +876,19 @@
             document.getElementById('period-id').textContent = currentPeriod;
             
             // Save the new period to database
-            const periodData = {
+            database.ref('gamePeriods/' + currentPeriod).set({
                 periodNumber: currentPeriodNumber,
-                periodId: currentPeriod,
-                startTime: getServerTime(),
+                startTime: Date.now(),
                 status: 'open'
-            };
-            
-            database.ref('gameSettings/currentPeriod').set(periodData);
-            database.ref('gamePeriods/' + currentPeriod).set(periodData);
+            });
         }
         
         // Start the countdown timer
-        function startTimer() {
+        function startTimer(initialTime = 30000) {
             clearInterval(timerInterval);
+            
+            // Calculate initial time left
+            timeLeft = Math.ceil(initialTime / 1000);
             updateTimerDisplay();
             
             timerInterval = setInterval(() => {
@@ -962,70 +903,139 @@
         
         // Update timer display
         function updateTimerDisplay() {
-            document.getElementById('timer').textContent = `0:${String(timeLeft).padStart(2, '0')}`;
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `0:${String(seconds).padStart(2, '0')}`;
         }
         
         // Generate random result for current period
         function generateResult() {
-            return new Promise((resolve) => {
-                const winningNumber = Math.floor(Math.random() * 9); // 0-8 (removed 9 as requested)
-                let color;
-                
-                if(winningNumber === 0) {
-                    color = 'green';
-                } else if(winningNumber === 5) {
-                    color = 'violet';
-                } else if([1, 3, 7].includes(winningNumber)) {
-                    color = 'red';
-                } else {
-                    color = 'green';
-                }
-                
-                const bigSmall = winningNumber >= 5 ? 'Big' : 'Small';
-                
-                // Save result to database
-                database.ref('gameResults/' + currentPeriod).set({
-                    periodNumber: currentPeriodNumber,
-                    number: winningNumber,
-                    color: color,
-                    bigSmall: bigSmall,
-                    timestamp: getServerTime()
-                }).then(() => {
-                    // Add to history
-                    addToHistory(currentPeriod, winningNumber, bigSmall, color);
-                    
-                    // Process bets for this period
-                    processBets(winningNumber, color, bigSmall).then(() => {
-                        // Clean up old history (keep only last 10)
-                        cleanupOldHistory();
-                        resolve();
-                    });
+            const winningNumber = Math.floor(Math.random() * 9); // 0-8 (removed 9)
+            let color;
+            
+            if(winningNumber === 0) {
+                color = 'green';
+            } else if(winningNumber === 5) {
+                color = 'violet';
+            } else if([1, 3, 7].includes(winningNumber)) {
+                color = 'red';
+            } else {
+                color = 'green';
+            }
+            
+            const bigSmall = winningNumber >= 5 ? 'big' : 'small';
+            
+            // Save result to database
+            database.ref('gameResults/' + currentPeriod).set({
+                periodNumber: currentPeriodNumber,
+                number: winningNumber,
+                color: color,
+                bigSmall: bigSmall,
+                timestamp: Date.now()
+            }).then(() => {
+                // Clean up old results (keep only last 10)
+                database.ref('gameResults').orderByChild('periodNumber').limitToLast(10).once('value', (snapshot) => {
+                    const results = snapshot.val();
+                    if(results) {
+                        const toDelete = [];
+                        snapshot.forEach((childSnapshot) => {
+                            if(childSnapshot.val().periodNumber < currentPeriodNumber - 9) {
+                                toDelete.push(childSnapshot.ref.remove());
+                            }
+                        });
+                        Promise.all(toDelete);
+                    }
                 });
             });
+            
+            // Add to history
+            addToHistory(currentPeriod, winningNumber, bigSmall === 'big' ? 'Big' : 'Small', color);
+            
+            // Show result to user
+            showResult(winningNumber, color, bigSmall);
         }
         
-        // Clean up old history (keep only last 10 records)
-        function cleanupOldHistory() {
-            database.ref('gameResults').orderByChild('periodNumber').once('value').then((snapshot) => {
-                const results = snapshot.val();
-                if (results) {
-                    const resultsArray = Object.keys(results).map(key => ({
-                        key: key,
-                        periodNumber: results[key].periodNumber
-                    }));
-                    
-                    // Sort by period number (ascending)
-                    resultsArray.sort((a, b) => a.periodNumber - b.periodNumber);
-                    
-                    // Delete all but the last 10
-                    if (resultsArray.length > 10) {
-                        const toDelete = resultsArray.slice(0, resultsArray.length - 10);
-                        toDelete.forEach(item => {
-                            database.ref('gameResults/' + item.key).remove();
+        // Show result modal with win/loss information
+        function showResult(number, color, bigSmall) {
+            document.getElementById('result-number').textContent = number;
+            
+            // Set color for the number
+            document.getElementById('result-number').className = 'result-number ' + color;
+            
+            // Check if user had any bets in this round
+            if(userBets.length === 0) {
+                document.getElementById('result-message').innerHTML = `
+                    <p>No bets placed this round</p>
+                `;
+            } else {
+                let totalWin = 0;
+                let winCount = 0;
+                let lossCount = 0;
+                
+                // Calculate wins and losses
+                userBets.forEach(bet => {
+                    if(
+                        (bet.type === 'number' && parseInt(bet.value) === number) ||
+                        (bet.type === 'color' && bet.value === color) ||
+                        (bet.type === 'bigSmall' && bet.value === bigSmall)
+                    ) {
+                        const winAmount = bet.amount * bet.odds;
+                        totalWin += winAmount;
+                        winCount++;
+                        
+                        // Update the bet in database as won
+                        database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + bet.id).update({
+                            status: 'won',
+                            winAmount: winAmount,
+                            processed: true
+                        });
+                    } else {
+                        lossCount++;
+                        
+                        // Update the bet in database as lost
+                        database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + bet.id).update({
+                            status: 'lost',
+                            winAmount: 0,
+                            processed: true
                         });
                     }
+                });
+                
+                // Update user balance if they won
+                if(totalWin > 0) {
+                    database.ref('users/' + userPhone + '/balance').transaction((balance) => {
+                        return (balance || 0) + totalWin;
+                    });
+                    
+                    // Update total wins
+                    database.ref('users/' + userPhone + '/totalWins').transaction((wins) => {
+                        return (wins || 0) + winCount;
+                    });
                 }
-            });
+                
+                // Show result message
+                if(winCount > 0 && lossCount > 0) {
+                    document.getElementById('result-message').innerHTML = `
+                        <div class="result-win">You won ₹${totalWin.toFixed(2)} on ${winCount} bet(s)!</div>
+                        <div class="result-loss">Lost ${lossCount} bet(s)</div>
+                    `;
+                } else if(winCount > 0) {
+                    document.getElementById('result-message').innerHTML = `
+                        <div class="result-win">Congratulations! You won ₹${totalWin.toFixed(2)} on ${winCount} bet(s)!</div>
+                    `;
+                } else {
+                    document.getElementById('result-message').innerHTML = `
+                        <div class="result-loss">Sorry, you lost all ${lossCount} bets this round</div>
+                    `;
+                }
+            }
+            
+            // Show the result modal
+            document.getElementById('result-modal').style.display = 'flex';
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                document.getElementById('result-modal').style.display = 'none';
+            }, 3000);
         }
         
         // Add result to history table
@@ -1075,175 +1085,21 @@
             }
         }
         
-        // Process all bets for the current period
-        function processBets(winningNumber, winningColor, winningBigSmall) {
-            return new Promise((resolve) => {
-                database.ref('bets/' + currentPeriod).once('value').then((snapshot) => {
-                    const bets = snapshot.val();
-                    let processedBets = 0;
-                    
-                    if(bets) {
-                        const userIds = Object.keys(bets);
-                        if (userIds.length === 0) {
-                            resolve();
-                            return;
-                        }
-                        
-                        userIds.forEach((userId) => {
-                            const userBets = bets[userId];
-                            const betIds = Object.keys(userBets);
-                            
-                            betIds.forEach((betId) => {
-                                const bet = userBets[betId];
-                                
-                                // Check if bet is a winner
-                                let isWinner = false;
-                                let winAmount = 0;
-                                
-                                if(bet.type === 'number' && parseInt(bet.value) === winningNumber) {
-                                    isWinner = true;
-                                    winAmount = bet.amount * bet.odds;
-                                } else if(bet.type === 'color' && bet.value === winningColor) {
-                                    isWinner = true;
-                                    winAmount = bet.amount * bet.odds;
-                                } else if(bet.type === 'bigSmall' && bet.value === winningBigSmall) {
-                                    isWinner = true;
-                                    winAmount = bet.amount * bet.odds;
-                                }
-                                
-                                // Update bet status
-                                const updates = {
-                                    status: isWinner ? 'won' : 'lost',
-                                    winAmount: isWinner ? winAmount : 0,
-                                    processed: true
-                                };
-                                
-                                database.ref('bets/' + currentPeriod + '/' + userId + '/' + betId).update(updates).then(() => {
-                                    processedBets++;
-                                    
-                                    // Update user balance if winner
-                                    if(isWinner) {
-                                        database.ref('users/' + userId + '/balance').transaction((balance) => {
-                                            return (balance || 0) + winAmount;
-                                        }).then(() => {
-                                            // Update total wins
-                                            database.ref('users/' + userId + '/totalWins').transaction((wins) => {
-                                                return (wins || 0) + 1;
-                                            });
-                                            
-                                            // Create notification for user
-                                            createNotification(
-                                                userId,
-                                                'Bet Won!',
-                                                `You won ₹${winAmount.toFixed(2)} on period ${currentPeriod}`,
-                                                'success'
-                                            );
-                                            
-                                            if (processedBets === betIds.length * userIds.length) {
-                                                resolve();
-                                            }
-                                        });
-                                    } else {
-                                        if (processedBets === betIds.length * userIds.length) {
-                                            resolve();
-                                        }
-                                    }
-                                });
-                            });
-                        });
-                    } else {
-                        resolve();
-                    }
-                });
-            });
-        }
-        
-        // Set up listener for bet results
-        function setupBetResultListener() {
-            database.ref('bets').on('child_added', (periodSnapshot) => {
-                const period = periodSnapshot.key;
-                const bets = periodSnapshot.val();
+        // Set up listener for user's bets
+        function setupBetsListener() {
+            database.ref('bets/' + currentPeriod + '/' + userPhone).on('value', (snapshot) => {
+                const bets = snapshot.val();
+                userBets = [];
                 
-                if(bets[userPhone]) {
-                    Object.keys(bets[userPhone]).forEach((betId) => {
-                        const bet = bets[userPhone][betId];
-                        
-                        // Listen for bet status changes
-                        database.ref('bets/' + period + '/' + userPhone + '/' + betId + '/status').on('value', (statusSnapshot) => {
-                            const status = statusSnapshot.val();
-                            
-                            if(status === 'won' || status === 'lost') {
-                                // Get the full bet data
-                                database.ref('bets/' + period + '/' + userPhone + '/' + betId).once('value').then((betSnapshot) => {
-                                    const fullBet = betSnapshot.val();
-                                    
-                                    if(fullBet.processed && !fullBet.notificationShown) {
-                                        // Show win/loss modal
-                                        showResultModal(fullBet);
-                                        
-                                        // Auto-hide after 3 seconds
-                                        clearTimeout(resultModalTimeout);
-                                        resultModalTimeout = setTimeout(() => {
-                                            hideResultModal();
-                                        }, 3000);
-                                        
-                                        // Mark notification as shown
-                                        database.ref('bets/' + period + '/' + userPhone + '/' + betId + '/notificationShown').set(true);
-                                    }
-                                });
-                            }
+                if(bets) {
+                    Object.keys(bets).forEach(betId => {
+                        userBets.push({
+                            id: betId,
+                            ...bets[betId]
                         });
                     });
                 }
             });
-        }
-        
-        // Show win/loss result modal
-        function showResultModal(bet) {
-            const resultModal = document.getElementById('result-modal');
-            const resultIcon = document.getElementById('result-icon');
-            const resultTitle = document.getElementById('result-title');
-            const resultMessage = document.getElementById('result-message');
-            const resultAmount = document.getElementById('result-amount');
-            
-            if(bet.status === 'won') {
-                // Win modal
-                resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
-                resultIcon.className = 'result-icon win';
-                resultTitle.textContent = 'You Won!';
-                resultTitle.className = 'result-title';
-                resultMessage.textContent = `Your bet on ${getBetDisplayName(bet)} was successful!`;
-                resultAmount.textContent = `+₹${bet.winAmount.toFixed(2)}`;
-                resultAmount.className = 'result-amount result-win';
-            } else {
-                // Loss modal
-                resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
-                resultIcon.className = 'result-icon loss';
-                resultTitle.textContent = 'You Lost';
-                resultTitle.className = 'result-title';
-                resultMessage.textContent = `Your bet on ${getBetDisplayName(bet)} was not successful.`;
-                resultAmount.textContent = `-₹${bet.amount.toFixed(2)}`;
-                resultAmount.className = 'result-amount result-loss';
-            }
-            
-            resultModal.style.display = 'flex';
-        }
-        
-        // Hide result modal
-        function hideResultModal() {
-            document.getElementById('result-modal').style.display = 'none';
-        }
-        
-        // Get display name for bet type
-        function getBetDisplayName(bet) {
-            if(bet.type === 'color') {
-                return bet.value.charAt(0).toUpperCase() + bet.value.slice(1);
-            } else if(bet.type === 'bigSmall') {
-                return bet.value.charAt(0).toUpperCase() + bet.value.slice(1);
-            } else if(bet.type === 'number') {
-                return 'Number ' + bet.value;
-            }
-            return bet.value;
         }
         
         // Load game history from database
@@ -1261,7 +1117,12 @@
                     }).sort((a, b) => b.periodNumber - a.periodNumber);
                     
                     resultsArray.forEach(result => {
-                        addToHistory(result.period, result.number, result.bigSmall, result.color);
+                        addToHistory(
+                            result.period, 
+                            result.number, 
+                            result.bigSmall === 'big' ? 'Big' : 'Small', 
+                            result.color
+                        );
                     });
                 }
             });
@@ -1364,10 +1225,13 @@
                 
                 // Determine bet type category
                 let typeCategory = '';
+                let betValue = currentBetType;
+                
                 if(['green', 'red', 'violet'].includes(currentBetType)) {
                     typeCategory = 'color';
                 } else if(['big', 'small'].includes(currentBetType)) {
                     typeCategory = 'bigSmall';
+                    betValue = currentBetType.toLowerCase();
                 } else {
                     typeCategory = 'number';
                 }
@@ -1376,12 +1240,20 @@
                 database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + betId).set({
                     amount: amount,
                     type: typeCategory,
-                    value: currentBetType,
+                    value: betValue,
                     odds: currentBetOdds,
                     timestamp: Date.now(),
                     status: 'pending',
-                    processed: false,
-                    notificationShown: false
+                    processed: false
+                });
+                
+                // Add to local bets array
+                userBets.push({
+                    id: betId,
+                    amount: amount,
+                    type: typeCategory,
+                    value: betValue,
+                    odds: currentBetOdds
                 });
                 
                 // Create notification
@@ -1429,7 +1301,7 @@
                 
                 bets.push({
                     type: randomType.category,
-                    value: randomType.type,
+                    value: randomType.type === 'big' || randomType.type === 'small' ? randomType.type.toLowerCase() : randomType.type,
                     name: randomType.name,
                     odds: randomType.odds,
                     amount: randomAmount
@@ -1458,8 +1330,16 @@
                         odds: bet.odds,
                         timestamp: Date.now(),
                         status: 'pending',
-                        processed: false,
-                        notificationShown: false
+                        processed: false
+                    });
+                    
+                    // Add to local bets array
+                    userBets.push({
+                        id: betId,
+                        amount: bet.amount,
+                        type: bet.type,
+                        value: bet.value,
+                        odds: bet.odds
                     });
                 });
                 
@@ -1498,8 +1378,9 @@
         // Event listeners
         document.getElementById('bet-amount').addEventListener('input', calculateWinAmount);
         
-        // Initialize the game when page loads
-        window.addEventListener('load', checkAuth);
+        // Initialize balance display
+        updateBalanceDisplay(0);
     </script>
 </body>
 </html>
+
