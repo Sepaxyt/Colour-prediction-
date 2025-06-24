@@ -202,95 +202,6 @@
             background-size: 20px 20px;
         }
         
-        .categories {
-            display: flex;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            scrollbar-width: none;
-        }
-        
-        .categories::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .category {
-            padding: 8px 15px;
-            margin-right: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .category.active {
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
-        }
-        
-        .category:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Auto Slider Styles */
-        .auto-slider {
-            height: 180px;
-            position: relative;
-            margin-bottom: 30px;
-            overflow: hidden;
-            border-radius: 12px;
-        }
-        
-        .auto-slider-container {
-            display: flex;
-            height: 100%;
-            transition: transform 0.5s ease;
-        }
-        
-        .auto-slide {
-            min-width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        
-        .auto-slide::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-        }
-        
-        .auto-slider-dots {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            z-index: 1;
-        }
-        
-        .auto-slider-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            margin: 0 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .auto-slider-dot.active {
-            background: white;
-            width: 20px;
-            border-radius: 4px;
-        }
-        
         /* Game Card Styles */
         .games-section {
             margin-bottom: 30px;
@@ -327,11 +238,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .game-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--secondary);
         }
         
         .game-thumbnail {
@@ -339,16 +252,49 @@
             background-size: cover;
             background-position: center;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        .game-thumbnail::after {
+        .game-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .game-icon::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            z-index: -1;
+            opacity: 0.4;
+        }
+        
+        .game-icon::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            z-index: -2;
+            opacity: 0.2;
         }
         
         .game-title {
@@ -726,26 +672,6 @@
             </div>
         </div>
         
-        <div class="categories">
-            <div class="category active">All</div>
-            <div class="category">Lottery</div>
-            <div class="category">Original</div>
-            <div class="category">Slots</div>
-            <div class="category">Casino</div>
-            <div class="category">Sports</div>
-        </div>
-        
-        <!-- Auto Slider for Featured Games -->
-        <div class="auto-slider">
-            <div class="auto-slider-container" id="auto-slider">
-                <!-- Slides will be loaded dynamically from JSON -->
-            </div>
-            
-            <div class="auto-slider-dots" id="auto-slider-dots">
-                <!-- Dots will be loaded dynamically -->
-            </div>
-        </div>
-        
         <!-- WinGo Games Section -->
         <div class="games-section">
             <div class="section-header">
@@ -835,53 +761,31 @@
             window.location.href = "index.html";
         }
         
-        // Game data JSON structure with your provided images
+        // Game data JSON structure with custom icons
         const gameData = {
-            featuredBanners: [
-                {
-                    id: "banner1",
-                    image: "https://i.ibb.co/27qvcHJH/Banner-20250117222909yv6t.jpg"
-                },
-                {
-                    id: "banner2",
-                    image: "https://i.ibb.co/n8Rfxnnm/Banner-202501172229382rs9.jpg"
-                },
-                {
-                    id: "banner3",
-                    image: "https://i.ibb.co/8nbjPn8Y/Banner-20250117222949rbe6.jpg"
-                },
-                {
-                    id: "banner4",
-                    image: "https://i.ibb.co/Gv8cvNsw/Banner-20250117223036ogqj.jpg"
-                },
-                {
-                    id: "banner5",
-                    image: "https://i.ibb.co/6cmc3tL5/Banner-20250117223118sxi7.jpg"
-                }
-            ],
             wingoGames: [
                 {
                     id: "wingo30",
                     title: "WinGo 30 Seconds",
-                    image: "https://i.ibb.co/GfZgdQgD/lotterycategory-202501081300366bjd.png",
+                    icon: "30",
                     description: "Fast-paced 30 second lottery game with quick results"
                 },
                 {
                     id: "wingo1",
                     title: "WinGo 1 Minute",
-                    image: "https://i.ibb.co/8D3fksgB/lotterycategory-20250108130042mug3.png",
+                    icon: "1M",
                     description: "Exciting 1 minute lottery game with bigger prizes"
                 },
                 {
                     id: "wingo3",
                     title: "WinGo 3 Minutes",
-                    image: "https://i.ibb.co/Y7PSCL39/lotterycategory-20250108130049l1jl.png",
+                    icon: "3M",
                     description: "Strategic 3 minute game with higher multipliers"
                 },
                 {
                     id: "wingo5",
                     title: "WinGo 5 Minutes",
-                    image: "https://i.ibb.co/b5K58SSr/lotterycategory-20250108130057tmo2.png",
+                    icon: "5M",
                     description: "Premium 5 minute game with massive jackpots"
                 }
             ],
@@ -889,25 +793,25 @@
                 {
                     id: "k3",
                     title: "K3 Lottery",
-                    image: "https://i.ibb.co/8D3fksgB/lotterycategory-20250108130042mug3.png",
+                    icon: "K3",
                     description: "Classic K3 lottery game with daily draws"
                 },
                 {
                     id: "5d",
                     title: "5D Lottery",
-                    image: "https://i.ibb.co/Y7PSCL39/lotterycategory-20250108130049l1jl.png",
+                    icon: "5D",
                     description: "5D lottery with huge jackpot prizes"
                 },
                 {
                     id: "trx",
                     title: "TRX Lottery",
-                    image: "https://i.ibb.co/b5K58SSr/lotterycategory-20250108130057tmo2.png",
+                    icon: "TRX",
                     description: "TRX blockchain-based lottery game"
                 },
                 {
                     id: "slots",
                     title: "Mega Slots",
-                    image: "https://i.ibb.co/GfZgdQgD/lotterycategory-202501081300366bjd.png",
+                    icon: "SL",
                     description: "Exciting slot machine with big bonuses"
                 }
             ]
@@ -928,82 +832,32 @@
             "K3 Lottery", "5D Lottery", "TRX Lottery", "Mega Slots"
         ];
         
-        // Auto slider functionality
-        let currentSlide = 0;
-        let slideInterval;
-        
-        function startSlider() {
-            slideInterval = setInterval(() => {
-                currentSlide = (currentSlide + 1) % document.querySelectorAll('.auto-slide').length;
-                updateSlider();
-            }, 5000); // Change slide every 5 seconds
-            
-            // Update timer display
-            updateRefreshTimer();
-        }
-        
-        function updateSlider() {
-            const slider = document.getElementById('auto-slider');
-            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            const dots = document.querySelectorAll('.auto-slider-dot');
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-        }
-        
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlider();
-            resetInterval();
-        }
-        
-        function resetInterval() {
-            clearInterval(slideInterval);
-            startSlider();
-        }
-        
         // Load game data
         function loadGameData() {
-            // Load featured banners
-            const autoSlider = document.getElementById('auto-slider');
-            const sliderDots = document.getElementById('auto-slider-dots');
-            
-            autoSlider.innerHTML = '';
-            sliderDots.innerHTML = '';
-            
-            gameData.featuredBanners.forEach((banner, index) => {
-                autoSlider.innerHTML += `
-                    <div class="auto-slide" style="background-image: url('${banner.image}')"></div>
-                `;
-                
-                sliderDots.innerHTML += `
-                    <div class="auto-slider-dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>
-                `;
-            });
-            
-            // Load WinGo games - modified to match your image
+            // Load WinGo games with custom icons
             const wingoGamesContainer = document.getElementById('wingo-games');
             wingoGamesContainer.innerHTML = '';
             
             gameData.wingoGames.forEach(game => {
                 wingoGamesContainer.innerHTML += `
                     <div class="game-card" onclick="openGame('${game.id}')">
-                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
+                        <div class="game-thumbnail">
+                            <div class="game-icon">${game.icon}</div>
                             <div class="game-title">${game.title}</div>
                         </div>
                     </div>
                 `;
             });
             
-            // Load popular games
+            // Load popular games with custom icons
             const popularGamesContainer = document.getElementById('popular-games');
             popularGamesContainer.innerHTML = '';
             
             gameData.popularGames.forEach(game => {
                 popularGamesContainer.innerHTML += `
                     <div class="game-card" onclick="openGame('${game.id}')">
-                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
+                        <div class="game-thumbnail">
+                            <div class="game-icon">${game.icon}</div>
                             <div class="game-title">${game.title}</div>
                         </div>
                     </div>
@@ -1182,7 +1036,7 @@
             loadGameData();
             loadUserBalance();
             generateRandomWinners();
-            startSlider();
+            updateRefreshTimer();
         });
     </script>
 </body>
