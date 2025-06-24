@@ -319,12 +319,6 @@
             font-weight: 500;
         }
         
-        .history-view-all {
-            font-size: 12px;
-            color: var(--highlight);
-            cursor: pointer;
-        }
-        
         .history-tabs {
             display: flex;
             margin-bottom: 10px;
@@ -381,25 +375,16 @@
             background-color: var(--red);
         }
         
-        .history-pagination {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
+        .status-won {
+            color: var(--green);
         }
         
-        .pagination-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 12px;
-            cursor: pointer;
+        .status-lost {
+            color: var(--red);
         }
         
-        .pagination-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .status-pending {
+            color: var(--warning);
         }
         
         .result-popup {
@@ -612,18 +597,6 @@
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
-        
-        .status-won {
-            color: var(--green);
-        }
-        
-        .status-lost {
-            color: var(--red);
-        }
-        
-        .status-pending {
-            color: var(--warning);
-        }
     </style>
 </head>
 <body>
@@ -705,7 +678,6 @@
         <div class="history-section">
             <div class="history-header">
                 <div class="history-title">Game History</div>
-                <div class="history-view-all" onclick="window.location.href='history-wingo30.html'">View All</div>
             </div>
             
             <div class="history-tabs">
@@ -740,12 +712,6 @@
                     <!-- My history items will be added here dynamically -->
                 </tbody>
             </table>
-            
-            <div class="history-pagination" id="history-pagination" style="display: none;">
-                <button class="pagination-btn" id="prev-page" onclick="prevHistoryPage()">Previous</button>
-                <span id="page-info">Page 1</span>
-                <button class="pagination-btn" id="next-page" onclick="nextHistoryPage()">Next</button>
-            </div>
         </div>
     </div>
     
@@ -808,9 +774,8 @@
         let countdownInterval;
         let secondsRemaining = 30;
         let isBettingClosed = false;
-        let currentHistoryPage = 1;
-        const HISTORY_PER_PAGE = 10;
         const GAME_TYPE = 'wingo30';
+        const HISTORY_LIMIT = 10; // Only show last 10 history items
         
         // Check if user is logged in
         const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
@@ -907,6 +872,12 @@
                         startTime: Date.now(),
                         status: 'open'
                     });
+                    
+                    // Schedule the result generation for this period (even if page is closed)
+                    const timeUntilResult = secondsRemaining * 1000;
+                    setTimeout(() => {
+                        generatePeriodResult(currentPeriod);
+                    }, timeUntilResult);
                 }
             });
         }
@@ -925,6 +896,37 @@
             } else {
                 timerElement.classList.remove('timer-warning');
             }
+        }
+        
+        // Generate result for a period (this will run even if page is closed)
+        function generatePeriodResult(period) {
+            // Generate random result (0-9)
+            const resultNumber = Math.floor(Math.random() * 10);
+            
+            // Determine color based on number
+            let resultColor;
+            if(resultNumber === 0) resultColor = 'green';
+            else if(resultNumber === 5) resultColor = 'violet';
+            else if([1, 3, 7, 9].includes(resultNumber)) resultColor = 'red';
+            else resultColor = 'green';
+            
+            // Determine big/small
+            const resultSize = resultNumber >= 5 ? 'big' : 'small';
+            
+            // Save result to database
+            database.ref('games/' + GAME_TYPE + '/periods/' + period).update({
+                resultNumber: resultNumber,
+                resultColor: resultColor,
+                resultSize: resultSize,
+                endTime: Date.now(),
+                status: 'completed'
+            }).then(() => {
+                // Process all bets for this period
+                processBets(period, resultNumber, resultColor, resultSize);
+                
+                // Add to history
+                addToHistory(period, resultNumber, resultSize, resultColor);
+            });
         }
         
         // End current period and determine results
@@ -952,28 +954,29 @@
                 resultNumber: resultNumber,
                 resultColor: resultColor,
                 resultSize: resultSize,
-                endTime: Date.now()
+                endTime: Date.now(),
+                status: 'completed'
+            }).then(() => {
+                // Process all bets for this period
+                processBets(currentPeriod, resultNumber, resultColor, resultSize);
+                
+                // Add to history
+                addToHistory(currentPeriod, resultNumber, resultSize, resultColor);
+                
+                // Reset betting flag
+                isBettingClosed = false;
+                
+                // Start new period
+                setTimeout(() => {
+                    updatePeriodNumber();
+                    startCountdown();
+                }, 5000);
             });
-            
-            // Process all bets for this period
-            processBets(resultNumber, resultColor, resultSize);
-            
-            // Add to history
-            addToHistory(currentPeriod, resultNumber, resultSize, resultColor);
-            
-            // Reset betting flag
-            isBettingClosed = false;
-            
-            // Start new period
-            setTimeout(() => {
-                updatePeriodNumber();
-                startCountdown();
-            }, 5000);
         }
         
         // Process all bets for the completed period
-        function processBets(resultNumber, resultColor, resultSize) {
-            database.ref('bets/' + GAME_TYPE + '/' + currentPeriod).once('value').then((snapshot) => {
+        function processBets(period, resultNumber, resultColor, resultSize) {
+            database.ref('bets/' + GAME_TYPE + '/' + period).once('value').then((snapshot) => {
                 const bets = snapshot.val();
                 
                 if(bets) {
@@ -1007,14 +1010,14 @@
                                 });
                                 
                                 // Update bet status
-                                database.ref('bets/' + GAME_TYPE + '/' + currentPeriod + '/' + userId + '/' + betId).update({
+                                database.ref('bets/' + GAME_TYPE + '/' + period + '/' + userId + '/' + betId).update({
                                     status: 'won',
                                     winAmount: payout
                                 });
                                 
-                                // Show win popup if it's the current user
+                                // Show win popup if it's the current user and page is open
                                 if(userId === userPhone) {
-                                    showResultPopup(true, currentPeriod, resultNumber, resultColor, resultSize, payout);
+                                    showResultPopup(true, period, resultNumber, resultColor, resultSize, payout);
                                 }
                                 
                                 // Update user stats
@@ -1023,14 +1026,14 @@
                                 });
                             } else {
                                 // Mark bet as lost
-                                database.ref('bets/' + GAME_TYPE + '/' + currentPeriod + '/' + userId + '/' + betId).update({
+                                database.ref('bets/' + GAME_TYPE + '/' + period + '/' + userId + '/' + betId).update({
                                     status: 'lost',
                                     winAmount: 0
                                 });
                                 
-                                // Show loss popup if it's the current user
+                                // Show loss popup if it's the current user and page is open
                                 if(userId === userPhone) {
-                                    showResultPopup(false, currentPeriod, resultNumber, resultColor, resultSize, 0);
+                                    showResultPopup(false, period, resultNumber, resultColor, resultSize, 0);
                                 }
                             }
                         });
@@ -1083,8 +1086,8 @@
             
             database.ref('history/' + GAME_TYPE).push(historyItem);
             
-            // Keep only last 29 history items
-            database.ref('history/' + GAME_TYPE).orderByChild('timestamp').limitToLast(29).once('value').then((snapshot) => {
+            // Keep only last HISTORY_LIMIT history items
+            database.ref('history/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_LIMIT).once('value').then((snapshot) => {
                 const items = [];
                 snapshot.forEach(child => {
                     items.push({
@@ -1093,10 +1096,10 @@
                     });
                 });
                 
-                // If we have more than 29 items, delete the oldest ones
-                if(items.length > 29) {
+                // If we have more than HISTORY_LIMIT items, delete the oldest ones
+                if(items.length > HISTORY_LIMIT) {
                     items.sort((a, b) => a.timestamp - b.timestamp);
-                    const toDelete = items.slice(0, items.length - 29);
+                    const toDelete = items.slice(0, items.length - HISTORY_LIMIT);
                     
                     toDelete.forEach(item => {
                         database.ref('history/' + GAME_TYPE + '/' + item.key).remove();
@@ -1107,7 +1110,7 @@
         
         // Load game history
         function loadGameHistory() {
-            database.ref('history/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_PER_PAGE).once('value').then((snapshot) => {
+            database.ref('history/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_LIMIT).once('value').then((snapshot) => {
                 const historyBody = document.getElementById('history-body');
                 historyBody.innerHTML = '';
                 
@@ -1139,7 +1142,7 @@
         
         // Load my betting history
         function loadMyHistory() {
-            database.ref('bets/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_PER_PAGE).once('value').then((snapshot) => {
+            database.ref('bets/' + GAME_TYPE).orderByChild('timestamp').limitToLast(HISTORY_LIMIT).once('value').then((snapshot) => {
                 const myHistoryBody = document.getElementById('my-history-body');
                 myHistoryBody.innerHTML = '';
                 
@@ -1162,7 +1165,7 @@
                 myBets.sort((a, b) => b.timestamp - a.timestamp);
                 
                 // Display only the most recent bets
-                myBets.slice(0, HISTORY_PER_PAGE).forEach(bet => {
+                myBets.slice(0, HISTORY_LIMIT).forEach(bet => {
                     const row = document.createElement('tr');
                     
                     let betType = '';
@@ -1426,7 +1429,6 @@
             document.getElementById('my-history-table').style.display = 'none';
             document.querySelector('.history-tab:nth-child(1)').classList.add('active');
             document.querySelector('.history-tab:nth-child(2)').classList.remove('active');
-            document.getElementById('history-pagination').style.display = 'none';
         }
         
         // Show my history tab
@@ -1435,29 +1437,6 @@
             document.getElementById('my-history-table').style.display = 'table';
             document.querySelector('.history-tab:nth-child(1)').classList.remove('active');
             document.querySelector('.history-tab:nth-child(2)').classList.add('active');
-            document.getElementById('history-pagination').style.display = 'flex';
-        }
-        
-        // Go to previous history page
-        function prevHistoryPage() {
-            if(currentHistoryPage > 1) {
-                currentHistoryPage--;
-                loadMyHistory();
-                updatePaginationUI();
-            }
-        }
-        
-        // Go to next history page
-        function nextHistoryPage() {
-            currentHistoryPage++;
-            loadMyHistory();
-            updatePaginationUI();
-        }
-        
-        // Update pagination UI
-        function updatePaginationUI() {
-            document.getElementById('page-info').textContent = `Page ${currentHistoryPage}`;
-            document.getElementById('prev-page').disabled = currentHistoryPage === 1;
         }
         
         // Show toast notification
