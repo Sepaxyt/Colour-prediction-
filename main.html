@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>53 Club - Main</title>
+    <title>53 Club - WinGo Games</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -233,122 +233,7 @@
             background: rgba(255, 255, 255, 0.1);
         }
         
-        .games-section {
-            margin-bottom: 30px;
-        }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        
-        .see-all {
-            color: var(--secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        
-        .games-container {
-            position: relative;
-        }
-        
-        .games-slider {
-            display: flex;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-            padding-bottom: 10px;
-        }
-        
-        .games-slider::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .game-card {
-            min-width: 150px;
-            margin-right: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-        
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        
-        .game-thumbnail {
-            height: 100px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        
-        .game-thumbnail::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
-        }
-        
-        .game-title {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            z-index: 1;
-        }
-        
-        .slider-controls {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-        
-        .slider-btn {
-            width: 30px;
-            height: 30px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-            pointer-events: all;
-            z-index: 10;
-        }
-        
-        .slider-btn:hover {
-            background: rgba(0, 0, 0, 0.7);
-        }
-        
-        .slider-btn.left {
-            margin-left: -15px;
-        }
-        
-        .slider-btn.right {
-            margin-right: -15px;
-        }
-        
+        /* Auto Slider Styles */
         .auto-slider {
             height: 180px;
             position: relative;
@@ -406,6 +291,103 @@
             border-radius: 4px;
         }
         
+        /* Game Card Styles */
+        .games-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .see-all {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .games-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-thumbnail {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .game-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
+        }
+        
+        .game-title {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            z-index: 1;
+            color: white;
+        }
+        
+        .game-info {
+            padding: 15px;
+        }
+        
+        .game-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+        
+        .play-btn {
+            width: 100%;
+            padding: 8px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-btn:hover {
+            opacity: 0.9;
+        }
+        
+        /* Winning Info Styles */
         .winning-info {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
@@ -633,50 +615,6 @@
             line-height: 1.5;
         }
         
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .banner h2 {
-                font-size: 1.4rem;
-            }
-            
-            .winners-list {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-            
-            .big-winners-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .user-info {
-                margin-top: 15px;
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .balance {
-                margin-right: 0;
-            }
-            
-            .banner {
-                height: 150px;
-            }
-            
-            .banner h2 {
-                font-size: 1.2rem;
-            }
-            
-            .winners-list {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
         /* Toast Notification */
         .toast {
             position: fixed;
@@ -730,6 +668,50 @@
         
         .winner-card {
             animation: fadeIn 0.5s ease;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .banner h2 {
+                font-size: 1.4rem;
+            }
+            
+            .winners-list {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .big-winners-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .user-info {
+                margin-top: 15px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .balance {
+                margin-right: 0;
+            }
+            
+            .banner {
+                height: 150px;
+            }
+            
+            .banner h2 {
+                font-size: 1.2rem;
+            }
+            
+            .winners-list {
+                grid-template-columns: 1fr 1fr;
+            }
         }
     </style>
 </head>
@@ -790,6 +772,18 @@
             </div>
         </div>
         
+        <!-- WinGo Games Section -->
+        <div class="games-section">
+            <div class="section-header">
+                <h3 class="section-title">WinGo Games</h3>
+                <a href="wingo-games.html" class="see-all">See All</a>
+            </div>
+            
+            <div class="games-container" id="wingo-games">
+                <!-- WinGo games will be loaded dynamically -->
+            </div>
+        </div>
+        
         <!-- Popular Games Section -->
         <div class="games-section">
             <div class="section-header">
@@ -797,15 +791,8 @@
                 <a href="popular-games.html" class="see-all">See All</a>
             </div>
             
-            <div class="games-container">
-                <div class="games-slider" id="popular-games">
-                    <!-- Popular games will be loaded dynamically from JSON -->
-                </div>
-                
-                <div class="slider-controls">
-                    <div class="slider-btn left" onclick="scrollSlider('popular-games', -150)"><i class="fas fa-chevron-left"></i></div>
-                    <div class="slider-btn right" onclick="scrollSlider('popular-games', 150)"><i class="fas fa-chevron-right"></i></div>
-                </div>
+            <div class="games-container" id="popular-games">
+                <!-- Popular games will be loaded dynamically -->
             </div>
         </div>
         
@@ -898,26 +885,56 @@
                     image: "https://i.ibb.co/6cmc3tL5/Banner-20250117223118sxi7.jpg"
                 }
             ],
-            popularGames: [
+            wingoGames: [
                 {
-                    id: "wingo",
-                    title: "WIN Go",
-                    image: "https://i.ibb.co/GfZgdQgD/lotterycategory-202501081300366bjd.png"
+                    id: "wingo30",
+                    title: "WinGo 30 Seconds",
+                    image: "https://i.ibb.co/GfZgdQgD/lotterycategory-202501081300366bjd.png",
+                    description: "Fast-paced 30 second lottery game with quick results"
                 },
+                {
+                    id: "wingo1",
+                    title: "WinGo 1 Minute",
+                    image: "https://i.ibb.co/8D3fksgB/lotterycategory-20250108130042mug3.png",
+                    description: "Exciting 1 minute lottery game with bigger prizes"
+                },
+                {
+                    id: "wingo3",
+                    title: "WinGo 3 Minutes",
+                    image: "https://i.ibb.co/Y7PSCL39/lotterycategory-20250108130049l1jl.png",
+                    description: "Strategic 3 minute game with higher multipliers"
+                },
+                {
+                    id: "wingo5",
+                    title: "WinGo 5 Minutes",
+                    image: "https://i.ibb.co/b5K58SSr/lotterycategory-20250108130057tmo2.png",
+                    description: "Premium 5 minute game with massive jackpots"
+                }
+            ],
+            popularGames: [
                 {
                     id: "k3",
                     title: "K3 Lottery",
-                    image: "https://i.ibb.co/8D3fksgB/lotterycategory-20250108130042mug3.png"
+                    image: "https://i.ibb.co/8D3fksgB/lotterycategory-20250108130042mug3.png",
+                    description: "Classic K3 lottery game with daily draws"
                 },
                 {
                     id: "5d",
                     title: "5D Lottery",
-                    image: "https://i.ibb.co/Y7PSCL39/lotterycategory-20250108130049l1jl.png"
+                    image: "https://i.ibb.co/Y7PSCL39/lotterycategory-20250108130049l1jl.png",
+                    description: "5D lottery with huge jackpot prizes"
                 },
                 {
                     id: "trx",
                     title: "TRX Lottery",
-                    image: "https://i.ibb.co/b5K58SSr/lotterycategory-20250108130057tmo2.png"
+                    image: "https://i.ibb.co/b5K58SSr/lotterycategory-20250108130057tmo2.png",
+                    description: "TRX blockchain-based lottery game"
+                },
+                {
+                    id: "slots",
+                    title: "Mega Slots",
+                    image: "https://i.ibb.co/GfZgdQgD/lotterycategory-202501081300366bjd.png",
+                    description: "Exciting slot machine with big bonuses"
                 }
             ]
         };
@@ -933,7 +950,8 @@
         
         // Random game names for winners
         const randomGameNames = [
-            "WIN Go", "K3 Lottery", "5D Lottery", "TRX Lottery"
+            "WIN Go 30s", "WIN Go 1m", "WIN Go 3m", "WIN Go 5m",
+            "K3 Lottery", "5D Lottery", "TRX Lottery", "Mega Slots"
         ];
         
         // Auto slider functionality
@@ -990,15 +1008,37 @@
                 `;
             });
             
-            // Load popular games
-            const popularGames = document.getElementById('popular-games');
-            popularGames.innerHTML = '';
+            // Load WinGo games
+            const wingoGamesContainer = document.getElementById('wingo-games');
+            wingoGamesContainer.innerHTML = '';
             
-            gameData.popularGames.forEach(game => {
-                popularGames.innerHTML += `
-                    <div class="game-card" onclick="openGame('${game.id}')">
+            gameData.wingoGames.forEach(game => {
+                wingoGamesContainer.innerHTML += `
+                    <div class="game-card">
                         <div class="game-thumbnail" style="background-image: url('${game.image}')">
                             <div class="game-title">${game.title}</div>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-description">${game.description}</div>
+                            <button class="play-btn" onclick="openGame('${game.id}')">Play Now</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Load popular games
+            const popularGamesContainer = document.getElementById('popular-games');
+            popularGamesContainer.innerHTML = '';
+            
+            gameData.popularGames.forEach(game => {
+                popularGamesContainer.innerHTML += `
+                    <div class="game-card">
+                        <div class="game-thumbnail" style="background-image: url('${game.image}')">
+                            <div class="game-title">${game.title}</div>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-description">${game.description}</div>
+                            <button class="play-btn" onclick="openGame('${game.id}')">Play Now</button>
                         </div>
                     </div>
                 `;
@@ -1116,9 +1156,15 @@
         
         // Open game
         function openGame(gameId) {
-            const game = gameData.popularGames.find(g => g.id === gameId);
+            const game = [...gameData.wingoGames, ...gameData.popularGames].find(g => g.id === gameId);
             if (game) {
-                showToast(`Opening ${game.title}...`, 'success');
+                if (gameId.startsWith('wingo')) {
+                    // Redirect to WinGo game page
+                    window.location.href = `${gameId}.html`;
+                } else {
+                    showToast(`Opening ${game.title}...`, 'success');
+                    // For other games, you can add specific redirects here
+                }
             } else {
                 showToast('Game is loading...', 'info');
             }
@@ -1137,12 +1183,6 @@
             setTimeout(() => {
                 toast.remove();
             }, 3000);
-        }
-        
-        // Slider controls
-        function scrollSlider(sliderId, amount) {
-            const slider = document.getElementById(sliderId);
-            slider.scrollBy({ left: amount, behavior: 'smooth' });
         }
         
         // User menu toggle
