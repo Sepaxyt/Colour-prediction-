@@ -88,14 +88,19 @@
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
+            gap: 15px;
         }
         
         .wallet-btn {
-            padding: 8px 15px;
-            border-radius: 6px;
+            padding: 12px 20px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         .withdraw-btn {
@@ -104,10 +109,18 @@
             border: 1px solid var(--danger);
         }
         
+        .withdraw-btn:hover {
+            background-color: rgba(220, 53, 69, 0.3);
+        }
+        
         .deposit-btn {
             background-color: rgba(40, 167, 69, 0.2);
             color: var(--success);
             border: 1px solid var(--success);
+        }
+        
+        .deposit-btn:hover {
+            background-color: rgba(40, 167, 69, 0.3);
         }
         
         .welcome-message {
@@ -124,14 +137,18 @@
             margin-bottom: 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 10px;
+            gap: 5px;
         }
         
         .game-tab {
-            padding: 8px 15px;
+            padding: 8px 5px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s ease;
+            font-size: 0.8rem;
+            text-align: center;
+            flex: 1;
         }
         
         .game-tab.active {
@@ -178,17 +195,18 @@
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
+            gap: 10px;
         }
         
         .color-option {
-            padding: 10px 15px;
+            padding: 10px 5px;
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
             flex: 1;
-            margin: 0 5px;
+            font-size: 0.9rem;
         }
         
         .color-option.green {
@@ -223,6 +241,7 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
         
         .number-item:hover {
@@ -234,14 +253,18 @@
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
+            gap: 10px;
         }
         
         .bet-option {
-            padding: 8px 15px;
+            padding: 12px 5px;
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-align: center;
+            flex: 1;
+            font-size: 0.9rem;
         }
         
         .bet-option.big {
@@ -261,18 +284,18 @@
             flex-wrap: wrap;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 8px;
         }
         
         .random-option {
-            width: 15%;
-            padding: 8px 5px;
-            margin-bottom: 10px;
+            width: calc(33.33% - 5px);
+            padding: 10px 5px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 6px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
         
         .random-option:hover {
@@ -297,11 +320,14 @@
             font-size: 0.9rem;
             color: var(--gray);
             cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
         }
         
         .history-tab.active {
             color: var(--light);
             font-weight: 600;
+            background: rgba(255, 255, 255, 0.1);
         }
         
         .history-table {
@@ -604,7 +630,12 @@
             }
             
             .random-option {
-                width: 30%;
+                width: calc(50% - 5px);
+            }
+            
+            .game-tab {
+                font-size: 0.7rem;
+                padding: 8px 3px;
             }
         }
     </style>
@@ -623,8 +654,12 @@
         <div class="wallet-balance" id="wallet-balance">₹0.00</div>
         
         <div class="wallet-actions">
-            <div class="wallet-btn withdraw-btn" onclick="window.location.href='withdraw.html'">Withdraw</div>
-            <div class="wallet-btn deposit-btn" onclick="window.location.href='deposit.html'">Deposit</div>
+            <div class="wallet-btn withdraw-btn" onclick="window.location.href='withdraw.html'">
+                <i class="fas fa-rupee-sign"></i> Withdraw
+            </div>
+            <div class="wallet-btn deposit-btn" onclick="window.location.href='deposit.html'">
+                <i class="fas fa-rupee-sign"></i> Deposit
+            </div>
         </div>
         
         <div class="welcome-message">
@@ -634,13 +669,13 @@
         <hr>
         
         <div class="game-tabs">
-            <div class="game-tab active">WinGo 30sec</div>
-            <div class="game-tab">WinGo 1 Min</div>
-            <div class="game-tab">WinGo 3 Min</div>
-            <div class="game-tab">WinGo 5 Min</div>
+            <div class="game-tab active" onclick="changeGameMode('30sec')">WinGo 30sec</div>
+            <div class="game-tab" onclick="changeGameMode('1min')">WinGo 1 Min</div>
+            <div class="game-tab" onclick="changeGameMode('3min')">WinGo 3 Min</div>
+            <div class="game-tab" onclick="changeGameMode('5min')">WinGo 5 Min</div>
         </div>
         
-        <div class="game-info">
+        <div class="game-info" id="game-info">
             How to play WinGo 30sec
         </div>
         
@@ -810,6 +845,8 @@
         let isGameRunning = false;
         let resultModalTimeout;
         let userBets = {}; // Track user's bets for current period
+        let gameMode = '30sec'; // Default game mode
+        let gameDuration = 30; // Default duration in seconds
         
         // Check if user is logged in
         function checkAuth() {
@@ -832,6 +869,41 @@
                     setupBetResultListener();
                 });
             }
+        }
+        
+        // Change game mode
+        function changeGameMode(mode) {
+            gameMode = mode;
+            
+            // Update active tab
+            document.querySelectorAll('.game-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update game info
+            document.getElementById('game-info').textContent = `How to play WinGo ${mode}`;
+            
+            // Set game duration based on mode
+            switch(mode) {
+                case '30sec':
+                    gameDuration = 30;
+                    break;
+                case '1min':
+                    gameDuration = 60;
+                    break;
+                case '3min':
+                    gameDuration = 180;
+                    break;
+                case '5min':
+                    gameDuration = 300;
+                    break;
+                default:
+                    gameDuration = 30;
+            }
+            
+            // Restart the game with new settings
+            initGame();
         }
         
         // Get server time offset to sync client and server times
@@ -860,13 +932,13 @@
             // Clear any existing timer
             clearInterval(timerInterval);
             
-            // Get the last period number from database
-            database.ref('gameSettings/lastPeriodNumber').once('value').then((snapshot) => {
+            // Get the last period number from database for this game mode
+            database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).once('value').then((snapshot) => {
                 const lastPeriod = snapshot.val();
                 currentPeriodNumber = lastPeriod ? lastPeriod + 1 : 100000;
                 
                 // Check if we have an active period
-                database.ref('gameSettings/currentPeriod').once('value').then((periodSnapshot) => {
+                database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then((periodSnapshot) => {
                     const activePeriod = periodSnapshot.val();
                     
                     if (activePeriod && activePeriod.periodNumber === currentPeriodNumber) {
@@ -875,9 +947,9 @@
                         const now = getServerTime();
                         const elapsed = Math.floor((now - periodStartTime) / 1000);
                         
-                        if (elapsed < 30) {
+                        if (elapsed < gameDuration) {
                             // Current period is still active
-                            timeLeft = 30 - elapsed;
+                            timeLeft = gameDuration - elapsed;
                             currentPeriod = activePeriod.periodId;
                             document.getElementById('period-id').textContent = currentPeriod;
                             
@@ -895,13 +967,13 @@
                     } else {
                         // No active period, start a new one
                         generatePeriodId();
-                        timeLeft = 30;
+                        timeLeft = gameDuration;
                         startTimer();
                         
                         // Schedule next period
                         setTimeout(() => {
                             endCurrentPeriod();
-                        }, 30000);
+                        }, gameDuration * 1000);
                     }
                 });
             });
@@ -916,15 +988,15 @@
             generateResult().then(() => {
                 // Start new round
                 currentPeriodNumber++;
-                database.ref('gameSettings/lastPeriodNumber').set(currentPeriodNumber);
+                database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).set(currentPeriodNumber);
                 generatePeriodId();
-                timeLeft = 30;
+                timeLeft = gameDuration;
                 startTimer();
                 
                 // Schedule next period end
                 setTimeout(() => {
                     endCurrentPeriod();
-                }, 30000);
+                }, gameDuration * 1000);
                 
                 isGameRunning = false;
             });
@@ -942,11 +1014,12 @@
                 periodNumber: currentPeriodNumber,
                 periodId: currentPeriod,
                 startTime: getServerTime(),
-                status: 'open'
+                status: 'open',
+                gameMode: gameMode
             };
             
-            database.ref('gameSettings/currentPeriod').set(periodData);
-            database.ref('gamePeriods/' + currentPeriod).set(periodData);
+            database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
+            database.ref(`gamePeriods/${gameMode}/` + currentPeriod).set(periodData);
             
             // Reset user bets for new period
             userBets = {};
@@ -969,13 +1042,26 @@
         
         // Update timer display
         function updateTimerDisplay() {
-            document.getElementById('timer').textContent = `0:${String(timeLeft).padStart(2, '0')}`;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
         }
         
         // Generate random result for current period
         function generateResult() {
             return new Promise((resolve) => {
-                const winningNumber = Math.floor(Math.random() * 9); // 0-8
+                // 10% chance of winning for random bets
+                const isRandomWin = Math.random() < 0.1;
+                
+                let winningNumber;
+                if (isRandomWin) {
+                    // Force a win for random bets (0-8)
+                    winningNumber = Math.floor(Math.random() * 9);
+                } else {
+                    // Normal random number
+                    winningNumber = Math.floor(Math.random() * 9);
+                }
+                
                 let color;
                 
                 if(winningNumber === 0) {
@@ -996,10 +1082,11 @@
                     number: winningNumber,
                     color: color,
                     bigSmall: bigSmall,
-                    timestamp: getServerTime()
+                    timestamp: getServerTime(),
+                    gameMode: gameMode
                 };
                 
-                database.ref('gameResults/' + currentPeriod).set(resultData).then(() => {
+                database.ref(`gameResults/${gameMode}/` + currentPeriod).set(resultData).then(() => {
                     // Add to history
                     addToHistory(currentPeriod, winningNumber, bigSmall, color);
                     
@@ -1015,7 +1102,7 @@
         
         // Clean up old history (keep only last 5 records)
         function cleanupOldHistory() {
-            database.ref('gameResults').orderByChild('periodNumber').once('value').then((snapshot) => {
+            database.ref(`gameResults/${gameMode}`).orderByChild('periodNumber').once('value').then((snapshot) => {
                 const results = snapshot.val();
                 if (results) {
                     const resultsArray = Object.keys(results).map(key => ({
@@ -1030,7 +1117,7 @@
                     if (resultsArray.length > 5) {
                         const toDelete = resultsArray.slice(0, resultsArray.length - 5);
                         toDelete.forEach(item => {
-                            database.ref('gameResults/' + item.key).remove();
+                            database.ref(`gameResults/${gameMode}/` + item.key).remove();
                         });
                     }
                 }
@@ -1265,7 +1352,7 @@
         
         // Load game history from database
         function loadGameHistory() {
-            database.ref('gameResults').orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
+            database.ref(`gameResults/${gameMode}`).orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
@@ -1428,7 +1515,8 @@
                     timestamp: Date.now(),
                     status: 'pending',
                     processed: false,
-                    notificationShown: false
+                    notificationShown: false,
+                    gameMode: gameMode
                 });
                 
                 // Track user's bet for this period
@@ -1495,7 +1583,8 @@
                         timestamp: Date.now(),
                         status: 'pending',
                         processed: false,
-                        notificationShown: false
+                        notificationShown: false,
+                        gameMode: gameMode
                     });
                     
                     // Track user's bet for this period
