@@ -3,1384 +3,539 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DG CLUB</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>53 Club - WinGo 30sec</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
         :root {
-            --primary: #6a11cb;
-            --secondary: #4a6bff;
-            --dark: #121212;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
-            --info: #17a2b8;
-            --red: #ff4757;
-            --green: #2ed573;
-            --violet: #9c88ff;
+            --primary: #6a1b9a;
+            --secondary: #ff5722;
+            --green: #4CAF50;
+            --violet: #9C27B0;
+            --red: #F44336;
+            --dark: #222;
+            --light: #f9f9f9;
         }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
         body {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            color: var(--light);
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
             min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
             padding: 20px;
         }
-        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
         }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo-img {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-            margin-right: 10px;
-        }
-        
-        .logo h1 {
-            font-size: 1.5rem;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .wallet-balance {
-            font-size: 1.8rem;
-            font-weight: bold;
-            text-align: center;
-            margin: 15px 0;
-        }
-        
-        .wallet-actions {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-        
-        .wallet-btn {
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .withdraw-btn {
-            background-color: rgba(220, 53, 69, 0.2);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-        
-        .deposit-btn {
-            background-color: rgba(40, 167, 69, 0.2);
-            color: var(--success);
-            border: 1px solid var(--success);
-        }
-        
-        .welcome-message {
-            font-size: 0.9rem;
-            color: var(--gray);
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 0 10px;
-        }
-        
-        .game-tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 10px;
-        }
-        
-        .game-tab {
-            padding: 8px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .game-tab.active {
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
-        }
-        
-        .game-tab:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .game-info {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        
-        .timer-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .timer {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 20px;
-            border-radius: 8px;
-            min-width: 100px;
-            text-align: center;
-        }
-        
-        .period-id {
-            font-size: 0.8rem;
-            color: var(--gray);
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .color-options {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-        
-        .color-option {
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            flex: 1;
-            margin: 0 5px;
-        }
-        
-        .color-option.green {
-            background-color: rgba(46, 213, 115, 0.2);
-            color: var(--green);
-            border: 1px solid var(--green);
-        }
-        
-        .color-option.violet {
-            background-color: rgba(156, 136, 255, 0.2);
-            color: var(--violet);
-            border: 1px solid var(--violet);
-        }
-        
-        .color-option.red {
-            background-color: rgba(255, 71, 87, 0.2);
-            color: var(--red);
-            border: 1px solid var(--red);
-        }
-        
-        .number-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .number-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .number-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .bet-options {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-        
-        .bet-option {
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .bet-option.big {
-            background-color: rgba(74, 107, 255, 0.2);
+        h1 {
             color: var(--secondary);
-            border: 1px solid var(--secondary);
+            font-size: 28px;
+            margin-bottom: 5px;
         }
-        
-        .bet-option.small {
-            background-color: rgba(106, 17, 203, 0.2);
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-        
-        .random-options {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        
-        .random-option {
-            width: 15%;
-            padding: 8px 5px;
-            margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-        
-        .random-option:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        hr {
-            border: none;
-            height: 1px;
-            background-color: rgba(255, 255, 255, 0.1);
-            margin: 20px 0;
-        }
-        
-        .game-history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .history-tab {
-            font-size: 0.9rem;
-            color: var(--gray);
-            cursor: pointer;
-        }
-        
-        .history-tab.active {
-            color: var(--light);
-            font-weight: 600;
-        }
-        
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        
-        .history-table th {
-            text-align: left;
-            padding: 8px 5px;
-            color: var(--gray);
-            font-weight: 500;
-        }
-        
-        .history-table td {
-            padding: 8px 5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .dot {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        
-        .dot.red {
-            background-color: var(--red);
-        }
-        
-        .dot.green {
-            background-color: var(--green);
-        }
-        
-        .dot.violet {
-            background-color: var(--violet);
-        }
-        
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--success);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 1001;
-            display: flex;
-            align-items: center;
-            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
-        }
-        
-        @keyframes toastFadeIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-        
-        @keyframes toastFadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        
-        .toast.error {
-            background-color: var(--danger);
-        }
-        
-        .toast.warning {
-            background-color: var(--warning);
-            color: var(--dark);
-        }
-        
-        .toast.info {
-            background-color: var(--info);
-        }
-        
-        .toast-icon {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-        
-        /* Result Modal */
-        .result-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .result-content {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            padding: 25px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-        
-        .result-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .result-number {
-            font-size: 3rem;
+        .logo {
+            font-size: 14px;
+            color: var(--secondary);
             font-weight: bold;
-            margin: 20px 0;
+            letter-spacing: 1px;
         }
-        
-        .result-number.red {
-            color: var(--red);
-        }
-        
-        .result-number.green {
-            color: var(--green);
-        }
-        
-        .result-number.violet {
-            color: var(--violet);
-        }
-        
-        .result-win {
-            color: var(--success);
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-        }
-        
-        .result-loss {
-            color: var(--danger);
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-        }
-        
-        .close-result {
-            padding: 10px 20px;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
-        }
-        
-        /* Bet Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, var(--dark), #1a1a1a);
-            padding: 25px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-        
-        .modal-title {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: var(--light);
-            display: flex;
-            align-items: center;
-        }
-        
-        .modal-title i {
-            margin-right: 10px;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            color: var(--gray);
-            cursor: pointer;
-        }
-        
-        .bet-amount-container {
-            margin-bottom: 20px;
-        }
-        
-        .bet-amount-input {
-            width: 100%;
+        .timer-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: var(--light);
-            font-size: 1.2rem;
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
-        
-        .bet-buttons {
+        .timer {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--secondary);
+            margin: 10px 0;
+        }
+        .game-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
-        
-        .bet-button {
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
-            border-radius: 6px;
-            color: var(--light);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .bet-button:hover {
+        .number {
             background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .bet-button.active {
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
-        }
-        
-        .submit-bet {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
-            border: none;
             border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
+            padding: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            border: 2px solid transparent;
         }
-        
-        .submit-bet:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+        .number:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        
-        .submit-bet:disabled {
-            background: var(--gray);
-            cursor: not-allowed;
-            transform: none;
+        .number.selected {
+            border-color: var(--secondary);
+            box-shadow: 0 0 15px var(--secondary);
         }
-        
-        .bet-details {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-        }
-        
-        .bet-detail-item {
+        .green { color: var(--green); }
+        .violet { color: var(--violet); }
+        .red { color: var(--red); }
+        .bet-options {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            margin-bottom: 20px;
         }
-        
-        .bet-detail-item:last-child {
-            margin-bottom: 0;
-            font-weight: 600;
-            color: var(--success);
+        .bet-btn {
+            flex: 1;
+            margin: 0 5px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .number-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .random-option {
-                width: 30%;
-            }
+        .big {
+            background: var(--primary);
+            color: white;
+        }
+        .small {
+            background: var(--secondary);
+            color: white;
+        }
+        .multipliers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .multiplier {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .multiplier:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .multiplier.selected {
+            background: var(--secondary);
+            color: white;
+            box-shadow: 0 0 10px var(--secondary);
+        }
+        .bet-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .balance {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .current-bet {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        .history {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .history-tabs {
+            display: flex;
+        }
+        .history-tab {
+            padding: 5px 10px;
+            margin-right: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .history-tab.active {
+            background: var(--primary);
+        }
+        .history-items {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .win-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--green);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            display: none;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        .win-amount {
+            color: gold;
+            font-size: 28px;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">
-                <div class="logo-img">DG</div>
-                <h1>DG CLUB</h1>
-            </div>
-            
-            <div style="width: 40px;"></div>
+            <h1>53 Club - WinGo 30sec</h1>
+            <div class="logo">OFFICIAL GAME</div>
         </header>
-        
-        <div class="wallet-balance" id="wallet-balance">₹0.00</div>
-        
-        <div class="wallet-actions">
-            <a href="withdraw.html" class="wallet-btn withdraw-btn">Withdraw</a>
-            <a href="deposit.html" class="wallet-btn deposit-btn">Deposit</a>
-        </div>
-        
-        <div class="welcome-message">
-            Welcome to the DGCLUB Games! Greetings, Gamers and Enthusiasts! The DGCLUB
-        </div>
-        
-        <hr>
-        
-        <div class="game-tabs">
-            <div class="game-tab active">WinGo 30sec</div>
-            <div class="game-tab">WinGo 1 Min</div>
-            <div class="game-tab">WinGo 3 Min</div>
-            <div class="game-tab">WinGo 5 Min</div>
-        </div>
-        
-        <div class="game-info">
-            How to play WinGo 30sec
-        </div>
-        
+
         <div class="timer-container">
-            <div class="timer" id="timer">0:30</div>
+            <div>Next Round In</div>
+            <div class="timer">30</div>
         </div>
-        
-        <div class="period-id" id="period-id">Loading...</div>
-        
-        <div class="color-options">
-            <div class="color-option green" onclick="openBetModal('green', 'Green', 2.0)">
-                Green
-            </div>
-            <div class="color-option violet" onclick="openBetModal('violet', 'Violet', 4.5)">
-                Violet
-            </div>
-            <div class="color-option red" onclick="openBetModal('red', 'Red', 2.0)">
-                Red
-            </div>
+
+        <div class="game-board">
+            <div class="number green" data-number="0" data-color="green">0</div>
+            <div class="number violet" data-number="1" data-color="violet">1</div>
+            <div class="number red" data-number="2" data-color="red">2</div>
+            <div class="number green" data-number="3" data-color="green">3</div>
+            <div class="number violet" data-number="4" data-color="violet">4</div>
+            <div class="number red" data-number="5" data-color="red">5</div>
+            <div class="number green" data-number="6" data-color="green">6</div>
+            <div class="number violet" data-number="7" data-color="violet">7</div>
+            <div class="number red" data-number="8" data-color="red">8</div>
         </div>
-        
-        <div class="number-grid">
-            <div class="number-item" onclick="openBetModal('0', '0', 9.0)">0</div>
-            <div class="number-item" onclick="openBetModal('1', '1', 9.0)">1</div>
-            <div class="number-item" onclick="openBetModal('2', '2', 9.0)">2</div>
-            <div class="number-item" onclick="openBetModal('3', '3', 9.0)">3</div>
-            <div class="number-item" onclick="openBetModal('4', '4', 9.0)">4</div>
-            <div class="number-item" onclick="openBetModal('5', '5', 9.0)">5</div>
-            <div class="number-item" onclick="openBetModal('6', '6', 9.0)">6</div>
-            <div class="number-item" onclick="openBetModal('7', '7', 9.0)">7</div>
-            <div class="number-item" onclick="openBetModal('8', '8', 9.0)">8</div>
-        </div>
-        
+
         <div class="bet-options">
-            <div class="bet-option big" onclick="openBetModal('big', 'Big', 2.0)">Big</div>
-            <div class="bet-option small" onclick="openBetModal('small', 'Small', 2.0)">Small</div>
+            <button class="bet-btn big" id="big">BIG (5-8)</button>
+            <button class="bet-btn small" id="small">SMALL (0-4)</button>
         </div>
-        
-        <div style="margin: 20px 0;">
-            <h3>Random</h3>
-            <div class="random-options">
-                <div class="random-option" onclick="placeRandomBet(1)">X1</div>
-                <div class="random-option" onclick="placeRandomBet(5)">X5</div>
-                <div class="random-option" onclick="placeRandomBet(10)">X10</div>
-                <div class="random-option" onclick="placeRandomBet(20)">X20</div>
-                <div class="random-option" onclick="placeRandomBet(50)">X50</div>
-                <div class="random-option" onclick="placeRandomBet(100)">X100</div>
-            </div>
+
+        <div class="multipliers">
+            <div class="multiplier" data-multiplier="1">X1</div>
+            <div class="multiplier" data-multiplier="5">X5</div>
+            <div class="multiplier" data-multiplier="10">X10</div>
+            <div class="multiplier" data-multiplier="20">X20</div>
+            <div class="multiplier" data-multiplier="50">X50</div>
+            <div class="multiplier" data-multiplier="100">X100</div>
         </div>
-        
-        <hr>
-        
-        <div class="game-history-header">
-            <h3>Game history</h3>
-            <div>
-                <span class="history-tab active">Chart</span>
-                <span class="history-tab">Follow Strategy</span>
-            </div>
+
+        <div class="bet-info">
+            <div class="balance">Balance: ₹<span id="balance">5000</span></div>
+            <div class="current-bet">Bet: ₹<span id="current-bet">0</span></div>
         </div>
-        
-        <table class="history-table">
-            <thead>
-                <tr>
-                    <th>Period</th>
-                    <th>Number</th>
-                    <th>Big Small</th>
-                    <th>Color</th>
-                </tr>
-            </thead>
-            <tbody id="history-body">
-                <!-- History rows will be inserted here by JavaScript -->
-            </tbody>
-        </table>
-    </div>
-    
-    <!-- Bet Modal -->
-    <div class="modal" id="bet-modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="hideBetModal()">&times;</span>
-            <h3 class="modal-title"><i class="fas fa-coins"></i> Place Bet</h3>
-            
-            <div class="bet-amount-container">
-                <input type="number" class="bet-amount-input" id="bet-amount" placeholder="Enter amount" min="1" step="1">
-                
-                <div class="bet-buttons">
-                    <div class="bet-button" onclick="setBetAmount(10)">10</div>
-                    <div class="bet-button" onclick="setBetAmount(50)">50</div>
-                    <div class="bet-button" onclick="setBetAmount(100)">100</div>
-                    <div class="bet-button" onclick="setBetAmount(500)">500</div>
-                    <div class="bet-button" onclick="setBetAmount(1000)">1000</div>
-                    <div class="bet-button" onclick="setBetAmount(5000)">5000</div>
+
+        <div class="history">
+            <div class="history-header">
+                <h3>Game History</h3>
+                <div class="history-tabs">
+                    <div class="history-tab active" data-tab="chart">Chart</div>
+                    <div class="history-tab" data-tab="details">Details</div>
                 </div>
             </div>
-            
-            <div class="bet-details">
-                <div class="bet-detail-item">
-                    <span>Bet Type:</span>
-                    <span id="bet-type-display">-</span>
-                </div>
-                <div class="bet-detail-item">
-                    <span>Odds:</span>
-                    <span id="bet-odds-display">-</span>
-                </div>
-                <div class="bet-detail-item">
-                    <span>Possible Win:</span>
-                    <span id="bet-win-display">₹0.00</span>
-                </div>
-            </div>
-            
-            <button class="submit-bet" id="submit-bet" onclick="placeBet()" disabled>
-                Place Bet
-            </button>
-        </div>
-    </div>
-    
-    <!-- Result Modal -->
-    <div class="result-modal" id="result-modal">
-        <div class="result-content">
-            <h2 class="result-title">Round Result</h2>
-            <div class="result-number" id="result-number">0</div>
-            <div id="result-message">
-                <!-- Win/loss message will be inserted here -->
+            <div class="history-items" id="history-items">
+                <!-- History will be loaded here -->
             </div>
         </div>
     </div>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    
+
+    <div class="win-popup" id="win-popup">
+        <div>YOU WON!</div>
+        <div class="win-amount">+₹<span id="win-amount">0</span></div>
+    </div>
+
     <script>
-        // Initialize Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
-            authDomain: "club-b8f03.firebaseapp.com",
-            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
-            projectId: "club-b8f03",
-            storageBucket: "club-b8f03.appspot.com",
-            messagingSenderId: "115909846985",
-            appId: "1:115909846985:web:6f42fbb224935c513cea18",
-            measurementId: "G-S3M36PLB9Y"
+        // Game State
+        const gameState = {
+            balance: 5000,
+            currentBet: 0,
+            selectedNumber: null,
+            selectedColor: null,
+            selectedBigSmall: null,
+            multiplier: 1,
+            timer: 30,
+            isRunning: false,
+            currentPeriod: 1,
+            gameHistory: [],
+            timerInterval: null
         };
-        
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        
-        // Game state variables
-        let currentPeriod = "";
-        let currentPeriodNumber = 0;
-        let timeLeft = 30;
-        let timerInterval;
-        let gameInterval;
-        let currentBetType = "";
-        let currentBetOdds = 0;
-        let currentBetName = "";
-        let userBalance = 0;
-        let gameHistory = [];
-        let userBets = [];
-        let gameRunning = false;
-        let lastRoundTime = 0;
-        
-        // Check if user is logged in
-        const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
-        if(!userPhone) {
-            window.location.href = "index.html";
-        } else {
-            // Initialize the game
-            initGame();
-            
-            // Set up real-time balance listener
-            setupRealtimeUpdates();
-            
-            // Load game history
-            loadGameHistory();
-            
-            // Listen for user's bets
-            setupBetsListener();
-        }
-        
-        // Initialize the game
+
+        // DOM Elements
+        const timerEl = document.querySelector('.timer');
+        const balanceEl = document.getElementById('balance');
+        const currentBetEl = document.getElementById('current-bet');
+        const historyItemsEl = document.getElementById('history-items');
+        const winPopupEl = document.getElementById('win-popup');
+        const winAmountEl = document.getElementById('win-amount');
+
+        // Initialize Game
         function initGame() {
-            // Get the last period number from database
-            database.ref('gameSettings/lastPeriodNumber').once('value').then((snapshot) => {
-                const lastPeriod = snapshot.val();
-                currentPeriodNumber = lastPeriod ? lastPeriod : 1;
-                
-                // Get the last round time
-                database.ref('gameSettings/lastRoundTime').once('value').then((timeSnapshot) => {
-                    lastRoundTime = timeSnapshot.val() || 0;
+            // Number selection
+            document.querySelectorAll('.number').forEach(num => {
+                num.addEventListener('click', () => {
+                    // Clear previous selection
+                    document.querySelectorAll('.number').forEach(n => n.classList.remove('selected'));
                     
-                    // Calculate time since last round
-                    const timeSinceLastRound = Date.now() - lastRoundTime;
-                    const timeUntilNextRound = 30000 - (timeSinceLastRound % 30000);
-                    
-                    // Generate initial period ID
-                    generatePeriodId();
-                    
-                    // Start the countdown timer
-                    startTimer(timeUntilNextRound);
-                    
-                    // Start the game loop
-                    startGameLoop();
+                    // Set new selection
+                    num.classList.add('selected');
+                    gameState.selectedNumber = parseInt(num.dataset.number);
+                    gameState.selectedColor = num.dataset.color;
+                    updateBet();
                 });
             });
-        }
-        
-        // Start the game loop
-        function startGameLoop() {
-            if(gameRunning) return;
-            gameRunning = true;
-            
-            // Clear any existing interval
-            if(gameInterval) clearInterval(gameInterval);
-            
-            // Set up periodic game rounds
-            gameInterval = setInterval(() => {
-                // Generate result for current period
-                generateResult();
-                
-                // Start new round
-                currentPeriodNumber++;
-                database.ref('gameSettings/lastPeriodNumber').set(currentPeriodNumber);
-                database.ref('gameSettings/lastRoundTime').set(Date.now());
-                generatePeriodId();
-                timeLeft = 30;
-                updateTimerDisplay();
-                
-                // Clear user bets for new round
-                userBets = [];
-            }, 30000);
-        }
-        
-        // Generate period ID based on sequential number
-        function generatePeriodId() {
-            // Pad the period number with leading zeros to make it 8 digits
-            const paddedPeriod = String(currentPeriodNumber).padStart(8, '0');
-            currentPeriod = paddedPeriod;
-            document.getElementById('period-id').textContent = currentPeriod;
-            
-            // Save the new period to database
-            database.ref('gamePeriods/' + currentPeriod).set({
-                periodNumber: currentPeriodNumber,
-                startTime: Date.now(),
-                status: 'open'
+
+            // Big/Small selection
+            document.getElementById('big').addEventListener('click', () => {
+                document.getElementById('big').classList.add('selected');
+                document.getElementById('small').classList.remove('selected');
+                gameState.selectedBigSmall = 'big';
+                updateBet();
             });
+
+            document.getElementById('small').addEventListener('click', () => {
+                document.getElementById('small').classList.add('selected');
+                document.getElementById('big').classList.remove('selected');
+                gameState.selectedBigSmall = 'small';
+                updateBet();
+            });
+
+            // Multiplier selection
+            document.querySelectorAll('.multiplier').forEach(multi => {
+                multi.addEventListener('click', () => {
+                    // Clear previous selection
+                    document.querySelectorAll('.multiplier').forEach(m => m.classList.remove('selected'));
+                    
+                    // Set new selection
+                    multi.classList.add('selected');
+                    gameState.multiplier = parseInt(multi.dataset.multiplier);
+                    updateBet();
+                });
+            });
+
+            // History tabs
+            document.querySelectorAll('.history-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.history-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    renderHistory(tab.dataset.tab);
+                });
+            });
+
+            // Start the game
+            startGame();
         }
-        
-        // Start the countdown timer
-        function startTimer(initialTime = 30000) {
-            clearInterval(timerInterval);
+
+        // Update bet amount
+        function updateBet() {
+            if (gameState.selectedNumber !== null || gameState.selectedBigSmall !== null) {
+                gameState.currentBet = 10 * gameState.multiplier;
+                currentBetEl.textContent = gameState.currentBet;
+            } else {
+                gameState.currentBet = 0;
+                currentBetEl.textContent = '0';
+            }
+        }
+
+        // Start game timer
+        function startGame() {
+            if (gameState.isRunning) return;
             
-            // Calculate initial time left
-            timeLeft = Math.ceil(initialTime / 1000);
-            updateTimerDisplay();
+            gameState.isRunning = true;
+            gameState.timer = 30;
+            timerEl.textContent = gameState.timer;
             
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimerDisplay();
+            gameState.timerInterval = setInterval(() => {
+                gameState.timer--;
+                timerEl.textContent = gameState.timer;
                 
-                if(timeLeft <= 0) {
-                    clearInterval(timerInterval);
+                if (gameState.timer <= 0) {
+                    endRound();
                 }
             }, 1000);
         }
-        
-        // Update timer display
-        function updateTimerDisplay() {
-            const seconds = timeLeft % 60;
-            document.getElementById('timer').textContent = `0:${String(seconds).padStart(2, '0')}`;
-        }
-        
-        // Generate random result for current period
-        function generateResult() {
-            const winningNumber = Math.floor(Math.random() * 9); // 0-8 (removed 9)
-            let color;
+
+        // End current round
+        function endRound() {
+            clearInterval(gameState.timerInterval);
             
-            if(winningNumber === 0) {
-                color = 'green';
-            } else if(winningNumber === 5) {
-                color = 'violet';
-            } else if([1, 3, 7].includes(winningNumber)) {
-                color = 'red';
-            } else {
-                color = 'green';
+            // Generate random result
+            const resultNumber = Math.floor(Math.random() * 9);
+            let resultColor;
+            if ([0, 3, 6].includes(resultNumber)) resultColor = 'green';
+            else if ([1, 4, 7].includes(resultNumber)) resultColor = 'violet';
+            else resultColor = 'red';
+            
+            const resultBigSmall = resultNumber >= 5 ? 'big' : 'small';
+            
+            // Create history entry
+            const historyEntry = {
+                period: gameState.currentPeriod,
+                timestamp: new Date().toLocaleTimeString(),
+                number: resultNumber,
+                color: resultColor,
+                bigSmall: resultBigSmall,
+                result: 'lose',
+                winAmount: 0
+            };
+            
+            // Check for wins
+            let winAmount = 0;
+            
+            // Number win (9x payout)
+            if (gameState.selectedNumber !== null && gameState.selectedNumber === resultNumber) {
+                winAmount += gameState.currentBet * 9;
             }
             
-            const bigSmall = winningNumber >= 5 ? 'big' : 'small';
+            // Color win (2x payout)
+            if (gameState.selectedColor !== null && gameState.selectedColor === resultColor) {
+                winAmount += gameState.currentBet * 2;
+            }
             
-            // Save result to database
-            database.ref('gameResults/' + currentPeriod).set({
-                periodNumber: currentPeriodNumber,
-                number: winningNumber,
-                color: color,
-                bigSmall: bigSmall,
-                timestamp: Date.now()
-            }).then(() => {
-                // Clean up old results (keep only last 10)
-                database.ref('gameResults').orderByChild('periodNumber').limitToLast(10).once('value', (snapshot) => {
-                    const results = snapshot.val();
-                    if(results) {
-                        const toDelete = [];
-                        snapshot.forEach((childSnapshot) => {
-                            if(childSnapshot.val().periodNumber < currentPeriodNumber - 9) {
-                                toDelete.push(childSnapshot.ref.remove());
-                            }
-                        });
-                        Promise.all(toDelete);
-                    }
-                });
-            });
+            // Big/Small win (1.5x payout)
+            if (gameState.selectedBigSmall !== null && gameState.selectedBigSmall === resultBigSmall) {
+                winAmount += gameState.currentBet * 1.5;
+            }
+            
+            // Update game state if won
+            if (winAmount > 0) {
+                historyEntry.result = 'win';
+                historyEntry.winAmount = winAmount;
+                gameState.balance += winAmount;
+                balanceEl.textContent = gameState.balance;
+                
+                // Show win popup
+                winAmountEl.textContent = winAmount;
+                winPopupEl.style.display = 'block';
+                setTimeout(() => {
+                    winPopupEl.style.display = 'none';
+                }, 3000);
+            }
             
             // Add to history
-            addToHistory(currentPeriod, winningNumber, bigSmall === 'big' ? 'Big' : 'Small', color);
+            gameState.gameHistory.unshift(historyEntry);
             
-            // Show result to user
-            showResult(winningNumber, color, bigSmall);
-        }
-        
-        // Show result modal with win/loss information
-        function showResult(number, color, bigSmall) {
-            document.getElementById('result-number').textContent = number;
+            // Render history
+            renderHistory('chart');
             
-            // Set color for the number
-            document.getElementById('result-number').className = 'result-number ' + color;
+            // Reset for next round
+            gameState.currentPeriod++;
+            resetSelections();
             
-            // Check if user had any bets in this round
-            if(userBets.length === 0) {
-                document.getElementById('result-message').innerHTML = `
-                    <p>No bets placed this round</p>
-                `;
-            } else {
-                let totalWin = 0;
-                let winCount = 0;
-                let lossCount = 0;
-                
-                // Calculate wins and losses
-                userBets.forEach(bet => {
-                    if(
-                        (bet.type === 'number' && parseInt(bet.value) === number) ||
-                        (bet.type === 'color' && bet.value === color) ||
-                        (bet.type === 'bigSmall' && bet.value === bigSmall)
-                    ) {
-                        const winAmount = bet.amount * bet.odds;
-                        totalWin += winAmount;
-                        winCount++;
-                        
-                        // Update the bet in database as won
-                        database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + bet.id).update({
-                            status: 'won',
-                            winAmount: winAmount,
-                            processed: true
-                        });
-                    } else {
-                        lossCount++;
-                        
-                        // Update the bet in database as lost
-                        database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + bet.id).update({
-                            status: 'lost',
-                            winAmount: 0,
-                            processed: true
-                        });
-                    }
-                });
-                
-                // Update user balance if they won
-                if(totalWin > 0) {
-                    database.ref('users/' + userPhone + '/balance').transaction((balance) => {
-                        return (balance || 0) + totalWin;
-                    });
-                    
-                    // Update total wins
-                    database.ref('users/' + userPhone + '/totalWins').transaction((wins) => {
-                        return (wins || 0) + winCount;
-                    });
-                }
-                
-                // Show result message
-                if(winCount > 0 && lossCount > 0) {
-                    document.getElementById('result-message').innerHTML = `
-                        <div class="result-win">You won ₹${totalWin.toFixed(2)} on ${winCount} bet(s)!</div>
-                        <div class="result-loss">Lost ${lossCount} bet(s)</div>
-                    `;
-                } else if(winCount > 0) {
-                    document.getElementById('result-message').innerHTML = `
-                        <div class="result-win">Congratulations! You won ₹${totalWin.toFixed(2)} on ${winCount} bet(s)!</div>
-                    `;
-                } else {
-                    document.getElementById('result-message').innerHTML = `
-                        <div class="result-loss">Sorry, you lost all ${lossCount} bets this round</div>
-                    `;
-                }
-            }
-            
-            // Show the result modal
-            document.getElementById('result-modal').style.display = 'flex';
-            
-            // Auto-hide after 3 seconds
+            // Start next round after delay
             setTimeout(() => {
-                document.getElementById('result-modal').style.display = 'none';
+                gameState.timer = 30;
+                timerEl.textContent = gameState.timer;
+                startGame();
             }, 3000);
         }
-        
-        // Add result to history table
-        function addToHistory(period, number, bigSmall, color) {
-            const historyRow = document.createElement('tr');
+
+        // Reset selections
+        function resetSelections() {
+            gameState.selectedNumber = null;
+            gameState.selectedColor = null;
+            gameState.selectedBigSmall = null;
+            gameState.currentBet = 0;
+            currentBetEl.textContent = '0';
             
-            // Create color dot
-            let colorDot = '';
-            if(color === 'red') {
-                colorDot = '<span class="dot red"></span>';
-            } else if(color === 'green') {
-                colorDot = '<span class="dot green"></span>';
-            } else if(color === 'violet') {
-                colorDot = '<span class="dot violet"></span>';
-            }
-            
-            historyRow.innerHTML = `
-                <td>${period}</td>
-                <td>${number}</td>
-                <td>${bigSmall}</td>
-                <td>${colorDot}</td>
-            `;
-            
-            // Insert at the beginning of the table
-            const historyBody = document.getElementById('history-body');
-            if(historyBody.firstChild) {
-                historyBody.insertBefore(historyRow, historyBody.firstChild);
-            } else {
-                historyBody.appendChild(historyRow);
-            }
-            
-            // Keep only the last 10 history items
-            while(historyBody.children.length > 10) {
-                historyBody.removeChild(historyBody.lastChild);
-            }
-            
-            // Add to local history array
-            gameHistory.unshift({
-                period: period,
-                number: number,
-                bigSmall: bigSmall,
-                color: color
-            });
-            
-            if(gameHistory.length > 10) {
-                gameHistory.pop();
-            }
+            // Clear UI selections
+            document.querySelectorAll('.number').forEach(n => n.classList.remove('selected'));
+            document.getElementById('big').classList.remove('selected');
+            document.getElementById('small').classList.remove('selected');
         }
-        
-        // Set up listener for user's bets
-        function setupBetsListener() {
-            database.ref('bets/' + currentPeriod + '/' + userPhone).on('value', (snapshot) => {
-                const bets = snapshot.val();
-                userBets = [];
-                
-                if(bets) {
-                    Object.keys(bets).forEach(betId => {
-                        userBets.push({
-                            id: betId,
-                            ...bets[betId]
-                        });
-                    });
-                }
-            });
-        }
-        
-        // Load game history from database
-        function loadGameHistory() {
-            database.ref('gameResults').orderByChild('periodNumber').limitToLast(10).once('value').then((snapshot) => {
-                const results = snapshot.val();
-                
-                if(results) {
-                    // Convert to array and sort by period number
-                    const resultsArray = Object.keys(results).map(key => {
-                        return {
-                            period: key,
-                            ...results[key]
-                        };
-                    }).sort((a, b) => b.periodNumber - a.periodNumber);
-                    
-                    resultsArray.forEach(result => {
-                        addToHistory(
-                            result.period, 
-                            result.number, 
-                            result.bigSmall === 'big' ? 'Big' : 'Small', 
-                            result.color
-                        );
-                    });
-                }
-            });
-        }
-        
-        // Set up real-time balance updates
-        function setupRealtimeUpdates() {
-            database.ref('users/' + userPhone + '/balance').on('value', (snapshot) => {
-                const balance = snapshot.val() || 0;
-                userBalance = balance;
-                updateBalanceDisplay(balance);
-            });
-        }
-        
-        // Update balance display
-        function updateBalanceDisplay(balance) {
-            const formattedBalance = parseFloat(balance).toLocaleString('en-IN', {
-                style: 'currency',
-                currency: 'INR',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-            document.getElementById('wallet-balance').textContent = formattedBalance;
-        }
-        
-        // Open bet modal
-        function openBetModal(type, name, odds) {
-            currentBetType = type;
-            currentBetName = name;
-            currentBetOdds = odds;
+
+        // Render history
+        function renderHistory(view) {
+            historyItemsEl.innerHTML = '';
             
-            // Set bet type display
-            let displayType = '';
-            if(type === 'green' || type === 'red' || type === 'violet') {
-                displayType = 'Color: ' + name;
-            } else if(type === 'big' || type === 'small') {
-                displayType = 'Big/Small: ' + name;
-            } else {
-                displayType = 'Number: ' + name;
-            }
-            
-            document.getElementById('bet-type-display').textContent = displayType;
-            document.getElementById('bet-odds-display').textContent = odds.toFixed(1) + 'x';
-            
-            // Reset bet amount
-            document.getElementById('bet-amount').value = '';
-            document.getElementById('bet-win-display').textContent = '₹0.00';
-            document.getElementById('submit-bet').disabled = true;
-            
-            // Show modal
-            document.getElementById('bet-modal').style.display = 'flex';
-            document.getElementById('bet-amount').focus();
-        }
-        
-        // Hide bet modal
-        function hideBetModal() {
-            document.getElementById('bet-modal').style.display = 'none';
-        }
-        
-        // Set bet amount from quick buttons
-        function setBetAmount(amount) {
-            document.getElementById('bet-amount').value = amount;
-            calculateWinAmount();
-        }
-        
-        // Calculate possible win amount
-        function calculateWinAmount() {
-            const amount = parseFloat(document.getElementById('bet-amount').value);
-            
-            if(amount && amount > 0) {
-                const winAmount = amount * currentBetOdds;
-                document.getElementById('bet-win-display').textContent = '₹' + winAmount.toFixed(2);
-                document.getElementById('submit-bet').disabled = false;
-            } else {
-                document.getElementById('bet-win-display').textContent = '₹0.00';
-                document.getElementById('submit-bet').disabled = true;
-            }
-        }
-        
-        // Place a bet
-        function placeBet() {
-            const amount = parseFloat(document.getElementById('bet-amount').value);
-            
-            if(!amount || amount <= 0) {
-                showToast('Please enter a valid bet amount', 'error');
+            if (gameState.gameHistory.length === 0) {
+                historyItemsEl.innerHTML = '<div class="history-item">No history yet</div>';
                 return;
             }
             
-            if(amount > userBalance) {
-                showToast('Insufficient balance', 'error');
-                return;
+            if (view === 'chart') {
+                // Chart view - compact
+                gameState.gameHistory.slice(0, 10).forEach(entry => {
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerHTML = `
+                        <span>#${entry.period}</span>
+                        <span style="color: ${getColorCode(entry.color)}">${entry.number}</span>
+                        <span>${entry.bigSmall}</span>
+                        <span style="color: ${entry.result === 'win' ? 'var(--green)' : 'var(--red)'}">
+                            ${entry.result === 'win' ? 'WIN +₹' + entry.winAmount : 'LOSE'}
+                        </span>
+                    `;
+                    historyItemsEl.appendChild(item);
+                });
+            } else {
+                // Detailed view
+                gameState.gameHistory.slice(0, 10).forEach(entry => {
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerHTML = `
+                        <div>
+                            <strong>Period:</strong> #${entry.period}<br>
+                            <strong>Time:</strong> ${entry.timestamp}<br>
+                            <strong>Number:</strong> <span style="color: ${getColorCode(entry.color)}">${entry.number} (${entry.color})</span><br>
+                            <strong>Big/Small:</strong> ${entry.bigSmall}<br>
+                            <strong>Result:</strong> <span style="color: ${entry.result === 'win' ? 'var(--green)' : 'var(--red)'}">
+                                ${entry.result.toUpperCase()} ${entry.result === 'win' ? '+₹' + entry.winAmount : ''}
+                            </span>
+                        </div>
+                    `;
+                    historyItemsEl.appendChild(item);
+                });
             }
-            
-            // Deduct amount from balance
-            database.ref('users/' + userPhone + '/balance').transaction((balance) => {
-                return (balance || 0) - amount;
-            }).then(() => {
-                // Generate unique bet ID
-                const betId = 'BET' + Date.now();
-                
-                // Determine bet type category
-                let typeCategory = '';
-                let betValue = currentBetType;
-                
-                if(['green', 'red', 'violet'].includes(currentBetType)) {
-                    typeCategory = 'color';
-                } else if(['big', 'small'].includes(currentBetType)) {
-                    typeCategory = 'bigSmall';
-                    betValue = currentBetType.toLowerCase();
-                } else {
-                    typeCategory = 'number';
-                }
-                
-                // Save bet to database
-                database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + betId).set({
-                    amount: amount,
-                    type: typeCategory,
-                    value: betValue,
-                    odds: currentBetOdds,
-                    timestamp: Date.now(),
-                    status: 'pending',
-                    processed: false
-                });
-                
-                // Add to local bets array
-                userBets.push({
-                    id: betId,
-                    amount: amount,
-                    type: typeCategory,
-                    value: betValue,
-                    odds: currentBetOdds
-                });
-                
-                // Create notification
-                createNotification(
-                    userPhone,
-                    'Bet Placed',
-                    `You placed a ₹${amount.toFixed(2)} bet on ${currentBetName}`,
-                    'info'
-                );
-                
-                showToast(`Bet placed successfully!`, 'success');
-                hideBetModal();
-            });
         }
-        
-        // Place random bets
-        function placeRandomBet(count) {
-            if(count <= 0) return;
-            
-            const betTypes = [
-                {type: '0', name: '0', odds: 9.0, category: 'number'},
-                {type: '1', name: '1', odds: 9.0, category: 'number'},
-                {type: '2', name: '2', odds: 9.0, category: 'number'},
-                {type: '3', name: '3', odds: 9.0, category: 'number'},
-                {type: '4', name: '4', odds: 9.0, category: 'number'},
-                {type: '5', name: '5', odds: 9.0, category: 'number'},
-                {type: '6', name: '6', odds: 9.0, category: 'number'},
-                {type: '7', name: '7', odds: 9.0, category: 'number'},
-                {type: '8', name: '8', odds: 9.0, category: 'number'},
-                {type: 'green', name: 'Green', odds: 2.0, category: 'color'},
-                {type: 'red', name: 'Red', odds: 2.0, category: 'color'},
-                {type: 'violet', name: 'Violet', odds: 4.5, category: 'color'},
-                {type: 'big', name: 'Big', odds: 2.0, category: 'bigSmall'},
-                {type: 'small', name: 'Small', odds: 2.0, category: 'bigSmall'}
-            ];
-            
-            const amounts = [10, 20, 50, 100, 200, 500];
-            
-            let totalAmount = 0;
-            const bets = [];
-            
-            for(let i = 0; i < count; i++) {
-                const randomType = betTypes[Math.floor(Math.random() * betTypes.length)];
-                const randomAmount = amounts[Math.floor(Math.random() * amounts.length)];
-                
-                bets.push({
-                    type: randomType.category,
-                    value: randomType.type === 'big' || randomType.type === 'small' ? randomType.type.toLowerCase() : randomType.type,
-                    name: randomType.name,
-                    odds: randomType.odds,
-                    amount: randomAmount
-                });
-                
-                totalAmount += randomAmount;
+
+        // Helper function to get color code
+        function getColorCode(color) {
+            switch(color) {
+                case 'green': return 'var(--green)';
+                case 'violet': return 'var(--violet)';
+                case 'red': return 'var(--red)';
+                default: return 'white';
             }
-            
-            if(totalAmount > userBalance) {
-                showToast('Insufficient balance for random bets', 'error');
-                return;
-            }
-            
-            // Deduct total amount from balance
-            database.ref('users/' + userPhone + '/balance').transaction((balance) => {
-                return (balance || 0) - totalAmount;
-            }).then(() => {
-                // Save all bets
-                bets.forEach((bet) => {
-                    const betId = 'BET' + Date.now() + Math.floor(Math.random() * 1000);
-                    
-                    database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + betId).set({
-                        amount: bet.amount,
-                        type: bet.type,
-                        value: bet.value,
-                        odds: bet.odds,
-                        timestamp: Date.now(),
-                        status: 'pending',
-                        processed: false
-                    });
-                    
-                    // Add to local bets array
-                    userBets.push({
-                        id: betId,
-                        amount: bet.amount,
-                        type: bet.type,
-                        value: bet.value,
-                        odds: bet.odds
-                    });
-                });
-                
-                showToast(`Placed ${count} random bets totaling ₹${totalAmount.toFixed(2)}`, 'success');
-            });
         }
-        
-        // Create notification for user
-        function createNotification(userId, title, message, type) {
-            const notificationId = 'NOT' + Date.now();
-            
-            database.ref('notifications/' + userId + '/' + notificationId).set({
-                title: title,
-                message: message,
-                type: type,
-                timestamp: Date.now(),
-                read: false
-            });
-        }
-        
-        // Show toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
-                ${message}
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-        
-        // Event listeners
-        document.getElementById('bet-amount').addEventListener('input', calculateWinAmount);
-        
-        // Initialize balance display
-        updateBalanceDisplay(0);
+
+        // Initialize the game when loaded
+        window.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
 </html>
-
