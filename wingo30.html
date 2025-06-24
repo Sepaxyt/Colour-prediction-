@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>53 CLUB</title>
+    <title>53 CLUB - Wingo 30sec</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -645,7 +645,7 @@
         <header>
             <div class="logo">
                 <div class="logo-img">53</div>
-                <h1>53 CLUB</h1>
+                <h1>53 CLUB - Wingo 30sec</h1>
             </div>
             
             <div style="width: 40px;"></div>
@@ -663,20 +663,13 @@
         </div>
         
         <div class="welcome-message">
-            Welcome to the 53 CLUB Games! Greetings, Gamers and Enthusiasts!
+            Welcome to Wingo 30sec! Place your bets before time runs out!
         </div>
         
         <hr>
         
-        <div class="game-tabs">
-            <div class="game-tab active" onclick="changeGameMode('30sec')">WinGo 30sec</div>
-            <div class="game-tab" onclick="changeGameMode('1min')">WinGo 1 Min</div>
-            <div class="game-tab" onclick="changeGameMode('3min')">WinGo 3 Min</div>
-            <div class="game-tab" onclick="changeGameMode('5min')">WinGo 5 Min</div>
-        </div>
-        
         <div class="game-info" id="game-info">
-            How to play WinGo 30sec
+            How to play Wingo 30sec
         </div>
         
         <div class="timer-container">
@@ -730,10 +723,6 @@
         
         <div class="game-history-header">
             <h3>Game history</h3>
-            <div>
-                <span class="history-tab active">Chart</span>
-                <span class="history-tab">Follow Strategy</span>
-            </div>
         </div>
         
         <table class="history-table">
@@ -832,7 +821,7 @@
         
         // Game state variables
         let currentPeriod = "";
-        let currentPeriodNumber = 0;
+        let currentPeriodNumber = 220; // Starting period number for 30sec game
         let timeLeft = 30;
         let timerInterval;
         let currentBetType = "";
@@ -845,33 +834,9 @@
         let isGameRunning = false;
         let resultModalTimeout;
         let userBets = {}; // Track user's bets for current period
-        let gameMode = '30sec'; // Default game mode
-        let gameDuration = 30; // Default duration in seconds
+        const gameMode = '30sec'; // Fixed for this variant
+        const gameDuration = 30; // Fixed duration in seconds
         let gameStartTime = 0;
-        
-        // Game mode configurations
-        const gameModes = {
-            '30sec': {
-                duration: 30,
-                startPeriodNumber: 220,
-                prefix: '30S'
-            },
-            '1min': {
-                duration: 60,
-                startPeriodNumber: 320,
-                prefix: '1M'
-            },
-            '3min': {
-                duration: 180,
-                startPeriodNumber: 430,
-                prefix: '3M'
-            },
-            '5min': {
-                duration: 300,
-                startPeriodNumber: 530,
-                prefix: '5M'
-            }
-        };
         
         // Check if user is logged in
         function checkAuth() {
@@ -894,24 +859,6 @@
                     setupBetResultListener();
                 });
             }
-        }
-        
-        // Change game mode
-        function changeGameMode(mode) {
-            gameMode = mode;
-            gameDuration = gameModes[mode].duration;
-            
-            // Update active tab
-            document.querySelectorAll('.game-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Update game info
-            document.getElementById('game-info').textContent = `How to play WinGo ${mode}`;
-            
-            // Initialize the game with new mode
-            initGame();
         }
         
         // Get server time offset to sync client and server times
@@ -941,7 +888,7 @@
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
-            const prefix = gameModes[gameMode].prefix;
+            const prefix = '30S'; // Prefix for 30sec game
             
             // Format: YYYYMMDD + prefix + period number (padded to 3 digits)
             return `${year}${month}${day}${prefix}${String(periodNumber).padStart(3, '0')}`;
@@ -953,12 +900,12 @@
             clearInterval(timerInterval);
             
             // Get the last period number from database for this game mode
-            database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).once('value').then((snapshot) => {
+            database.ref(`gameSettings/lastPeriodNumber_30sec`).once('value').then((snapshot) => {
                 const lastPeriod = snapshot.val();
-                currentPeriodNumber = lastPeriod ? lastPeriod + 1 : gameModes[gameMode].startPeriodNumber;
+                currentPeriodNumber = lastPeriod ? lastPeriod + 1 : 220; // Default to 220 if no previous period
                 
                 // Check if we have an active period
-                database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then((periodSnapshot) => {
+                database.ref(`gameSettings/currentPeriod_30sec`).once('value').then((periodSnapshot) => {
                     const activePeriod = periodSnapshot.val();
                     
                     if (activePeriod && activePeriod.periodNumber === currentPeriodNumber) {
@@ -995,13 +942,13 @@
                             periodId: currentPeriod,
                             startTime: getServerTime(),
                             status: 'open',
-                            gameMode: gameMode
+                            gameMode: '30sec'
                         };
                         
                         gameStartTime = periodData.startTime;
                         
-                        database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
-                        database.ref(`gamePeriods/${gameMode}/` + currentPeriod).set(periodData);
+                        database.ref(`gameSettings/currentPeriod_30sec`).set(periodData);
+                        database.ref(`gamePeriods/30sec/` + currentPeriod).set(periodData);
                         
                         // Reset user bets for new period
                         userBets = {};
@@ -1028,7 +975,7 @@
             generateResult().then(() => {
                 // Increment period number
                 currentPeriodNumber++;
-                database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).set(currentPeriodNumber);
+                database.ref(`gameSettings/lastPeriodNumber_30sec`).set(currentPeriodNumber);
                 
                 // Generate new period ID
                 currentPeriod = generatePeriodId(currentPeriodNumber);
@@ -1040,13 +987,13 @@
                     periodId: currentPeriod,
                     startTime: getServerTime(),
                     status: 'open',
-                    gameMode: gameMode
+                    gameMode: '30sec'
                 };
                 
                 gameStartTime = periodData.startTime;
                 
-                database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
-                database.ref(`gamePeriods/${gameMode}/` + currentPeriod).set(periodData);
+                database.ref(`gameSettings/currentPeriod_30sec`).set(periodData);
+                database.ref(`gamePeriods/30sec/` + currentPeriod).set(periodData);
                 
                 // Reset user bets for new period
                 userBets = {};
@@ -1122,10 +1069,10 @@
                     color: color,
                     bigSmall: bigSmall,
                     timestamp: getServerTime(),
-                    gameMode: gameMode
+                    gameMode: '30sec'
                 };
                 
-                database.ref(`gameResults/${gameMode}/` + currentPeriod).set(resultData).then(() => {
+                database.ref(`gameResults/30sec/` + currentPeriod).set(resultData).then(() => {
                     // Add to history
                     addToHistory(currentPeriod, winningNumber, bigSmall, color);
                     
@@ -1141,7 +1088,7 @@
         
         // Clean up old history (keep only last 5 records)
         function cleanupOldHistory() {
-            database.ref(`gameResults/${gameMode}`).orderByChild('periodNumber').once('value').then((snapshot) => {
+            database.ref(`gameResults/30sec`).orderByChild('periodNumber').once('value').then((snapshot) => {
                 const results = snapshot.val();
                 if (results) {
                     const resultsArray = Object.keys(results).map(key => ({
@@ -1156,7 +1103,7 @@
                     if (resultsArray.length > 5) {
                         const toDelete = resultsArray.slice(0, resultsArray.length - 5);
                         toDelete.forEach(item => {
-                            database.ref(`gameResults/${gameMode}/` + item.key).remove();
+                            database.ref(`gameResults/30sec/` + item.key).remove();
                         });
                     }
                 }
@@ -1391,7 +1338,7 @@
         
         // Load game history from database
         function loadGameHistory() {
-            database.ref(`gameResults/${gameMode}`).orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
+            database.ref(`gameResults/30sec`).orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
@@ -1555,7 +1502,7 @@
                     status: 'pending',
                     processed: false,
                     notificationShown: false,
-                    gameMode: gameMode
+                    gameMode: '30sec'
                 });
                 
                 // Track user's bet for this period
@@ -1623,7 +1570,7 @@
                         status: 'pending',
                         processed: false,
                         notificationShown: false,
-                        gameMode: gameMode
+                        gameMode: '30sec'
                     });
                     
                     // Track user's bet for this period
