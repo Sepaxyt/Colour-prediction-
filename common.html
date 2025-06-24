@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>53 Club - WinGo 30s</title>
+    <title>53 CLUB - WinGo 30s</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -225,8 +225,9 @@
         
         .multiplier-grid {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 8px;
+            margin-bottom: 10px;
         }
         
         .multiplier-btn {
@@ -597,6 +598,57 @@
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
+        
+        .amount-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .amount-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .amount-display {
+            flex-grow: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .rules-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        
+        .rules-checkbox input {
+            margin-right: 8px;
+        }
+        
+        .rules-link {
+            color: var(--highlight);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        .bet-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -651,27 +703,30 @@
             <div class="multiplier-title">Select Amount</div>
             <div class="multiplier-grid">
                 <div class="multiplier-btn" onclick="setMultiplier(1)">₹1</div>
-                <div class="multiplier-btn" onclick="setMultiplier(5)">₹5</div>
                 <div class="multiplier-btn" onclick="setMultiplier(10)">₹10</div>
-                <div class="multiplier-btn" onclick="setMultiplier(20)">₹20</div>
-                <div class="multiplier-btn" onclick="setMultiplier(50)">₹50</div>
                 <div class="multiplier-btn" onclick="setMultiplier(100)">₹100</div>
+                <div class="multiplier-btn" onclick="setMultiplier(1000)">₹1000</div>
             </div>
-            <div class="custom-amount" id="custom-amount">
-                <input type="number" class="custom-amount-input" id="custom-amount-input" placeholder="Enter amount in ₹" min="1">
-                <button class="custom-amount-btn" onclick="setCustomAmount()">Set Amount</button>
+            
+            <div class="amount-controls">
+                <button class="amount-btn" onclick="adjustAmount(-1)">-</button>
+                <div class="amount-display" id="amount-display">₹1</div>
+                <button class="amount-btn" onclick="adjustAmount(1)">+</button>
             </div>
-            <div style="text-align: center; margin-top: 5px;">
-                <a href="#" style="color: var(--highlight); font-size: 12px;" onclick="toggleCustomAmount()">Custom Amount</a>
+            
+            <div class="rules-checkbox">
+                <input type="checkbox" id="agree-rules" checked>
+                <label for="agree-rules">I agree to <span class="rules-link" onclick="showRules()">Pre-sale rules</span></label>
             </div>
-        </div>
-        
-        <div class="bet-confirm" id="bet-confirm">
-            <div class="confirm-title">Confirm Bet</div>
-            <div class="confirm-amount" id="confirm-amount">₹1.00 on Big</div>
+            
+            <div class="bet-summary">
+                <div>Total amount</div>
+                <div id="total-amount">₹1.00</div>
+            </div>
+            
             <div class="confirm-btns">
                 <button class="confirm-btn cancel" onclick="cancelBet()">Cancel</button>
-                <button class="confirm-btn submit" onclick="placeBet()">Submit</button>
+                <button class="confirm-btn submit" onclick="placeBet()">Confirm</button>
             </div>
         </div>
         
@@ -743,6 +798,24 @@
         </div>
     </div>
     
+    <!-- Rules Popup -->
+    <div class="result-popup" id="rules-popup" style="max-width: 350px;">
+        <div class="result-header">
+            <div class="result-title">Pre-sale Rules</div>
+            <button class="result-close" onclick="closeRulesPopup()">&times;</button>
+        </div>
+        <div class="result-content" style="font-size: 12px; line-height: 1.5;">
+            <p>1. All bets are final and cannot be canceled once placed.</p>
+            <p>2. Results are determined by the system and are non-negotiable.</p>
+            <p>3. Winnings will be credited to your account balance immediately.</p>
+            <p>4. The platform reserves the right to cancel any bet in case of system errors.</p>
+            <p>5. Users must be 18+ years old to participate.</p>
+        </div>
+        <div class="result-footer">
+            <button class="result-ok" onclick="closeRulesPopup()">I Understand</button>
+        </div>
+    </div>
+    
     <div class="overlay" id="overlay"></div>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -775,7 +848,7 @@
         let secondsRemaining = 30;
         let isBettingClosed = false;
         const GAME_TYPE = 'wingo30';
-        const HISTORY_LIMIT = 10; // Only show last 10 history items
+        const HISTORY_LIMIT = 10;
         
         // Check if user is logged in
         const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
@@ -1074,6 +1147,18 @@
             document.getElementById('overlay').classList.remove('show');
         }
         
+        // Show rules popup
+        function showRules() {
+            document.getElementById('rules-popup').classList.add('show');
+            document.getElementById('overlay').classList.add('show');
+        }
+        
+        // Close rules popup
+        function closeRulesPopup() {
+            document.getElementById('rules-popup').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+        }
+        
         // Add result to history
         function addToHistory(period, number, size, color) {
             const historyItem = {
@@ -1243,7 +1328,6 @@
             
             // Show multiplier section
             document.getElementById('multiplier-section').style.display = 'block';
-            document.getElementById('bet-confirm').style.display = 'none';
             
             // Reset multiplier to 1
             setMultiplier(1);
@@ -1273,7 +1357,6 @@
             
             // Show multiplier section
             document.getElementById('multiplier-section').style.display = 'block';
-            document.getElementById('bet-confirm').style.display = 'none';
             
             // Reset multiplier to 1
             setMultiplier(1);
@@ -1282,6 +1365,7 @@
         // Set bet multiplier
         function setMultiplier(multiplier) {
             currentMultiplier = multiplier;
+            updateAmountDisplay();
             
             // Update UI
             document.querySelectorAll('.multiplier-btn').forEach(el => {
@@ -1289,68 +1373,33 @@
             });
             
             document.querySelectorAll('.multiplier-btn').forEach((el, index) => {
-                const values = [1, 5, 10, 20, 50, 100];
+                const values = [1, 10, 100, 1000];
                 if(values[index] === multiplier) {
                     el.classList.add('active');
                 }
             });
-            
-            // Show confirm section
-            document.getElementById('bet-confirm').style.display = 'block';
-            
-            // Update confirm amount display
-            updateConfirmAmountDisplay();
         }
         
-        // Update confirm amount display
-        function updateConfirmAmountDisplay() {
-            let betType = '';
-            if(selectedOption === 'number') {
-                betType = `Number ${selectedNumber}`;
-            } else {
-                betType = selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1);
-            }
+        // Adjust amount by increment/decrement
+        function adjustAmount(change) {
+            let newAmount = currentMultiplier + change;
             
-            const amount = (currentMultiplier).toLocaleString('en-IN', {
-                style: 'currency',
-                currency: 'INR',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
+            // Ensure amount doesn't go below 1
+            if(newAmount < 1) newAmount = 1;
             
-            document.getElementById('confirm-amount').textContent = `${amount} on ${betType}`;
-        }
-        
-        // Toggle custom amount input
-        function toggleCustomAmount() {
-            const customAmountDiv = document.getElementById('custom-amount');
-            if(customAmountDiv.style.display === 'block') {
-                customAmountDiv.style.display = 'none';
-            } else {
-                customAmountDiv.style.display = 'block';
-                document.getElementById('custom-amount-input').focus();
-            }
-        }
-        
-        // Set custom amount
-        function setCustomAmount() {
-            const amountInput = document.getElementById('custom-amount-input');
-            const amount = parseFloat(amountInput.value);
-            
-            if(isNaN(amount) || amount <= 0) {
-                showToast('Please enter a valid amount', 'error');
-                return;
-            }
-            
-            if(amount > userBalance) {
+            // Ensure amount doesn't exceed user balance
+            if(newAmount > userBalance) {
                 showToast('Insufficient balance', 'error');
-                return;
+                newAmount = userBalance;
             }
             
-            currentMultiplier = amount;
-            updateConfirmAmountDisplay();
-            document.getElementById('custom-amount').style.display = 'none';
-            amountInput.value = '';
+            setMultiplier(newAmount);
+        }
+        
+        // Update amount display
+        function updateAmountDisplay() {
+            document.getElementById('amount-display').textContent = `₹${currentMultiplier}`;
+            document.getElementById('total-amount').textContent = `₹${currentMultiplier.toFixed(2)}`;
         }
         
         // Place bet
@@ -1362,6 +1411,11 @@
             
             if(!selectedOption && !selectedNumber) {
                 showToast('Please select a bet option', 'error');
+                return;
+            }
+            
+            if(!document.getElementById('agree-rules').checked) {
+                showToast('Please agree to the rules', 'error');
                 return;
             }
             
@@ -1418,9 +1472,7 @@
             });
             
             document.getElementById('multiplier-section').style.display = 'none';
-            document.getElementById('bet-confirm').style.display = 'none';
-            document.getElementById('custom-amount').style.display = 'none';
-            document.getElementById('custom-amount-input').value = '';
+            updateAmountDisplay();
         }
         
         // Show game history tab
