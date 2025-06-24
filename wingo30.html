@@ -408,6 +408,7 @@
             max-width: 400px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
         }
         
         .modal-title {
@@ -569,7 +570,7 @@
             <div class="timer" id="timer">0:30</div>
         </div>
         
-        <div class="period-id" id="period-id">20250624100050230</div>
+        <div class="period-id" id="period-id">Loading...</div>
         
         <div class="color-options">
             <div class="color-option green" onclick="openBetModal('green', 'Green', 2.0)">
@@ -700,6 +701,7 @@
         
         // Game state variables
         let currentPeriod = "";
+        let currentPeriodNumber = 0;
         let timeLeft = 30;
         let timerInterval;
         let currentBetType = "";
@@ -725,44 +727,42 @@
         
         // Initialize the game
         function initGame() {
-            // Generate initial period ID based on current Kolkata time
-            generatePeriodId();
-            
-            // Start the countdown timer
-            startTimer();
-            
-            // Set up periodic game rounds
-            setInterval(() => {
-                // Generate result for current period
-                generateResult();
+            // Get the last period number from database
+            database.ref('gameSettings/lastPeriodNumber').once('value').then((snapshot) => {
+                const lastPeriod = snapshot.val();
+                currentPeriodNumber = lastPeriod ? lastPeriod : 1;
                 
-                // Start new round
+                // Generate initial period ID
                 generatePeriodId();
-                timeLeft = 30;
-                updateTimerDisplay();
-            }, 30000);
+                
+                // Start the countdown timer
+                startTimer();
+                
+                // Set up periodic game rounds
+                setInterval(() => {
+                    // Generate result for current period
+                    generateResult();
+                    
+                    // Start new round
+                    currentPeriodNumber++;
+                    database.ref('gameSettings/lastPeriodNumber').set(currentPeriodNumber);
+                    generatePeriodId();
+                    timeLeft = 30;
+                    updateTimerDisplay();
+                }, 30000);
+            });
         }
         
-        // Generate period ID based on current Kolkata time
+        // Generate period ID based on sequential number
         function generatePeriodId() {
-            const now = new Date();
-            // Kolkata is UTC+5:30
-            const kolkataOffset = 330 * 60 * 1000;
-            const kolkataTime = new Date(now.getTime() + kolkataOffset);
-            
-            const year = kolkataTime.getUTCFullYear();
-            const month = String(kolkataTime.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(kolkataTime.getUTCDate()).padStart(2, '0');
-            const hours = String(kolkataTime.getUTCHours()).padStart(2, '0');
-            const minutes = String(kolkataTime.getUTCMinutes()).padStart(2, '0');
-            const seconds = String(kolkataTime.getUTCSeconds()).padStart(2, '0');
-            const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
-            
-            currentPeriod = `${year}${month}${day}${hours}${minutes}${seconds}${milliseconds}`;
+            // Pad the period number with leading zeros to make it 8 digits
+            const paddedPeriod = String(currentPeriodNumber).padStart(8, '0');
+            currentPeriod = paddedPeriod;
             document.getElementById('period-id').textContent = currentPeriod;
             
             // Save the new period to database
             database.ref('gamePeriods/' + currentPeriod).set({
+                periodNumber: currentPeriodNumber,
                 startTime: Date.now(),
                 status: 'open'
             });
@@ -808,6 +808,7 @@
             
             // Save result to database
             database.ref('gameResults/' + currentPeriod).set({
+                periodNumber: currentPeriodNumber,
                 number: winningNumber,
                 color: color,
                 bigSmall: bigSmall,
@@ -825,9 +826,6 @@
         function addToHistory(period, number, bigSmall, color) {
             const historyRow = document.createElement('tr');
             
-            // Format period for display (show only last 8 digits)
-            const displayPeriod = period.slice(-8);
-            
             // Create color dot
             let colorDot = '';
             if(color === 'red') {
@@ -839,7 +837,7 @@
             }
             
             historyRow.innerHTML = `
-                <td>${displayPeriod}</td>
+                <td>${period}</td>
                 <td>${number}</td>
                 <td>${bigSmall}</td>
                 <td>${colorDot}</td>
@@ -909,20 +907,20 @@
                             if(isWinner) {
                                 database.ref('users/' + userId + '/balance').transaction((balance) => {
                                     return (balance || 0) + winAmount;
+                                }).then(() => {
+                                    // Update total wins
+                                    database.ref('users/' + userId + '/totalWins').transaction((wins) => {
+                                        return (wins || 0) + 1;
+                                    });
+                                    
+                                    // Create notification for user
+                                    createNotification(
+                                        userId,
+                                        'Bet Won!',
+                                        `You won ₹${winAmount.toFixed(2)} on period ${currentPeriod}`,
+                                        'success'
+                                    );
                                 });
-                                
-                                // Update total wins
-                                database.ref('users/' + userId + '/totalWins').transaction((wins) => {
-                                    return (wins || 0) + 1;
-                                });
-                                
-                                // Create notification for user
-                                createNotification(
-                                    userId,
-                                    'Bet Won!',
-                                    `You won ₹${winAmount} on period ${currentPeriod}`,
-                                    'success'
-                                );
                             }
                         });
                     });
@@ -932,13 +930,20 @@
         
         // Load game history from database
         function loadGameHistory() {
-            database.ref('gameResults').orderByKey().limitToLast(10).once('value').then((snapshot) => {
+            database.ref('gameResults').orderByChild('periodNumber').limitToLast(10).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
-                    Object.keys(results).sort().reverse().forEach((period) => {
-                        const result = results[period];
-                        addToHistory(period, result.number, result.bigSmall, result.color);
+                    // Convert to array and sort by period number
+                    const resultsArray = Object.keys(results).map(key => {
+                        return {
+                            period: key,
+                            ...results[key]
+                        };
+                    }).sort((a, b) => b.periodNumber - a.periodNumber);
+                    
+                    resultsArray.forEach(result => {
+                        addToHistory(result.period, result.number, result.bigSmall, result.color);
                     });
                 }
             });
@@ -1064,7 +1069,7 @@
                 createNotification(
                     userPhone,
                     'Bet Placed',
-                    `You placed a ₹${amount} bet on ${currentBetName}`,
+                    `You placed a ₹${amount.toFixed(2)} bet on ${currentBetName}`,
                     'info'
                 );
                 
@@ -1139,7 +1144,7 @@
                     });
                 });
                 
-                showToast(`Placed ${count} random bets totaling ₹${totalAmount}`, 'success');
+                showToast(`Placed ${count} random bets totaling ₹${totalAmount.toFixed(2)}`, 'success');
             });
         }
         
