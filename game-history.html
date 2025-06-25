@@ -287,72 +287,18 @@
                 <table class="history-table">
                     <thead>
                         <tr>
+                            <th>Period</th>
                             <th>Game</th>
                             <th>Bet Type</th>
                             <th>Amount</th>
                             <th>Result</th>
                             <th>Win/Loss</th>
                             <th>Status</th>
+                            <th>Time</th>
                         </tr>
                     </thead>
                     <tbody id="history-body">
-                        <!-- Sample data -->
-                        <tr>
-                            <td>WinGo 30s</td>
-                            <td>Big</td>
-                            <td>¥1.00</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>WinGo 30s</td>
-                            <td>Green</td>
-                            <td>¥1101.00</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>WinGo 30s</td>
-                            <td>Number 6</td>
-                            <td>¥1.00</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>WinGo 30s</td>
-                            <td>Green</td>
-                            <td>¥20.00</td>
-                            <td class="result-cell"><span class="color-indicator color-green"></span>Green</td>
-                            <td class="win-amount">+¥194.04</td>
-                            <td><span class="status-badge status-won">Won</span></td>
-                        </tr>
-                        <tr>
-                            <td>WinGo 30s</td>
-                            <td>Small</td>
-                            <td>¥10.00</td>
-                            <td class="result-cell"><span class="color-indicator color-red"></span>Red</td>
-                            <td class="loss-amount">-¥10.00</td>
-                            <td><span class="status-badge status-lost">Lost</span></td>
-                        </tr>
-                        <tr>
-                            <td>WinGo 30s</td>
-                            <td>Big</td>
-                            <td>¥10.00</td>
-                            <td class="result-cell"><span class="color-indicator color-green"></span>Green</td>
-                            <td class="win-amount">+¥19.60</td>
-                            <td><span class="status-badge status-won">Won</span></td>
-                        </tr>
-                        <tr>
-                            <td>WinGo 30s</td>
-                            <td>Number 9</td>
-                            <td>¥100.00</td>
-                            <td class="result-cell">7 | <span class="color-indicator color-red"></span>Red</td>
-                            <td class="loss-amount">-¥100.00</td>
-                            <td><span class="status-badge status-lost">Lost</span></td>
-                        </tr>
+                        <!-- Data will be loaded dynamically -->
                     </tbody>
                 </table>
             </div>
@@ -403,8 +349,11 @@
         if(!userPhone) {
             window.location.href = "index.html";
         } else {
-            // Load user bets
-            loadUserBets();
+            // Load user bets when page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                loadUserBets();
+                setupRealtimeUpdates();
+            });
         }
         
         // Load all user bets from database
@@ -416,12 +365,20 @@
                     const gameType = gameTypeSnapshot.key;
                     
                     gameTypeSnapshot.forEach(periodSnapshot => {
+                        const periodId = periodSnapshot.key;
+                        
                         periodSnapshot.forEach(userSnapshot => {
                             if(userSnapshot.key === userPhone) {
                                 userSnapshot.forEach(betSnapshot => {
                                     const bet = betSnapshot.val();
                                     bet.id = betSnapshot.key;
                                     bet.gameType = gameType;
+                                    bet.periodId = periodId;
+                                    
+                                    // Add timestamp if not exists (for older bets)
+                                    if(!bet.timestamp) {
+                                        bet.timestamp = periodSnapshot.child('timestamp').val() || Date.now();
+                                    }
                                     
                                     allBets.push(bet);
                                 });
@@ -494,9 +451,9 @@
                         resultDisplay = `
                             <div class="result-cell">
                                 ${bet.result.number ? bet.result.number + ' | ' : ''}
-                                <span class="color-indicator ${colorClass}"></span>
-                                ${bet.result.color} 
-                                ${bet.result.size ? ' | ' + bet.result.size : ''}
+                                ${colorClass ? `<span class="color-indicator ${colorClass}"></span>` : ''}
+                                ${bet.result.color ? bet.result.color.charAt(0).toUpperCase() + bet.result.color.slice(1) : ''} 
+                                ${bet.result.size ? ' | ' + bet.result.size.charAt(0).toUpperCase() + bet.result.size.slice(1) : ''}
                             </div>
                         `;
                     }
@@ -505,10 +462,10 @@
                     let winLossDisplay = '-';
                     let winLossClass = '';
                     if(bet.status === 'won') {
-                        winLossDisplay = `+¥${bet.winAmount.toFixed(2)}`;
+                        winLossDisplay = `+¥${(bet.winAmount || 0).toFixed(2)}`;
                         winLossClass = 'win-amount';
                     } else if(bet.status === 'lost') {
-                        winLossDisplay = `-¥${bet.amount.toFixed(2)}`;
+                        winLossDisplay = `-¥${(bet.amount || 0).toFixed(2)}`;
                         winLossClass = 'loss-amount';
                     }
                     
@@ -532,13 +489,20 @@
                         default: gameName = bet.gameType;
                     }
                     
+                    // Format time
+                    const betTime = new Date(bet.timestamp);
+                    const timeString = betTime.toLocaleTimeString();
+                    const dateString = betTime.toLocaleDateString();
+                    
                     row.innerHTML = `
+                        <td>${bet.periodId || '-'}</td>
                         <td>${gameName}</td>
                         <td>${betType}</td>
-                        <td>¥${bet.amount.toFixed(2)}</td>
+                        <td>¥${(bet.amount || 0).toFixed(2)}</td>
                         <td>${resultDisplay}</td>
                         <td class="${winLossClass}">${winLossDisplay}</td>
                         <td>${statusBadge}</td>
+                        <td>${timeString}<br>${dateString}</td>
                     `;
                     
                     historyBody.appendChild(row);
@@ -556,6 +520,31 @@
             });
         }
         
+        // Update pagination buttons
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredBets.length / itemsPerPage);
+            const paginationDiv = document.querySelector('.pagination');
+            
+            // Clear existing buttons (keep prev/next)
+            while(paginationDiv.children.length > 2) {
+                paginationDiv.removeChild(paginationDiv.lastChild);
+            }
+            
+            // Add page buttons
+            const startPage = Math.max(1, currentPage - 1);
+            const endPage = Math.min(totalPages, startPage + 2);
+            
+            for(let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => displayPage(i);
+                
+                // Insert before the next button
+                paginationDiv.insertBefore(pageBtn, paginationDiv.lastChild);
+            }
+        }
+        
         // Change page
         function changePage(delta) {
             const newPage = currentPage + delta;
@@ -563,6 +552,7 @@
             
             if(newPage >= 1 && newPage <= totalPages) {
                 displayPage(newPage);
+                updatePagination();
             }
         }
         
@@ -584,17 +574,16 @@
         
         // Set up real-time updates
         function setupRealtimeUpdates() {
+            // Listen for new bets
             database.ref('bets').on('child_added', () => {
                 loadUserBets();
             });
             
+            // Listen for bet changes (like status updates)
             database.ref('bets').on('child_changed', () => {
                 loadUserBets();
             });
         }
-        
-        // Initialize real-time updates
-        setupRealtimeUpdates();
     </script>
 </body>
 </html>
