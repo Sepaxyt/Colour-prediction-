@@ -1044,35 +1044,9 @@
                     
                     // Process bets for this period
                     processBets(winningNumber, color, bigSmall).then(() => {
-                        // Clean up old history (keep only last 5)
-                        cleanupOldHistory();
                         resolve();
                     });
                 });
-            });
-        }
-        
-        // Clean up old history (keep only last 5 records)
-        function cleanupOldHistory() {
-            database.ref(`gameResults/1min`).orderByChild('periodNumber').once('value').then((snapshot) => {
-                const results = snapshot.val();
-                if (results) {
-                    const resultsArray = Object.keys(results).map(key => ({
-                        key: key,
-                        periodNumber: results[key].periodNumber
-                    }));
-                    
-                    // Sort by period number (ascending)
-                    resultsArray.sort((a, b) => a.periodNumber - b.periodNumber);
-                    
-                    // Delete all but the last 5
-                    if (resultsArray.length > 5) {
-                        const toDelete = resultsArray.slice(0, resultsArray.length - 5);
-                        toDelete.forEach(item => {
-                            database.ref(`gameResults/1min/` + item.key).remove();
-                        });
-                    }
-                }
             });
         }
         
@@ -1304,7 +1278,7 @@
         
         // Load game history from database
         function loadGameHistory() {
-            database.ref(`gameResults/1min`).orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
+            database.ref(`gameResults/1min`).orderByChild('timestamp').limitToLast(5).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
@@ -1312,14 +1286,14 @@
                     document.getElementById('history-body').innerHTML = '';
                     gameHistory = [];
                     
-                    // Convert to array and sort by period number (descending)
+                    // Convert to array and sort by timestamp (descending)
                     const resultsArray = Object.keys(results).map(key => ({
-                        key: key,
+                        periodId: key,
                         ...results[key]
-                    })).sort((a, b) => b.periodNumber - a.periodNumber);
+                    })).sort((a, b) => b.timestamp - a.timestamp);
                     
                     resultsArray.forEach(result => {
-                        addToHistory(result.key, result.number, result.bigSmall, result.color);
+                        addToHistory(result.periodId, result.number, result.bigSmall, result.color);
                     });
                 } else {
                     // No results yet, show waiting message
