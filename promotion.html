@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 Club - Promotion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .balance {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-right: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .balance i {
+            margin-right: 8px;
+            color: var(--success);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .user-menu {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            padding: 10px 0;
+            min-width: 180px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            z-index: 100;
+        }
+        
+        .user-menu.active {
+            display: block;
+        }
+        
+        .user-menu a {
+            display: block;
+            padding: 8px 15px;
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .user-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--secondary);
+        }
+        
+        .user-menu a i {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Promotion Styles */
+        .promotion-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .promotion-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .referral-card {
+            background: rgba(74, 107, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .referral-code {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .referral-code input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+        
+        .referral-code button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .referral-code button:hover {
+            background: var(--primary);
+        }
+        
+        .referral-link {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .referral-link input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+        
+        .referral-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 1.8rem;
+            color: var(--success);
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .referral-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .referral-table th, .referral-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .referral-table th {
+            background: rgba(74, 107, 255, 0.2);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .referral-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .qr-code-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .nav-item.active, .nav-item:hover {
+            color: var(--secondary);
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .referral-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .referral-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .user-info {
+                margin-top: 15px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .balance {
+                margin-right: 0;
+            }
+            
+            .referral-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .referral-code, .referral-link {
+                flex-direction: column;
+            }
+            
+            .referral-code input, .referral-link input {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .referral-code button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-img">53</div>
+                <h1>53 Club</h1>
+            </div>
+            
+            <div class="user-info">
+                <div class="balance">
+                    <i class="fas fa-wallet"></i>
+                    <span id="user-balance">₹0.00</span>
+                </div>
+                
+                <div class="user-avatar" id="user-avatar" onclick="toggleUserMenu()">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+                
+                <div class="user-menu" id="user-menu">
+                    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    <a href="wallet.html"><i class="fas fa-wallet"></i> Wallet</a>
+                    <a href="transactions.html"><i class="fas fa-exchange-alt"></i> Transactions</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </header>
+        
+        <div class="promotion-section">
+            <h2>Agency</h2>
+            
+            <div class="referral-card">
+                <h3>Copy invitation code</h3>
+                <div class="referral-code">
+                    <input type="text" id="referral-code-input" readonly>
+                    <button onclick="copyReferralCode()">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                
+                <div class="referral-link">
+                    <input type="text" id="referral-link-input" readonly>
+                    <button onclick="copyReferralLink()">
+                        <i class="fas fa-copy"></i> Copy Link
+                    </button>
+                </div>
+                
+                <div class="qr-code-container">
+                    <div class="qr-code" id="qr-code"></div>
+                    <p>Scan QR to share your referral link</p>
+                </div>
+            </div>
+            
+            <div class="referral-stats">
+                <div class="stat-card">
+                    <h3 id="today-commission">₹0</h3>
+                    <p>Today's Commission</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="total-commission">₹0</h3>
+                    <p>Total Commission</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="direct-referrals">0</h3>
+                    <p>Direct Referrals</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="team-referrals">0</h3>
+                    <p>Team Referrals</p>
+                </div>
+            </div>
+            
+            <h3>Subordinate data</h3>
+            <table class="referral-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Registration Date</th>
+                        <th>First Deposit</th>
+                        <th>Total Deposit</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="referrals-table-body">
+                    <!-- Referrals will be loaded dynamically -->
+                </tbody>
+            </table>
+            
+            <h3 style="margin-top: 30px;">Commission detail</h3>
+            <table class="referral-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Referral</th>
+                        <th>Amount</th>
+                        <th>Commission</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="commissions-table-body">
+                    <!-- Commissions will be loaded dynamically -->
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 30px;">
+                <h3>Invitation rules</h3>
+                <p style="color: var(--gray); margin-top: 10px; line-height: 1.6;">
+                    - Earn 10% commission on your direct referrals' first deposit<br>
+                    - Earn 5% commission on your team referrals' first deposit<br>
+                    - Get 2% of all deposits made by your referrals<br>
+                    - Higher levels get higher commission rates<br>
+                    - Commissions are credited instantly and can be withdrawn anytime
+                </p>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <h3>Agent line customer service</h3>
+                <p style="color: var(--gray); margin-top: 10px; line-height: 1.6;">
+                    For any questions about our referral program, please contact our customer service:<br>
+                    Email: agents@53club.com<br>
+                    Telegram: @53ClubAgents<br>
+                    WhatsApp: +91 9876543210
+                </p>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <h3>Rebate ratio</h3>
+                <p style="color: var(--gray); margin-top: 10px; line-height: 1.6;">
+                    Your current rebate level: <span id="rebate-level" style="color: var(--success);">Basic</span><br>
+                    Your current rebate ratio: <span id="rebate-ratio" style="color: var(--success);">10%</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="main.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="game-history.html" class="nav-item">
+            <i class="fas fa-history"></i>
+            <span>Activity</span>
+        </a>
+        <a href="promotion.html" class="nav-item active">
+            <i class="fas fa-gift"></i>
+            <span>Promotion</span>
+        </a>
+        <a href="wallet.html" class="nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Account</span>
+        </a>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.firebasestorage.app",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Check if user is logged in
+        const userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
+        if(!userPhone) {
+            window.location.href = "index.html";
+        }
+        
+        // Generate a random referral code if not exists
+        function generateReferralCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        // Load user data and referrals
+        function loadUserData() {
+            database.ref('users/' + userPhone).once('value').then((snapshot) => {
+                const userData = snapshot.val() || {};
+                
+                // Set or generate referral code
+                let referralCode = userData.referralCode;
+                if (!referralCode) {
+                    referralCode = generateReferralCode();
+                    database.ref('users/' + userPhone + '/referralCode').set(referralCode);
+                }
+                
+                // Update UI
+                document.getElementById('referral-code-input').value = referralCode;
+                const referralLink = window.location.origin + '/index.html?ref=' + referralCode;
+                document.getElementById('referral-link-input').value = referralLink;
+                
+                // Generate QR code
+                QRCode.toCanvas(document.getElementById('qr-code'), referralLink, {
+                    width: 150,
+                    margin: 1,
+                    color: {
+                        dark: '#000000',
+                        light: '#ffffff'
+                    }
+                }, function (error) {
+                    if (error) console.error(error);
+                });
+                
+                // Load balance
+                const balance = userData.balance || 0;
+                document.getElementById('user-balance').textContent = '₹' + balance.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                
+                // Load referral stats
+                loadReferralStats(userPhone, referralCode);
+                loadReferrals(userPhone);
+                loadCommissions(userPhone);
+                
+                // Load rebate level
+                const rebateLevel = userData.rebateLevel || 'Basic';
+                const rebateRatio = getRebateRatio(rebateLevel);
+                document.getElementById('rebate-level').textContent = rebateLevel;
+                document.getElementById('rebate-ratio').textContent = rebateRatio + '%';
+                
+            }).catch((error) => {
+                console.error("Error loading user data:", error);
+            });
+        }
+        
+        // Get rebate ratio based on level
+        function getRebateRatio(level) {
+            const levels = {
+                'Basic': 10,
+                'Silver': 15,
+                'Gold': 20,
+                'Platinum': 25,
+                'Diamond': 30
+            };
+            return levels[level] || 10;
+        }
+        
+        // Load referral statistics
+        function loadReferralStats(userPhone, referralCode) {
+            // Load today's commission
+            const today = new Date().toISOString().split('T')[0];
+            database.ref('commissions/' + userPhone).orderByChild('date').equalTo(today).once('value').then((snapshot) => {
+                let todayCommission = 0;
+                snapshot.forEach((childSnapshot) => {
+                    todayCommission += parseFloat(childSnapshot.val().amount) || 0;
+                });
+                document.getElementById('today-commission').textContent = '₹' + todayCommission.toFixed(2);
+            });
+            
+            // Load total commission
+            database.ref('commissions/' + userPhone).once('value').then((snapshot) => {
+                let totalCommission = 0;
+                snapshot.forEach((childSnapshot) => {
+                    totalCommission += parseFloat(childSnapshot.val().amount) || 0;
+                });
+                document.getElementById('total-commission').textContent = '₹' + totalCommission.toFixed(2);
+            });
+            
+            // Load direct referrals count
+            database.ref('users').orderByChild('referredBy').equalTo(referralCode).once('value').then((snapshot) => {
+                const directCount = snapshot.numChildren();
+                document.getElementById('direct-referrals').textContent = directCount;
+                
+                // Load team referrals count (direct + indirect)
+                let teamCount = directCount;
+                snapshot.forEach((childSnapshot) => {
+                    const refereePhone = childSnapshot.key;
+                    database.ref('users').orderByChild('referredBy').equalTo(childSnapshot.val().referralCode).once('value').then((subSnapshot) => {
+                        teamCount += subSnapshot.numChildren();
+                        document.getElementById('team-referrals').textContent = teamCount;
+                    });
+                });
+            });
+        }
+        
+        // Load referrals list
+        function loadReferrals(userPhone) {
+            database.ref('users/' + userPhone).once('value').then((userSnapshot) => {
+                const userData = userSnapshot.val() || {};
+                const referralCode = userData.referralCode;
+                
+                database.ref('users').orderByChild('referredBy').equalTo(referralCode).once('value').then((snapshot) => {
+                    const referralsTable = document.getElementById('referrals-table-body');
+                    referralsTable.innerHTML = '';
+                    
+                    if (snapshot.numChildren() === 0) {
+                        referralsTable.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--gray);">No referrals yet</td></tr>';
+                        return;
+                    }
+                    
+                    snapshot.forEach((childSnapshot) => {
+                        const referral = childSnapshot.val();
+                        const row = document.createElement('tr');
+                        
+                        // Format registration date
+                        const regDate = new Date(referral.registrationDate || Date.now());
+                        const formattedDate = regDate.toLocaleDateString('en-IN', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                        });
+                        
+                        // Check first deposit
+                        let firstDeposit = 'No';
+                        let totalDeposit = '₹0';
+                        if (referral.deposits) {
+                            const deposits = Object.values(referral.deposits);
+                            if (deposits.length > 0) {
+                                firstDeposit = '₹' + deposits[0].amount.toFixed(2);
+                                totalDeposit = '₹' + deposits.reduce((sum, deposit) => sum + deposit.amount, 0).toFixed(2);
+                            }
+                        }
+                        
+                        row.innerHTML = `
+                            <td>${referral.name || 'User' + referral.phone.slice(-4)}</td>
+                            <td>${formattedDate}</td>
+                            <td>${firstDeposit}</td>
+                            <td>${totalDeposit}</td>
+                            <td style="color: ${firstDeposit === 'No' ? 'var(--danger)' : 'var(--success)'}">
+                                ${firstDeposit === 'No' ? 'Pending' : 'Active'}
+                            </td>
+                        `;
+                        referralsTable.appendChild(row);
+                    });
+                });
+            });
+        }
+        
+        // Load commissions list
+        function loadCommissions(userPhone) {
+            database.ref('commissions/' + userPhone).orderByChild('date').once('value').then((snapshot) => {
+                const commissionsTable = document.getElementById('commissions-table-body');
+                commissionsTable.innerHTML = '';
+                
+                if (snapshot.numChildren() === 0) {
+                    commissionsTable.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--gray);">No commissions yet</td></tr>';
+                    return;
+                }
+                
+                // Convert to array and reverse to show latest first
+                const commissions = [];
+                snapshot.forEach((childSnapshot) => {
+                    commissions.push(childSnapshot.val());
+                });
+                commissions.reverse();
+                
+                commissions.forEach(commission => {
+                    const row = document.createElement('tr');
+                    
+                    // Format date
+                    const commissionDate = new Date(commission.date);
+                    const formattedDate = commissionDate.toLocaleDateString('en-IN', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                    
+                    row.innerHTML = `
+                        <td>${formattedDate}</td>
+                        <td>${commission.referralName || 'User' + commission.referralPhone.slice(-4)}</td>
+                        <td>₹${commission.depositAmount.toFixed(2)}</td>
+                        <td>₹${commission.amount.toFixed(2)}</td>
+                        <td style="color: var(--success)">Paid</td>
+                    `;
+                    commissionsTable.appendChild(row);
+                });
+            });
+        }
+        
+        // Copy referral code to clipboard
+        function copyReferralCode() {
+            const referralCodeInput = document.getElementById('referral-code-input');
+            referralCodeInput.select();
+            document.execCommand('copy');
+            showToast('Referral code copied to clipboard!', 'success');
+        }
+        
+        // Copy referral link to clipboard
+        function copyReferralLink() {
+            const referralLinkInput = document.getElementById('referral-link-input');
+            referralLinkInput.select();
+            document.execCommand('copy');
+            showToast('Referral link copied to clipboard!', 'success');
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // User menu toggle
+        function toggleUserMenu() {
+            document.getElementById('user-menu').classList.toggle('active');
+        }
+        
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('user-menu');
+            const userAvatar = document.getElementById('user-avatar');
+            
+            if(userMenu.classList.contains('active') && !userAvatar.contains(event.target) && !userMenu.contains(event.target)) {
+                userMenu.classList.remove('active');
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userPhone');
+            localStorage.removeItem('loginExpiry');
+            sessionStorage.removeItem('userLoggedIn');
+            sessionStorage.removeItem('userPhone');
+            
+            window.location.href = "index.html";
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+        });
+    </script>
+</body>
+</html>
