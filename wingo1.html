@@ -868,22 +868,23 @@
             // Get the last period number from database for this game mode
             database.ref(`gameSettings/lastPeriodNumber_1min`).once('value').then((snapshot) => {
                 const lastPeriod = snapshot.val();
-                currentPeriodNumber = lastPeriod ? lastPeriod + 1 : 320; // Default to 320 if no previous period
                 
                 // Check if we have an active period
                 database.ref(`gameSettings/currentPeriod_1min`).once('value').then((periodSnapshot) => {
                     const activePeriod = periodSnapshot.val();
                     
-                    if (activePeriod && activePeriod.periodNumber === currentPeriodNumber) {
-                        // We're in the middle of a period
+                    if (activePeriod) {
+                        // We have an active period
+                        currentPeriodNumber = activePeriod.periodNumber;
+                        currentPeriod = activePeriod.periodId;
                         gameStartTime = activePeriod.startTime;
+                        
                         const now = getServerTime();
                         const elapsed = Math.floor((now - gameStartTime) / 1000);
                         
                         if (elapsed < gameDuration) {
                             // Current period is still active
                             timeLeft = gameDuration - elapsed;
-                            currentPeriod = activePeriod.periodId;
                             document.getElementById('period-id').textContent = currentPeriod;
                             
                             // Start the countdown timer
@@ -898,7 +899,8 @@
                             endCurrentPeriod();
                         }
                     } else {
-                        // No active period, start a new one
+                        // No active period, start a new one with last period number + 1
+                        currentPeriodNumber = lastPeriod ? lastPeriod + 1 : 320;
                         currentPeriod = generatePeriodId(currentPeriodNumber);
                         document.getElementById('period-id').textContent = currentPeriod;
                         
