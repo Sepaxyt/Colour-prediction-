@@ -193,6 +193,7 @@
             padding: 15px;
             margin-bottom: 20px;
             border: 1px dashed rgba(255, 255, 255, 0.1);
+            position: relative;
         }
         
         .bank-item {
@@ -206,6 +207,27 @@
         .bank-info {
             font-size: 0.9rem;
             color: var(--gray);
+        }
+        
+        .edit-bank-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--light);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-bank-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
         
         .add-bank-btn {
@@ -327,6 +349,83 @@
             color: var(--light);
         }
         
+        /* Withdrawal Method Tabs */
+        .method-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .method-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .method-tab.active {
+            border-bottom: 2px solid var(--secondary);
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        
+        /* Withdrawal Info Box */
+        .info-box {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .info-box p {
+            margin-bottom: 10px;
+        }
+        
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Bet Progress */
+        .bet-progress {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .progress-title {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
         /* Toast Notification */
         .toast {
             position: fixed;
@@ -417,16 +516,38 @@
                 <div class="balance-amount" id="current-balance">₹0.00</div>
             </div>
             
+            <div class="info-box">
+                <p><i class="fas fa-info-circle"></i> Withdrawal time: 00:00-23:59</p>
+                <p><i class="fas fa-info-circle"></i> Withdrawal amount range: ₹110.00-50,000.00</p>
+                <p><i class="fas fa-info-circle"></i> Daily remaining withdrawal times: <span id="remaining-withdrawals">3</span></p>
+                <p><i class="fas fa-exclamation-triangle"></i> Please confirm your beneficial account information before withdrawing. If your information is incorrect, our company will not be liable for the amount of loss.</p>
+                <p><i class="fas fa-exclamation-triangle"></i> If your beneficial information is incorrect, please contact customer service.</p>
+            </div>
+            
+            <div class="bet-progress" id="bet-progress-container">
+                <div class="progress-title">Withdrawal Requirement</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="bet-progress-bar"></div>
+                </div>
+                <div class="progress-stats">
+                    <span>Bet remaining: <span id="bet-remaining">₹0.00</span></span>
+                    <span>Bet completed: <span id="bet-completed">₹0.00</span></span>
+                </div>
+                <div class="progress-title" style="margin-top: 10px; color: var(--warning);" id="withdrawal-message">
+                    Need to bet ₹0.00 to be able to withdraw
+                </div>
+            </div>
+            
             <div class="withdraw-section">
                 <h3 class="section-title"><i class="fas fa-money-bill-wave"></i> Withdraw Funds</h3>
                 
                 <div class="form-group">
                     <label class="form-label">Withdraw Amount (₹)</label>
-                    <input type="number" class="form-control" id="withdraw-amount" placeholder="Enter amount (min ₹100)" min="100">
+                    <input type="number" class="form-control" id="withdraw-amount" placeholder="Enter amount (min ₹110)" min="110" max="50000">
                 </div>
                 
                 <div class="amount-buttons">
-                    <div class="amount-btn" onclick="setAmount(100)">₹100</div>
+                    <div class="amount-btn" onclick="setAmount(110)">₹110</div>
                     <div class="amount-btn" onclick="setAmount(500)">₹500</div>
                     <div class="amount-btn" onclick="setAmount(1000)">₹1000</div>
                     <div class="amount-btn" onclick="setAmount(2000)">₹2000</div>
@@ -434,8 +555,24 @@
                     <div class="amount-btn" onclick="setAmount(10000)">₹10000</div>
                 </div>
                 
+                <div class="method-tabs">
+                    <div class="method-tab active" onclick="changeWithdrawalMethod('bank')">
+                        <i class="fas fa-university"></i> Bank Transfer
+                    </div>
+                    <div class="method-tab" onclick="changeWithdrawalMethod('upi')">
+                        <i class="fas fa-mobile-alt"></i> UPI Transfer
+                    </div>
+                </div>
+                
                 <div id="bank-container">
                     <!-- Bank details will be loaded here -->
+                </div>
+                
+                <div id="upi-container" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">UPI ID</label>
+                        <input type="text" class="form-control" id="upi-id" placeholder="Enter your UPI ID (e.g. name@upi)">
+                    </div>
                 </div>
                 
                 <button class="add-bank-btn" onclick="showAddBankModal()">
@@ -461,11 +598,11 @@
         </div>
     </div>
     
-    <!-- Add Bank Modal -->
+    <!-- Add/Edit Bank Modal -->
     <div class="modal" id="bank-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="hideAddBankModal()">&times;</span>
-            <h3 class="modal-title">Add Bank Account</h3>
+            <h3 class="modal-title" id="modal-title">Add Bank Account</h3>
             
             <div class="form-group">
                 <label class="form-label">Select Bank</label>
@@ -499,7 +636,9 @@
                 </select>
             </div>
             
-            <button class="submit-btn" onclick="saveBankDetails()">
+            <input type="hidden" id="editing-bank-id" value="">
+            
+            <button class="submit-btn" id="save-bank-btn" onclick="saveBankDetails()">
                 Save Bank Details
             </button>
         </div>
@@ -554,8 +693,8 @@
         if(!userPhone) {
             window.location.href = "index.html";
         } else {
-            // Load user balance
-            loadBalance();
+            // Load user data
+            loadUserData();
             
             // Load bank details
             loadBankDetails();
@@ -565,18 +704,118 @@
             
             // Populate bank dropdown
             populateBankDropdown();
+            
+            // Check withdrawal eligibility
+            checkWithdrawalEligibility();
         }
         
-        // Load user balance
-        function loadBalance() {
-            database.ref('users/' + userPhone + '/balance').on('value', (snapshot) => {
-                const balance = snapshot.val() || 0;
-                document.getElementById('current-balance').textContent = 
-                    '₹' + balance.toLocaleString('en-IN', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
+        // Current withdrawal method (bank or upi)
+        let currentWithdrawalMethod = 'bank';
+        
+        // User data
+        let userData = {
+            balance: 0,
+            totalDeposits: 0,
+            totalBonus: 0,
+            totalBetAmount: 0,
+            requiredBetAmount: 0,
+            withdrawalsToday: 0,
+            maxDailyWithdrawals: 3
+        };
+        
+        // Load user data
+        function loadUserData() {
+            database.ref('users/' + userPhone).on('value', (snapshot) => {
+                const data = snapshot.val();
+                if(data) {
+                    userData = {
+                        balance: data.balance || 0,
+                        totalDeposits: data.totalDeposits || 0,
+                        totalBonus: data.totalBonus || 0,
+                        totalBetAmount: data.totalBetAmount || 0,
+                        requiredBetAmount: data.requiredBetAmount || 0,
+                        withdrawalsToday: data.withdrawalsToday || 0,
+                        maxDailyWithdrawals: data.maxDailyWithdrawals || 3,
+                        lastWithdrawalDate: data.lastWithdrawalDate || null
+                    };
+                    
+                    // Check if it's a new day and reset withdrawals
+                    const today = new Date().toDateString();
+                    if(userData.lastWithdrawalDate && new Date(userData.lastWithdrawalDate).toDateString() !== today) {
+                        userData.withdrawalsToday = 0;
+                        database.ref('users/' + userPhone + '/withdrawalsToday').set(0);
+                        database.ref('users/' + userPhone + '/lastWithdrawalDate').set(new Date().toISOString());
+                    }
+                    
+                    updateUI();
+                }
             });
+        }
+        
+        // Update UI with user data
+        function updateUI() {
+            // Update balance
+            document.getElementById('current-balance').textContent = 
+                '₹' + userData.balance.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            
+            // Update remaining withdrawals
+            document.getElementById('remaining-withdrawals').textContent = 
+                Math.max(0, userData.maxDailyWithdrawals - userData.withdrawalsToday);
+            
+            // Update bet progress
+            updateBetProgress();
+        }
+        
+        // Update bet progress bar
+        function updateBetProgress() {
+            const betRemaining = Math.max(0, userData.requiredBetAmount - userData.totalBetAmount);
+            const betCompleted = Math.min(userData.totalBetAmount, userData.requiredBetAmount);
+            const progressPercentage = (betCompleted / userData.requiredBetAmount) * 100 || 0;
+            
+            document.getElementById('bet-progress-bar').style.width = `${progressPercentage}%`;
+            document.getElementById('bet-remaining').textContent = 
+                '₹' + betRemaining.toLocaleString('en-IN');
+            document.getElementById('bet-completed').textContent = 
+                '₹' + betCompleted.toLocaleString('en-IN');
+            
+            if(betRemaining > 0) {
+                document.getElementById('withdrawal-message').textContent = 
+                    `Need to bet ₹${betRemaining.toLocaleString('en-IN')} to be able to withdraw`;
+                document.getElementById('withdrawal-message').style.color = 'var(--warning)';
+            } else {
+                document.getElementById('withdrawal-message').textContent = 
+                    'You can now withdraw your funds';
+                document.getElementById('withdrawal-message').style.color = 'var(--success)';
+            }
+        }
+        
+        // Check withdrawal eligibility
+        function checkWithdrawalEligibility() {
+            const betRemaining = Math.max(0, userData.requiredBetAmount - userData.totalBetAmount);
+            return betRemaining <= 0 && userData.withdrawalsToday < userData.maxDailyWithdrawals;
+        }
+        
+        // Change withdrawal method
+        function changeWithdrawalMethod(method) {
+            currentWithdrawalMethod = method;
+            
+            // Update UI
+            document.querySelectorAll('.method-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            if(method === 'bank') {
+                document.querySelector('.method-tab:nth-child(1)').classList.add('active');
+                document.getElementById('bank-container').style.display = 'block';
+                document.getElementById('upi-container').style.display = 'none';
+            } else {
+                document.querySelector('.method-tab:nth-child(2)').classList.add('active');
+                document.getElementById('bank-container').style.display = 'none';
+                document.getElementById('upi-container').style.display = 'block';
+            }
         }
         
         // Load bank details
@@ -592,6 +831,9 @@
                         const bankItem = document.createElement('div');
                         bankItem.className = 'bank-details';
                         bankItem.innerHTML = `
+                            <button class="edit-bank-btn" onclick="editBankDetails('${bankId}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
                             <div class="bank-item">
                                 <input type="radio" name="selectedBank" id="bank-${bankId}" value="${bankId}" ${bank.isDefault ? 'checked' : ''}>
                                 <label for="bank-${bankId}">
@@ -632,8 +874,18 @@
                         if(withdrawal.status === 'success') statusClass = 'history-success';
                         if(withdrawal.status === 'failed') statusClass = 'history-failed';
                         
+                        let methodText = '';
+                        if(withdrawal.method === 'upi') {
+                            methodText = `UPI: ${withdrawal.upiId}`;
+                        } else {
+                            methodText = `${withdrawal.bankName} (${withdrawal.accountNumber.slice(-4)})`;
+                        }
+                        
                         historyItem.innerHTML = `
-                            <div class="history-date">${formattedDate}</div>
+                            <div>
+                                <div class="history-date">${formattedDate}</div>
+                                <div class="bank-info">${methodText}</div>
+                            </div>
                             <div class="history-amount ${statusClass}">
                                 ₹${withdrawal.amount.toLocaleString('en-IN')}
                             </div>
@@ -655,6 +907,7 @@
         // Populate bank dropdown
         function populateBankDropdown() {
             const bankSelect = document.getElementById('bank-name');
+            bankSelect.innerHTML = '<option value="">Select your bank</option>';
             indianBanks.forEach(bank => {
                 const option = document.createElement('option');
                 option.value = bank;
@@ -678,7 +931,40 @@
         
         // Show add bank modal
         function showAddBankModal() {
+            document.getElementById('modal-title').textContent = 'Add Bank Account';
+            document.getElementById('save-bank-btn').textContent = 'Save Bank Details';
+            document.getElementById('editing-bank-id').value = '';
+            
+            // Clear form
+            document.getElementById('bank-name').value = '';
+            document.getElementById('account-name').value = '';
+            document.getElementById('account-number').value = '';
+            document.getElementById('ifsc-code').value = '';
+            document.getElementById('account-type').value = 'savings';
+            
             document.getElementById('bank-modal').style.display = 'flex';
+        }
+        
+        // Show edit bank modal
+        function editBankDetails(bankId) {
+            database.ref('bankAccounts/' + userPhone + '/' + bankId).once('value').then((snapshot) => {
+                const bank = snapshot.val();
+                
+                if(bank) {
+                    document.getElementById('modal-title').textContent = 'Edit Bank Account';
+                    document.getElementById('save-bank-btn').textContent = 'Update Bank Details';
+                    document.getElementById('editing-bank-id').value = bankId;
+                    
+                    // Fill form with existing data
+                    document.getElementById('bank-name').value = bank.bankName;
+                    document.getElementById('account-name').value = bank.accountName;
+                    document.getElementById('account-number').value = bank.accountNumber;
+                    document.getElementById('ifsc-code').value = bank.ifscCode;
+                    document.getElementById('account-type').value = bank.accountType;
+                    
+                    document.getElementById('bank-modal').style.display = 'flex';
+                }
+            });
         }
         
         // Hide add bank modal
@@ -693,6 +979,7 @@
             const accountNumber = document.getElementById('account-number').value;
             const ifscCode = document.getElementById('ifsc-code').value;
             const accountType = document.getElementById('account-type').value;
+            const editingBankId = document.getElementById('editing-bank-id').value;
             
             if(!bankName || !accountName || !accountNumber || !ifscCode) {
                 showToast('Please fill all bank details', 'error');
@@ -711,85 +998,114 @@
                 return;
             }
             
-            // Check if this bank account already exists
-            database.ref('bankAccounts/' + userPhone).once('value').then((snapshot) => {
-                const banks = snapshot.val() || {};
-                const accountExists = Object.values(banks).some(bank => 
-                    bank.bankName === bankName && 
-                    bank.accountNumber === accountNumber
-                );
-                
-                if(accountExists) {
-                    showToast('This bank account is already added', 'error');
-                    return;
-                }
-                
-                // Save new bank account
-                const bankId = 'bank_' + Date.now();
+            const btn = document.getElementById('save-bank-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Processing...';
+            
+            if(editingBankId) {
+                // Update existing bank account
                 const bankData = {
                     bankName: bankName,
                     accountName: accountName,
                     accountNumber: accountNumber,
                     ifscCode: ifscCode.toUpperCase(),
-                    accountType: accountType,
-                    isDefault: Object.keys(banks).length === 0, // Set as default if first account
-                    addedAt: Date.now()
+                    accountType: accountType
                 };
                 
-                database.ref('bankAccounts/' + userPhone + '/' + bankId).set(bankData)
+                database.ref('bankAccounts/' + userPhone + '/' + editingBankId).update(bankData)
                     .then(() => {
-                        showToast('Bank account added successfully', 'success');
+                        showToast('Bank account updated successfully', 'success');
                         hideAddBankModal();
-                        
-                        // Clear form
-                        document.getElementById('account-name').value = '';
-                        document.getElementById('account-number').value = '';
-                        document.getElementById('ifsc-code').value = '';
+                        btn.disabled = false;
+                        btn.textContent = 'Update Bank Details';
                     })
                     .catch((error) => {
-                        console.error('Error saving bank details:', error);
-                        showToast('Error saving bank details', 'error');
+                        console.error('Error updating bank details:', error);
+                        showToast('Error updating bank details', 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'Update Bank Details';
                     });
-            });
+            } else {
+                // Check if this bank account already exists
+                database.ref('bankAccounts/' + userPhone).once('value').then((snapshot) => {
+                    const banks = snapshot.val() || {};
+                    const accountExists = Object.values(banks).some(bank => 
+                        bank.bankName === bankName && 
+                        bank.accountNumber === accountNumber
+                    );
+                    
+                    if(accountExists) {
+                        showToast('This bank account is already added', 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'Save Bank Details';
+                        return;
+                    }
+                    
+                    // Save new bank account
+                    const bankId = 'bank_' + Date.now();
+                    const bankData = {
+                        bankName: bankName,
+                        accountName: accountName,
+                        accountNumber: accountNumber,
+                        ifscCode: ifscCode.toUpperCase(),
+                        accountType: accountType,
+                        isDefault: Object.keys(banks).length === 0, // Set as default if first account
+                        addedAt: Date.now()
+                    };
+                    
+                    database.ref('bankAccounts/' + userPhone + '/' + bankId).set(bankData)
+                        .then(() => {
+                            showToast('Bank account added successfully', 'success');
+                            hideAddBankModal();
+                            btn.disabled = false;
+                            btn.textContent = 'Save Bank Details';
+                        })
+                        .catch((error) => {
+                            console.error('Error saving bank details:', error);
+                            showToast('Error saving bank details', 'error');
+                            btn.disabled = false;
+                            btn.textContent = 'Save Bank Details';
+                        });
+                });
+            }
         }
         
         // Process withdrawal
         function processWithdrawal() {
             const amount = parseInt(document.getElementById('withdraw-amount').value);
-            const selectedBank = document.querySelector('input[name="selectedBank"]:checked');
             
-            if(!amount || amount < 100) {
-                showToast('Minimum withdrawal amount is ₹100', 'error');
+            if(!amount || amount < 110 || amount > 50000) {
+                showToast('Withdrawal amount must be between ₹110 and ₹50,000', 'error');
                 return;
             }
             
-            if(!selectedBank) {
-                showToast('Please select a bank account', 'error');
+            // Check withdrawal eligibility
+            if(!checkWithdrawalEligibility()) {
+                const betRemaining = Math.max(0, userData.requiredBetAmount - userData.totalBetAmount);
+                if(betRemaining > 0) {
+                    showToast(`You need to bet ₹${betRemaining.toLocaleString('en-IN')} more to withdraw`, 'error');
+                } else if(userData.withdrawalsToday >= userData.maxDailyWithdrawals) {
+                    showToast('You have reached your daily withdrawal limit', 'error');
+                }
                 return;
             }
             
-            // Check if user has sufficient balance
-            database.ref('users/' + userPhone + '/balance').once('value').then((snapshot) => {
-                const balance = snapshot.val() || 0;
+            let withdrawalData = {};
+            
+            if(currentWithdrawalMethod === 'bank') {
+                const selectedBank = document.querySelector('input[name="selectedBank"]:checked');
                 
-                if(amount > balance) {
-                    showToast('Insufficient balance for withdrawal', 'error');
+                if(!selectedBank) {
+                    showToast('Please select a bank account', 'error');
                     return;
                 }
-                
-                const btn = document.getElementById('withdraw-btn');
-                btn.disabled = true;
-                btn.innerHTML = '<span class="spinner"></span> Processing...';
-                
-                // Generate a random transaction ID
-                const transactionId = 'WDR' + Date.now() + Math.floor(Math.random() * 1000);
                 
                 // Get bank details
                 database.ref('bankAccounts/' + userPhone + '/' + selectedBank.value).once('value').then((bankSnapshot) => {
                     const bankDetails = bankSnapshot.val();
                     
-                    // Create withdrawal record
-                    const withdrawalData = {
+                    withdrawalData = {
+                        method: 'bank',
                         amount: amount,
                         bankId: selectedBank.value,
                         bankName: bankDetails.bankName,
@@ -799,43 +1115,98 @@
                         timestamp: Date.now()
                     };
                     
-                    // Save to Firebase
-                    database.ref('withdrawals/' + userPhone + '/' + transactionId).set(withdrawalData)
-                        .then(() => {
-                            // Send notification to admin
-                            database.ref('adminNotifications').push({
-                                type: 'withdrawal',
-                                userId: userPhone,
-                                transactionId: transactionId,
-                                amount: amount,
-                                bankDetails: bankDetails,
-                                status: 'pending',
-                                timestamp: Date.now(),
-                                read: false
-                            });
-                            
-                            // Create notification for user
-                            createNotification(
-                                'Withdrawal Requested',
-                                `Your withdrawal request of ₹${amount} has been submitted for processing.`,
-                                'info'
-                            );
-                            
-                            showToast(`Withdrawal of ₹${amount} requested successfully!`, 'success');
-                            
-                            // Reset form
-                            document.getElementById('withdraw-amount').value = '';
-                            btn.disabled = false;
-                            btn.textContent = 'Request Withdrawal';
-                        })
-                        .catch((error) => {
-                            console.error('Error processing withdrawal:', error);
-                            showToast('Error processing withdrawal. Please try again.', 'error');
-                            btn.disabled = false;
-                            btn.textContent = 'Request Withdrawal';
-                        });
+                    completeWithdrawalProcess(withdrawalData);
                 });
-            });
+            } else {
+                const upiId = document.getElementById('upi-id').value.trim();
+                
+                if(!upiId) {
+                    showToast('Please enter your UPI ID', 'error');
+                    return;
+                }
+                
+                // Basic UPI ID validation
+                if(!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+$/.test(upiId)) {
+                    showToast('Please enter a valid UPI ID (e.g. name@upi)', 'error');
+                    return;
+                }
+                
+                withdrawalData = {
+                    method: 'upi',
+                    amount: amount,
+                    upiId: upiId,
+                    status: 'pending',
+                    timestamp: Date.now()
+                };
+                
+                completeWithdrawalProcess(withdrawalData);
+            }
+        }
+        
+        // Complete withdrawal process
+        function completeWithdrawalProcess(withdrawalData) {
+            const amount = withdrawalData.amount;
+            
+            // Check if user has sufficient balance
+            if(amount > userData.balance) {
+                showToast('Insufficient balance for withdrawal', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('withdraw-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Processing...';
+            
+            // Generate a random transaction ID
+            const transactionId = 'WDR' + Date.now() + Math.floor(Math.random() * 1000);
+            
+            // Save to Firebase
+            database.ref('withdrawals/' + userPhone + '/' + transactionId).set(withdrawalData)
+                .then(() => {
+                    // Update user data
+                    const updates = {
+                        balance: userData.balance - amount,
+                        withdrawalsToday: userData.withdrawalsToday + 1,
+                        lastWithdrawalDate: new Date().toISOString()
+                    };
+                    
+                    database.ref('users/' + userPhone).update(updates);
+                    
+                    // Send notification to admin
+                    database.ref('adminNotifications').push({
+                        type: 'withdrawal',
+                        userId: userPhone,
+                        transactionId: transactionId,
+                        amount: amount,
+                        withdrawalDetails: withdrawalData,
+                        status: 'pending',
+                        timestamp: Date.now(),
+                        read: false
+                    });
+                    
+                    // Create notification for user
+                    createNotification(
+                        'Withdrawal Requested',
+                        `Your withdrawal request of ₹${amount} has been submitted for processing.`,
+                        'info'
+                    );
+                    
+                    showToast(`Withdrawal of ₹${amount} requested successfully!`, 'success');
+                    
+                    // Reset form
+                    document.getElementById('withdraw-amount').value = '';
+                    if(currentWithdrawalMethod === 'upi') {
+                        document.getElementById('upi-id').value = '';
+                    }
+                    btn.disabled = false;
+                    btn.textContent = 'Request Withdrawal';
+                })
+                .catch((error) => {
+                    console.error('Error processing withdrawal:', error);
+                    showToast('Error processing withdrawal. Please try again.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Request Withdrawal';
+                });
         }
         
         // Create notification
