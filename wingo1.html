@@ -776,7 +776,7 @@
             authDomain: "club-b8f03.firebaseapp.com",
             databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
             projectId: "club-b8f03",
-            storageBucket: "club-b8f03.firebasestorage.app",
+            storageBucket: "club-b8f03.appspot.com",
             messagingSenderId: "115909846985",
             appId: "1:115909846985:web:6f42fbb224935c513cea18",
             measurementId: "G-S3M36PLB9Y"
@@ -787,7 +787,7 @@
         
         // Game state variables
         let currentPeriod = "";
-        let currentPeriodNumber = 320; // Starting period number for 1min game
+        let currentPeriodNumber = 320;
         let timeLeft = 60;
         let timerInterval;
         let currentBetType = "";
@@ -799,9 +799,9 @@
         let userPhone = "";
         let isGameRunning = false;
         let resultModalTimeout;
-        let userBets = {}; // Track user's bets for current period
-        const gameMode = '1min'; // Fixed for this variant
-        const gameDuration = 60; // Fixed duration in seconds
+        let userBets = {};
+        const gameMode = '1min';
+        const gameDuration = 60;
         let gameStartTime = 0;
         
         // Check if user is logged in
@@ -810,33 +810,22 @@
             if(!userPhone) {
                 window.location.href = "index.html";
             } else {
-                // Get server time offset first
                 getServerTimeOffset().then(() => {
-                    // Initialize the game after we have server time
                     initGame();
-                    
-                    // Set up real-time balance listener
                     setupRealtimeUpdates();
-                    
-                    // Load game history
                     loadGameHistory();
-                    
-                    // Set up bet result listener
                     setupBetResultListener();
                 });
             }
         }
         
-        // Get server time offset to sync client and server times
+        // Get server time offset
         function getServerTimeOffset() {
             return new Promise((resolve) => {
-                const startTime = Date.now();
-                
                 database.ref('.info/serverTimeOffset').once('value').then((snapshot) => {
                     serverTimeOffset = snapshot.val();
                     resolve();
                 }).catch(() => {
-                    // If we can't get server time, assume no offset
                     serverTimeOffset = 0;
                     resolve();
                 });
@@ -848,33 +837,27 @@
             return Date.now() + serverTimeOffset;
         }
         
-        // Generate a period ID based on current date and period number
+        // Generate a period ID
         function generatePeriodId(periodNumber) {
             const now = new Date(getServerTime());
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
-            const prefix = '1M'; // Prefix for 1min game
-            
-            // Format: YYYYMMDD + prefix + period number (padded to 3 digits)
+            const prefix = '1M';
             return `${year}${month}${day}${prefix}${String(periodNumber).padStart(3, '0')}`;
         }
         
         // Initialize the game
         function initGame() {
-            // Clear any existing timer
             clearInterval(timerInterval);
             
-            // Get the last period number from database for this game mode
             database.ref(`gameSettings/lastPeriodNumber_1min`).once('value').then((snapshot) => {
                 const lastPeriod = snapshot.val();
                 
-                // Check if we have an active period
                 database.ref(`gameSettings/currentPeriod_1min`).once('value').then((periodSnapshot) => {
                     const activePeriod = periodSnapshot.val();
                     
                     if (activePeriod) {
-                        // We have an active period
                         currentPeriodNumber = activePeriod.periodNumber;
                         currentPeriod = activePeriod.periodId;
                         gameStartTime = activePeriod.startTime;
@@ -883,28 +866,21 @@
                         const elapsed = Math.floor((now - gameStartTime) / 1000);
                         
                         if (elapsed < gameDuration) {
-                            // Current period is still active
                             timeLeft = gameDuration - elapsed;
                             document.getElementById('period-id').textContent = currentPeriod;
-                            
-                            // Start the countdown timer
                             startTimer();
                             
-                            // Schedule next period
                             setTimeout(() => {
                                 endCurrentPeriod();
                             }, timeLeft * 1000);
                         } else {
-                            // Current period should have ended already
                             endCurrentPeriod();
                         }
                     } else {
-                        // No active period, start a new one with last period number + 1
                         currentPeriodNumber = lastPeriod ? lastPeriod + 1 : 320;
                         currentPeriod = generatePeriodId(currentPeriodNumber);
                         document.getElementById('period-id').textContent = currentPeriod;
                         
-                        // Save the new period to database
                         const periodData = {
                             periodNumber: currentPeriodNumber,
                             periodId: currentPeriod,
@@ -918,14 +894,10 @@
                         database.ref(`gameSettings/currentPeriod_1min`).set(periodData);
                         database.ref(`gamePeriods/1min/` + currentPeriod).set(periodData);
                         
-                        // Reset user bets for new period
                         userBets = {};
-                        
-                        // Start the countdown timer
                         timeLeft = gameDuration;
                         startTimer();
                         
-                        // Schedule next period end
                         setTimeout(() => {
                             endCurrentPeriod();
                         }, gameDuration * 1000);
@@ -934,22 +906,24 @@
             });
         }
         
-        // End the current period and start a new one
+        // End current period and start new one
         function endCurrentPeriod() {
             if (isGameRunning) return;
             isGameRunning = true;
             
-            // Generate result for current period
             generateResult().then(() => {
-                // Increment period number
+                // Clear old period data
+                database.ref(`gamePeriods/1min/` + currentPeriod).remove();
+                database.ref(`gameResults/1min/` + currentPeriod).remove();
+                database.ref(`bets/` + currentPeriod).remove();
+                
+                // Start new period
                 currentPeriodNumber++;
                 database.ref(`gameSettings/lastPeriodNumber_1min`).set(currentPeriodNumber);
                 
-                // Generate new period ID
                 currentPeriod = generatePeriodId(currentPeriodNumber);
                 document.getElementById('period-id').textContent = currentPeriod;
                 
-                // Save the new period to database
                 const periodData = {
                     periodNumber: currentPeriodNumber,
                     periodId: currentPeriod,
@@ -963,14 +937,10 @@
                 database.ref(`gameSettings/currentPeriod_1min`).set(periodData);
                 database.ref(`gamePeriods/1min/` + currentPeriod).set(periodData);
                 
-                // Reset user bets for new period
                 userBets = {};
-                
-                // Start the countdown timer
                 timeLeft = gameDuration;
                 startTimer();
                 
-                // Schedule next period end
                 setTimeout(() => {
                     endCurrentPeriod();
                 }, gameDuration * 1000);
@@ -979,7 +949,7 @@
             });
         }
         
-        // Start the countdown timer
+        // Start timer
         function startTimer() {
             clearInterval(timerInterval);
             updateTimerDisplay();
@@ -1001,21 +971,10 @@
             document.getElementById('timer').textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
         }
         
-        // Generate random result for current period
+        // Generate random result
         function generateResult() {
             return new Promise((resolve) => {
-                // 10% chance of winning for random bets
-                const isRandomWin = Math.random() < 0.1;
-                
-                let winningNumber;
-                if (isRandomWin) {
-                    // Force a win for random bets (0-8)
-                    winningNumber = Math.floor(Math.random() * 9);
-                } else {
-                    // Normal random number
-                    winningNumber = Math.floor(Math.random() * 9);
-                }
-                
+                const winningNumber = Math.floor(Math.random() * 9);
                 let color;
                 
                 if(winningNumber === 0) {
@@ -1030,7 +989,6 @@
                 
                 const bigSmall = winningNumber >= 5 ? 'Big' : 'Small';
                 
-                // Save result to database
                 const resultData = {
                     periodNumber: currentPeriodNumber,
                     number: winningNumber,
@@ -1041,10 +999,7 @@
                 };
                 
                 database.ref(`gameResults/1min/` + currentPeriod).set(resultData).then(() => {
-                    // Add to history
                     addToHistory(currentPeriod, winningNumber, bigSmall, color);
-                    
-                    // Process bets for this period
                     processBets(winningNumber, color, bigSmall).then(() => {
                         resolve();
                     });
@@ -1052,16 +1007,14 @@
             });
         }
         
-        // Add result to history table
+        // Add to history
         function addToHistory(period, number, bigSmall, color) {
             const historyBody = document.getElementById('history-body');
             
-            // Clear loading message if it exists
             if(historyBody.firstChild && historyBody.firstChild.textContent === 'Loading history...') {
                 historyBody.innerHTML = '';
             }
             
-            // Create color dot
             let colorDot = '';
             if(color === 'red') {
                 colorDot = '<span class="dot red"></span>';
@@ -1079,32 +1032,27 @@
                 <td>${colorDot}</td>
             `;
             
-            // Insert at the beginning of the table
             if(historyBody.firstChild) {
                 historyBody.insertBefore(historyRow, historyBody.firstChild);
             } else {
                 historyBody.appendChild(historyRow);
             }
             
-            // Keep only the last 5 history items
-            while(historyBody.children.length > 5) {
+            // Keep only the latest result
+            while(historyBody.children.length > 1) {
                 historyBody.removeChild(historyBody.lastChild);
             }
             
-            // Add to local history array
-            gameHistory.unshift({
+            // Update local history
+            gameHistory = [{
                 period: period,
                 number: number,
                 bigSmall: bigSmall,
                 color: color
-            });
-            
-            if(gameHistory.length > 5) {
-                gameHistory.pop();
-            }
+            }];
         }
         
-        // Process all bets for the current period
+        // Process bets
         function processBets(winningNumber, winningColor, winningBigSmall) {
             return new Promise((resolve) => {
                 database.ref('bets/' + currentPeriod).once('value').then((snapshot) => {
@@ -1125,7 +1073,6 @@
                             betIds.forEach((betId) => {
                                 const bet = userBets[betId];
                                 
-                                // Check if bet is a winner
                                 let isWinner = false;
                                 let winAmount = 0;
                                 
@@ -1140,7 +1087,6 @@
                                     winAmount = bet.amount * bet.odds;
                                 }
                                 
-                                // Update bet status
                                 const updates = {
                                     status: isWinner ? 'won' : 'lost',
                                     winAmount: isWinner ? winAmount : 0,
@@ -1153,17 +1099,14 @@
                                 database.ref('bets/' + currentPeriod + '/' + userId + '/' + betId).update(updates).then(() => {
                                     processedBets++;
                                     
-                                    // Update user balance if winner
                                     if(isWinner) {
                                         database.ref('users/' + userId + '/balance').transaction((balance) => {
                                             return (balance || 0) + winAmount;
                                         }).then(() => {
-                                            // Update total wins
                                             database.ref('users/' + userId + '/totalWins').transaction((wins) => {
                                                 return (wins || 0) + 1;
                                             });
                                             
-                                            // Create notification for user
                                             createNotification(
                                                 userId,
                                                 'Bet Won!',
@@ -1190,7 +1133,7 @@
             });
         }
         
-        // Set up listener for bet results
+        // Set up bet result listener
         function setupBetResultListener() {
             database.ref('bets').on('child_added', (periodSnapshot) => {
                 const period = periodSnapshot.key;
@@ -1200,26 +1143,21 @@
                     Object.keys(bets[userPhone]).forEach((betId) => {
                         const bet = bets[userPhone][betId];
                         
-                        // Listen for bet status changes
                         database.ref('bets/' + period + '/' + userPhone + '/' + betId + '/status').on('value', (statusSnapshot) => {
                             const status = statusSnapshot.val();
                             
                             if(status === 'won' || status === 'lost') {
-                                // Get the full bet data
                                 database.ref('bets/' + period + '/' + userPhone + '/' + betId).once('value').then((betSnapshot) => {
                                     const fullBet = betSnapshot.val();
                                     
                                     if(fullBet.processed && !fullBet.notificationShown) {
-                                        // Show win/loss modal
                                         showResultModal(fullBet);
                                         
-                                        // Auto-hide after 3 seconds
                                         clearTimeout(resultModalTimeout);
                                         resultModalTimeout = setTimeout(() => {
                                             hideResultModal();
                                         }, 3000);
                                         
-                                        // Mark notification as shown
                                         database.ref('bets/' + period + '/' + userPhone + '/' + betId + '/notificationShown').set(true);
                                     }
                                 });
@@ -1230,7 +1168,7 @@
             });
         }
         
-        // Show win/loss result modal
+        // Show result modal
         function showResultModal(bet) {
             const resultModal = document.getElementById('result-modal');
             const resultIcon = document.getElementById('result-icon');
@@ -1239,7 +1177,6 @@
             const resultAmount = document.getElementById('result-amount');
             
             if(bet.status === 'won') {
-                // Win modal
                 resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
                 resultIcon.className = 'result-icon win';
                 resultTitle.textContent = 'You Won!';
@@ -1248,7 +1185,6 @@
                 resultAmount.textContent = `+₹${bet.winAmount.toFixed(2)}`;
                 resultAmount.className = 'result-amount result-win';
             } else {
-                // Loss modal
                 resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
                 resultIcon.className = 'result-icon loss';
                 resultTitle.textContent = 'You Lost';
@@ -1266,7 +1202,7 @@
             document.getElementById('result-modal').style.display = 'none';
         }
         
-        // Get display name for bet type
+        // Get bet display name
         function getBetDisplayName(bet) {
             if(bet.type === 'color') {
                 return bet.value.charAt(0).toUpperCase() + bet.value.slice(1);
@@ -1278,31 +1214,20 @@
             return bet.value;
         }
         
-        // Load game history from database
+        // Load game history
         function loadGameHistory() {
-            database.ref(`gameResults/1min`).orderByChild('timestamp').limitToLast(5).once('value').then((snapshot) => {
+            database.ref(`gameResults/1min`).orderByChild('timestamp').limitToLast(1).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
-                    // Clear existing history
                     document.getElementById('history-body').innerHTML = '';
                     gameHistory = [];
                     
-                    // Convert to array and sort by timestamp (descending)
-                    const resultsArray = Object.keys(results).map(key => ({
-                        period: key,
-                        number: results[key].number,
-                        bigSmall: results[key].bigSmall,
-                        color: results[key].color,
-                        timestamp: results[key].timestamp
-                    })).sort((a, b) => b.timestamp - a.timestamp);
-                    
-                    // Add to history in sorted order
-                    resultsArray.forEach(result => {
-                        addToHistory(result.period, result.number, result.bigSmall, result.color);
+                    Object.keys(results).forEach(key => {
+                        const result = results[key];
+                        addToHistory(key, result.number, result.bigSmall, result.color);
                     });
                 } else {
-                    // No results yet, show waiting message
                     document.getElementById('history-body').innerHTML = `
                         <tr>
                             <td colspan="4" style="text-align: center;">Waiting for first round results...</td>
@@ -1312,7 +1237,7 @@
             });
         }
         
-        // Set up real-time balance updates
+        // Set up real-time updates
         function setupRealtimeUpdates() {
             database.ref('users/' + userPhone + '/balance').on('value', (snapshot) => {
                 const balance = snapshot.val() || 0;
@@ -1334,7 +1259,6 @@
         
         // Open bet modal
         function openBetModal(type, name, odds) {
-            // Check if user has already placed a conflicting bet
             if (userBets[type] || 
                 (type === 'big' && userBets['small']) || 
                 (type === 'small' && userBets['big'])) {
@@ -1346,7 +1270,6 @@
             currentBetName = name;
             currentBetOdds = odds;
             
-            // Set bet type display
             let displayType = '';
             if(type === 'green' || type === 'red' || type === 'violet') {
                 displayType = 'Color: ' + name;
@@ -1358,13 +1281,9 @@
             
             document.getElementById('bet-type-display').textContent = displayType;
             document.getElementById('bet-odds-display').textContent = odds.toFixed(1) + 'x';
-            
-            // Reset bet amount
             document.getElementById('bet-amount').value = '';
             document.getElementById('bet-win-display').textContent = '₹0.00';
             document.getElementById('submit-bet').disabled = true;
-            
-            // Show modal
             document.getElementById('bet-modal').style.display = 'flex';
             document.getElementById('bet-amount').focus();
         }
@@ -1374,13 +1293,13 @@
             document.getElementById('bet-modal').style.display = 'none';
         }
         
-        // Set bet amount from quick buttons
+        // Set bet amount
         function setBetAmount(amount) {
             document.getElementById('bet-amount').value = amount;
             calculateWinAmount();
         }
         
-        // Calculate possible win amount
+        // Calculate win amount
         function calculateWinAmount() {
             const amount = parseFloat(document.getElementById('bet-amount').value);
             
@@ -1394,7 +1313,7 @@
             }
         }
         
-        // Place a bet
+        // Place bet
         function placeBet() {
             const amount = parseFloat(document.getElementById('bet-amount').value);
             
@@ -1408,27 +1327,22 @@
                 return;
             }
             
-            // Check if user has already placed this bet
             if (userBets[currentBetType]) {
                 showToast('You can only place one bet per type per round', 'error');
                 return;
             }
             
-            // Check for conflicting bets
             if ((currentBetType === 'big' && userBets['small']) || 
                 (currentBetType === 'small' && userBets['big'])) {
                 showToast('Cannot place both Big and Small bets in same round', 'error');
                 return;
             }
             
-            // Deduct amount from balance
             database.ref('users/' + userPhone + '/balance').transaction((balance) => {
                 return (balance || 0) - amount;
             }).then(() => {
-                // Generate unique bet ID
                 const betId = 'BET' + Date.now();
                 
-                // Determine bet type category
                 let typeCategory = '';
                 if(['green', 'red', 'violet'].includes(currentBetType)) {
                     typeCategory = 'color';
@@ -1438,7 +1352,6 @@
                     typeCategory = 'number';
                 }
                 
-                // Save bet to database
                 database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + betId).set({
                     amount: amount,
                     type: typeCategory,
@@ -1451,10 +1364,8 @@
                     gameMode: '1min'
                 });
                 
-                // Track user's bet for this period
                 userBets[currentBetType] = true;
                 
-                // Create notification
                 createNotification(
                     userPhone,
                     'Bet Placed',
@@ -1467,7 +1378,7 @@
             });
         }
         
-        // Place random bets with specified amount
+        // Place random bets
         function placeRandomBet(count, amount) {
             if(count <= 0) return;
             
@@ -1495,16 +1406,13 @@
                 return;
             }
             
-            // Deduct total amount from balance
             database.ref('users/' + userPhone + '/balance').transaction((balance) => {
                 return (balance || 0) - totalAmount;
             }).then(() => {
-                // Save all bets
                 for(let i = 0; i < count; i++) {
                     const randomType = betTypes[Math.floor(Math.random() * betTypes.length)];
                     const betId = 'BET' + Date.now() + Math.floor(Math.random() * 1000);
                     
-                    // Skip if user already placed this bet type
                     if (userBets[randomType.type]) continue;
                     
                     database.ref('bets/' + currentPeriod + '/' + userPhone + '/' + betId).set({
@@ -1519,7 +1427,6 @@
                         gameMode: '1min'
                     });
                     
-                    // Track user's bet for this period
                     userBets[randomType.type] = true;
                 }
                 
@@ -1527,7 +1434,7 @@
             });
         }
         
-        // Create notification for user
+        // Create notification
         function createNotification(userId, title, message, type) {
             const notificationId = 'NOT' + Date.now();
             
@@ -1540,7 +1447,7 @@
             });
         }
         
-        // Show toast notification
+        // Show toast
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
@@ -1558,7 +1465,7 @@
         // Event listeners
         document.getElementById('bet-amount').addEventListener('input', calculateWinAmount);
         
-        // Initialize the game when page loads
+        // Initialize
         window.addEventListener('load', checkAuth);
     </script>
 </body>
