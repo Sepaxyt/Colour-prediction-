@@ -426,6 +426,34 @@
             color: var(--gray);
         }
         
+        /* Balance Summary */
+        .balance-summary {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .balance-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .balance-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .balance-label {
+            color: var(--gray);
+        }
+        
+        .balance-value {
+            font-weight: 500;
+        }
+        
         /* Toast Notification */
         .toast {
             position: fixed;
@@ -516,6 +544,25 @@
                 <div class="balance-amount" id="current-balance">₹0.00</div>
             </div>
             
+            <div class="balance-summary">
+                <div class="balance-row">
+                    <span class="balance-label">Deposited Amount:</span>
+                    <span class="balance-value" id="deposited-amount">₹0.00</span>
+                </div>
+                <div class="balance-row">
+                    <span class="balance-label">Bonus Amount:</span>
+                    <span class="balance-value" id="bonus-amount">₹0.00</span>
+                </div>
+                <div class="balance-row">
+                    <span class="balance-label">Winning Amount:</span>
+                    <span class="balance-value" id="winning-amount">₹0.00</span>
+                </div>
+                <div class="balance-row">
+                    <span class="balance-label">Unplayed Amount:</span>
+                    <span class="balance-value" id="unplayed-amount">₹0.00</span>
+                </div>
+            </div>
+            
             <div class="info-box">
                 <p><i class="fas fa-info-circle"></i> Withdrawal time: 00:00-23:59</p>
                 <p><i class="fas fa-info-circle"></i> Withdrawal amount range: ₹110.00-50,000.00</p>
@@ -556,10 +603,10 @@
                 </div>
                 
                 <div class="method-tabs">
-                    <div class="method-tab active" onclick="changeWithdrawalMethod('bank')">
+                    <div class="method-tab active" id="bank-tab" onclick="changeWithdrawalMethod('bank')">
                         <i class="fas fa-university"></i> Bank Transfer
                     </div>
-                    <div class="method-tab" onclick="changeWithdrawalMethod('upi')">
+                    <div class="method-tab" id="upi-tab" onclick="changeWithdrawalMethod('upi')">
                         <i class="fas fa-mobile-alt"></i> UPI Transfer
                     </div>
                 </div>
@@ -717,6 +764,7 @@
             balance: 0,
             totalDeposits: 0,
             totalBonus: 0,
+            totalWinnings: 0,
             totalBetAmount: 0,
             requiredBetAmount: 0,
             withdrawalsToday: 0,
@@ -732,6 +780,7 @@
                         balance: data.balance || 0,
                         totalDeposits: data.totalDeposits || 0,
                         totalBonus: data.totalBonus || 0,
+                        totalWinnings: data.totalWinnings || 0,
                         totalBetAmount: data.totalBetAmount || 0,
                         requiredBetAmount: data.requiredBetAmount || 0,
                         withdrawalsToday: data.withdrawalsToday || 0,
@@ -754,12 +803,25 @@
         
         // Update UI with user data
         function updateUI() {
+            // Calculate unplayed amount (deposits + bonus - bets)
+            const unplayedAmount = Math.max(0, (userData.totalDeposits + userData.totalBonus) - userData.totalBetAmount);
+            
             // Update balance
             document.getElementById('current-balance').textContent = 
                 '₹' + userData.balance.toLocaleString('en-IN', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                 });
+            
+            // Update balance summary
+            document.getElementById('deposited-amount').textContent = 
+                '₹' + userData.totalDeposits.toLocaleString('en-IN');
+            document.getElementById('bonus-amount').textContent = 
+                '₹' + userData.totalBonus.toLocaleString('en-IN');
+            document.getElementById('winning-amount').textContent = 
+                '₹' + userData.totalWinnings.toLocaleString('en-IN');
+            document.getElementById('unplayed-amount').textContent = 
+                '₹' + unplayedAmount.toLocaleString('en-IN');
             
             // Update remaining withdrawals
             document.getElementById('remaining-withdrawals').textContent = 
@@ -803,16 +865,15 @@
             currentWithdrawalMethod = method;
             
             // Update UI
-            document.querySelectorAll('.method-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
+            document.getElementById('bank-tab').classList.remove('active');
+            document.getElementById('upi-tab').classList.remove('active');
             
             if(method === 'bank') {
-                document.querySelector('.method-tab:nth-child(1)').classList.add('active');
+                document.getElementById('bank-tab').classList.add('active');
                 document.getElementById('bank-container').style.display = 'block';
                 document.getElementById('upi-container').style.display = 'none';
             } else {
-                document.querySelector('.method-tab:nth-child(2)').classList.add('active');
+                document.getElementById('upi-tab').classList.add('active');
                 document.getElementById('bank-container').style.display = 'none';
                 document.getElementById('upi-container').style.display = 'block';
             }
