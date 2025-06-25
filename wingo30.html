@@ -1046,9 +1046,10 @@
                 <td>${colorDot}</td>
             `;
             
-            // Always insert new results at the top
-            if(historyBody.firstChild) {
-                historyBody.insertBefore(historyRow, historyBody.firstChild);
+            // Insert new results at the top (index 0)
+            const firstRow = historyBody.querySelector('tr');
+            if (firstRow) {
+                historyBody.insertBefore(historyRow, firstRow);
             } else {
                 historyBody.appendChild(historyRow);
             }
@@ -1242,16 +1243,16 @@
                     document.getElementById('history-body').innerHTML = '';
                     gameHistory = [];
                     
-                    // Convert to array and sort by timestamp descending (newest first)
+                    // Convert to array and sort by timestamp ascending (oldest first)
                     const resultsArray = Object.entries(results).map(([key, value]) => ({
                         period: key,
                         number: value.number,
                         bigSmall: value.bigSmall,
                         color: value.color,
                         timestamp: value.timestamp
-                    })).sort((a, b) => b.timestamp - a.timestamp);
+                    })).sort((a, b) => a.timestamp - b.timestamp);
                     
-                    // Add to history in correct order
+                    // Add to history in correct order (oldest first)
                     resultsArray.forEach(result => {
                         addToHistory(result.period, result.number, result.bigSmall, result.color);
                     });
