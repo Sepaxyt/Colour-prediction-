@@ -804,8 +804,8 @@
         let isGameRunning = false;
         let resultModalTimeout;
         let userBets = {}; // Track user's bets for current period
-        let gameStartTime = 0;
         const gameMode = '5min'; // Fixed for this file
+        let gameStartTime = 0;
         
         // Check if user is logged in
         function checkAuth() {
@@ -1321,8 +1321,20 @@
                     })).sort((a, b) => b.periodNumber - a.periodNumber);
                     
                     resultsArray.forEach(result => {
-                        addToHistory(result.key, result.number, result.bigSmall, result.color);
+                        // Only add to history if we have valid result data
+                        if(result.number !== undefined && result.color && result.bigSmall) {
+                            addToHistory(result.key, result.number, result.bigSmall, result.color);
+                        }
                     });
+                    
+                    // If no valid results found, show waiting message
+                    if(document.getElementById('history-body').children.length === 0) {
+                        document.getElementById('history-body').innerHTML = `
+                            <tr>
+                                <td colspan="4" style="text-align: center;">Waiting for first round results...</td>
+                            </tr>
+                        `;
+                    }
                 } else {
                     // No results yet, show waiting message
                     document.getElementById('history-body').innerHTML = `
