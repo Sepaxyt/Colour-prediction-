@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>53 CLUB - Activity Rewards</title>
+    <title>53 CLUB - VIP Invitation Bonus</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -77,12 +77,12 @@
             -webkit-text-fill-color: transparent;
         }
         
-        .activity-header {
+        .vip-header {
             text-align: center;
             margin-bottom: 30px;
         }
         
-        .activity-header h2 {
+        .vip-header h2 {
             font-size: 1.8rem;
             margin-bottom: 10px;
             background: linear-gradient(to right, var(--secondary), var(--primary));
@@ -90,12 +90,13 @@
             -webkit-text-fill-color: transparent;
         }
         
-        .activity-header p {
+        .vip-header p {
             color: var(--gray);
             font-size: 0.9rem;
+            margin-bottom: 5px;
         }
         
-        .task-container {
+        .bonus-container {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             padding: 20px;
@@ -103,20 +104,26 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        .task-header {
+        .bonus-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
         
-        .task-title {
+        .bonus-title {
             font-size: 1.2rem;
             font-weight: 600;
             color: var(--light);
         }
         
-        .task-status {
+        .bonus-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+        
+        .bonus-status {
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 0.8rem;
@@ -135,54 +142,58 @@
             border: 1px solid var(--red);
         }
         
-        .task-progress {
+        .bonus-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
             margin-bottom: 15px;
         }
         
-        .progress-bar {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
+        .detail-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px;
+            border-radius: 6px;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--gray);
             margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .progress-container {
+            margin-bottom: 15px;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
             overflow: hidden;
         }
         
         .progress-fill {
             height: 100%;
             background: linear-gradient(to right, var(--secondary), var(--primary));
-            border-radius: 5px;
+            border-radius: 4px;
             transition: width 0.3s ease;
         }
         
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-        
-        .task-description {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-        
-        .task-reward {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-        
-        .reward-amount {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--green);
-        }
-        
-        .task-button {
-            padding: 10px 20px;
+        .invite-button {
+            width: 100%;
+            padding: 12px;
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
@@ -190,14 +201,15 @@
             border: none;
             background: linear-gradient(to right, var(--secondary), var(--primary));
             color: white;
+            margin-top: 10px;
         }
         
-        .task-button:hover {
+        .invite-button:hover {
             opacity: 0.9;
             transform: translateY(-2px);
         }
         
-        .task-button:disabled {
+        .invite-button:disabled {
             background: var(--gray);
             cursor: not-allowed;
             transform: none;
@@ -207,7 +219,34 @@
             border: none;
             height: 1px;
             background-color: rgba(255, 255, 255, 0.1);
-            margin: 30px 0;
+            margin: 20px 0;
+        }
+        
+        .rules-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .rules-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+        
+        .rules-content {
+            font-size: 0.9rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        
+        .date-range {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-align: center;
+            margin-bottom: 20px;
         }
         
         /* Toast Notification */
@@ -254,6 +293,32 @@
             margin-right: 10px;
             font-size: 1.2rem;
         }
+        
+        /* Copy Link Button */
+        .copy-link {
+            display: flex;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .link-input {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: var(--light);
+        }
+        
+        .copy-button {
+            padding: 10px 15px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -261,131 +326,315 @@
         <header>
             <div class="logo">
                 <div class="logo-img">53</div>
-                <h1>53 CLUB - Activity</h1>
+                <h1>53 CLUB - VIP Bonus</h1>
             </div>
         </header>
         
-        <div class="activity-header">
-            <h2>Activity Awards</h2>
-            <p>Complete weekly/daily tasks to receive rich rewards</p>
-            <p>Weekly rewards cannot be accumulated to the next week</p>
+        <div class="vip-header">
+            <h2>Invitation Bonus</h2>
+            <p>Invite friends to register and recharge to receive rewards</p>
+            <p class="date-range">Activity Date: 2025-03-18 - 2041-12-29</p>
         </div>
         
-        <div class="task-container">
-            <div class="task-header">
-                <div class="task-title">7.7 Weekly Slots Betting Task</div>
-                <div class="task-status status-unfinished">Unfinished</div>
-            </div>
-            <div class="task-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-1" style="width: 0%"></div>
-                </div>
-                <div class="progress-text">
-                    <span id="progress-text-1">₹0</span>
-                    <span>₹10,000</span>
-                </div>
-            </div>
-            <div class="task-description">
-                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
-            </div>
-            <div class="task-reward">
-                <div class="reward-amount">₹25.00</div>
-                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
+        <div class="rules-container">
+            <div class="rules-title">Invitation Reward Rules</div>
+            <div class="rules-content">
+                <p>1. Both inviter and invitee will receive rewards when invitee completes first deposit</p>
+                <p>2. Bonus will be credited to your account immediately after requirements are met</p>
+                <p>3. Each invitee can only be counted once for each bonus level</p>
             </div>
         </div>
         
-        <div class="task-container">
-            <div class="task-header">
-                <div class="task-title">7.7 Weekly Slots Betting Task</div>
-                <div class="task-status status-unfinished">Unfinished</div>
-            </div>
-            <div class="task-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-2" style="width: 0%"></div>
-                </div>
-                <div class="progress-text">
-                    <span id="progress-text-2">₹0</span>
-                    <span>₹20,000</span>
-                </div>
-            </div>
-            <div class="task-description">
-                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
-            </div>
-            <div class="task-reward">
-                <div class="reward-amount">₹50.00</div>
-                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
-            </div>
+        <div class="copy-link">
+            <input type="text" id="referral-link" class="link-input" value="Loading referral link..." readonly>
+            <button class="copy-button" onclick="copyReferralLink()">Copy</button>
         </div>
         
-        <div class="task-container">
-            <div class="task-header">
-                <div class="task-title">7.7 Weekly Slots Betting Task</div>
-                <div class="task-status status-unfinished">Unfinished</div>
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 1</div>
+                <div class="bonus-amount">₹38.00</div>
             </div>
-            <div class="task-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-3" style="width: 0%"></div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">1</div>
                 </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹300.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
                 <div class="progress-text">
-                    <span id="progress-text-3">₹0</span>
-                    <span>₹50,000</span>
+                    <span id="invitees-1">0 / 1</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-1" style="width: 0%"></div>
                 </div>
             </div>
-            <div class="task-description">
-                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-1">0 / 1</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-1" style="width: 0%"></div>
+                </div>
             </div>
-            <div class="task-reward">
-                <div class="reward-amount">₹100.00</div>
-                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
-            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
         </div>
         
-        <div class="divider"></div>
-        
-        <div class="task-container">
-            <div class="task-header">
-                <div class="task-title">7.7 Weekly Slots Betting Task</div>
-                <div class="task-status status-unfinished">Unfinished</div>
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 2</div>
+                <div class="bonus-amount">₹158.00</div>
             </div>
-            <div class="task-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-4" style="width: 0%"></div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">3</div>
                 </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹300.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
                 <div class="progress-text">
-                    <span id="progress-text-4">₹0</span>
-                    <span>₹100,000</span>
+                    <span id="invitees-2">0 / 3</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-2" style="width: 0%"></div>
                 </div>
             </div>
-            <div class="task-description">
-                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-2">0 / 3</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-2" style="width: 0%"></div>
+                </div>
             </div>
-            <div class="task-reward">
-                <div class="reward-amount">₹200.00</div>
-                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
-            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
         </div>
         
-        <div class="task-container">
-            <div class="task-header">
-                <div class="task-title">7.7 Weekly Slots Betting Task</div>
-                <div class="task-status status-unfinished">Unfinished</div>
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 3</div>
+                <div class="bonus-amount">₹580.00</div>
             </div>
-            <div class="task-progress">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-5" style="width: 0%"></div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">10</div>
                 </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹500.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
                 <div class="progress-text">
-                    <span id="progress-text-5">₹0</span>
-                    <span>₹150,000</span>
+                    <span id="invitees-3">0 / 10</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-3" style="width: 0%"></div>
                 </div>
             </div>
-            <div class="task-description">
-                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-3">0 / 10</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-3" style="width: 0%"></div>
+                </div>
             </div>
-            <div class="task-reward">
-                <div class="reward-amount">₹300.00</div>
-                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 4</div>
+                <div class="bonus-amount">₹1,800.00</div>
             </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">30</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹800.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-4">0 / 30</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-4" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-4">0 / 30</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-4" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 5</div>
+                <div class="bonus-amount">₹2,800.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">50</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹1,200.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-5">0 / 50</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-5" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-5">0 / 50</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-5" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 6</div>
+                <div class="bonus-amount">₹4,500.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">75</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹1,200.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-6">0 / 75</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-6" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-6">0 / 75</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-6" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 7</div>
+                <div class="bonus-amount">₹5,800.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">100</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹1,200.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-7">0 / 100</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-7" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-7">0 / 100</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-7" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
         </div>
     </div>
     
@@ -411,15 +660,19 @@
         
         // User data
         let userPhone = "";
-        let weeklyBettingAmount = 0;
+        let referralCode = "";
+        let invitees = 0;
+        let deposits = 0;
         
-        // Task requirements
-        const tasks = [
-            { id: 1, target: 10000, reward: 25 },
-            { id: 2, target: 20000, reward: 50 },
-            { id: 3, target: 50000, reward: 100 },
-            { id: 4, target: 100000, reward: 200 },
-            { id: 5, target: 150000, reward: 300 }
+        // Bonus requirements
+        const bonuses = [
+            { id: 1, invitees: 1, deposit: 1, amount: 300, reward: 38 },
+            { id: 2, invitees: 3, deposit: 3, amount: 300, reward: 158 },
+            { id: 3, invitees: 10, deposit: 10, amount: 500, reward: 580 },
+            { id: 4, invitees: 30, deposit: 30, amount: 800, reward: 1800 },
+            { id: 5, invitees: 50, deposit: 50, amount: 1200, reward: 2800 },
+            { id: 6, invitees: 75, deposit: 75, amount: 1200, reward: 4500 },
+            { id: 7, invitees: 100, deposit: 100, amount: 1200, reward: 5800 }
         ];
         
         // Check if user is logged in
@@ -428,42 +681,51 @@
             if(!userPhone) {
                 window.location.href = "index.html";
             } else {
-                loadUserData();
+                generateReferralCode();
+                loadReferralData();
             }
         }
         
-        // Load user data and update progress
-        function loadUserData() {
-            // Get current week start timestamp (Monday 00:00:00)
-            const now = new Date();
-            const day = now.getDay();
-            const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Adjust for Sunday
-            const weekStart = new Date(now.setDate(diff));
-            weekStart.setHours(0, 0, 0, 0);
-            const weekStartTimestamp = weekStart.getTime();
-            
-            // Get user's weekly betting amount
-            database.ref('users/' + userPhone + '/weeklyBetting').once('value').then((snapshot) => {
-                const weeklyData = snapshot.val() || {};
-                weeklyBettingAmount = 0;
+        // Generate referral code from phone number
+        function generateReferralCode() {
+            referralCode = "53" + userPhone.slice(-6);
+            document.getElementById('referral-link').value = window.location.origin + "/register.html?ref=" + referralCode;
+        }
+        
+        // Copy referral link to clipboard
+        function copyReferralLink() {
+            const linkInput = document.getElementById('referral-link');
+            linkInput.select();
+            document.execCommand('copy');
+            showToast('Referral link copied!', 'success');
+        }
+        
+        // Load user's referral data
+        function loadReferralData() {
+            database.ref('users/' + userPhone + '/referrals').once('value').then((snapshot) => {
+                const referralData = snapshot.val() || {};
                 
-                // Sum up bets for current week
-                Object.keys(weeklyData).forEach(timestamp => {
-                    if (parseInt(timestamp) >= weekStartTimestamp) {
-                        weeklyBettingAmount += weeklyData[timestamp].amount || 0;
-                    }
-                });
+                // Count qualified invitees (those who deposited)
+                invitees = Object.keys(referralData).length;
+                deposits = Object.values(referralData).filter(user => user.deposited).length;
                 
-                // Update progress for each task
-                tasks.forEach(task => {
-                    const progress = Math.min(100, (weeklyBettingAmount / task.target) * 100);
-                    document.getElementById(`progress-${task.id}`).style.width = `${progress}%`;
-                    document.getElementById(`progress-text-${task.id}`).textContent = 
-                        `₹${Math.min(weeklyBettingAmount, task.target).toLocaleString()}`;
+                // Update all bonus progress
+                bonuses.forEach(bonus => {
+                    const inviteesProgress = Math.min(100, (invitees / bonus.invitees) * 100);
+                    const depositsProgress = Math.min(100, (deposits / bonus.deposit) * 100);
                     
-                    // Update status if completed
-                    if (weeklyBettingAmount >= task.target) {
-                        const statusElement = document.querySelector(`#progress-${task.id}`).closest('.task-container').querySelector('.task-status');
+                    document.getElementById(`progress-invitees-${bonus.id}`).style.width = `${inviteesProgress}%`;
+                    document.getElementById(`progress-deposits-${bonus.id}`).style.width = `${depositsProgress}%`;
+                    
+                    document.getElementById(`invitees-${bonus.id}`).textContent = 
+                        `${Math.min(invitees, bonus.invitees)} / ${bonus.invitees}`;
+                    document.getElementById(`deposits-${bonus.id}`).textContent = 
+                        `${Math.min(deposits, bonus.deposit)} / ${bonus.deposit}`;
+                    
+                    // Check if bonus is completed
+                    if (invitees >= bonus.invitees && deposits >= bonus.deposit) {
+                        const statusElement = document.querySelector(`#progress-invitees-${bonus.id}`)
+                            .closest('.bonus-container').querySelector('.bonus-status');
                         statusElement.classList.remove('status-unfinished');
                         statusElement.classList.add('status-completed');
                         statusElement.textContent = 'Completed';
