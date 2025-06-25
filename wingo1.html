@@ -1290,12 +1290,16 @@
                     
                     // Convert to array and sort by timestamp (descending)
                     const resultsArray = Object.keys(results).map(key => ({
-                        key: key,
-                        ...results[key]
+                        period: key,
+                        number: results[key].number,
+                        bigSmall: results[key].bigSmall,
+                        color: results[key].color,
+                        timestamp: results[key].timestamp
                     })).sort((a, b) => b.timestamp - a.timestamp);
                     
+                    // Add to history in sorted order
                     resultsArray.forEach(result => {
-                        addToHistory(result.key, result.number, result.bigSmall, result.color);
+                        addToHistory(result.period, result.number, result.bigSmall, result.color);
                     });
                 } else {
                     // No results yet, show waiting message
