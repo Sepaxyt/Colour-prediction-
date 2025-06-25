@@ -800,7 +800,7 @@
         let isGameRunning = false;
         let resultModalTimeout;
         let userBets = {}; // Track user's bets for current period
-        const gameMode = '3min'; // Fixed for this variant
+        const gameMode = 'wingo3min'; // Changed to unique identifier
         const gameDuration = 180; // Fixed duration in seconds
         let gameStartTime = 0;
         
@@ -854,7 +854,7 @@
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
-            const prefix = '3M'; // Prefix for 3min game
+            const prefix = 'W3M'; // Changed prefix for Wingo 3min
             
             // Format: YYYYMMDD + prefix + period number (padded to 3 digits)
             return `${year}${month}${day}${prefix}${String(periodNumber).padStart(3, '0')}`;
@@ -866,12 +866,12 @@
             clearInterval(timerInterval);
             
             // Get the last period number from database for this game mode
-            database.ref(`gameSettings/lastPeriodNumber_3min`).once('value').then((snapshot) => {
+            database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).once('value').then((snapshot) => {
                 const lastPeriod = snapshot.val();
                 currentPeriodNumber = lastPeriod ? lastPeriod + 1 : 430; // Default to 430 if no previous period
                 
                 // Check if we have an active period
-                database.ref(`gameSettings/currentPeriod_3min`).once('value').then((periodSnapshot) => {
+                database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then((periodSnapshot) => {
                     const activePeriod = periodSnapshot.val();
                     
                     if (activePeriod && activePeriod.periodNumber === currentPeriodNumber) {
@@ -908,13 +908,13 @@
                             periodId: currentPeriod,
                             startTime: getServerTime(),
                             status: 'open',
-                            gameMode: '3min'
+                            gameMode: gameMode
                         };
                         
                         gameStartTime = periodData.startTime;
                         
-                        database.ref(`gameSettings/currentPeriod_3min`).set(periodData);
-                        database.ref(`gamePeriods/3min/` + currentPeriod).set(periodData);
+                        database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
+                        database.ref(`gamePeriods/${gameMode}/` + currentPeriod).set(periodData);
                         
                         // Reset user bets for new period
                         userBets = {};
@@ -941,7 +941,7 @@
             generateResult().then(() => {
                 // Increment period number
                 currentPeriodNumber++;
-                database.ref(`gameSettings/lastPeriodNumber_3min`).set(currentPeriodNumber);
+                database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).set(currentPeriodNumber);
                 
                 // Generate new period ID
                 currentPeriod = generatePeriodId(currentPeriodNumber);
@@ -953,13 +953,13 @@
                     periodId: currentPeriod,
                     startTime: getServerTime(),
                     status: 'open',
-                    gameMode: '3min'
+                    gameMode: gameMode
                 };
                 
                 gameStartTime = periodData.startTime;
                 
-                database.ref(`gameSettings/currentPeriod_3min`).set(periodData);
-                database.ref(`gamePeriods/3min/` + currentPeriod).set(periodData);
+                database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
+                database.ref(`gamePeriods/${gameMode}/` + currentPeriod).set(periodData);
                 
                 // Reset user bets for new period
                 userBets = {};
@@ -1035,10 +1035,10 @@
                     color: color,
                     bigSmall: bigSmall,
                     timestamp: getServerTime(),
-                    gameMode: '3min'
+                    gameMode: gameMode
                 };
                 
-                database.ref(`gameResults/3min/` + currentPeriod).set(resultData).then(() => {
+                database.ref(`gameResults/${gameMode}/` + currentPeriod).set(resultData).then(() => {
                     // Add to history
                     addToHistory(currentPeriod, winningNumber, bigSmall, color);
                     
@@ -1054,7 +1054,7 @@
         
         // Clean up old history (keep only last 5 records)
         function cleanupOldHistory() {
-            database.ref(`gameResults/3min`).orderByChild('periodNumber').once('value').then((snapshot) => {
+            database.ref(`gameResults/${gameMode}`).orderByChild('periodNumber').once('value').then((snapshot) => {
                 const results = snapshot.val();
                 if (results) {
                     const resultsArray = Object.keys(results).map(key => ({
@@ -1069,7 +1069,7 @@
                     if (resultsArray.length > 5) {
                         const toDelete = resultsArray.slice(0, resultsArray.length - 5);
                         toDelete.forEach(item => {
-                            database.ref(`gameResults/3min/` + item.key).remove();
+                            database.ref(`gameResults/${gameMode}/` + item.key).remove();
                         });
                     }
                 }
@@ -1304,7 +1304,7 @@
         
         // Load game history from database
         function loadGameHistory() {
-            database.ref(`gameResults/3min`).orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
+            database.ref(`gameResults/${gameMode}`).orderByChild('periodNumber').limitToLast(5).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
@@ -1468,7 +1468,7 @@
                     status: 'pending',
                     processed: false,
                     notificationShown: false,
-                    gameMode: '3min'
+                    gameMode: gameMode
                 });
                 
                 // Track user's bet for this period
@@ -1536,7 +1536,7 @@
                         status: 'pending',
                         processed: false,
                         notificationShown: false,
-                        gameMode: '3min'
+                        gameMode: gameMode
                     });
                     
                     // Track user's bet for this period
