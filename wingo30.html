@@ -802,6 +802,7 @@
         let userBets = {};
         const gameMode = '30sec';
         const gameDuration = 30;
+        const bettingCloseTime = 5; // Close betting 5 seconds before end
         let gameStartTime = 0;
         const MAX_HISTORY_ITEMS = 5;
         
@@ -871,6 +872,11 @@
                             document.getElementById('period-id').textContent = currentPeriod;
                             startTimer();
                             
+                            // Show red timer when betting is closed (last 5 seconds)
+                            if (timeLeft <= bettingCloseTime) {
+                                document.getElementById('timer').style.color = 'var(--red)';
+                            }
+                            
                             setTimeout(() => {
                                 endCurrentPeriod();
                             }, timeLeft * 1000);
@@ -939,6 +945,7 @@
                 
                 userBets = {};
                 timeLeft = gameDuration;
+                document.getElementById('timer').style.color = ''; // Reset timer color
                 startTimer();
                 
                 setTimeout(() => {
@@ -957,6 +964,12 @@
             timerInterval = setInterval(() => {
                 timeLeft--;
                 updateTimerDisplay();
+                
+                // Change timer color to red when 5 seconds left (betting closed)
+                if (timeLeft === bettingCloseTime) {
+                    document.getElementById('timer').style.color = 'var(--red)';
+                    showToast('Betting closed!', 'warning');
+                }
                 
                 if(timeLeft <= 0) {
                     clearInterval(timerInterval);
@@ -1008,7 +1021,7 @@
             });
         }
         
-        // Add to history
+        // Add to history (fixed to maintain order)
         function addToHistory(period, number, bigSmall, color) {
             const historyBody = document.getElementById('history-body');
             
@@ -1033,6 +1046,7 @@
                 <td>${colorDot}</td>
             `;
             
+            // Always insert new results at the top
             if(historyBody.firstChild) {
                 historyBody.insertBefore(historyRow, historyBody.firstChild);
             } else {
@@ -1044,14 +1058,14 @@
                 historyBody.removeChild(historyBody.lastChild);
             }
             
-            // Update gameHistory array
-            gameHistory = [{period, number, bigSmall, color}, ...gameHistory];
+            // Update gameHistory array (newest first)
+            gameHistory.unshift({period, number, bigSmall, color});
             if (gameHistory.length > MAX_HISTORY_ITEMS) {
                 gameHistory = gameHistory.slice(0, MAX_HISTORY_ITEMS);
             }
         }
         
-        // Process bets
+        // Process bets with 10% commission
         function processBets(winningNumber, winningColor, winningBigSmall) {
             return new Promise((resolve) => {
                 database.ref('bets/' + currentPeriod).once('value').then((snapshot) => {
@@ -1086,9 +1100,9 @@
                                     winAmount = bet.amount * bet.odds;
                                 }
                                 
-                                // Deduct 10% commission from win amount
+                                // Deduct 10% commission from win amount (minimum ₹1)
                                 if (isWinner) {
-                                    const commission = Math.max(1, Math.floor(winAmount * 0.1)); // Minimum ₹1 deduction
+                                    const commission = Math.max(1, Math.floor(winAmount * 0.1));
                                     winAmount = winAmount - commission;
                                 }
                                 
@@ -1219,7 +1233,7 @@
             return bet.value;
         }
         
-        // Load game history (from separate 30sec path)
+        // Load game history (fixed to maintain order)
         function loadGameHistory() {
             database.ref(`gameResults/30sec`).orderByChild('timestamp').limitToLast(MAX_HISTORY_ITEMS).once('value').then((snapshot) => {
                 const results = snapshot.val();
@@ -1228,7 +1242,7 @@
                     document.getElementById('history-body').innerHTML = '';
                     gameHistory = [];
                     
-                    // Convert results to array and sort by timestamp descending
+                    // Convert to array and sort by timestamp descending (newest first)
                     const resultsArray = Object.entries(results).map(([key, value]) => ({
                         period: key,
                         number: value.number,
@@ -1237,7 +1251,7 @@
                         timestamp: value.timestamp
                     })).sort((a, b) => b.timestamp - a.timestamp);
                     
-                    // Add to history in reverse order (newest first)
+                    // Add to history in correct order
                     resultsArray.forEach(result => {
                         addToHistory(result.period, result.number, result.bigSmall, result.color);
                     });
@@ -1271,8 +1285,13 @@
             document.getElementById('wallet-balance').textContent = formattedBalance;
         }
         
-        // Open bet modal
+        // Open bet modal (with betting time check)
         function openBetModal(type, name, odds) {
+            if (timeLeft <= bettingCloseTime) {
+                showToast('Betting closed! Wait for next round', 'error');
+                return;
+            }
+            
             if (userBets[type] || 
                 (type === 'big' && userBets['small']) || 
                 (type === 'small' && userBets['big'])) {
@@ -1313,7 +1332,7 @@
             calculateWinAmount();
         }
         
-        // Calculate win amount (with 10% commission deduction)
+        // Calculate win amount (with 10% commission)
         function calculateWinAmount() {
             const amount = parseFloat(document.getElementById('bet-amount').value);
             
@@ -1329,8 +1348,14 @@
             }
         }
         
-        // Place bet
+        // Place bet (with betting time check)
         function placeBet() {
+            if (timeLeft <= bettingCloseTime) {
+                showToast('Betting closed! Wait for next round', 'error');
+                hideBetModal();
+                return;
+            }
+            
             const amount = parseFloat(document.getElementById('bet-amount').value);
             
             if(!amount || amount <= 0) {
@@ -1394,8 +1419,13 @@
             });
         }
         
-        // Place random bets (with 10% commission deduction)
+        // Place random bets (with betting time check)
         function placeRandomBet(count, amount) {
+            if (timeLeft <= bettingCloseTime) {
+                showToast('Betting closed! Wait for next round', 'error');
+                return;
+            }
+            
             if(count <= 0) return;
             
             const betTypes = [
