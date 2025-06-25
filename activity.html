@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 CLUB - Activity Rewards</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --red: #ff4757;
+            --green: #2ed573;
+            --violet: #9c88ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .activity-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .activity-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .activity-header p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .task-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .task-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+        
+        .task-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-completed {
+            background-color: rgba(46, 213, 115, 0.2);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+        
+        .status-unfinished {
+            background-color: rgba(255, 71, 87, 0.2);
+            color: var(--red);
+            border: 1px solid var(--red);
+        }
+        
+        .task-progress {
+            margin-bottom: 15px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin-bottom: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .task-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .task-reward {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .reward-amount {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--green);
+        }
+        
+        .task-button {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+        }
+        
+        .task-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .task-button:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .divider {
+            border: none;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 30px 0;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-img">53</div>
+                <h1>53 CLUB - Activity</h1>
+            </div>
+        </header>
+        
+        <div class="activity-header">
+            <h2>Activity Awards</h2>
+            <p>Complete weekly/daily tasks to receive rich rewards</p>
+            <p>Weekly rewards cannot be accumulated to the next week</p>
+        </div>
+        
+        <div class="task-container">
+            <div class="task-header">
+                <div class="task-title">7.7 Weekly Slots Betting Task</div>
+                <div class="task-status status-unfinished">Unfinished</div>
+            </div>
+            <div class="task-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-1" style="width: 0%"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-text-1">₹0</span>
+                    <span>₹10,000</span>
+                </div>
+            </div>
+            <div class="task-description">
+                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
+            </div>
+            <div class="task-reward">
+                <div class="reward-amount">₹25.00</div>
+                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
+            </div>
+        </div>
+        
+        <div class="task-container">
+            <div class="task-header">
+                <div class="task-title">7.7 Weekly Slots Betting Task</div>
+                <div class="task-status status-unfinished">Unfinished</div>
+            </div>
+            <div class="task-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-2" style="width: 0%"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-text-2">₹0</span>
+                    <span>₹20,000</span>
+                </div>
+            </div>
+            <div class="task-description">
+                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
+            </div>
+            <div class="task-reward">
+                <div class="reward-amount">₹50.00</div>
+                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
+            </div>
+        </div>
+        
+        <div class="task-container">
+            <div class="task-header">
+                <div class="task-title">7.7 Weekly Slots Betting Task</div>
+                <div class="task-status status-unfinished">Unfinished</div>
+            </div>
+            <div class="task-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-3" style="width: 0%"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-text-3">₹0</span>
+                    <span>₹50,000</span>
+                </div>
+            </div>
+            <div class="task-description">
+                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
+            </div>
+            <div class="task-reward">
+                <div class="reward-amount">₹100.00</div>
+                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="task-container">
+            <div class="task-header">
+                <div class="task-title">7.7 Weekly Slots Betting Task</div>
+                <div class="task-status status-unfinished">Unfinished</div>
+            </div>
+            <div class="task-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-4" style="width: 0%"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-text-4">₹0</span>
+                    <span>₹100,000</span>
+                </div>
+            </div>
+            <div class="task-description">
+                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
+            </div>
+            <div class="task-reward">
+                <div class="reward-amount">₹200.00</div>
+                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
+            </div>
+        </div>
+        
+        <div class="task-container">
+            <div class="task-header">
+                <div class="task-title">7.7 Weekly Slots Betting Task</div>
+                <div class="task-status status-unfinished">Unfinished</div>
+            </div>
+            <div class="task-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-5" style="width: 0%"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progress-text-5">₹0</span>
+                    <span>₹150,000</span>
+                </div>
+            </div>
+            <div class="task-description">
+                Member must place bets on "SLOTS" game and reach the minimum requirement betting amount in a week to complete this task and receive the reward.
+            </div>
+            <div class="task-reward">
+                <div class="reward-amount">₹300.00</div>
+                <button class="task-button" onclick="window.location.href='main.html'">To Complete</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.appspot.com",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // User data
+        let userPhone = "";
+        let weeklyBettingAmount = 0;
+        
+        // Task requirements
+        const tasks = [
+            { id: 1, target: 10000, reward: 25 },
+            { id: 2, target: 20000, reward: 50 },
+            { id: 3, target: 50000, reward: 100 },
+            { id: 4, target: 100000, reward: 200 },
+            { id: 5, target: 150000, reward: 300 }
+        ];
+        
+        // Check if user is logged in
+        function checkAuth() {
+            userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
+            if(!userPhone) {
+                window.location.href = "index.html";
+            } else {
+                loadUserData();
+            }
+        }
+        
+        // Load user data and update progress
+        function loadUserData() {
+            // Get current week start timestamp (Monday 00:00:00)
+            const now = new Date();
+            const day = now.getDay();
+            const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Adjust for Sunday
+            const weekStart = new Date(now.setDate(diff));
+            weekStart.setHours(0, 0, 0, 0);
+            const weekStartTimestamp = weekStart.getTime();
+            
+            // Get user's weekly betting amount
+            database.ref('users/' + userPhone + '/weeklyBetting').once('value').then((snapshot) => {
+                const weeklyData = snapshot.val() || {};
+                weeklyBettingAmount = 0;
+                
+                // Sum up bets for current week
+                Object.keys(weeklyData).forEach(timestamp => {
+                    if (parseInt(timestamp) >= weekStartTimestamp) {
+                        weeklyBettingAmount += weeklyData[timestamp].amount || 0;
+                    }
+                });
+                
+                // Update progress for each task
+                tasks.forEach(task => {
+                    const progress = Math.min(100, (weeklyBettingAmount / task.target) * 100);
+                    document.getElementById(`progress-${task.id}`).style.width = `${progress}%`;
+                    document.getElementById(`progress-text-${task.id}`).textContent = 
+                        `₹${Math.min(weeklyBettingAmount, task.target).toLocaleString()}`;
+                    
+                    // Update status if completed
+                    if (weeklyBettingAmount >= task.target) {
+                        const statusElement = document.querySelector(`#progress-${task.id}`).closest('.task-container').querySelector('.task-status');
+                        statusElement.classList.remove('status-unfinished');
+                        statusElement.classList.add('status-completed');
+                        statusElement.textContent = 'Completed';
+                    }
+                });
+            });
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Initialize
+        window.addEventListener('load', checkAuth);
+    </script>
+</body>
+</html>
