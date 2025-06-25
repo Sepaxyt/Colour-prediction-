@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 CLUB - VIP Invitation Bonus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --red: #ff4757;
+            --green: #2ed573;
+            --violet: #9c88ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .vip-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .vip-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .vip-header p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .bonus-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .bonus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .bonus-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+        
+        .bonus-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+        
+        .bonus-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-completed {
+            background-color: rgba(46, 213, 115, 0.2);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+        
+        .status-unfinished {
+            background-color: rgba(255, 71, 87, 0.2);
+            color: var(--red);
+            border: 1px solid var(--red);
+        }
+        
+        .bonus-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px;
+            border-radius: 6px;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .progress-container {
+            margin-bottom: 15px;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .invite-button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            margin-top: 10px;
+        }
+        
+        .invite-button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .invite-button:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .divider {
+            border: none;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+        }
+        
+        .rules-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .rules-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+        
+        .rules-content {
+            font-size: 0.9rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        
+        .date-range {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Copy Link Button */
+        .copy-link {
+            display: flex;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .link-input {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: var(--light);
+        }
+        
+        .copy-button {
+            padding: 10px 15px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-img">53</div>
+                <h1>53 CLUB - VIP Bonus</h1>
+            </div>
+        </header>
+        
+        <div class="vip-header">
+            <h2>Invitation Bonus</h2>
+            <p>Invite friends to register and recharge to receive rewards</p>
+            <p class="date-range">Activity Date: 2025-03-18 - 2041-12-29</p>
+        </div>
+        
+        <div class="rules-container">
+            <div class="rules-title">Invitation Reward Rules</div>
+            <div class="rules-content">
+                <p>1. Both inviter and invitee will receive rewards when invitee completes first deposit</p>
+                <p>2. Bonus will be credited to your account immediately after requirements are met</p>
+                <p>3. Each invitee can only be counted once for each bonus level</p>
+            </div>
+        </div>
+        
+        <div class="copy-link">
+            <input type="text" id="referral-link" class="link-input" value="Loading referral link..." readonly>
+            <button class="copy-button" onclick="copyReferralLink()">Copy</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 1</div>
+                <div class="bonus-amount">₹38.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">1</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹300.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-1">0 / 1</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-1" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-1">0 / 1</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-1" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 2</div>
+                <div class="bonus-amount">₹158.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">3</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹300.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-2">0 / 3</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-2" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-2">0 / 3</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-2" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 3</div>
+                <div class="bonus-amount">₹580.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">10</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹500.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-3">0 / 10</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-3" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-3">0 / 10</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-3" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 4</div>
+                <div class="bonus-amount">₹1,800.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">30</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹800.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-4">0 / 30</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-4" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-4">0 / 30</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-4" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 5</div>
+                <div class="bonus-amount">₹2,800.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">50</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹1,200.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-5">0 / 50</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-5" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-5">0 / 50</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-5" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 6</div>
+                <div class="bonus-amount">₹4,500.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">75</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹1,200.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-6">0 / 75</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-6" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-6">0 / 75</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-6" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+        
+        <div class="bonus-container">
+            <div class="bonus-header">
+                <div class="bonus-title">Bonus 7</div>
+                <div class="bonus-amount">₹5,800.00</div>
+            </div>
+            <div class="bonus-status status-unfinished">Unfinished</div>
+            
+            <div class="bonus-details">
+                <div class="detail-item">
+                    <div class="detail-label">Number of invitees</div>
+                    <div class="detail-value">100</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Recharge per people</div>
+                    <div class="detail-value">₹1,200.00</div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="invitees-7">0 / 100</span>
+                    <span>Invitees</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-invitees-7" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="deposits-7">0 / 100</span>
+                    <span>Deposits</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-deposits-7" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.appspot.com",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // User data
+        let userPhone = "";
+        let referralCode = "";
+        let invitees = 0;
+        let deposits = 0;
+        
+        // Bonus requirements
+        const bonuses = [
+            { id: 1, invitees: 1, deposit: 1, amount: 300, reward: 38 },
+            { id: 2, invitees: 3, deposit: 3, amount: 300, reward: 158 },
+            { id: 3, invitees: 10, deposit: 10, amount: 500, reward: 580 },
+            { id: 4, invitees: 30, deposit: 30, amount: 800, reward: 1800 },
+            { id: 5, invitees: 50, deposit: 50, amount: 1200, reward: 2800 },
+            { id: 6, invitees: 75, deposit: 75, amount: 1200, reward: 4500 },
+            { id: 7, invitees: 100, deposit: 100, amount: 1200, reward: 5800 }
+        ];
+        
+        // Check if user is logged in
+        function checkAuth() {
+            userPhone = localStorage.getItem('userPhone') || sessionStorage.getItem('userPhone');
+            if(!userPhone) {
+                window.location.href = "index.html";
+            } else {
+                generateReferralCode();
+                loadReferralData();
+            }
+        }
+        
+        // Generate referral code from phone number
+        function generateReferralCode() {
+            referralCode = "53" + userPhone.slice(-6);
+            document.getElementById('referral-link').value = window.location.origin + "/register.html?ref=" + referralCode;
+        }
+        
+        // Copy referral link to clipboard
+        function copyReferralLink() {
+            const linkInput = document.getElementById('referral-link');
+            linkInput.select();
+            document.execCommand('copy');
+            showToast('Referral link copied!', 'success');
+        }
+        
+        // Load user's referral data
+        function loadReferralData() {
+            database.ref('users/' + userPhone + '/referrals').once('value').then((snapshot) => {
+                const referralData = snapshot.val() || {};
+                
+                // Count qualified invitees (those who deposited)
+                invitees = Object.keys(referralData).length;
+                deposits = Object.values(referralData).filter(user => user.deposited).length;
+                
+                // Update all bonus progress
+                bonuses.forEach(bonus => {
+                    const inviteesProgress = Math.min(100, (invitees / bonus.invitees) * 100);
+                    const depositsProgress = Math.min(100, (deposits / bonus.deposit) * 100);
+                    
+                    document.getElementById(`progress-invitees-${bonus.id}`).style.width = `${inviteesProgress}%`;
+                    document.getElementById(`progress-deposits-${bonus.id}`).style.width = `${depositsProgress}%`;
+                    
+                    document.getElementById(`invitees-${bonus.id}`).textContent = 
+                        `${Math.min(invitees, bonus.invitees)} / ${bonus.invitees}`;
+                    document.getElementById(`deposits-${bonus.id}`).textContent = 
+                        `${Math.min(deposits, bonus.deposit)} / ${bonus.deposit}`;
+                    
+                    // Check if bonus is completed
+                    if (invitees >= bonus.invitees && deposits >= bonus.deposit) {
+                        const statusElement = document.querySelector(`#progress-invitees-${bonus.id}`)
+                            .closest('.bonus-container').querySelector('.bonus-status');
+                        statusElement.classList.remove('status-unfinished');
+                        statusElement.classList.add('status-completed');
+                        statusElement.textContent = 'Completed';
+                    }
+                });
+            });
+        }
+        
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Initialize
+        window.addEventListener('load', checkAuth);
+    </script>
+</body>
+</html>
