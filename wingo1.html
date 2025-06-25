@@ -803,6 +803,7 @@
         const gameMode = '1min';
         const gameDuration = 60;
         let gameStartTime = 0;
+        const MAX_HISTORY_ITEMS = 5; // Show last 5 results
         
         // Check if user is logged in
         function checkAuth() {
@@ -1011,6 +1012,7 @@
         function addToHistory(period, number, bigSmall, color) {
             const historyBody = document.getElementById('history-body');
             
+            // Initialize historyBody if empty
             if(historyBody.firstChild && historyBody.firstChild.textContent === 'Loading history...') {
                 historyBody.innerHTML = '';
             }
@@ -1032,24 +1034,29 @@
                 <td>${colorDot}</td>
             `;
             
+            // Add new result to the top
             if(historyBody.firstChild) {
                 historyBody.insertBefore(historyRow, historyBody.firstChild);
             } else {
                 historyBody.appendChild(historyRow);
             }
             
-            // Keep only the latest result
-            while(historyBody.children.length > 1) {
+            // Remove oldest result if we exceed the max history items
+            while(historyBody.children.length > MAX_HISTORY_ITEMS) {
                 historyBody.removeChild(historyBody.lastChild);
             }
             
-            // Update local history
-            gameHistory = [{
+            // Update local history (keep only the last 5 items)
+            gameHistory.unshift({
                 period: period,
                 number: number,
                 bigSmall: bigSmall,
                 color: color
-            }];
+            });
+            
+            if (gameHistory.length > MAX_HISTORY_ITEMS) {
+                gameHistory.pop();
+            }
         }
         
         // Process bets
@@ -1216,16 +1223,25 @@
         
         // Load game history
         function loadGameHistory() {
-            database.ref(`gameResults/1min`).orderByChild('timestamp').limitToLast(1).once('value').then((snapshot) => {
+            database.ref(`gameResults/1min`).orderByChild('timestamp').limitToLast(MAX_HISTORY_ITEMS).once('value').then((snapshot) => {
                 const results = snapshot.val();
                 
                 if(results) {
                     document.getElementById('history-body').innerHTML = '';
                     gameHistory = [];
                     
-                    Object.keys(results).forEach(key => {
-                        const result = results[key];
-                        addToHistory(key, result.number, result.bigSmall, result.color);
+                    // Convert to array and sort by timestamp (newest first)
+                    const resultsArray = Object.entries(results).map(([key, value]) => ({
+                        period: key,
+                        number: value.number,
+                        bigSmall: value.bigSmall,
+                        color: value.color,
+                        timestamp: value.timestamp
+                    })).sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    // Add to history (newest first)
+                    resultsArray.forEach(result => {
+                        addToHistory(result.period, result.number, result.bigSmall, result.color);
                     });
                 } else {
                     document.getElementById('history-body').innerHTML = `
