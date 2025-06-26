@@ -319,6 +319,100 @@
             border: none;
             cursor: pointer;
         }
+        
+        /* Share Modal */
+        .share-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .share-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .share-content {
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .share-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .share-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .close-share {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .share-platforms {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .share-platform {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .share-platform:hover {
+            transform: translateY(-5px);
+        }
+        
+        .platform-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .platform-name {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .whatsapp { background: #25D366; color: white; }
+        .telegram { background: #0088cc; color: white; }
+        .instagram { background: #E1306C; color: white; }
+        .facebook { background: #1877F2; color: white; }
+        .twitter { background: #1DA1F2; color: white; }
+        .messenger { background: #006AFF; color: white; }
+        .sms { background: #34B7F1; color: white; }
+        .more { background: var(--gray); color: white; }
     </style>
 </head>
 <body>
@@ -388,7 +482,7 @@
                 </div>
             </div>
             
-            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+            <button class="invite-button" onclick="openShareModal()">Invite Friends</button>
         </div>
         
         <div class="bonus-container">
@@ -429,7 +523,7 @@
                 </div>
             </div>
             
-            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+            <button class="invite-button" onclick="openShareModal()">Invite Friends</button>
         </div>
         
         <div class="bonus-container">
@@ -470,7 +564,7 @@
                 </div>
             </div>
             
-            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+            <button class="invite-button" onclick="openShareModal()">Invite Friends</button>
         </div>
         
         <div class="bonus-container">
@@ -511,7 +605,7 @@
                 </div>
             </div>
             
-            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+            <button class="invite-button" onclick="openShareModal()">Invite Friends</button>
         </div>
         
         <div class="bonus-container">
@@ -552,7 +646,7 @@
                 </div>
             </div>
             
-            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+            <button class="invite-button" onclick="openShareModal()">Invite Friends</button>
         </div>
         
         <div class="bonus-container">
@@ -593,7 +687,7 @@
                 </div>
             </div>
             
-            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+            <button class="invite-button" onclick="openShareModal()">Invite Friends</button>
         </div>
         
         <div class="bonus-container">
@@ -634,7 +728,67 @@
                 </div>
             </div>
             
-            <button class="invite-button" onclick="window.location.href='invite.html'">Invite Friends</button>
+            <button class="invite-button" onclick="openShareModal()">Invite Friends</button>
+        </div>
+    </div>
+    
+    <!-- Share Modal -->
+    <div class="share-modal" id="shareModal">
+        <div class="share-content">
+            <div class="share-header">
+                <h3 class="share-title">Share Invitation Link</h3>
+                <button class="close-share" onclick="closeShareModal()">&times;</button>
+            </div>
+            <div class="share-platforms">
+                <div class="share-platform" onclick="shareOnWhatsApp()">
+                    <div class="platform-icon whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <span class="platform-name">WhatsApp</span>
+                </div>
+                <div class="share-platform" onclick="shareOnTelegram()">
+                    <div class="platform-icon telegram">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <span class="platform-name">Telegram</span>
+                </div>
+                <div class="share-platform" onclick="shareOnInstagram()">
+                    <div class="platform-icon instagram">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <span class="platform-name">Instagram</span>
+                </div>
+                <div class="share-platform" onclick="shareOnFacebook()">
+                    <div class="platform-icon facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <span class="platform-name">Facebook</span>
+                </div>
+                <div class="share-platform" onclick="shareOnTwitter()">
+                    <div class="platform-icon twitter">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <span class="platform-name">Twitter</span>
+                </div>
+                <div class="share-platform" onclick="shareOnMessenger()">
+                    <div class="platform-icon messenger">
+                        <i class="fab fa-facebook-messenger"></i>
+                    </div>
+                    <span class="platform-name">Messenger</span>
+                </div>
+                <div class="share-platform" onclick="shareViaSMS()">
+                    <div class="platform-icon sms">
+                        <i class="fas fa-sms"></i>
+                    </div>
+                    <span class="platform-name">SMS</span>
+                </div>
+                <div class="share-platform" onclick="shareMoreOptions()">
+                    <div class="platform-icon more">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                    <span class="platform-name">More</span>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -747,6 +901,78 @@
             setTimeout(() => {
                 toast.remove();
             }, 3000);
+        }
+        
+        // Share modal functions
+        function openShareModal() {
+            document.getElementById('shareModal').classList.add('active');
+        }
+        
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('active');
+        }
+        
+        // Share functions
+        function getShareMessage() {
+            return `Join me on 53 CLUB and get exclusive bonuses! Register with my referral link: ${document.getElementById('referral-link').value}`;
+        }
+        
+        function shareOnWhatsApp() {
+            const message = encodeURIComponent(getShareMessage());
+            window.open(`https://wa.me/?text=${message}`, '_blank');
+            closeShareModal();
+        }
+        
+        function shareOnTelegram() {
+            const message = encodeURIComponent(getShareMessage());
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(document.getElementById('referral-link').value)}&text=${message}`, '_blank');
+            closeShareModal();
+        }
+        
+        function shareOnInstagram() {
+            // Instagram doesn't support direct sharing, so we'll open in a new tab
+            showToast('Copy the link and paste in Instagram', 'info');
+            closeShareModal();
+        }
+        
+        function shareOnFacebook() {
+            const url = encodeURIComponent(document.getElementById('referral-link').value);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+            closeShareModal();
+        }
+        
+        function shareOnTwitter() {
+            const message = encodeURIComponent(getShareMessage());
+            window.open(`https://twitter.com/intent/tweet?text=${message}`, '_blank');
+            closeShareModal();
+        }
+        
+        function shareOnMessenger() {
+            const url = encodeURIComponent(document.getElementById('referral-link').value);
+            window.open(`https://www.facebook.com/dialog/send?link=${url}&app_id=YOUR_FB_APP_ID&redirect_uri=${encodeURIComponent(window.location.href)}`, '_blank');
+            closeShareModal();
+        }
+        
+        function shareViaSMS() {
+            const message = encodeURIComponent(getShareMessage());
+            window.open(`sms:?body=${message}`, '_blank');
+            closeShareModal();
+        }
+        
+        function shareMoreOptions() {
+            // Use Web Share API if available
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join 53 CLUB',
+                    text: 'Get exclusive bonuses when you register with my link',
+                    url: document.getElementById('referral-link').value
+                })
+                .then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing:', error));
+            } else {
+                showToast('Use the copy button to share manually', 'info');
+            }
+            closeShareModal();
         }
         
         // Initialize
