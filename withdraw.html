@@ -501,12 +501,12 @@
         <div class="wallet-container">
             <div class="balance-card">
                 <div class="balance-title">Your Current Balance</div>
-                <div class="balance-amount" id="current-balance">₹0.00</div>
+                <div class="balance-amount" id="current-balance">¥0.00</div>
             </div>
             
             <div class="info-box">
                 <p><i class="fas fa-info-circle"></i> Withdrawal time: 00:00-23:59</p>
-                <p><i class="fas fa-info-circle"></i> Withdrawal amount range: ₹110.00-50,000.00</p>
+                <p><i class="fas fa-info-circle"></i> Withdrawal amount range: ¥110.00-50,000.00</p>
                 <p><i class="fas fa-info-circle"></i> Daily remaining withdrawal times: <span id="remaining-withdrawals">3</span></p>
                 <p><i class="fas fa-exclamation-triangle"></i> Please confirm your beneficial account information before withdrawing. If your information is incorrect, our company will not be liable for the amount of loss.</p>
                 <p><i class="fas fa-exclamation-triangle"></i> If your beneficial information is incorrect, please contact customer service.</p>
@@ -518,11 +518,11 @@
                     <div class="progress-bar" id="bet-progress-bar"></div>
                 </div>
                 <div class="progress-stats">
-                    <span>Bet remaining: <span id="bet-remaining">₹0.00</span></span>
-                    <span>Bet completed: <span id="bet-completed">₹0.00</span></span>
+                    <span>Bet remaining: <span id="bet-remaining">¥0.00</span></span>
+                    <span>Bet completed: <span id="bet-completed">¥0.00</span></span>
                 </div>
                 <div class="progress-title" id="withdrawal-message" style="margin-top: 10px; color: var(--warning);">
-                    Need to bet ₹0.00 to be able to withdraw
+                    Need to bet ¥0.00 to be able to withdraw
                 </div>
             </div>
             
@@ -530,17 +530,17 @@
                 <h3 class="section-title"><i class="fas fa-money-bill-wave"></i> Withdraw Funds</h3>
                 
                 <div class="form-group">
-                    <label class="form-label">Withdraw Amount (₹)</label>
-                    <input type="number" class="form-control" id="withdraw-amount" placeholder="Enter amount (min ₹110)" min="110" max="50000">
+                    <label class="form-label">Withdraw Amount (¥)</label>
+                    <input type="number" class="form-control" id="withdraw-amount" placeholder="Enter amount (min ¥110)" min="110" max="50000" step="0.01">
                 </div>
                 
                 <div class="amount-buttons">
-                    <div class="amount-btn" onclick="setAmount(110)">₹110</div>
-                    <div class="amount-btn" onclick="setAmount(500)">₹500</div>
-                    <div class="amount-btn" onclick="setAmount(1000)">₹1000</div>
-                    <div class="amount-btn" onclick="setAmount(2000)">₹2000</div>
-                    <div class="amount-btn" onclick="setAmount(5000)">₹5000</div>
-                    <div class="amount-btn" onclick="setAmount(10000)">₹10000</div>
+                    <div class="amount-btn" onclick="setAmount(110)">¥110</div>
+                    <div class="amount-btn" onclick="setAmount(500)">¥500</div>
+                    <div class="amount-btn" onclick="setAmount(1000)">¥1000</div>
+                    <div class="amount-btn" onclick="setAmount(2000)">¥2000</div>
+                    <div class="amount-btn" onclick="setAmount(5000)">¥5000</div>
+                    <div class="amount-btn" onclick="setAmount(10000)">¥10000</div>
                 </div>
                 
                 <div class="method-tabs">
@@ -580,7 +580,7 @@
                     <!-- History items will be loaded here -->
                     <div class="history-item">
                         <div class="history-date">No withdrawals yet</div>
-                        <div class="history-amount history-pending">₹0.00</div>
+                        <div class="history-amount history-pending">¥0.00</div>
                     </div>
                 </div>
             </div>
@@ -681,8 +681,7 @@
             totalBetAmount: 0,
             withdrawalsToday: 0,
             maxDailyWithdrawals: 3,
-            lastWithdrawalDate: null,
-            totalDeposits: 0
+            lastWithdrawalDate: null
         };
         
         // Check if user is logged in
@@ -706,12 +705,11 @@
                 const data = snapshot.val();
                 if(data) {
                     userData = {
-                        balance: data.balance || 0,
-                        totalBetAmount: data.totalBetAmount || 0,
-                        withdrawalsToday: data.withdrawalsToday || 0,
-                        maxDailyWithdrawals: data.maxDailyWithdrawals || 3,
-                        lastWithdrawalDate: data.lastWithdrawalDate || null,
-                        totalDeposits: data.totalDeposits || 0
+                        balance: parseFloat(data.balance) || 0,
+                        totalBetAmount: parseFloat(data.totalBetAmount) || 0,
+                        withdrawalsToday: parseInt(data.withdrawalsToday) || 0,
+                        maxDailyWithdrawals: parseInt(data.maxDailyWithdrawals) || 3,
+                        lastWithdrawalDate: data.lastWithdrawalDate || null
                     };
                     
                     // Check if it's a new day and reset withdrawals
@@ -729,12 +727,9 @@
         
         // Update UI with user data
         function updateUI() {
-            // Update balance
+            // Update balance with proper formatting
             document.getElementById('current-balance').textContent = 
-                '₹' + userData.balance.toLocaleString('en-IN', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
+                formatCurrency(userData.balance);
             
             // Update remaining withdrawals
             document.getElementById('remaining-withdrawals').textContent = 
@@ -744,25 +739,33 @@
             updateBetProgress();
         }
         
+        // Format currency with 2 decimal places
+        function formatCurrency(amount) {
+            return '¥' + amount.toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+        
         // Update bet progress bar
         function updateBetProgress() {
-            // User must bet their entire balance before withdrawing
+            // Calculate remaining bet amount needed
             const betRemaining = Math.max(0, userData.balance - userData.totalBetAmount);
             const betCompleted = Math.min(userData.totalBetAmount, userData.balance);
             const progressPercentage = userData.balance > 0 ? (betCompleted / userData.balance) * 100 : 0;
             
+            // Update progress bar
             document.getElementById('bet-progress-bar').style.width = `${progressPercentage}%`;
-            document.getElementById('bet-remaining').textContent = 
-                '₹' + betRemaining.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            document.getElementById('bet-completed').textContent = 
-                '₹' + betCompleted.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            
+            // Update displayed amounts
+            document.getElementById('bet-remaining').textContent = formatCurrency(betRemaining);
+            document.getElementById('bet-completed').textContent = formatCurrency(betCompleted);
             
             const withdrawalMessage = document.getElementById('withdrawal-message');
             const withdrawBtn = document.getElementById('withdraw-btn');
             
             if(betRemaining > 0) {
-                withdrawalMessage.textContent = 
-                    `Need to bet ₹${betRemaining.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) to be able to withdraw`;
+                withdrawalMessage.textContent = `Need to bet ${formatCurrency(betRemaining)} to be able to withdraw`;
                 withdrawalMessage.style.color = 'var(--warning)';
                 withdrawBtn.disabled = true;
             } else {
@@ -774,7 +777,6 @@
         
         // Check withdrawal eligibility
         function checkWithdrawalEligibility() {
-            // User can only withdraw if they've bet their entire balance
             const betRemaining = Math.max(0, userData.balance - userData.totalBetAmount);
             return betRemaining <= 0 && userData.withdrawalsToday < userData.maxDailyWithdrawals;
         }
@@ -867,7 +869,7 @@
                                 <div class="bank-info">${methodText}</div>
                             </div>
                             <div class="history-amount ${statusClass}">
-                                ₹${withdrawal.amount.toLocaleString('en-IN')}
+                                ${formatCurrency(withdrawal.amount)}
                             </div>
                         `;
                         
@@ -877,7 +879,7 @@
                     historyContainer.innerHTML = `
                         <div class="history-item">
                             <div class="history-date">No withdrawals yet</div>
-                            <div class="history-amount history-pending">₹0.00</div>
+                            <div class="history-amount history-pending">¥0.00</div>
                         </div>
                     `;
                 }
@@ -891,7 +893,7 @@
             // Highlight the selected button
             document.querySelectorAll('.amount-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if(parseInt(btn.textContent.replace('₹', '')) === amount) {
+                if(parseFloat(btn.textContent.replace('¥', '')) === amount) {
                     btn.classList.add('active');
                 }
             });
@@ -1043,7 +1045,7 @@
             const amount = parseFloat(document.getElementById('withdraw-amount').value);
             
             if(!amount || amount < 110 || amount > 50000) {
-                showToast('Withdrawal amount must be between ₹110 and ₹50,000', 'error');
+                showToast('Withdrawal amount must be between ¥110 and ¥50,000', 'error');
                 return;
             }
             
@@ -1051,7 +1053,7 @@
             if(!checkWithdrawalEligibility()) {
                 const betRemaining = Math.max(0, userData.balance - userData.totalBetAmount);
                 if(betRemaining > 0) {
-                    showToast(`You need to bet ₹${betRemaining.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) more to withdraw`, 'error');
+                    showToast(`You need to bet ${formatCurrency(betRemaining)} more to withdraw`, 'error');
                 } else if(userData.withdrawalsToday >= userData.maxDailyWithdrawals) {
                     showToast('You have reached your daily withdrawal limit', 'error');
                 }
@@ -1157,11 +1159,11 @@
                     // Create notification for user
                     createNotification(
                         'Withdrawal Requested',
-                        `Your withdrawal request of ₹${amount} has been submitted for processing.`,
+                        `Your withdrawal request of ${formatCurrency(amount)} has been submitted for processing.`,
                         'info'
                     );
                     
-                    showToast(`Withdrawal of ₹${amount.toLocaleString('en-IN')} requested successfully!`, 'success');
+                    showToast(`Withdrawal of ${formatCurrency(amount)} requested successfully!`, 'success');
                     
                     // Reset form
                     document.getElementById('withdraw-amount').value = '';
