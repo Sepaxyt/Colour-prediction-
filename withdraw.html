@@ -114,27 +114,6 @@
             margin-bottom: 15px;
         }
         
-        .balance-details {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-        }
-        
-        .balance-detail {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .detail-label {
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 5px;
-        }
-        
-        .detail-value {
-            font-weight: 500;
-        }
-        
         .withdraw-section {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
@@ -526,11 +505,6 @@
             .amount-buttons {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
-            .balance-details {
-                flex-direction: column;
-                gap: 10px;
-            }
         }
     </style>
 </head>
@@ -552,44 +526,33 @@
         <div class="wallet-container">
             <div class="balance-card">
                 <div class="balance-title">Your Current Balance</div>
-                <div class="balance-amount" id="current-balance">₹0.00</div>
-                
-                <div class="balance-details">
-                    <div class="balance-detail">
-                        <div class="detail-label">Deposits</div>
-                        <div class="detail-value" id="total-deposits">₹0.00</div>
-                    </div>
-                    <div class="balance-detail">
-                        <div class="detail-label">Bonus</div>
-                        <div class="detail-value" id="total-bonus">₹0.00</div>
-                    </div>
-                    <div class="balance-detail">
-                        <div class="detail-label">Winnings</div>
-                        <div class="detail-value" id="total-winnings">₹0.00</div>
-                    </div>
+                <div class="balance-amount" id="current-balance">¥0.00</div>
+                <div style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">
+                    Deposit: <span id="deposit-balance">¥0.00</span> | 
+                    Bonus: <span id="bonus-balance">¥0.00</span> | 
+                    Winnings: <span id="winning-balance">¥0.00</span>
                 </div>
             </div>
             
             <div class="info-box">
                 <p><i class="fas fa-info-circle"></i> Withdrawal time: 00:00-23:59</p>
-                <p><i class="fas fa-info-circle"></i> Withdrawal amount range: ₹110.00-50,000.00</p>
+                <p><i class="fas fa-info-circle"></i> Withdrawal amount range: ¥110.00-50,000.00</p>
                 <p><i class="fas fa-info-circle"></i> Daily remaining withdrawal times: <span id="remaining-withdrawals">3</span></p>
-                <p><i class="fas fa-exclamation-triangle"></i> You must make at least one deposit before withdrawing</p>
-                <p><i class="fas fa-exclamation-triangle"></i> You must bet at least 1x your total deposit amount before withdrawing</p>
-                <p><i class="fas fa-exclamation-triangle"></i> Only winnings can be withdrawn (not deposit or bonus amounts)</p>
+                <p><i class="fas fa-exclamation-triangle"></i> You can only withdraw winnings after completing 1x rollover of your deposit + bonus amount</p>
+                <p><i class="fas fa-exclamation-triangle"></i> Please confirm your beneficial account information before withdrawing. If your information is incorrect, our company will not be liable for the amount of loss.</p>
             </div>
             
             <div class="bet-progress" id="bet-progress-container">
-                <div class="progress-title">Withdrawal Requirement</div>
+                <div class="progress-title">Withdrawal Requirement (1x Rollover)</div>
                 <div class="progress-bar-container">
                     <div class="progress-bar" id="bet-progress-bar"></div>
                 </div>
                 <div class="progress-stats">
-                    <span>Bet remaining: <span id="bet-remaining">₹0.00</span></span>
-                    <span>Bet completed: <span id="bet-completed">₹0.00</span></span>
+                    <span>Bet remaining: <span id="bet-remaining">¥0.00</span></span>
+                    <span>Bet completed: <span id="bet-completed">¥0.00</span></span>
                 </div>
                 <div class="progress-title" id="withdrawal-message" style="margin-top: 10px; color: var(--warning);">
-                    Need to bet ₹0.00 to be able to withdraw
+                    Need to bet ¥0.00 to be able to withdraw
                 </div>
             </div>
             
@@ -597,17 +560,17 @@
                 <h3 class="section-title"><i class="fas fa-money-bill-wave"></i> Withdraw Funds</h3>
                 
                 <div class="form-group">
-                    <label class="form-label">Withdraw Amount (₹)</label>
-                    <input type="number" class="form-control" id="withdraw-amount" placeholder="Enter amount (min ₹110)" min="110" max="50000" step="0.01">
+                    <label class="form-label">Withdraw Amount (¥)</label>
+                    <input type="number" class="form-control" id="withdraw-amount" placeholder="Enter amount (min ¥110)" min="110" max="50000" step="0.01">
                 </div>
                 
                 <div class="amount-buttons">
-                    <div class="amount-btn" onclick="setAmount(110)">₹110</div>
-                    <div class="amount-btn" onclick="setAmount(500)">₹500</div>
-                    <div class="amount-btn" onclick="setAmount(1000)">₹1000</div>
-                    <div class="amount-btn" onclick="setAmount(2000)">₹2000</div>
-                    <div class="amount-btn" onclick="setAmount(5000)">₹5000</div>
-                    <div class="amount-btn" onclick="setAmount(10000)">₹10000</div>
+                    <div class="amount-btn" onclick="setAmount(110)">¥110</div>
+                    <div class="amount-btn" onclick="setAmount(500)">¥500</div>
+                    <div class="amount-btn" onclick="setAmount(1000)">¥1000</div>
+                    <div class="amount-btn" onclick="setAmount(2000)">¥2000</div>
+                    <div class="amount-btn" onclick="setAmount(5000)">¥5000</div>
+                    <div class="amount-btn" onclick="setAmount(10000)">¥10000</div>
                 </div>
                 
                 <div class="method-tabs">
@@ -647,7 +610,7 @@
                     <!-- History items will be loaded here -->
                     <div class="history-item">
                         <div class="history-date">No withdrawals yet</div>
-                        <div class="history-amount history-pending">₹0.00</div>
+                        <div class="history-amount history-pending">¥0.00</div>
                     </div>
                 </div>
             </div>
@@ -745,16 +708,18 @@
         // User data
         let userData = {
             balance: 0,
-            totalDeposits: 0,
-            totalBonus: 0,
-            totalWinnings: 0,
+            depositBalance: 0,
+            bonusBalance: 0,
+            winningBalance: 0,
+            totalBetAmount: 0,
             withdrawalsToday: 0,
             maxDailyWithdrawals: 3,
             lastWithdrawalDate: null,
+            totalDeposits: 0,
             totalWithdrawals: 0,
             rolloverRequirement: 1, // 1x rollover requirement
             rolloverCompleted: 0,
-            totalBetAmount: 0
+            rolloverRequiredAmount: 0
         };
         
         // Check if user is logged in
@@ -779,16 +744,18 @@
                 if(data) {
                     userData = {
                         balance: parseFloat(data.balance) || 0,
-                        totalDeposits: parseFloat(data.totalDeposits) || 0,
-                        totalBonus: parseFloat(data.totalBonus) || 0,
-                        totalWinnings: parseFloat(data.totalWinnings) || 0,
+                        depositBalance: parseFloat(data.depositBalance) || 0,
+                        bonusBalance: parseFloat(data.bonusBalance) || 0,
+                        winningBalance: parseFloat(data.winningBalance) || 0,
+                        totalBetAmount: parseFloat(data.totalBetAmount) || 0,
                         withdrawalsToday: parseInt(data.withdrawalsToday) || 0,
                         maxDailyWithdrawals: parseInt(data.maxDailyWithdrawals) || 3,
                         lastWithdrawalDate: data.lastWithdrawalDate || null,
+                        totalDeposits: parseFloat(data.totalDeposits) || 0,
                         totalWithdrawals: parseFloat(data.totalWithdrawals) || 0,
                         rolloverRequirement: parseFloat(data.rolloverRequirement) || 1,
                         rolloverCompleted: parseFloat(data.rolloverCompleted) || 0,
-                        totalBetAmount: parseFloat(data.totalBetAmount) || 0
+                        rolloverRequiredAmount: parseFloat(data.rolloverRequiredAmount) || 0
                     };
                     
                     // Check if it's a new day and reset withdrawals
@@ -806,17 +773,15 @@
         
         // Update UI with user data
         function updateUI() {
-            // Update balance with proper formatting
+            // Update balances with proper formatting
             document.getElementById('current-balance').textContent = 
                 formatCurrency(userData.balance);
-            
-            // Update balance details
-            document.getElementById('total-deposits').textContent = 
-                formatCurrency(userData.totalDeposits);
-            document.getElementById('total-bonus').textContent = 
-                formatCurrency(userData.totalBonus);
-            document.getElementById('total-winnings').textContent = 
-                formatCurrency(userData.totalWinnings);
+            document.getElementById('deposit-balance').textContent = 
+                formatCurrency(userData.depositBalance);
+            document.getElementById('bonus-balance').textContent = 
+                formatCurrency(userData.bonusBalance);
+            document.getElementById('winning-balance').textContent = 
+                formatCurrency(userData.winningBalance);
             
             // Update remaining withdrawals
             document.getElementById('remaining-withdrawals').textContent = 
@@ -828,7 +793,7 @@
         
         // Format currency with 2 decimal places
         function formatCurrency(amount) {
-            return '₹' + amount.toLocaleString('en-IN', {
+            return '¥' + amount.toLocaleString('en-IN', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
@@ -837,8 +802,9 @@
         // Update bet progress bar
         function updateBetProgress() {
             // Calculate rollover requirements
-            // Users must bet at least 1x their deposited amount before withdrawing
-            const requiredBetAmount = userData.totalDeposits * userData.rolloverRequirement;
+            // Users must bet at least 1x their (deposit + bonus) amount before withdrawing
+            const depositAndBonus = userData.depositBalance + userData.bonusBalance;
+            const requiredBetAmount = depositAndBonus * userData.rolloverRequirement;
             const betRemaining = Math.max(0, requiredBetAmount - userData.rolloverCompleted);
             const betCompleted = Math.min(userData.rolloverCompleted, requiredBetAmount);
             const progressPercentage = requiredBetAmount > 0 ? (betCompleted / requiredBetAmount) * 100 : 0;
@@ -854,38 +820,25 @@
             const withdrawBtn = document.getElementById('withdraw-btn');
             
             if(betRemaining > 0) {
-                withdrawalMessage.textContent = `Need to bet ${formatCurrency(betRemaining)} more (1x deposit) to withdraw`;
+                withdrawalMessage.textContent = `Need to bet ${formatCurrency(betRemaining)} more (1x deposit + bonus) to withdraw`;
                 withdrawalMessage.style.color = 'var(--warning)';
                 withdrawBtn.disabled = true;
+            } else if(userData.winningBalance <= 0) {
+                withdrawalMessage.textContent = 'No winnings available for withdrawal';
+                withdrawalMessage.style.color = 'var(--danger)';
+                withdrawBtn.disabled = true;
             } else {
-                withdrawalMessage.textContent = 'You can now withdraw your funds';
+                withdrawalMessage.textContent = 'You can now withdraw your winnings';
                 withdrawalMessage.style.color = 'var(--success)';
                 withdrawBtn.disabled = false;
             }
             
-            // Check if user has made any deposits
-            if(userData.totalDeposits <= 0) {
-                withdrawalMessage.textContent = 'You must make at least one deposit before withdrawing';
-                withdrawalMessage.style.color = 'var(--danger)';
-                withdrawBtn.disabled = true;
-            }
-            
-            // Check if user has winnings to withdraw
-            if(userData.totalWinnings <= 0) {
-                withdrawalMessage.textContent = 'No winnings available for withdrawal';
-                withdrawalMessage.style.color = 'var(--danger)';
-                withdrawBtn.disabled = true;
-            }
-            
-            // Also check if user has balance
+            // Also check if user has balance and hasn't exceeded daily limit
             if(userData.balance <= 0) {
                 withdrawalMessage.textContent = 'No balance available for withdrawal';
                 withdrawalMessage.style.color = 'var(--danger)';
                 withdrawBtn.disabled = true;
-            }
-            
-            // Check if user has exceeded daily withdrawal limit
-            if(userData.withdrawalsToday >= userData.maxDailyWithdrawals) {
+            } else if(userData.withdrawalsToday >= userData.maxDailyWithdrawals) {
                 withdrawalMessage.textContent = 'You have reached your daily withdrawal limit';
                 withdrawalMessage.style.color = 'var(--danger)';
                 withdrawBtn.disabled = true;
@@ -894,25 +847,15 @@
         
         // Check withdrawal eligibility
         function checkWithdrawalEligibility() {
-            // Check if user has made any deposits
-            if(userData.totalDeposits <= 0) {
-                return false;
-            }
-            
             // Check rollover requirement
-            const requiredBetAmount = userData.totalDeposits * userData.rolloverRequirement;
+            const depositAndBonus = userData.depositBalance + userData.bonusBalance;
+            const requiredBetAmount = depositAndBonus * userData.rolloverRequirement;
             const betRemaining = Math.max(0, requiredBetAmount - userData.rolloverCompleted);
             
-            // Check if user has winnings to withdraw
-            if(userData.totalWinnings <= 0) {
-                return false;
-            }
-            
-            // User must have completed rollover, have balance, not exceeded daily withdrawal limit, and have winnings
+            // User must have completed rollover, have winnings, and not exceeded daily withdrawal limit
             return betRemaining <= 0 && 
-                   userData.balance > 0 && 
-                   userData.withdrawalsToday < userData.maxDailyWithdrawals &&
-                   userData.totalWinnings > 0;
+                   userData.winningBalance > 0 && 
+                   userData.withdrawalsToday < userData.maxDailyWithdrawals;
         }
         
         // Change withdrawal method
@@ -1013,7 +956,7 @@
                     historyContainer.innerHTML = `
                         <div class="history-item">
                             <div class="history-date">No withdrawals yet</div>
-                            <div class="history-amount history-pending">₹0.00</div>
+                            <div class="history-amount history-pending">¥0.00</div>
                         </div>
                     `;
                 }
@@ -1027,7 +970,7 @@
             // Highlight the selected button
             document.querySelectorAll('.amount-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if(parseFloat(btn.textContent.replace('₹', '')) === amount) {
+                if(parseFloat(btn.textContent.replace('¥', '')) === amount) {
                     btn.classList.add('active');
                 }
             });
@@ -1179,38 +1122,31 @@
             const amount = parseFloat(document.getElementById('withdraw-amount').value);
             
             if(!amount || amount < 110 || amount > 50000) {
-                showToast('Withdrawal amount must be between ₹110 and ₹50,000', 'error');
+                showToast('Withdrawal amount must be between ¥110 and ¥50,000', 'error');
                 return;
             }
             
             // Check withdrawal eligibility
             if(!checkWithdrawalEligibility()) {
-                const requiredBetAmount = userData.totalDeposits * userData.rolloverRequirement;
+                const depositAndBonus = userData.depositBalance + userData.bonusBalance;
+                const requiredBetAmount = depositAndBonus * userData.rolloverRequirement;
                 const betRemaining = Math.max(0, requiredBetAmount - userData.rolloverCompleted);
                 
                 if(betRemaining > 0) {
-                    showToast(`You need to bet ${formatCurrency(betRemaining)} more (1x deposit) to withdraw`, 'error');
+                    showToast(`You need to bet ${formatCurrency(betRemaining)} more (1x deposit + bonus) to withdraw`, 'error');
                 } else if(userData.withdrawalsToday >= userData.maxDailyWithdrawals) {
                     showToast('You have reached your daily withdrawal limit', 'error');
+                } else if(userData.winningBalance <= 0) {
+                    showToast('No winnings available for withdrawal', 'error');
                 } else if(userData.balance <= 0) {
                     showToast('Insufficient balance for withdrawal', 'error');
-                } else if(userData.totalDeposits <= 0) {
-                    showToast('You must make a deposit before withdrawing', 'error');
-                } else if(userData.totalWinnings <= 0) {
-                    showToast('No winnings available for withdrawal', 'error');
                 }
                 return;
             }
             
-            // Check if user has sufficient balance
-            if(amount > userData.balance) {
-                showToast('Insufficient balance for withdrawal', 'error');
-                return;
-            }
-            
-            // Check if withdrawal amount exceeds available winnings
-            if(amount > userData.totalWinnings) {
-                showToast('You can only withdraw up to your winnings amount', 'error');
+            // Check if user has sufficient winnings
+            if(amount > userData.winningBalance) {
+                showToast('Insufficient winnings for withdrawal', 'error');
                 return;
             }
             
@@ -1285,7 +1221,7 @@
                     // Update user data
                     const updates = {
                         balance: userData.balance - amount,
-                        totalWinnings: Math.max(0, userData.totalWinnings - amount),
+                        winningBalance: userData.winningBalance - amount,
                         withdrawalsToday: userData.withdrawalsToday + 1,
                         lastWithdrawalDate: new Date().toISOString(),
                         totalWithdrawals: (userData.totalWithdrawals || 0) + amount
