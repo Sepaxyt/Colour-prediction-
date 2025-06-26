@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>53 CLUB - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6a11cb;
+            --secondary: #4a6bff;
+            --dark: #121212;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --red: #ff4757;
+            --green: #2ed573;
+            --violet: #9c88ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .admin-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .nav-btn {
+            padding: 10px 15px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover, .nav-btn.active {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+        }
+        
+        .game-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        
+        .game-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .game-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .game-mode {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .mode-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mode-btn:hover, .mode-btn.active {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+        }
+        
+        .game-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .info-title {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .timer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 20px;
+            border-radius: 8px;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .period-id {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .result-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .control-btn {
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: white;
+        }
+        
+        .auto-btn {
+            background: var(--success);
+        }
+        
+        .manual-btn {
+            background: var(--warning);
+            color: var(--dark);
+        }
+        
+        .force-btn {
+            background: var(--danger);
+        }
+        
+        .result-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .result-option {
+            padding: 10px 15px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .result-option:hover, .result-option.selected {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+        }
+        
+        .result-option.green {
+            border: 1px solid var(--green);
+        }
+        
+        .result-option.red {
+            border: 1px solid var(--red);
+        }
+        
+        .result-option.violet {
+            border: 1px solid var(--violet);
+        }
+        
+        .submit-result {
+            padding: 12px 20px;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .submit-result:hover {
+            opacity: 0.9;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
+        .history-table th {
+            text-align: left;
+            padding: 10px;
+            color: var(--gray);
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .history-table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .dot.red {
+            background-color: var(--red);
+        }
+        
+        .dot.green {
+            background-color: var(--green);
+        }
+        
+        .dot.violet {
+            background-color: var(--violet);
+        }
+        
+        .top-bets {
+            margin-top: 20px;
+        }
+        
+        .bet-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .bet-type {
+            font-weight: 600;
+        }
+        
+        .bet-amount {
+            color: var(--green);
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            animation: toastFadeIn 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+        }
+        
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        @keyframes toastFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .toast.error {
+            background-color: var(--danger);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .toast.info {
+            background-color: var(--info);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--dark), #1a1a1a);
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+        }
+        
+        .modal-title i {
+            margin-right: 10px;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            margin-bottom: 20px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .modal-btn.primary {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+        }
+        
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .game-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-img">53</div>
+                <h1>53 CLUB - Admin Panel</h1>
+            </div>
+            <div id="admin-name">Loading...</div>
+        </header>
+        
+        <div class="admin-nav">
+            <div class="nav-btn active" id="nav-dashboard">Dashboard</div>
+            <div class="nav-btn" id="nav-users">Users</div>
+            <div class="nav-btn" id="nav-transactions">Transactions</div>
+            <div class="nav-btn" id="nav-settings">Settings</div>
+        </div>
+        
+        <div id="dashboard-section">
+            <div class="game-controls">
+                <div class="game-section" style="flex: 1;">
+                    <div class="game-header">
+                        <div class="game-title">Wingo 1min</div>
+                        <div class="game-mode">
+                            <div class="mode-btn active" data-mode="current">Current</div>
+                            <div class="mode-btn" data-mode="next">Next</div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-info">
+                        <div class="info-card">
+                            <div class="info-title">Current Period</div>
+                            <div class="info-value" id="1min-current-period">Loading...</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-title">Status</div>
+                            <div class="info-value" id="1min-status">Loading...</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-title">Mode</div>
+                            <div class="info-value" id="1min-mode">Loading...</div>
+                        </div>
+                    </div>
+                    
+                    <div id="1min-current-controls">
+                        <div class="timer-container">
+                            <div class="timer" id="1min-timer">0:00</div>
+                        </div>
+                        <div class="period-id" id="1min-period-id">Period: Loading...</div>
+                        
+                        <div class="result-controls">
+                            <button class="control-btn auto-btn" id="1min-auto-btn">Auto</button>
+                            <button class="control-btn manual-btn" id="1min-manual-btn">Manual</button>
+                            <button class="control-btn force-btn" id="1min-force-btn">Force End</button>
+                        </div>
+                        
+                        <div class="result-selector" id="1min-result-selector">
+                            <div class="result-option green" data-result="0">0 (Green)</div>
+                            <div class="result-option red" data-result="1">1 (Red)</div>
+                            <div class="result-option green" data-result="2">2 (Green)</div>
+                            <div class="result-option red" data-result="3">3 (Red)</div>
+                            <div class="result-option green" data-result="4">4 (Green)</div>
+                            <div class="result-option violet" data-result="5">5 (Violet)</div>
+                            <div class="result-option green" data-result="6">6 (Green)</div>
+                            <div class="result-option red" data-result="7">7 (Red)</div>
+                            <div class="result-option green" data-result="8">8 (Green)</div>
+                        </div>
+                        
+                        <button class="submit-result" id="1min-submit-result">Set Result</button>
+                    </div>
+                    
+                    <div id="1min-next-controls" style="display: none;">
+                        <div class="info-card">
+                            <div class="info-title">Next Period</div>
+                            <div class="info-value" id="1min-next-period">Loading...</div>
+                        </div>
+                        
+                        <div class="result-selector" id="1min-next-result-selector">
+                            <div class="result-option green" data-result="0">0 (Green)</div>
+                            <div class="result-option red" data-result="1">1 (Red)</div>
+                            <div class="result-option green" data-result="2">2 (Green)</div>
+                            <div class="result-option red" data-result="3">3 (Red)</div>
+                            <div class="result-option green" data-result="4">4 (Green)</div>
+                            <div class="result-option violet" data-result="5">5 (Violet)</div>
+                            <div class="result-option green" data-result="6">6 (Green)</div>
+                            <div class="result-option red" data-result="7">7 (Red)</div>
+                            <div class="result-option green" data-result="8">8 (Green)</div>
+                        </div>
+                        
+                        <button class="submit-result" id="1min-submit-next-result">Set Next Result</button>
+                    </div>
+                    
+                    <div class="game-header">
+                        <div class="game-title">Game History</div>
+                    </div>
+                    
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Period</th>
+                                <th>Number</th>
+                                <th>Big/Small</th>
+                                <th>Color</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="1min-history-body">
+                            <tr>
+                                <td colspan="5" style="text-align: center;">Loading history...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="game-header">
+                        <div class="game-title">Top Bets (Current Period)</div>
+                    </div>
+                    
+                    <div class="top-bets" id="1min-top-bets">
+                        <div class="bet-item">
+                            <div class="bet-type">Loading...</div>
+                            <div class="bet-amount">₹0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="game-section" style="flex: 1;">
+                    <div class="game-header">
+                        <div class="game-title">Wingo 30sec</div>
+                        <div class="game-mode">
+                            <div class="mode-btn active" data-mode="current">Current</div>
+                            <div class="mode-btn" data-mode="next">Next</div>
+                        </div>
+                    </div>
+                    
+                    <div class="game-info">
+                        <div class="info-card">
+                            <div class="info-title">Current Period</div>
+                            <div class="info-value" id="30sec-current-period">Loading...</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-title">Status</div>
+                            <div class="info-value" id="30sec-status">Loading...</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-title">Mode</div>
+                            <div class="info-value" id="30sec-mode">Loading...</div>
+                        </div>
+                    </div>
+                    
+                    <div id="30sec-current-controls">
+                        <div class="timer-container">
+                            <div class="timer" id="30sec-timer">0:00</div>
+                        </div>
+                        <div class="period-id" id="30sec-period-id">Period: Loading...</div>
+                        
+                        <div class="result-controls">
+                            <button class="control-btn auto-btn" id="30sec-auto-btn">Auto</button>
+                            <button class="control-btn manual-btn" id="30sec-manual-btn">Manual</button>
+                            <button class="control-btn force-btn" id="30sec-force-btn">Force End</button>
+                        </div>
+                        
+                        <div class="result-selector" id="30sec-result-selector">
+                            <div class="result-option green" data-result="0">0 (Green)</div>
+                            <div class="result-option red" data-result="1">1 (Red)</div>
+                            <div class="result-option green" data-result="2">2 (Green)</div>
+                            <div class="result-option red" data-result="3">3 (Red)</div>
+                            <div class="result-option green" data-result="4">4 (Green)</div>
+                            <div class="result-option violet" data-result="5">5 (Violet)</div>
+                            <div class="result-option green" data-result="6">6 (Green)</div>
+                            <div class="result-option red" data-result="7">7 (Red)</div>
+                            <div class="result-option green" data-result="8">8 (Green)</div>
+                        </div>
+                        
+                        <button class="submit-result" id="30sec-submit-result">Set Result</button>
+                    </div>
+                    
+                    <div id="30sec-next-controls" style="display: none;">
+                        <div class="info-card">
+                            <div class="info-title">Next Period</div>
+                            <div class="info-value" id="30sec-next-period">Loading...</div>
+                        </div>
+                        
+                        <div class="result-selector" id="30sec-next-result-selector">
+                            <div class="result-option green" data-result="0">0 (Green)</div>
+                            <div class="result-option red" data-result="1">1 (Red)</div>
+                            <div class="result-option green" data-result="2">2 (Green)</div>
+                            <div class="result-option red" data-result="3">3 (Red)</div>
+                            <div class="result-option green" data-result="4">4 (Green)</div>
+                            <div class="result-option violet" data-result="5">5 (Violet)</div>
+                            <div class="result-option green" data-result="6">6 (Green)</div>
+                            <div class="result-option red" data-result="7">7 (Red)</div>
+                            <div class="result-option green" data-result="8">8 (Green)</div>
+                        </div>
+                        
+                        <button class="submit-result" id="30sec-submit-next-result">Set Next Result</button>
+                    </div>
+                    
+                    <div class="game-header">
+                        <div class="game-title">Game History</div>
+                    </div>
+                    
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Period</th>
+                                <th>Number</th>
+                                <th>Big/Small</th>
+                                <th>Color</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="30sec-history-body">
+                            <tr>
+                                <td colspan="5" style="text-align: center;">Loading history...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="game-header">
+                        <div class="game-title">Top Bets (Current Period)</div>
+                    </div>
+                    
+                    <div class="top-bets" id="30sec-top-bets">
+                        <div class="bet-item">
+                            <div class="bet-type">Loading...</div>
+                            <div class="bet-amount">₹0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="users-section" style="display: none;">
+            <!-- Users management section would go here -->
+            <div class="game-section">
+                <div class="game-header">
+                    <div class="game-title">User Management</div>
+                </div>
+                <p>User management functionality would be implemented here.</p>
+            </div>
+        </div>
+        
+        <div id="transactions-section" style="display: none;">
+            <!-- Transactions section would go here -->
+            <div class="game-section">
+                <div class="game-header">
+                    <div class="game-title">Transaction History</div>
+                </div>
+                <p>Transaction history functionality would be implemented here.</p>
+            </div>
+        </div>
+        
+        <div id="settings-section" style="display: none;">
+            <!-- Settings section would go here -->
+            <div class="game-section">
+                <div class="game-header">
+                    <div class="game-title">System Settings</div>
+                </div>
+                <p>System settings functionality would be implemented here.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirm-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideModal('confirm-modal')">&times;</span>
+            <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> <span id="confirm-title">Confirm Action</span></h3>
+            
+            <div class="modal-body">
+                <p id="confirm-message">Are you sure you want to perform this action?</p>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-btn secondary" onclick="hideModal('confirm-modal')">Cancel</button>
+                <button class="modal-btn primary" id="confirm-action-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5JqJPbyUw-rZgFp67nc0f5svWcoNt5D4",
+            authDomain: "club-b8f03.firebaseapp.com",
+            databaseURL: "https://club-b8f03-default-rtdb.firebaseio.com",
+            projectId: "club-b8f03",
+            storageBucket: "club-b8f03.appspot.com",
+            messagingSenderId: "115909846985",
+            appId: "1:115909846985:web:6f42fbb224935c513cea18",
+            measurementId: "G-S3M36PLB9Y"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Game state variables
+        let adminId = "";
+        let serverTimeOffset = 0;
+        let selectedGame = "";
+        let selectedResult = null;
+        let nextResult = null;
+        
+        // Check if admin is logged in
+        function checkAuth() {
+            adminId = localStorage.getItem('adminId') || sessionStorage.getItem('adminId');
+            if(!adminId) {
+                window.location.href = "admin-login.html";
+            } else {
+                getServerTimeOffset().then(() => {
+                    setupNavigation();
+                    loadAdminData();
+                    setupGameListeners();
+                });
+            }
+        }
+        
+        // Get server time offset
+        function getServerTimeOffset() {
+            return new Promise((resolve) => {
+                database.ref('.info/serverTimeOffset').once('value').then((snapshot) => {
+                    serverTimeOffset = snapshot.val();
+                    resolve();
+                }).catch(() => {
+                    serverTimeOffset = 0;
+                    resolve();
+                });
+            });
+        }
+        
+        // Get current server time
+        function getServerTime() {
+            return Date.now() + serverTimeOffset;
+        }
+        
+        // Setup navigation
+        function setupNavigation() {
+            document.getElementById('nav-dashboard').addEventListener('click', () => {
+                showSection('dashboard');
+            });
+            
+            document.getElementById('nav-users').addEventListener('click', () => {
+                showSection('users');
+            });
+            
+            document.getElementById('nav-transactions').addEventListener('click', () => {
+                showSection('transactions');
+            });
+            
+            document.getElementById('nav-settings').addEventListener('click', () => {
+                showSection('settings');
+            });
+            
+            // Game mode toggles for 1min game
+            document.querySelectorAll('#1min-current-controls .mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#1min-current-controls .mode-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    if(btn.dataset.mode === 'current') {
+                        document.getElementById('1min-current-controls').style.display = 'block';
+                        document.getElementById('1min-next-controls').style.display = 'none';
+                    } else {
+                        document.getElementById('1min-current-controls').style.display = 'none';
+                        document.getElementById('1min-next-controls').style.display = 'block';
+                    }
+                });
+            });
+            
+            // Game mode toggles for 30sec game
+            document.querySelectorAll('#30sec-current-controls .mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#30sec-current-controls .mode-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    if(btn.dataset.mode === 'current') {
+                        document.getElementById('30sec-current-controls').style.display = 'block';
+                        document.getElementById('30sec-next-controls').style.display = 'none';
+                    } else {
+                        document.getElementById('30sec-current-controls').style.display = 'none';
+                        document.getElementById('30sec-next-controls').style.display = 'block';
+                    }
+                });
+            });
+            
+            // Result selection for 1min game
+            document.querySelectorAll('#1min-result-selector .result-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('#1min-result-selector .result-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedResult = parseInt(option.dataset.result);
+                });
+            });
+            
+            // Result selection for 1min next game
+            document.querySelectorAll('#1min-next-result-selector .result-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('#1min-next-result-selector .result-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    nextResult = parseInt(option.dataset.result);
+                });
+            });
+            
+            // Result selection for 30sec game
+            document.querySelectorAll('#30sec-result-selector .result-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('#30sec-result-selector .result-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedResult = parseInt(option.dataset.result);
+                });
+            });
+            
+            // Result selection for 30sec next game
+            document.querySelectorAll('#30sec-next-result-selector .result-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('#30sec-next-result-selector .result-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    nextResult = parseInt(option.dataset.result);
+                });
+            });
+            
+            // Control buttons for 1min game
+            document.getElementById('1min-auto-btn').addEventListener('click', () => {
+                setGameMode('1min', 'auto');
+            });
+            
+            document.getElementById('1min-manual-btn').addEventListener('click', () => {
+                setGameMode('1min', 'manual');
+            });
+            
+            document.getElementById('1min-force-btn').addEventListener('click', () => {
+                showConfirmModal(
+                    'Force End Current Game',
+                    'Are you sure you want to force end the current 1min game?',
+                    () => forceEndGame('1min')
+                );
+            });
+            
+            document.getElementById('1min-submit-result').addEventListener('click', () => {
+                if(selectedResult === null) {
+                    showToast('Please select a result first', 'error');
+                    return;
+                }
+                
+                showConfirmModal(
+                    'Set Game Result',
+                    `Are you sure you want to set the current 1min game result to ${selectedResult}?`,
+                    () => setGameResult('1min', selectedResult)
+                );
+            });
+            
+            document.getElementById('1min-submit-next-result').addEventListener('click', () => {
+                if(nextResult === null) {
+                    showToast('Please select a result first', 'error');
+                    return;
+                }
+                
+                showConfirmModal(
+                    'Set Next Game Result',
+                    `Are you sure you want to set the next 1min game result to ${nextResult}?`,
+                    () => setNextGameResult('1min', nextResult)
+                );
+            });
+            
+            // Control buttons for 30sec game
+            document.getElementById('30sec-auto-btn').addEventListener('click', () => {
+                setGameMode('30sec', 'auto');
+            });
+            
+            document.getElementById('30sec-manual-btn').addEventListener('click', () => {
+                setGameMode('30sec', 'manual');
+            });
+            
+            document.getElementById('30sec-force-btn').addEventListener('click', () => {
+                showConfirmModal(
+                    'Force End Current Game',
+                    'Are you sure you want to force end the current 30sec game?',
+                    () => forceEndGame('30sec')
+                );
+            });
+            
+            document.getElementById('30sec-submit-result').addEventListener('click', () => {
+                if(selectedResult === null) {
+                    showToast('Please select a result first', 'error');
+                    return;
+                }
+                
+                showConfirmModal(
+                    'Set Game Result',
+                    `Are you sure you want to set the current 30sec game result to ${selectedResult}?`,
+                    () => setGameResult('30sec', selectedResult)
+                );
+            });
+            
+            document.getElementById('30sec-submit-next-result').addEventListener('click', () => {
+                if(nextResult === null) {
+                    showToast('Please select a result first', 'error');
+                    return;
+                }
+                
+                showConfirmModal(
+                    'Set Next Game Result',
+                    `Are you sure you want to set the next 30sec game result to ${nextResult}?`,
+                    () => setNextGameResult('30sec', nextResult)
+                );
+            });
+        }
+        
+        // Show section
+        function showSection(section) {
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('users-section').style.display = 'none';
+            document.getElementById('transactions-section').style.display = 'none';
+            document.getElementById('settings-section').style.display = 'none';
+            
+            document.getElementById('nav-dashboard').classList.remove('active');
+            document.getElementById('nav-users').classList.remove('active');
+            document.getElementById('nav-transactions').classList.remove('active');
+            document.getElementById('nav-settings').classList.remove('active');
+            
+            document.getElementById(`${section}-section`).style.display = 'block';
+            document.getElementById(`nav-${section}`).classList.add('active');
+        }
+        
+        // Load admin data
+        function loadAdminData() {
+            database.ref('admins/' + adminId).once('value').then(snapshot => {
+                const adminData = snapshot.val();
+                if(adminData) {
+                    document.getElementById('admin-name').textContent = adminData.name || 'Admin';
+                }
+            });
+        }
+        
+        // Setup game listeners
+        function setupGameListeners() {
+            // 1min game listeners
+            database.ref('gameSettings/currentPeriod_1min').on('value', snapshot => {
+                const periodData = snapshot.val();
+                if(periodData) {
+                    document.getElementById('1min-current-period').textContent = periodData.periodId || 'N/A';
+                    document.getElementById('1min-period-id').textContent = `Period: ${periodData.periodId || 'Loading...'}`;
+                    
+                    // Update timer
+                    const now = getServerTime();
+                    const elapsed = Math.floor((now - periodData.startTime) / 1000);
+                    const timeLeft = 60 - elapsed;
+                    
+                    if(timeLeft > 0) {
+                        const minutes = Math.floor(timeLeft / 60);
+                        const seconds = timeLeft % 60;
+                        document.getElementById('1min-timer').textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+                    } else {
+                        document.getElementById('1min-timer').textContent = '0:00';
+                    }
+                }
+            });
+            
+            database.ref('gameSettings/lastPeriodNumber_1min').on('value', snapshot => {
+                const lastPeriod = snapshot.val();
+                if(lastPeriod) {
+                    const nextPeriod = lastPeriod + 1;
+                    const nextPeriodId = generatePeriodId('1min', nextPeriod);
+                    document.getElementById('1min-next-period').textContent = nextPeriodId;
+                }
+            });
+            
+            database.ref('gameSettings/gameMode_1min').on('value', snapshot => {
+                const mode = snapshot.val() || 'auto';
+                document.getElementById('1min-mode').textContent = mode === 'auto' ? 'Auto' : 'Manual';
+                
+                if(mode === 'auto') {
+                    document.getElementById('1min-auto-btn').classList.add('active');
+                    document.getElementById('1min-manual-btn').classList.remove('active');
+                } else {
+                    document.getElementById('1min-auto-btn').classList.remove('active');
+                    document.getElementById('1min-manual-btn').classList.add('active');
+                }
+            });
+            
+            database.ref('gameSettings/nextResult_1min').on('value', snapshot => {
+                const result = snapshot.val();
+                if(result !== null && result !== undefined) {
+                    document.querySelectorAll('#1min-next-result-selector .result-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                        if(parseInt(opt.dataset.result) === result) {
+                            opt.classList.add('selected');
+                            nextResult = result;
+                        }
+                    });
+                }
+            });
+            
+            // 30sec game listeners
+            database.ref('gameSettings/currentPeriod_30sec').on('value', snapshot => {
+                const periodData = snapshot.val();
+                if(periodData) {
+                    document.getElementById('30sec-current-period').textContent = periodData.periodId || 'N/A';
+                    document.getElementById('30sec-period-id').textContent = `Period: ${periodData.periodId || 'Loading...'}`;
+                    
+                    // Update timer
+                    const now = getServerTime();
+                    const elapsed = Math.floor((now - periodData.startTime) / 1000);
+                    const timeLeft = 30 - elapsed;
+                    
+                    if(timeLeft > 0) {
+                        const minutes = Math.floor(timeLeft / 60);
+                        const seconds = timeLeft % 60;
+                        document.getElementById('30sec-timer').textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+                    } else {
+                        document.getElementById('30sec-timer').textContent = '0:00';
+                    }
+                }
+            });
+            
+            database.ref('gameSettings/lastPeriodNumber_30sec').on('value', snapshot => {
+                const lastPeriod = snapshot.val();
+                if(lastPeriod) {
+                    const nextPeriod = lastPeriod + 1;
+                    const nextPeriodId = generatePeriodId('30sec', nextPeriod);
+                    document.getElementById('30sec-next-period').textContent = nextPeriodId;
+                }
+            });
+            
+            database.ref('gameSettings/gameMode_30sec').on('value', snapshot => {
+                const mode = snapshot.val() || 'auto';
+                document.getElementById('30sec-mode').textContent = mode === 'auto' ? 'Auto' : 'Manual';
+                
+                if(mode === 'auto') {
+                    document.getElementById('30sec-auto-btn').classList.add('active');
+                    document.getElementById('30sec-manual-btn').classList.remove('active');
+                } else {
+                    document.getElementById('30sec-auto-btn').classList.remove('active');
+                    document.getElementById('30sec-manual-btn').classList.add('active');
+                }
+            });
+            
+            database.ref('gameSettings/nextResult_30sec').on('value', snapshot => {
+                const result = snapshot.val();
+                if(result !== null && result !== undefined) {
+                    document.querySelectorAll('#30sec-next-result-selector .result-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                        if(parseInt(opt.dataset.result) === result) {
+                            opt.classList.add('selected');
+                            nextResult = result;
+                        }
+                    });
+                }
+            });
+            
+            // Load history for both games
+            loadGameHistory('1min');
+            loadGameHistory('30sec');
+            
+            // Load top bets for both games
+            loadTopBets('1min');
+            loadTopBets('30sec');
+        }
+        
+        // Generate period ID
+        function generatePeriodId(gameMode, periodNumber) {
+            const now = new Date(getServerTime());
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const prefix = gameMode === '1min' ? '1M' : '30S';
+            return `${year}${month}${day}${prefix}${String(periodNumber).padStart(3, '0')}`;
+        }
+        
+        // Set game mode (auto/manual)
+        function setGameMode(gameMode, mode) {
+            database.ref(`gameSettings/gameMode_${gameMode}`).set(mode).then(() => {
+                showToast(`${gameMode === '1min' ? '1min' : '30sec'} game mode set to ${mode}`, 'success');
+            }).catch(error => {
+                showToast(`Failed to set game mode: ${error.message}`, 'error');
+            });
+        }
+        
+        // Force end game
+        function forceEndGame(gameMode) {
+            database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then(snapshot => {
+                const periodData = snapshot.val();
+                if(periodData) {
+                    endCurrentPeriod(gameMode, periodData.periodNumber, periodData.periodId);
+                }
+            }).catch(error => {
+                showToast(`Failed to force end game: ${error.message}`, 'error');
+            });
+            
+            hideModal('confirm-modal');
+        }
+        
+        // End current period
+        function endCurrentPeriod(gameMode, periodNumber, periodId) {
+            // Generate result if in auto mode
+            database.ref(`gameSettings/gameMode_${gameMode}`).once('value').then(snapshot => {
+                const mode = snapshot.val();
+                
+                if(mode === 'auto') {
+                    // Generate random result for auto mode
+                    const winningNumber = Math.floor(Math.random() * 9);
+                    saveGameResult(gameMode, periodNumber, periodId, winningNumber);
+                } else {
+                    // Use next result if set for manual mode
+                    database.ref(`gameSettings/nextResult_${gameMode}`).once('value').then(resultSnapshot => {
+                        const nextResult = resultSnapshot.val();
+                        if(nextResult !== null && nextResult !== undefined) {
+                            saveGameResult(gameMode, periodNumber, periodId, nextResult);
+                        } else {
+                            // If no next result set, generate random
+                            const winningNumber = Math.floor(Math.random() * 9);
+                            saveGameResult(gameMode, periodNumber, periodId, winningNumber);
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Save game result
+        function saveGameResult(gameMode, periodNumber, periodId, winningNumber) {
+            let color;
+            
+            if(winningNumber === 0) {
+                color = 'green';
+            } else if(winningNumber === 5) {
+                color = 'violet';
+            } else if([1, 3, 7].includes(winningNumber)) {
+                color = 'red';
+            } else {
+                color = 'green';
+            }
+            
+            const bigSmall = winningNumber >= 5 ? 'Big' : 'Small';
+            
+            const resultData = {
+                periodNumber: periodNumber,
+                number: winningNumber,
+                color: color,
+                bigSmall: bigSmall,
+                timestamp: getServerTime(),
+                gameMode: gameMode
+            };
+            
+            // Save result
+            database.ref(`gameResults/${gameMode}/` + periodId).set(resultData).then(() => {
+                // Process bets
+                processBets(gameMode, periodId, winningNumber, color, bigSmall).then(() => {
+                    // Start new period
+                    startNewPeriod(gameMode, periodNumber);
+                });
+            });
+        }
+        
+        // Process bets with 10% commission
+        function processBets(gameMode, periodId, winningNumber, winningColor, winningBigSmall) {
+            return new Promise((resolve) => {
+                database.ref('bets/' + periodId).once('value').then((snapshot) => {
+                    const bets = snapshot.val();
+                    let processedBets = 0;
+                    
+                    if(bets) {
+                        const userIds = Object.keys(bets);
+                        if (userIds.length === 0) {
+                            resolve();
+                            return;
+                        }
+                        
+                        userIds.forEach((userId) => {
+                            const userBets = bets[userId];
+                            const betIds = Object.keys(userBets);
+                            
+                            betIds.forEach((betId) => {
+                                const bet = userBets[betId];
+                                
+                                let isWinner = false;
+                                let winAmount = 0;
+                                
+                                if(bet.type === 'number' && parseInt(bet.value) === winningNumber) {
+                                    isWinner = true;
+                                    winAmount = bet.amount * bet.odds;
+                                } else if(bet.type === 'color' && bet.value.toLowerCase() === winningColor.toLowerCase()) {
+                                    isWinner = true;
+                                    winAmount = bet.amount * bet.odds;
+                                } else if(bet.type === 'bigSmall' && bet.value.toLowerCase() === winningBigSmall.toLowerCase()) {
+                                    isWinner = true;
+                                    winAmount = bet.amount * bet.odds;
+                                }
+                                
+                                // Deduct 10% commission from win amount (minimum ₹1)
+                                if (isWinner) {
+                                    const commission = Math.max(1, Math.floor(winAmount * 0.1));
+                                    winAmount = winAmount - commission;
+                                }
+                                
+                                const updates = {
+                                    status: isWinner ? 'won' : 'lost',
+                                    winAmount: isWinner ? winAmount : 0,
+                                    processed: true,
+                                    winningNumber: winningNumber,
+                                    winningColor: winningColor,
+                                    winningBigSmall: winningBigSmall
+                                };
+                                
+                                database.ref('bets/' + periodId + '/' + userId + '/' + betId).update(updates).then(() => {
+                                    processedBets++;
+                                    
+                                    if(isWinner) {
+                                        database.ref('users/' + userId + '/balance').transaction((balance) => {
+                                            return (balance || 0) + winAmount;
+                                        }).then(() => {
+                                            database.ref('users/' + userId + '/totalWins').transaction((wins) => {
+                                                return (wins || 0) + 1;
+                                            });
+                                            
+                                            createNotification(
+                                                userId,
+                                                'Bet Won!',
+                                                `You won ₹${winAmount.toFixed(2)} on period ${periodId}`,
+                                                'success'
+                                            );
+                                            
+                                            if (processedBets === betIds.length * userIds.length) {
+                                                resolve();
+                                            }
+                                        });
+                                    } else {
+                                        if (processedBets === betIds.length * userIds.length) {
+                                            resolve();
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        }
+        
+        // Start new period
+        function startNewPeriod(gameMode, lastPeriodNumber) {
+            const newPeriodNumber = lastPeriodNumber + 1;
+            const newPeriodId = generatePeriodId(gameMode, newPeriodNumber);
+            
+            const periodData = {
+                periodNumber: newPeriodNumber,
+                periodId: newPeriodId,
+                startTime: getServerTime(),
+                status: 'open',
+                gameMode: gameMode
+            };
+            
+            // Update last period number
+            database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).set(newPeriodNumber);
+            
+            // Set new current period
+            database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
+            database.ref(`gamePeriods/${gameMode}/` + newPeriodId).set(periodData);
+            
+            // Clear next result if in manual mode
+            database.ref(`gameSettings/gameMode_${gameMode}`).once('value').then(snapshot => {
+                const mode = snapshot.val();
+                if(mode === 'manual') {
+                    database.ref(`gameSettings/nextResult_${gameMode}`).set(null);
+                }
+            });
+            
+            // Schedule next end if in auto mode
+            if(gameMode === '1min') {
+                setTimeout(() => {
+                    endCurrentPeriod(gameMode, newPeriodNumber, newPeriodId);
+                }, 60000);
+            } else {
+                setTimeout(() => {
+                    endCurrentPeriod(gameMode, newPeriodNumber, newPeriodId);
+                }, 30000);
+            }
+        }
+        
+        // Set game result (for manual mode)
+        function setGameResult(gameMode, result) {
+            database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then(snapshot => {
+                const periodData = snapshot.val();
+                if(periodData) {
+                    saveGameResult(gameMode, periodData.periodNumber, periodData.periodId, result);
+                    showToast(`Result set to ${result} for current ${gameMode} game`, 'success');
+                }
+            }).catch(error => {
+                showToast(`Failed to set result: ${error.message}`, 'error');
+            });
+            
+            hideModal('confirm-modal');
+        }
+        
+        // Set next game result
+        function setNextGameResult(gameMode, result) {
+            database.ref(`gameSettings/nextResult_${gameMode}`).set(result).then(() => {
+                showToast(`Next ${gameMode} game result set to ${result}`, 'success');
+            }).catch(error => {
+                showToast(`Failed to set next result: ${error.message}`, 'error');
+            });
+            
+            hideModal('confirm-modal');
+        }
+        
+        // Load game history
+        function loadGameHistory(gameMode) {
+            database.ref(`gameResults/${gameMode}`).orderByChild('timestamp').limitToLast(10).once('value').then((snapshot) => {
+                const results = snapshot.val();
+                const historyBody = document.getElementById(`${gameMode}-history-body`);
+                
+                if(results) {
+                    historyBody.innerHTML = '';
+                    
+                    // Convert to array and sort by timestamp descending (newest first)
+                    const resultsArray = Object.entries(results).map(([key, value]) => ({
+                        period: key,
+                        number: value.number,
+                        bigSmall: value.bigSmall,
+                        color: value.color,
+                        timestamp: value.timestamp
+                    })).sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    // Add to history
+                    resultsArray.forEach(result => {
+                        let colorDot = '';
+                        if(result.color === 'red') {
+                            colorDot = '<span class="dot red"></span>';
+                        } else if(result.color === 'green') {
+                            colorDot = '<span class="dot green"></span>';
+                        } else if(result.color === 'violet') {
+                            colorDot = '<span class="dot violet"></span>';
+                        }
+                        
+                        const date = new Date(result.timestamp);
+                        const timeString = date.toLocaleTimeString();
+                        
+                        const historyRow = document.createElement('tr');
+                        historyRow.innerHTML = `
+                            <td>${result.period}</td>
+                            <td>${result.number}</td>
+                            <td>${result.bigSmall}</td>
+                            <td>${colorDot}</td>
+                            <td>${timeString}</td>
+                        `;
+                        historyBody.appendChild(historyRow);
+                    });
+                } else {
+                    historyBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align: center;">No history available</td>
+                        </tr>
+                    `;
+                }
+            });
+        }
+        
+        // Load top bets for current period
+        function loadTopBets(gameMode) {
+            database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then(periodSnapshot => {
+                const periodData = periodSnapshot.val();
+                if(periodData) {
+                    database.ref(`bets/${periodData.periodId}`).once('value').then(snapshot => {
+                        const bets = snapshot.val();
+                        const topBetsContainer = document.getElementById(`${gameMode}-top-bets`);
+                        
+                        if(bets) {
+                            // Aggregate bets by type
+                            const betAggregates = {};
+                            
+                            Object.keys(bets).forEach(userId => {
+                                const userBets = bets[userId];
+                                Object.keys(userBets).forEach(betId => {
+                                    const bet = userBets[betId];
+                                    const betKey = `${bet.type}_${bet.value}`;
+                                    
+                                    if(!betAggregates[betKey]) {
+                                        betAggregates[betKey] = {
+                                            type: bet.type,
+                                            value: bet.value,
+                                            total: 0,
+                                            count: 0
+                                        };
+                                    }
+                                    
+                                    betAggregates[betKey].total += bet.amount;
+                                    betAggregates[betKey].count++;
+                                });
+                            });
+                            
+                            // Convert to array and sort by total amount
+                            const betArray = Object.values(betAggregates).sort((a, b) => b.total - a.total);
+                            
+                            // Display top 5 bets
+                            topBetsContainer.innerHTML = '';
+                            betArray.slice(0, 5).forEach(bet => {
+                                const betItem = document.createElement('div');
+                                betItem.className = 'bet-item';
+                                
+                                let displayType = '';
+                                if(bet.type === 'color') {
+                                    displayType = bet.value.charAt(0).toUpperCase() + bet.value.slice(1);
+                                } else if(bet.type === 'bigSmall') {
+                                    displayType = bet.value.charAt(0).toUpperCase() + bet.value.slice(1);
+                                } else if(bet.type === 'number') {
+                                    displayType = 'Number ' + bet.value;
+                                }
+                                
+                                betItem.innerHTML = `
+                                    <div class="bet-type">${displayType}</div>
+                                    <div class="bet-amount">₹${bet.total.toFixed(2)} (${bet.count} bets)</div>
+                                `;
+                                topBetsContainer.appendChild(betItem);
+                            });
+                            
+                            if(betArray.length === 0) {
+                                topBetsContainer.innerHTML = `
+                                    <div class="bet-item">
+                                        <div class="bet-type">No bets placed yet</div>
+                                        <div class="bet-amount">₹0</div>
+                                    </div>
+                                `;
+                            }
+                        } else {
+                            topBetsContainer.innerHTML = `
+                                <div class="bet-item">
+                                    <div class="bet-type">No bets placed yet</div>
+                                    <div class="bet-amount">₹0</div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Create notification
+        function createNotification(userId, title, message, type) {
+            const notificationId = 'NOT' + Date.now();
+            
+            database.ref('notifications/' + userId + '/' + notificationId).set({
+                title: title,
+                message: message,
+                type: type,
+                timestamp: Date.now(),
+                read: false
+            });
+        }
+        
+        // Show confirm modal
+        function showConfirmModal(title, message, confirmAction) {
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            document.getElementById('confirm-action-btn').onclick = confirmAction;
+            document.getElementById('confirm-modal').style.display = 'flex';
+        }
+        
+        // Hide modal
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Show toast
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${type === 'success' ? '✓' : type === 'error' ? '✗' : type === 'warning' ? '⚠' : 'i'}</span>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Initialize
+        window.addEventListener('load', checkAuth);
+    </script>
+</body>
+</html>
