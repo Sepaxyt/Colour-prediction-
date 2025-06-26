@@ -594,7 +594,7 @@
                     <span>Bet remaining: <span id="bet-remaining">₹0.00</span></span>
                     <span>Bet completed: <span id="bet-completed">₹0.00</span></span>
                 </div>
-                <div class="progress-title" style="margin-top: 10px; color: var(--warning);" id="withdrawal-message">
+                <div class="progress-title" id="withdrawal-message" style="margin-top: 10px; color: var(--warning);">
                     Need to bet ₹0.00 to be able to withdraw
                 </div>
             </div>
@@ -851,14 +851,14 @@
             document.getElementById('bet-completed').textContent = 
                 '₹' + betCompleted.toLocaleString('en-IN');
             
+            const withdrawalMessage = document.getElementById('withdrawal-message');
             if(betRemaining > 0) {
-                document.getElementById('withdrawal-message').textContent = 
+                withdrawalMessage.textContent = 
                     `Need to bet ₹${betRemaining.toLocaleString('en-IN')} to be able to withdraw`;
-                document.getElementById('withdrawal-message').style.color = 'var(--warning)';
+                withdrawalMessage.style.color = 'var(--warning)';
             } else {
-                document.getElementById('withdrawal-message').textContent = 
-                    'You can now withdraw your funds';
-                document.getElementById('withdrawal-message').style.color = 'var(--success)';
+                withdrawalMessage.textContent = 'You can now withdraw your funds';
+                withdrawalMessage.style.color = 'var(--success)';
             }
         }
         
@@ -1231,7 +1231,8 @@
                     database.ref('users/' + userPhone).update(updates);
                     
                     // Send notification to admin
-                    database.ref('adminNotifications').push({
+                    const adminNotificationRef = database.ref('adminNotifications').push();
+                    adminNotificationRef.set({
                         type: 'withdrawal',
                         userId: userPhone,
                         transactionId: transactionId,
