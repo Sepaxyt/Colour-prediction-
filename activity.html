@@ -835,14 +835,29 @@
             if(!userPhone) {
                 window.location.href = "index.html";
             } else {
-                generateReferralCode();
-                loadReferralData();
+                loadUserReferralCode();
             }
         }
         
-        // Generate referral code from phone number
-        function generateReferralCode() {
-            referralCode = "53" + userPhone.slice(-6);
+        // Load user's referral code from Firebase
+        function loadUserReferralCode() {
+            database.ref('users/' + userPhone + '/referralCode').once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    referralCode = snapshot.val();
+                    updateReferralLink();
+                    loadReferralData();
+                } else {
+                    // If no referral code exists, generate one based on phone number
+                    referralCode = "53" + userPhone.slice(-6);
+                    database.ref('users/' + userPhone).update({ referralCode: referralCode });
+                    updateReferralLink();
+                    loadReferralData();
+                }
+            });
+        }
+        
+        // Update referral link in UI
+        function updateReferralLink() {
             document.getElementById('referral-link').value = window.location.origin + "/register.html?ref=" + referralCode;
         }
         
