@@ -21,6 +21,7 @@
             --red: #ff4757;
             --green: #2ed573;
             --violet: #9c88ff;
+            --blue: #3498db;
         }
         
         * {
@@ -91,198 +92,223 @@
             transition: all 0.3s ease;
         }
         
-        .nav-btn:hover, .nav-btn.active {
+        .nav-btn.active {
             background: linear-gradient(to right, var(--secondary), var(--primary));
             color: white;
         }
         
         .game-controls {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
             gap: 15px;
+            margin-bottom: 20px;
         }
         
-        .game-section {
+        .game-card {
+            flex: 1;
+            min-width: 300px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         .game-title {
             font-size: 1.2rem;
-            font-weight: 600;
-        }
-        
-        .game-mode {
-            display: flex;
-            gap: 10px;
             margin-bottom: 15px;
-        }
-        
-        .mode-btn {
-            padding: 8px 15px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .mode-btn:hover, .mode-btn.active {
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
+            color: var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .game-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
-        .info-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 15px;
-        }
-        
-        .info-title {
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
             font-size: 0.9rem;
+        }
+        
+        .info-label {
             color: var(--gray);
-            margin-bottom: 5px;
         }
         
         .info-value {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        
-        .timer-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 15px;
+            font-weight: 500;
         }
         
         .timer {
             font-size: 1.5rem;
             font-weight: bold;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 20px;
-            border-radius: 8px;
-            min-width: 100px;
             text-align: center;
+            margin: 10px 0;
         }
         
-        .period-id {
+        .betting-stats {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
             font-size: 0.9rem;
+        }
+        
+        .stats-label {
             color: var(--gray);
-            text-align: center;
-            margin-bottom: 15px;
         }
         
-        .result-controls {
+        .stats-value {
+            font-weight: 500;
+        }
+        
+        .bigsmall-stats {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-top: 10px;
         }
         
-        .control-btn {
-            padding: 10px 15px;
+        .bigsmall-stat {
+            flex: 1;
+            padding: 10px;
             border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            color: white;
-        }
-        
-        .auto-btn {
-            background: var(--success);
-        }
-        
-        .manual-btn {
-            background: var(--warning);
-            color: var(--dark);
-        }
-        
-        .force-btn {
-            background: var(--danger);
-        }
-        
-        .result-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .result-option {
-            padding: 10px 15px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            transition: all 0.3s ease;
             text-align: center;
         }
         
-        .result-option:hover, .result-option.selected {
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
+        .big-stat {
+            background-color: rgba(52, 152, 219, 0.2);
+            border: 1px solid var(--blue);
         }
         
-        .result-option.green {
-            border: 1px solid var(--green);
-        }
-        
-        .result-option.red {
-            border: 1px solid var(--red);
-        }
-        
-        .result-option.violet {
+        .small-stat {
+            background-color: rgba(156, 136, 255, 0.2);
             border: 1px solid var(--violet);
         }
         
-        .submit-result {
-            padding: 12px 20px;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
+        .bigsmall-title {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .bigsmall-amount {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .game-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
+            border: none;
+            flex: 1;
+        }
+        
+        .end-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .force-btn {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        .manual-result {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .manual-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .result-select {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--light);
+        }
+        
+        .bigsmall-select {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: var(--light);
+        }
+        
+        .set-result-btn {
+            padding: 8px 12px;
+            background-color: var(--success);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .history-section {
+            margin-top: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+        
+        .history-tabs {
+            display: flex;
+            gap: 10px;
             margin-bottom: 15px;
         }
         
-        .submit-result:hover {
-            opacity: 0.9;
+        .history-tab {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .history-tab.active {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
         }
         
         .history-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.9rem;
-            margin-bottom: 20px;
         }
         
         .history-table th {
             text-align: left;
             padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
             color: var(--gray);
             font-weight: 500;
-            background: rgba(255, 255, 255, 0.05);
         }
         
         .history-table td {
@@ -295,6 +321,7 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
+            margin-right: 5px;
         }
         
         .dot.red {
@@ -309,23 +336,71 @@
             background-color: var(--violet);
         }
         
-        .top-bets {
-            margin-top: 20px;
+        .bets-section {
+            margin-top: 30px;
         }
         
-        .bet-item {
-            display: flex;
-            justify-content: space-between;
+        .bets-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .bets-table th {
+            text-align: left;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        .bets-table td {
             padding: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         
         .bet-type {
-            font-weight: 600;
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
         }
         
-        .bet-amount {
+        .type-number {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--blue);
+        }
+        
+        .type-color {
+            background-color: rgba(46, 213, 115, 0.2);
             color: var(--green);
+        }
+        
+        .type-bigsmall {
+            background-color: rgba(156, 136, 255, 0.2);
+            color: var(--violet);
+        }
+        
+        .bet-status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+        
+        .status-won {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+        
+        .status-lost {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: var(--danger);
         }
         
         /* Toast Notification */
@@ -402,12 +477,6 @@
             font-size: 1.3rem;
             margin-bottom: 20px;
             color: var(--light);
-            display: flex;
-            align-items: center;
-        }
-        
-        .modal-title i {
-            margin-right: 10px;
         }
         
         .close-modal {
@@ -432,410 +501,265 @@
         .modal-btn {
             padding: 10px 20px;
             border-radius: 6px;
-            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             border: none;
         }
         
-        .modal-btn.primary {
+        .modal-btn.confirm {
             background: linear-gradient(to right, var(--secondary), var(--primary));
             color: white;
         }
         
-        .modal-btn.secondary {
+        .modal-btn.cancel {
             background: rgba(255, 255, 255, 0.05);
             color: var(--light);
         }
         
-        /* Login Page Styles */
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .login-box {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .login-title {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 1.8rem;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .login-logo {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        
-        .login-logo .logo-img {
-            width: 60px;
-            height: 60px;
-            font-size: 1.5rem;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--gray);
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
-        }
-        
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(to right, var(--secondary), var(--primary));
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-        
-        .login-btn:hover {
-            opacity: 0.9;
-        }
-        
-        .login-error {
-            color: var(--danger);
-            margin-top: 15px;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        
         /* Responsive styles */
         @media (max-width: 768px) {
-            .game-info {
-                grid-template-columns: 1fr;
+            .game-card {
+                min-width: 100%;
             }
             
-            .game-controls {
+            .history-table, .bets-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .manual-controls {
                 flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Login Page -->
-    <div id="login-page" class="login-container">
-        <div class="login-box">
-            <div class="login-logo">
-                <div class="logo-img">53</div>
-            </div>
-            <h1 class="login-title">53 CLUB - Admin Login</h1>
-            
-            <div class="form-group">
-                <label for="login-email" class="form-label">Email</label>
-                <input type="email" id="login-email" class="form-input" placeholder="Enter your email">
-            </div>
-            
-            <div class="form-group">
-                <label for="login-password" class="form-label">Password</label>
-                <input type="password" id="login-password" class="form-input" placeholder="Enter your password">
-            </div>
-            
-            <button id="login-btn" class="login-btn">Login</button>
-            
-            <div id="login-error" class="login-error"></div>
-        </div>
-    </div>
-    
-    <!-- Admin Panel (hidden by default) -->
-    <div id="admin-panel" class="container" style="display: none;">
+    <div class="container">
         <header>
             <div class="logo">
                 <div class="logo-img">53</div>
                 <h1>53 CLUB - Admin Panel</h1>
             </div>
-            <div id="admin-name">Loading...</div>
         </header>
         
         <div class="admin-nav">
-            <div class="nav-btn active" id="nav-dashboard">Dashboard</div>
-            <div class="nav-btn" id="nav-users">Users</div>
-            <div class="nav-btn" id="nav-transactions">Transactions</div>
-            <div class="nav-btn" id="nav-settings">Settings</div>
+            <div class="nav-btn active" data-tab="dashboard">Dashboard</div>
+            <div class="nav-btn" data-tab="history">Game History</div>
+            <div class="nav-btn" data-tab="bets">All Bets</div>
         </div>
         
-        <div id="dashboard-section">
+        <div id="dashboard-content" class="tab-content active">
             <div class="game-controls">
-                <div class="game-section" style="flex: 1;">
-                    <div class="game-header">
-                        <div class="game-title">Wingo 1min</div>
-                        <div class="game-mode">
-                            <div class="mode-btn active" data-mode="current">Current</div>
-                            <div class="mode-btn" data-mode="next">Next</div>
-                        </div>
+                <div class="game-card" id="30sec-card">
+                    <div class="game-title">
+                        <span>Wingo 30sec</span>
+                        <span id="30sec-status" class="status-pending">Loading...</span>
                     </div>
-                    
                     <div class="game-info">
-                        <div class="info-card">
-                            <div class="info-title">Current Period</div>
-                            <div class="info-value" id="1min-current-period">Loading...</div>
+                        <div class="info-item">
+                            <span class="info-label">Current Period:</span>
+                            <span class="info-value" id="30sec-period">-</span>
                         </div>
-                        <div class="info-card">
-                            <div class="info-title">Status</div>
-                            <div class="info-value" id="1min-status">Loading...</div>
+                        <div class="info-item">
+                            <span class="info-label">Next Period:</span>
+                            <span class="info-value" id="30sec-next-period">-</span>
                         </div>
-                        <div class="info-card">
-                            <div class="info-title">Mode</div>
-                            <div class="info-value" id="1min-mode">Loading...</div>
+                        <div class="timer" id="30sec-timer">0:30</div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value" id="30sec-game-status">-</span>
                         </div>
                     </div>
-                    
-                    <div id="1min-current-controls">
-                        <div class="timer-container">
-                            <div class="timer" id="1min-timer">0:00</div>
+                    <div class="betting-stats">
+                        <div class="stats-item">
+                            <span class="stats-label">Total Bets:</span>
+                            <span class="stats-value" id="30sec-total-bets">0</span>
                         </div>
-                        <div class="period-id" id="1min-period-id">Period: Loading...</div>
-                        
-                        <div class="result-controls">
-                            <button class="control-btn auto-btn" id="1min-auto-btn">Auto</button>
-                            <button class="control-btn manual-btn" id="1min-manual-btn">Manual</button>
-                            <button class="control-btn force-btn" id="1min-force-btn">Force End</button>
+                        <div class="stats-item">
+                            <span class="stats-label">Total Amount:</span>
+                            <span class="stats-value" id="30sec-total-amount">₹0</span>
                         </div>
-                        
-                        <div class="result-selector" id="1min-result-selector">
-                            <div class="result-option green" data-result="0">0 (Green)</div>
-                            <div class="result-option red" data-result="1">1 (Red)</div>
-                            <div class="result-option green" data-result="2">2 (Green)</div>
-                            <div class="result-option red" data-result="3">3 (Red)</div>
-                            <div class="result-option green" data-result="4">4 (Green)</div>
-                            <div class="result-option violet" data-result="5">5 (Violet)</div>
-                            <div class="result-option green" data-result="6">6 (Green)</div>
-                            <div class="result-option red" data-result="7">7 (Red)</div>
-                            <div class="result-option green" data-result="8">8 (Green)</div>
+                        <div class="stats-item">
+                            <span class="stats-label">Highest Bet:</span>
+                            <span class="stats-value" id="30sec-highest-bet">₹0</span>
                         </div>
-                        
-                        <button class="submit-result" id="1min-submit-result">Set Result</button>
+                        <div class="bigsmall-stats">
+                            <div class="bigsmall-stat big-stat">
+                                <div class="bigsmall-title">Big Bets</div>
+                                <div class="bigsmall-amount" id="30sec-big-amount">₹0</div>
+                            </div>
+                            <div class="bigsmall-stat small-stat">
+                                <div class="bigsmall-title">Small Bets</div>
+                                <div class="bigsmall-amount" id="30sec-small-amount">₹0</div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div id="1min-next-controls" style="display: none;">
-                        <div class="info-card">
-                            <div class="info-title">Next Period</div>
-                            <div class="info-value" id="1min-next-period">Loading...</div>
+                    <div class="game-actions">
+                        <button class="action-btn end-btn" id="30sec-end-btn">End Current Period</button>
+                        <button class="action-btn force-btn" id="30sec-force-btn">Force Next Period</button>
+                    </div>
+                    <div class="manual-result">
+                        <div class="info-item">
+                            <span class="info-label">Manual Result:</span>
+                            <span class="info-value" id="30sec-result-display">Not set</span>
                         </div>
-                        
-                        <div class="result-selector" id="1min-next-result-selector">
-                            <div class="result-option green" data-result="0">0 (Green)</div>
-                            <div class="result-option red" data-result="1">1 (Red)</div>
-                            <div class="result-option green" data-result="2">2 (Green)</div>
-                            <div class="result-option red" data-result="3">3 (Red)</div>
-                            <div class="result-option green" data-result="4">4 (Green)</div>
-                            <div class="result-option violet" data-result="5">5 (Violet)</div>
-                            <div class="result-option green" data-result="6">6 (Green)</div>
-                            <div class="result-option red" data-result="7">7 (Red)</div>
-                            <div class="result-option green" data-result="8">8 (Green)</div>
-                        </div>
-                        
-                        <button class="submit-result" id="1min-submit-next-result">Set Next Result</button>
-                    </div>
-                    
-                    <div class="game-header">
-                        <div class="game-title">Game History</div>
-                    </div>
-                    
-                    <table class="history-table">
-                        <thead>
-                            <tr>
-                                <th>Period</th>
-                                <th>Number</th>
-                                <th>Big/Small</th>
-                                <th>Color</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="1min-history-body">
-                            <tr>
-                                <td colspan="5" style="text-align: center;">Loading history...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <div class="game-header">
-                        <div class="game-title">Top Bets (Current Period)</div>
-                    </div>
-                    
-                    <div class="top-bets" id="1min-top-bets">
-                        <div class="bet-item">
-                            <div class="bet-type">Loading...</div>
-                            <div class="bet-amount">₹0</div>
+                        <div class="manual-controls">
+                            <select class="result-select" id="30sec-result-select">
+                                <option value="0">0 (Green)</option>
+                                <option value="1">1 (Red)</option>
+                                <option value="2">2 (Green)</option>
+                                <option value="3">3 (Red)</option>
+                                <option value="4">4 (Green)</option>
+                                <option value="5">5 (Violet)</option>
+                                <option value="6">6 (Green)</option>
+                                <option value="7">7 (Red)</option>
+                                <option value="8">8 (Green)</option>
+                            </select>
+                            <select class="bigsmall-select" id="30sec-bigsmall-select">
+                                <option value="auto">Auto Big/Small</option>
+                                <option value="big">Force Big</option>
+                                <option value="small">Force Small</option>
+                            </select>
+                            <button class="set-result-btn" id="30sec-set-result">Set Result</button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="game-section" style="flex: 1;">
-                    <div class="game-header">
-                        <div class="game-title">Wingo 30sec</div>
-                        <div class="game-mode">
-                            <div class="mode-btn active" data-mode="current">Current</div>
-                            <div class="mode-btn" data-mode="next">Next</div>
-                        </div>
+                <div class="game-card" id="1min-card">
+                    <div class="game-title">
+                        <span>Wingo 1min</span>
+                        <span id="1min-status" class="status-pending">Loading...</span>
                     </div>
-                    
                     <div class="game-info">
-                        <div class="info-card">
-                            <div class="info-title">Current Period</div>
-                            <div class="info-value" id="30sec-current-period">Loading...</div>
+                        <div class="info-item">
+                            <span class="info-label">Current Period:</span>
+                            <span class="info-value" id="1min-period">-</span>
                         </div>
-                        <div class="info-card">
-                            <div class="info-title">Status</div>
-                            <div class="info-value" id="30sec-status">Loading...</div>
+                        <div class="info-item">
+                            <span class="info-label">Next Period:</span>
+                            <span class="info-value" id="1min-next-period">-</span>
                         </div>
-                        <div class="info-card">
-                            <div class="info-title">Mode</div>
-                            <div class="info-value" id="30sec-mode">Loading...</div>
-                        </div>
-                    </div>
-                    
-                    <div id="30sec-current-controls">
-                        <div class="timer-container">
-                            <div class="timer" id="30sec-timer">0:00</div>
-                        </div>
-                        <div class="period-id" id="30sec-period-id">Period: Loading...</div>
-                        
-                        <div class="result-controls">
-                            <button class="control-btn auto-btn" id="30sec-auto-btn">Auto</button>
-                            <button class="control-btn manual-btn" id="30sec-manual-btn">Manual</button>
-                            <button class="control-btn force-btn" id="30sec-force-btn">Force End</button>
-                        </div>
-                        
-                        <div class="result-selector" id="30sec-result-selector">
-                            <div class="result-option green" data-result="0">0 (Green)</div>
-                            <div class="result-option red" data-result="1">1 (Red)</div>
-                            <div class="result-option green" data-result="2">2 (Green)</div>
-                            <div class="result-option red" data-result="3">3 (Red)</div>
-                            <div class="result-option green" data-result="4">4 (Green)</div>
-                            <div class="result-option violet" data-result="5">5 (Violet)</div>
-                            <div class="result-option green" data-result="6">6 (Green)</div>
-                            <div class="result-option red" data-result="7">7 (Red)</div>
-                            <div class="result-option green" data-result="8">8 (Green)</div>
-                        </div>
-                        
-                        <button class="submit-result" id="30sec-submit-result">Set Result</button>
-                    </div>
-                    
-                    <div id="30sec-next-controls" style="display: none;">
-                        <div class="info-card">
-                            <div class="info-title">Next Period</div>
-                            <div class="info-value" id="30sec-next-period">Loading...</div>
-                        </div>
-                        
-                        <div class="result-selector" id="30sec-next-result-selector">
-                            <div class="result-option green" data-result="0">0 (Green)</div>
-                            <div class="result-option red" data-result="1">1 (Red)</div>
-                            <div class="result-option green" data-result="2">2 (Green)</div>
-                            <div class="result-option red" data-result="3">3 (Red)</div>
-                            <div class="result-option green" data-result="4">4 (Green)</div>
-                            <div class="result-option violet" data-result="5">5 (Violet)</div>
-                            <div class="result-option green" data-result="6">6 (Green)</div>
-                            <div class="result-option red" data-result="7">7 (Red)</div>
-                            <div class="result-option green" data-result="8">8 (Green)</div>
-                        </div>
-                        
-                        <button class="submit-result" id="30sec-submit-next-result">Set Next Result</button>
-                    </div>
-                    
-                    <div class="game-header">
-                        <div class="game-title">Game History</div>
-                    </div>
-                    
-                    <table class="history-table">
-                        <thead>
-                            <tr>
-                                <th>Period</th>
-                                <th>Number</th>
-                                <th>Big/Small</th>
-                                <th>Color</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="30sec-history-body">
-                            <tr>
-                                <td colspan="5" style="text-align: center;">Loading history...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <div class="game-header">
-                        <div class="game-title">Top Bets (Current Period)</div>
-                    </div>
-                    
-                    <div class="top-bets" id="30sec-top-bets">
-                        <div class="bet-item">
-                            <div class="bet-type">Loading...</div>
-                            <div class="bet-amount">₹0</div>
+                        <div class="timer" id="1min-timer">1:00</div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value" id="1min-game-status">-</span>
                         </div>
                     </div>
+                    <div class="betting-stats">
+                        <div class="stats-item">
+                            <span class="stats-label">Total Bets:</span>
+                            <span class="stats-value" id="1min-total-bets">0</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">Total Amount:</span>
+                            <span class="stats-value" id="1min-total-amount">₹0</span>
+                        </div>
+                        <div class="stats-item">
+                            <span class="stats-label">Highest Bet:</span>
+                            <span class="stats-value" id="1min-highest-bet">₹0</span>
+                        </div>
+                        <div class="bigsmall-stats">
+                            <div class="bigsmall-stat big-stat">
+                                <div class="bigsmall-title">Big Bets</div>
+                                <div class="bigsmall-amount" id="1min-big-amount">₹0</div>
+                            </div>
+                            <div class="bigsmall-stat small-stat">
+                                <div class="bigsmall-title">Small Bets</div>
+                                <div class="bigsmall-amount" id="1min-small-amount">₹0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-actions">
+                        <button class="action-btn end-btn" id="1min-end-btn">End Current Period</button>
+                        <button class="action-btn force-btn" id="1min-force-btn">Force Next Period</button>
+                    </div>
+                    <div class="manual-result">
+                        <div class="info-item">
+                            <span class="info-label">Manual Result:</span>
+                            <span class="info-value" id="1min-result-display">Not set</span>
+                        </div>
+                        <div class="manual-controls">
+                            <select class="result-select" id="1min-result-select">
+                                <option value="0">0 (Green)</option>
+                                <option value="1">1 (Red)</option>
+                                <option value="2">2 (Green)</option>
+                                <option value="3">3 (Red)</option>
+                                <option value="4">4 (Green)</option>
+                                <option value="5">5 (Violet)</option>
+                                <option value="6">6 (Green)</option>
+                                <option value="7">7 (Red)</option>
+                                <option value="8">8 (Green)</option>
+                            </select>
+                            <select class="bigsmall-select" id="1min-bigsmall-select">
+                                <option value="auto">Auto Big/Small</option>
+                                <option value="big">Force Big</option>
+                                <option value="small">Force Small</option>
+                            </select>
+                            <button class="set-result-btn" id="1min-set-result">Set Result</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-section">
+                <h3 class="section-title">Betting Statistics</h3>
+                <div class="stats-grid">
+                    <!-- Will be populated with stats -->
                 </div>
             </div>
         </div>
         
-        <div id="users-section" style="display: none;">
-            <!-- Users management section would go here -->
-            <div class="game-section">
-                <div class="game-header">
-                    <div class="game-title">User Management</div>
-                </div>
-                <p>User management functionality would be implemented here.</p>
+        <div id="history-content" class="tab-content">
+            <div class="history-tabs">
+                <div class="history-tab active" data-history="30sec">30sec History</div>
+                <div class="history-tab" data-history="1min">1min History</div>
             </div>
+            
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Number</th>
+                        <th>Color</th>
+                        <th>Big/Small</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <tr>
+                        <td colspan="5" style="text-align: center;">Loading history...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         
-        <div id="transactions-section" style="display: none;">
-            <!-- Transactions section would go here -->
-            <div class="game-section">
-                <div class="game-header">
-                    <div class="game-title">Transaction History</div>
-                </div>
-                <p>Transaction history functionality would be implemented here.</p>
+        <div id="bets-content" class="tab-content">
+            <div class="history-tabs">
+                <div class="history-tab active" data-bets="30sec">30sec Bets</div>
+                <div class="history-tab" data-bets="1min">1min Bets</div>
+                <div class="history-tab" data-bets="all">All Bets</div>
             </div>
-        </div>
-        
-        <div id="settings-section" style="display: none;">
-            <!-- Settings section would go here -->
-            <div class="game-section">
-                <div class="game-header">
-                    <div class="game-title">System Settings</div>
-                </div>
-                <p>System settings functionality would be implemented here.</p>
-            </div>
+            
+            <table class="bets-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>User</th>
+                        <th>Type</th>
+                        <th>Bet</th>
+                        <th>Amount</th>
+                        <th>Odds</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="bets-body">
+                    <tr>
+                        <td colspan="8" style="text-align: center;">Loading bets...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     
@@ -843,15 +767,13 @@
     <div class="modal" id="confirm-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="hideModal('confirm-modal')">&times;</span>
-            <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> <span id="confirm-title">Confirm Action</span></h3>
-            
-            <div class="modal-body">
-                <p id="confirm-message">Are you sure you want to perform this action?</p>
+            <h3 class="modal-title" id="confirm-title">Confirm Action</h3>
+            <div class="modal-body" id="confirm-message">
+                Are you sure you want to perform this action?
             </div>
-            
             <div class="modal-footer">
-                <button class="modal-btn secondary" onclick="hideModal('confirm-modal')">Cancel</button>
-                <button class="modal-btn primary" id="confirm-action-btn">Confirm</button>
+                <button class="modal-btn cancel" onclick="hideModal('confirm-modal')">Cancel</button>
+                <button class="modal-btn confirm" id="confirm-action">Confirm</button>
             </div>
         </div>
     </div>
@@ -874,75 +796,42 @@
         };
         
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
         const database = firebase.database();
         
         // Game state variables
-        let adminId = "";
+        let currentGameMode = 'dashboard';
+        let currentHistoryMode = '30sec';
+        let currentBetsMode = '30sec';
         let serverTimeOffset = 0;
-        let selectedGame = "";
-        let selectedResult = null;
-        let nextResult = null;
+        let adminPassword = "admin123"; // Change this to your secure password
+        let timerIntervals = {
+            '30sec': null,
+            '1min': null
+        };
         
-        // Check if admin is logged in
+        // Check admin authentication
         function checkAuth() {
-            auth.onAuthStateChanged((user) => {
-                if (user) {
-                    // User is signed in
-                    adminId = user.uid;
-                    localStorage.setItem('adminId', adminId);
-                    
-                    // Hide login page and show admin panel
-                    document.getElementById('login-page').style.display = 'none';
-                    document.getElementById('admin-panel').style.display = 'block';
-                    
-                    getServerTimeOffset().then(() => {
-                        setupNavigation();
-                        loadAdminData();
-                        setupGameListeners();
-                    });
+            const storedPassword = localStorage.getItem('adminPassword');
+            if (storedPassword !== adminPassword) {
+                const password = prompt("Enter admin password:");
+                if (password === adminPassword) {
+                    localStorage.setItem('adminPassword', password);
+                    initAdminPanel();
                 } else {
-                    // User is signed out
-                    document.getElementById('login-page').style.display = 'flex';
-                    document.getElementById('admin-panel').style.display = 'none';
+                    alert("Invalid password");
+                    window.location.href = "index.html";
                 }
-            });
+            } else {
+                initAdminPanel();
+            }
         }
         
-        // Setup login functionality
-        function setupLogin() {
-            document.getElementById('login-btn').addEventListener('click', () => {
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                
-                // Pre-filled credentials for testing
-                const testEmail = "ytsepax@gmail.com";
-                const testPassword = "saab9988";
-                
-                // Use pre-filled credentials if fields are empty
-                const loginEmail = email || testEmail;
-                const loginPassword = password || testPassword;
-                
-                auth.signInWithEmailAndPassword(loginEmail, loginPassword)
-                    .then((userCredential) => {
-                        // Signed in
-                        adminId = userCredential.user.uid;
-                        localStorage.setItem('adminId', adminId);
-                        document.getElementById('login-error').textContent = '';
-                        
-                        // Hide login page and show admin panel
-                        document.getElementById('login-page').style.display = 'none';
-                        document.getElementById('admin-panel').style.display = 'block';
-                        
-                        getServerTimeOffset().then(() => {
-                            setupNavigation();
-                            loadAdminData();
-                            setupGameListeners();
-                        });
-                    })
-                    .catch((error) => {
-                        document.getElementById('login-error').textContent = error.message;
-                    });
+        // Initialize admin panel
+        function initAdminPanel() {
+            getServerTimeOffset().then(() => {
+                setupEventListeners();
+                setupRealtimeUpdates();
+                loadInitialData();
             });
         }
         
@@ -964,328 +853,242 @@
             return Date.now() + serverTimeOffset;
         }
         
-        // Setup navigation
-        function setupNavigation() {
-            document.getElementById('nav-dashboard').addEventListener('click', () => {
-                showSection('dashboard');
-            });
-            
-            document.getElementById('nav-users').addEventListener('click', () => {
-                showSection('users');
-            });
-            
-            document.getElementById('nav-transactions').addEventListener('click', () => {
-                showSection('transactions');
-            });
-            
-            document.getElementById('nav-settings').addEventListener('click', () => {
-                showSection('settings');
-            });
-            
-            // Game mode toggles for 1min game
-            document.querySelectorAll('#1min-current-controls .mode-btn').forEach(btn => {
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('#1min-current-controls .mode-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
                     btn.classList.add('active');
+                    currentGameMode = btn.dataset.tab;
+                    document.getElementById(`${currentGameMode}-content`).classList.add('active');
                     
-                    if(btn.dataset.mode === 'current') {
-                        document.getElementById('1min-current-controls').style.display = 'block';
-                        document.getElementById('1min-next-controls').style.display = 'none';
-                    } else {
-                        document.getElementById('1min-current-controls').style.display = 'none';
-                        document.getElementById('1min-next-controls').style.display = 'block';
+                    if (currentGameMode === 'history') {
+                        loadHistory(currentHistoryMode);
+                    } else if (currentGameMode === 'bets') {
+                        loadBets(currentBetsMode);
                     }
                 });
             });
             
-            // Game mode toggles for 30sec game
-            document.querySelectorAll('#30sec-current-controls .mode-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('#30sec-current-controls .mode-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    if(btn.dataset.mode === 'current') {
-                        document.getElementById('30sec-current-controls').style.display = 'block';
-                        document.getElementById('30sec-next-controls').style.display = 'none';
-                    } else {
-                        document.getElementById('30sec-current-controls').style.display = 'none';
-                        document.getElementById('30sec-next-controls').style.display = 'block';
-                    }
+            // History tabs
+            document.querySelectorAll('[data-history]').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('[data-history]').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentHistoryMode = tab.dataset.history;
+                    loadHistory(currentHistoryMode);
                 });
             });
             
-            // Result selection for 1min game
-            document.querySelectorAll('#1min-result-selector .result-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('#1min-result-selector .result-option').forEach(opt => opt.classList.remove('selected'));
-                    option.classList.add('selected');
-                    selectedResult = parseInt(option.dataset.result);
+            // Bets tabs
+            document.querySelectorAll('[data-bets]').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('[data-bets]').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentBetsMode = tab.dataset.bets;
+                    loadBets(currentBetsMode);
                 });
             });
             
-            // Result selection for 1min next game
-            document.querySelectorAll('#1min-next-result-selector .result-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('#1min-next-result-selector .result-option').forEach(opt => opt.classList.remove('selected'));
-                    option.classList.add('selected');
-                    nextResult = parseInt(option.dataset.result);
-                });
-            });
-            
-            // Result selection for 30sec game
-            document.querySelectorAll('#30sec-result-selector .result-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('#30sec-result-selector .result-option').forEach(opt => opt.classList.remove('selected'));
-                    option.classList.add('selected');
-                    selectedResult = parseInt(option.dataset.result);
-                });
-            });
-            
-            // Result selection for 30sec next game
-            document.querySelectorAll('#30sec-next-result-selector .result-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('#30sec-next-result-selector .result-option').forEach(opt => opt.classList.remove('selected'));
-                    option.classList.add('selected');
-                    nextResult = parseInt(option.dataset.result);
-                });
-            });
-            
-            // Control buttons for 1min game
-            document.getElementById('1min-auto-btn').addEventListener('click', () => {
-                setGameMode('1min', 'auto');
-            });
-            
-            document.getElementById('1min-manual-btn').addEventListener('click', () => {
-                setGameMode('1min', 'manual');
-            });
-            
-            document.getElementById('1min-force-btn').addEventListener('click', () => {
+            // Game controls
+            document.getElementById('30sec-end-btn').addEventListener('click', () => {
                 showConfirmModal(
-                    'Force End Current Game',
-                    'Are you sure you want to force end the current 1min game?',
-                    () => forceEndGame('1min')
+                    "End Current Period",
+                    "Are you sure you want to end the current 30sec period? This will generate a result and start the next period.",
+                    () => endCurrentPeriod('30sec')
                 );
-            });
-            
-            document.getElementById('1min-submit-result').addEventListener('click', () => {
-                if(selectedResult === null) {
-                    showToast('Please select a result first', 'error');
-                    return;
-                }
-                
-                showConfirmModal(
-                    'Set Game Result',
-                    `Are you sure you want to set the current 1min game result to ${selectedResult}?`,
-                    () => setGameResult('1min', selectedResult)
-                );
-            });
-            
-            document.getElementById('1min-submit-next-result').addEventListener('click', () => {
-                if(nextResult === null) {
-                    showToast('Please select a result first', 'error');
-                    return;
-                }
-                
-                showConfirmModal(
-                    'Set Next Game Result',
-                    `Are you sure you want to set the next 1min game result to ${nextResult}?`,
-                    () => setNextGameResult('1min', nextResult)
-                );
-            });
-            
-            // Control buttons for 30sec game
-            document.getElementById('30sec-auto-btn').addEventListener('click', () => {
-                setGameMode('30sec', 'auto');
-            });
-            
-            document.getElementById('30sec-manual-btn').addEventListener('click', () => {
-                setGameMode('30sec', 'manual');
             });
             
             document.getElementById('30sec-force-btn').addEventListener('click', () => {
                 showConfirmModal(
-                    'Force End Current Game',
-                    'Are you sure you want to force end the current 30sec game?',
-                    () => forceEndGame('30sec')
+                    "Force Next Period",
+                    "Are you sure you want to force start the next 30sec period? This will end the current period immediately.",
+                    () => forceNextPeriod('30sec')
                 );
             });
             
-            document.getElementById('30sec-submit-result').addEventListener('click', () => {
-                if(selectedResult === null) {
-                    showToast('Please select a result first', 'error');
-                    return;
-                }
-                
+            document.getElementById('30sec-set-result').addEventListener('click', () => {
+                const selectedValue = document.getElementById('30sec-result-select').value;
+                const bigSmallValue = document.getElementById('30sec-bigsmall-select').value;
                 showConfirmModal(
-                    'Set Game Result',
-                    `Are you sure you want to set the current 30sec game result to ${selectedResult}?`,
-                    () => setGameResult('30sec', selectedResult)
+                    "Set Manual Result",
+                    `Are you sure you want to set the result for current 30sec period to ${selectedValue} with ${bigSmallValue === 'auto' ? 'auto' : 'forced ' + bigSmallValue} Big/Small?`,
+                    () => setManualResult('30sec', parseInt(selectedValue), bigSmallValue)
                 );
             });
             
-            document.getElementById('30sec-submit-next-result').addEventListener('click', () => {
-                if(nextResult === null) {
-                    showToast('Please select a result first', 'error');
-                    return;
-                }
-                
+            document.getElementById('1min-end-btn').addEventListener('click', () => {
                 showConfirmModal(
-                    'Set Next Game Result',
-                    `Are you sure you want to set the next 30sec game result to ${nextResult}?`,
-                    () => setNextGameResult('30sec', nextResult)
+                    "End Current Period",
+                    "Are you sure you want to end the current 1min period? This will generate a result and start the next period.",
+                    () => endCurrentPeriod('1min')
+                );
+            });
+            
+            document.getElementById('1min-force-btn').addEventListener('click', () => {
+                showConfirmModal(
+                    "Force Next Period",
+                    "Are you sure you want to force start the next 1min period? This will end the current period immediately.",
+                    () => forceNextPeriod('1min')
+                );
+            });
+            
+            document.getElementById('1min-set-result').addEventListener('click', () => {
+                const selectedValue = document.getElementById('1min-result-select').value;
+                const bigSmallValue = document.getElementById('1min-bigsmall-select').value;
+                showConfirmModal(
+                    "Set Manual Result",
+                    `Are you sure you want to set the result for current 1min period to ${selectedValue} with ${bigSmallValue === 'auto' ? 'auto' : 'forced ' + bigSmallValue} Big/Small?`,
+                    () => setManualResult('1min', parseInt(selectedValue), bigSmallValue)
                 );
             });
         }
         
-        // Show section
-        function showSection(section) {
-            document.getElementById('dashboard-section').style.display = 'none';
-            document.getElementById('users-section').style.display = 'none';
-            document.getElementById('transactions-section').style.display = 'none';
-            document.getElementById('settings-section').style.display = 'none';
-            
-            document.getElementById('nav-dashboard').classList.remove('active');
-            document.getElementById('nav-users').classList.remove('active');
-            document.getElementById('nav-transactions').classList.remove('active');
-            document.getElementById('nav-settings').classList.remove('active');
-            
-            document.getElementById(`${section}-section`).style.display = 'block';
-            document.getElementById(`nav-${section}`).classList.add('active');
+        // Show confirmation modal
+        function showConfirmModal(title, message, confirmCallback) {
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            document.getElementById('confirm-action').onclick = function() {
+                confirmCallback();
+                hideModal('confirm-modal');
+            };
+            document.getElementById('confirm-modal').style.display = 'flex';
         }
         
-        // Load admin data
-        function loadAdminData() {
-            database.ref('admins/' + adminId).once('value').then(snapshot => {
-                const adminData = snapshot.val();
-                if(adminData) {
-                    document.getElementById('admin-name').textContent = adminData.name || 'Admin';
+        // Hide modal
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Setup realtime updates
+        function setupRealtimeUpdates() {
+            // 30sec game updates
+            database.ref('gameSettings/currentPeriod_30sec').on('value', (snapshot) => {
+                const periodData = snapshot.val();
+                if (periodData) {
+                    updateGameDisplay('30sec', periodData);
+                    calculateBettingStats('30sec', periodData.periodId);
                 }
+            });
+            
+            database.ref('gameSettings/lastPeriodNumber_30sec').on('value', (snapshot) => {
+                const lastPeriod = snapshot.val() || 320;
+                document.getElementById('30sec-next-period').textContent = generatePeriodId('30sec', lastPeriod + 1);
+            });
+            
+            // 1min game updates
+            database.ref('gameSettings/currentPeriod_1min').on('value', (snapshot) => {
+                const periodData = snapshot.val();
+                if (periodData) {
+                    updateGameDisplay('1min', periodData);
+                    calculateBettingStats('1min', periodData.periodId);
+                }
+            });
+            
+            database.ref('gameSettings/lastPeriodNumber_1min').on('value', (snapshot) => {
+                const lastPeriod = snapshot.val() || 440;
+                document.getElementById('1min-next-period').textContent = generatePeriodId('1min', lastPeriod + 1);
             });
         }
         
-        // Setup game listeners
-        function setupGameListeners() {
-            // 1min game listeners
-            database.ref('gameSettings/currentPeriod_1min').on('value', snapshot => {
+        // Load initial data
+        function loadInitialData() {
+            // Load current periods
+            database.ref('gameSettings/currentPeriod_30sec').once('value').then((snapshot) => {
                 const periodData = snapshot.val();
-                if(periodData) {
-                    document.getElementById('1min-current-period').textContent = periodData.periodId || 'N/A';
-                    document.getElementById('1min-period-id').textContent = `Period: ${periodData.periodId || 'Loading...'}`;
-                    
-                    // Update timer
-                    const now = getServerTime();
-                    const elapsed = Math.floor((now - periodData.startTime) / 1000);
-                    const timeLeft = 60 - elapsed;
-                    
-                    if(timeLeft > 0) {
-                        const minutes = Math.floor(timeLeft / 60);
-                        const seconds = timeLeft % 60;
-                        document.getElementById('1min-timer').textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
-                    } else {
-                        document.getElementById('1min-timer').textContent = '0:00';
-                    }
+                if (periodData) {
+                    updateGameDisplay('30sec', periodData);
+                    calculateBettingStats('30sec', periodData.periodId);
                 }
             });
             
-            database.ref('gameSettings/lastPeriodNumber_1min').on('value', snapshot => {
-                const lastPeriod = snapshot.val();
-                if(lastPeriod) {
-                    const nextPeriod = lastPeriod + 1;
-                    const nextPeriodId = generatePeriodId('1min', nextPeriod);
-                    document.getElementById('1min-next-period').textContent = nextPeriodId;
-                }
-            });
-            
-            database.ref('gameSettings/gameMode_1min').on('value', snapshot => {
-                const mode = snapshot.val() || 'auto';
-                document.getElementById('1min-mode').textContent = mode === 'auto' ? 'Auto' : 'Manual';
-                
-                if(mode === 'auto') {
-                    document.getElementById('1min-auto-btn').classList.add('active');
-                    document.getElementById('1min-manual-btn').classList.remove('active');
-                } else {
-                    document.getElementById('1min-auto-btn').classList.remove('active');
-                    document.getElementById('1min-manual-btn').classList.add('active');
-                }
-            });
-            
-            database.ref('gameSettings/nextResult_1min').on('value', snapshot => {
-                const result = snapshot.val();
-                if(result !== null && result !== undefined) {
-                    document.querySelectorAll('#1min-next-result-selector .result-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                        if(parseInt(opt.dataset.result) === result) {
-                            opt.classList.add('selected');
-                            nextResult = result;
-                        }
-                    });
-                }
-            });
-            
-            // 30sec game listeners
-            database.ref('gameSettings/currentPeriod_30sec').on('value', snapshot => {
+            database.ref('gameSettings/currentPeriod_1min').once('value').then((snapshot) => {
                 const periodData = snapshot.val();
-                if(periodData) {
-                    document.getElementById('30sec-current-period').textContent = periodData.periodId || 'N/A';
-                    document.getElementById('30sec-period-id').textContent = `Period: ${periodData.periodId || 'Loading...'}`;
-                    
-                    // Update timer
-                    const now = getServerTime();
-                    const elapsed = Math.floor((now - periodData.startTime) / 1000);
-                    const timeLeft = 30 - elapsed;
-                    
-                    if(timeLeft > 0) {
-                        const minutes = Math.floor(timeLeft / 60);
-                        const seconds = timeLeft % 60;
-                        document.getElementById('30sec-timer').textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
-                    } else {
-                        document.getElementById('30sec-timer').textContent = '0:00';
-                    }
+                if (periodData) {
+                    updateGameDisplay('1min', periodData);
+                    calculateBettingStats('1min', periodData.periodId);
                 }
             });
             
-            database.ref('gameSettings/lastPeriodNumber_30sec').on('value', snapshot => {
-                const lastPeriod = snapshot.val();
-                if(lastPeriod) {
-                    const nextPeriod = lastPeriod + 1;
-                    const nextPeriodId = generatePeriodId('30sec', nextPeriod);
-                    document.getElementById('30sec-next-period').textContent = nextPeriodId;
-                }
+            // Load next periods
+            database.ref('gameSettings/lastPeriodNumber_30sec').once('value').then((snapshot) => {
+                const lastPeriod = snapshot.val() || 320;
+                document.getElementById('30sec-next-period').textContent = generatePeriodId('30sec', lastPeriod + 1);
             });
             
-            database.ref('gameSettings/gameMode_30sec').on('value', snapshot => {
-                const mode = snapshot.val() || 'auto';
-                document.getElementById('30sec-mode').textContent = mode === 'auto' ? 'Auto' : 'Manual';
+            database.ref('gameSettings/lastPeriodNumber_1min').once('value').then((snapshot) => {
+                const lastPeriod = snapshot.val() || 440;
+                document.getElementById('1min-next-period').textContent = generatePeriodId('1min', lastPeriod + 1);
+            });
+            
+            // Load initial history
+            loadHistory(currentHistoryMode);
+            
+            // Load initial bets
+            loadBets(currentBetsMode);
+        }
+        
+        // Update game display
+        function updateGameDisplay(gameMode, periodData) {
+            const prefix = gameMode === '30sec' ? '30sec' : '1min';
+            const gameDuration = gameMode === '30sec' ? 30 : 60;
+            
+            document.getElementById(`${prefix}-period`).textContent = periodData.periodId;
+            
+            // Clear previous timer
+            if (timerIntervals[gameMode]) {
+                clearInterval(timerIntervals[gameMode]);
+            }
+            
+            // Update timer
+            const updateTimer = () => {
+                const now = getServerTime();
+                const elapsed = Math.floor((now - periodData.startTime) / 1000);
+                const timeLeft = Math.max(0, gameDuration - elapsed);
                 
-                if(mode === 'auto') {
-                    document.getElementById('30sec-auto-btn').classList.add('active');
-                    document.getElementById('30sec-manual-btn').classList.remove('active');
-                } else {
-                    document.getElementById('30sec-auto-btn').classList.remove('active');
-                    document.getElementById('30sec-manual-btn').classList.add('active');
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById(`${prefix}-timer`).textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+                
+                // Update status
+                let statusText = "Running";
+                let statusClass = "status-pending";
+                
+                if (timeLeft <= 0) {
+                    statusText = "Ended - Processing";
+                    statusClass = "status-won";
+                } else if (timeLeft <= (gameMode === '30sec' ? 5 : 10)) {
+                    statusText = "Running - Betting Closed";
+                    statusClass = "status-lost";
                 }
-            });
+                
+                document.getElementById(`${prefix}-status`).textContent = statusText;
+                document.getElementById(`${prefix}-status`).className = statusClass;
+                document.getElementById(`${prefix}-game-status`).textContent = statusText;
+                
+                return timeLeft;
+            };
             
-            database.ref('gameSettings/nextResult_30sec').on('value', snapshot => {
+            // Initial update
+            const timeLeft = updateTimer();
+            
+            // Set up interval if game is still running
+            if (timeLeft > 0) {
+                timerIntervals[gameMode] = setInterval(updateTimer, 1000);
+            }
+            
+            // Update result display if available
+            database.ref(`gameResults/${gameMode}/${periodData.periodId}`).once('value').then((snapshot) => {
                 const result = snapshot.val();
-                if(result !== null && result !== undefined) {
-                    document.querySelectorAll('#30sec-next-result-selector .result-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                        if(parseInt(opt.dataset.result) === result) {
-                            opt.classList.add('selected');
-                            nextResult = result;
-                        }
-                    });
+                if (result) {
+                    document.getElementById(`${prefix}-result-display`).textContent = 
+                        `${result.number} (${result.color}, ${result.bigSmall})`;
+                } else {
+                    document.getElementById(`${prefix}-result-display`).textContent = "Not set";
                 }
             });
-            
-            // Load history for both games
-            loadGameHistory('1min');
-            loadGameHistory('30sec');
-            
-            // Load top bets for both games
-            loadTopBets('1min');
-            loadTopBets('30sec');
         }
         
         // Generate period ID
@@ -1294,96 +1097,212 @@
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
-            const prefix = gameMode === '1min' ? '1M' : '30S';
+            const prefix = gameMode === '30sec' ? '30S' : '1M';
             return `${year}${month}${day}${prefix}${String(periodNumber).padStart(3, '0')}`;
         }
         
-        // Set game mode (auto/manual)
-        function setGameMode(gameMode, mode) {
-            database.ref(`gameSettings/gameMode_${gameMode}`).set(mode).then(() => {
-                showToast(`${gameMode === '1min' ? '1min' : '30sec'} game mode set to ${mode}`, 'success');
-            }).catch(error => {
-                showToast(`Failed to set game mode: ${error.message}`, 'error');
-            });
-        }
-        
-        // Force end game
-        function forceEndGame(gameMode) {
-            database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then(snapshot => {
-                const periodData = snapshot.val();
-                if(periodData) {
-                    endCurrentPeriod(gameMode, periodData.periodNumber, periodData.periodId);
+        // Calculate betting stats
+        function calculateBettingStats(gameMode, periodId) {
+            database.ref(`bets/${periodId}`).once('value').then((snapshot) => {
+                const bets = snapshot.val();
+                let totalBets = 0;
+                let totalAmount = 0;
+                let highestBet = 0;
+                let bigAmount = 0;
+                let smallAmount = 0;
+                
+                if (bets) {
+                    Object.keys(bets).forEach(userId => {
+                        Object.keys(bets[userId]).forEach(betId => {
+                            const bet = bets[userId][betId];
+                            totalBets++;
+                            totalAmount += bet.amount;
+                            if (bet.amount > highestBet) {
+                                highestBet = bet.amount;
+                            }
+                            
+                            // Calculate Big/Small bets
+                            if (bet.type === 'bigSmall') {
+                                if (bet.value.toLowerCase() === 'big') {
+                                    bigAmount += bet.amount;
+                                } else if (bet.value.toLowerCase() === 'small') {
+                                    smallAmount += bet.amount;
+                                }
+                            }
+                        });
+                    });
                 }
-            }).catch(error => {
-                showToast(`Failed to force end game: ${error.message}`, 'error');
+                
+                const prefix = gameMode === '30sec' ? '30sec' : '1min';
+                document.getElementById(`${prefix}-total-bets`).textContent = totalBets;
+                document.getElementById(`${prefix}-total-amount`).textContent = `₹${totalAmount.toFixed(2)}`;
+                document.getElementById(`${prefix}-highest-bet`).textContent = `₹${highestBet.toFixed(2)}`;
+                document.getElementById(`${prefix}-big-amount`).textContent = `₹${bigAmount.toFixed(2)}`;
+                document.getElementById(`${prefix}-small-amount`).textContent = `₹${smallAmount.toFixed(2)}`;
             });
-            
-            hideModal('confirm-modal');
         }
         
         // End current period
-        function endCurrentPeriod(gameMode, periodNumber, periodId) {
-            // Generate result if in auto mode
-            database.ref(`gameSettings/gameMode_${gameMode}`).once('value').then(snapshot => {
-                const mode = snapshot.val();
-                
-                if(mode === 'auto') {
-                    // Generate random result for auto mode
-                    const winningNumber = Math.floor(Math.random() * 9);
-                    saveGameResult(gameMode, periodNumber, periodId, winningNumber);
-                } else {
-                    // Use next result if set for manual mode
-                    database.ref(`gameSettings/nextResult_${gameMode}`).once('value').then(resultSnapshot => {
-                        const nextResult = resultSnapshot.val();
-                        if(nextResult !== null && nextResult !== undefined) {
-                            saveGameResult(gameMode, periodNumber, periodId, nextResult);
-                        } else {
-                            // If no next result set, generate random
-                            const winningNumber = Math.floor(Math.random() * 9);
-                            saveGameResult(gameMode, periodNumber, periodId, winningNumber);
-                        }
+        function endCurrentPeriod(gameMode) {
+            const prefix = gameMode === '30sec' ? '30sec' : '1min';
+            
+            database.ref(`gameSettings/currentPeriod_${prefix}`).once('value').then((snapshot) => {
+                const periodData = snapshot.val();
+                if (periodData) {
+                    generateResult(gameMode, periodData.periodId, periodData.periodNumber).then(() => {
+                        showToast(`Successfully ended ${gameMode} period ${periodData.periodId}`, 'success');
                     });
                 }
             });
         }
         
-        // Save game result
-        function saveGameResult(gameMode, periodNumber, periodId, winningNumber) {
-            let color;
+        // Force next period
+        function forceNextPeriod(gameMode) {
+            const prefix = gameMode === '30sec' ? '30sec' : '1min';
             
-            if(winningNumber === 0) {
-                color = 'green';
-            } else if(winningNumber === 5) {
-                color = 'violet';
-            } else if([1, 3, 7].includes(winningNumber)) {
-                color = 'red';
-            } else {
-                color = 'green';
-            }
+            database.ref(`gameSettings/currentPeriod_${prefix}`).once('value').then((snapshot) => {
+                const currentPeriod = snapshot.val();
+                if (currentPeriod) {
+                    // First generate result for current period
+                    generateResult(gameMode, currentPeriod.periodId, currentPeriod.periodNumber).then(() => {
+                        // Then start new period
+                        const newPeriodNumber = currentPeriod.periodNumber + 1;
+                        const newPeriodId = generatePeriodId(gameMode, newPeriodNumber);
+                        
+                        const periodData = {
+                            periodNumber: newPeriodNumber,
+                            periodId: newPeriodId,
+                            startTime: getServerTime(),
+                            status: 'open',
+                            gameMode: gameMode
+                        };
+                        
+                        database.ref(`gameSettings/currentPeriod_${prefix}`).set(periodData);
+                        database.ref(`gameSettings/lastPeriodNumber_${prefix}`).set(newPeriodNumber);
+                        database.ref(`gamePeriods/${gameMode}/${newPeriodId}`).set(periodData);
+                        
+                        showToast(`Successfully started new ${gameMode} period ${newPeriodId}`, 'success');
+                    });
+                }
+            });
+        }
+        
+        // Set manual result
+        function setManualResult(gameMode, number, bigSmallMode) {
+            const prefix = gameMode === '30sec' ? '30sec' : '1min';
             
-            const bigSmall = winningNumber >= 5 ? 'Big' : 'Small';
-            
-            const resultData = {
-                periodNumber: periodNumber,
-                number: winningNumber,
-                color: color,
-                bigSmall: bigSmall,
-                timestamp: getServerTime(),
-                gameMode: gameMode
-            };
-            
-            // Save result
-            database.ref(`gameResults/${gameMode}/` + periodId).set(resultData).then(() => {
-                // Process bets
-                processBets(gameMode, periodId, winningNumber, color, bigSmall).then(() => {
-                    // Start new period
-                    startNewPeriod(gameMode, periodNumber);
+            database.ref(`gameSettings/currentPeriod_${prefix}`).once('value').then((snapshot) => {
+                const periodData = snapshot.val();
+                if (periodData) {
+                    let color;
+                    if(number === 0) {
+                        color = 'green';
+                    } else if(number === 5) {
+                        color = 'violet';
+                    } else if([1, 3, 7].includes(number)) {
+                        color = 'red';
+                    } else {
+                        color = 'green';
+                    }
+                    
+                    // Determine big/small based on selection
+                    let bigSmall;
+                    if (bigSmallMode === 'big') {
+                        bigSmall = 'Big';
+                        // If number is <5 but we're forcing Big, adjust the number to be >=5
+                        if (number < 5) {
+                            number = 5 + Math.floor(Math.random() * 4); // Random number between 5-8
+                            // Recalculate color based on new number
+                            if(number === 5) color = 'violet';
+                            else if([1, 3, 7].includes(number)) color = 'red';
+                            else color = 'green';
+                        }
+                    } else if (bigSmallMode === 'small') {
+                        bigSmall = 'Small';
+                        // If number is >=5 but we're forcing Small, adjust the number to be <5
+                        if (number >= 5) {
+                            number = Math.floor(Math.random() * 5); // Random number between 0-4
+                            // Recalculate color based on new number
+                            if(number === 0) color = 'green';
+                            else if([1, 3, 7].includes(number)) color = 'red';
+                            else color = 'green';
+                        }
+                    } else {
+                        // Auto mode - determine by number
+                        bigSmall = number >= 5 ? 'Big' : 'Small';
+                    }
+                    
+                    const resultData = {
+                        periodNumber: periodData.periodNumber,
+                        number: number,
+                        color: color,
+                        bigSmall: bigSmall,
+                        timestamp: getServerTime(),
+                        gameMode: gameMode,
+                        manual: true
+                    };
+                    
+                    database.ref(`gameResults/${gameMode}/${periodData.periodId}`).set(resultData).then(() => {
+                        processBets(periodData.periodId, number, color, bigSmall).then(() => {
+                            showToast(`Manual result set for ${gameMode} period ${periodData.periodId}: ${number} (${color}, ${bigSmall})`, 'success');
+                            document.getElementById(`${prefix}-result-display`).textContent = `${number} (${color}, ${bigSmall})`;
+                        });
+                    });
+                }
+            });
+        }
+        
+        // Generate random result
+        function generateResult(gameMode, periodId, periodNumber) {
+            return new Promise((resolve) => {
+                // Check if manual result exists
+                database.ref(`gameResults/${gameMode}/${periodId}`).once('value').then((snapshot) => {
+                    const manualResult = snapshot.val();
+                    
+                    if (manualResult && manualResult.manual) {
+                        // Use manual result
+                        processBets(periodId, manualResult.number, manualResult.color, manualResult.bigSmall).then(() => {
+                            resolve();
+                        });
+                    } else {
+                        // Generate random result
+                        const winningNumber = Math.floor(Math.random() * 9);
+                        let color;
+                        
+                        if(winningNumber === 0) {
+                            color = 'green';
+                        } else if(winningNumber === 5) {
+                            color = 'violet';
+                        } else if([1, 3, 7].includes(winningNumber)) {
+                            color = 'red';
+                        } else {
+                            color = 'green';
+                        }
+                        
+                        const bigSmall = winningNumber >= 5 ? 'Big' : 'Small';
+                        
+                        const resultData = {
+                            periodNumber: periodNumber,
+                            number: winningNumber,
+                            color: color,
+                            bigSmall: bigSmall,
+                            timestamp: getServerTime(),
+                            gameMode: gameMode
+                        };
+                        
+                        database.ref(`gameResults/${gameMode}/${periodId}`).set(resultData).then(() => {
+                            addToHistory(gameMode, periodId, winningNumber, bigSmall, color);
+                            processBets(periodId, winningNumber, color, bigSmall).then(() => {
+                                resolve();
+                            });
+                        });
+                    }
                 });
             });
         }
         
         // Process bets with 10% commission
-        function processBets(gameMode, periodId, winningNumber, winningColor, winningBigSmall) {
+        function processBets(periodId, winningNumber, winningColor, winningBigSmall) {
             return new Promise((resolve) => {
                 database.ref('bets/' + periodId).once('value').then((snapshot) => {
                     const bets = snapshot.val();
@@ -1469,92 +1388,27 @@
             });
         }
         
-        // Start new period
-        function startNewPeriod(gameMode, lastPeriodNumber) {
-            const newPeriodNumber = lastPeriodNumber + 1;
-            const newPeriodId = generatePeriodId(gameMode, newPeriodNumber);
-            
-            const periodData = {
-                periodNumber: newPeriodNumber,
-                periodId: newPeriodId,
-                startTime: getServerTime(),
-                status: 'open',
-                gameMode: gameMode
-            };
-            
-            // Update last period number
-            database.ref(`gameSettings/lastPeriodNumber_${gameMode}`).set(newPeriodNumber);
-            
-            // Set new current period
-            database.ref(`gameSettings/currentPeriod_${gameMode}`).set(periodData);
-            database.ref(`gamePeriods/${gameMode}/` + newPeriodId).set(periodData);
-            
-            // Clear next result if in manual mode
-            database.ref(`gameSettings/gameMode_${gameMode}`).once('value').then(snapshot => {
-                const mode = snapshot.val();
-                if(mode === 'manual') {
-                    database.ref(`gameSettings/nextResult_${gameMode}`).set(null);
-                }
-            });
-            
-            // Schedule next end if in auto mode
-            if(gameMode === '1min') {
-                setTimeout(() => {
-                    endCurrentPeriod(gameMode, newPeriodNumber, newPeriodId);
-                }, 60000);
-            } else {
-                setTimeout(() => {
-                    endCurrentPeriod(gameMode, newPeriodNumber, newPeriodId);
-                }, 30000);
-            }
-        }
-        
-        // Set game result (for manual mode)
-        function setGameResult(gameMode, result) {
-            database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then(snapshot => {
-                const periodData = snapshot.val();
-                if(periodData) {
-                    saveGameResult(gameMode, periodData.periodNumber, periodData.periodId, result);
-                    showToast(`Result set to ${result} for current ${gameMode} game`, 'success');
-                }
-            }).catch(error => {
-                showToast(`Failed to set result: ${error.message}`, 'error');
-            });
-            
-            hideModal('confirm-modal');
-        }
-        
-        // Set next game result
-        function setNextGameResult(gameMode, result) {
-            database.ref(`gameSettings/nextResult_${gameMode}`).set(result).then(() => {
-                showToast(`Next ${gameMode} game result set to ${result}`, 'success');
-            }).catch(error => {
-                showToast(`Failed to set next result: ${error.message}`, 'error');
-            });
-            
-            hideModal('confirm-modal');
-        }
-        
         // Load game history
-        function loadGameHistory(gameMode) {
-            database.ref(`gameResults/${gameMode}`).orderByChild('timestamp').limitToLast(10).once('value').then((snapshot) => {
+        function loadHistory(gameMode) {
+            database.ref(`gameResults/${gameMode}`).orderByChild('timestamp').limitToLast(50).once('value').then((snapshot) => {
                 const results = snapshot.val();
-                const historyBody = document.getElementById(`${gameMode}-history-body`);
+                const historyBody = document.getElementById('history-body');
+                historyBody.innerHTML = '';
                 
                 if(results) {
-                    historyBody.innerHTML = '';
-                    
                     // Convert to array and sort by timestamp descending (newest first)
                     const resultsArray = Object.entries(results).map(([key, value]) => ({
                         period: key,
                         number: value.number,
-                        bigSmall: value.bigSmall,
                         color: value.color,
+                        bigSmall: value.bigSmall,
                         timestamp: value.timestamp
                     })).sort((a, b) => b.timestamp - a.timestamp);
                     
-                    // Add to history
+                    // Add to history table
                     resultsArray.forEach(result => {
+                        const row = document.createElement('tr');
+                        
                         let colorDot = '';
                         if(result.color === 'red') {
                             colorDot = '<span class="dot red"></span>';
@@ -1567,15 +1421,15 @@
                         const date = new Date(result.timestamp);
                         const timeString = date.toLocaleTimeString();
                         
-                        const historyRow = document.createElement('tr');
-                        historyRow.innerHTML = `
+                        row.innerHTML = `
                             <td>${result.period}</td>
                             <td>${result.number}</td>
+                            <td>${colorDot}${result.color}</td>
                             <td>${result.bigSmall}</td>
-                            <td>${colorDot}</td>
                             <td>${timeString}</td>
                         `;
-                        historyBody.appendChild(historyRow);
+                        
+                        historyBody.appendChild(row);
                     });
                 } else {
                     historyBody.innerHTML = `
@@ -1587,83 +1441,104 @@
             });
         }
         
-        // Load top bets for current period
-        function loadTopBets(gameMode) {
-            database.ref(`gameSettings/currentPeriod_${gameMode}`).once('value').then(periodSnapshot => {
-                const periodData = periodSnapshot.val();
-                if(periodData) {
-                    database.ref(`bets/${periodData.periodId}`).once('value').then(snapshot => {
-                        const bets = snapshot.val();
-                        const topBetsContainer = document.getElementById(`${gameMode}-top-bets`);
-                        
-                        if(bets) {
-                            // Aggregate bets by type
-                            const betAggregates = {};
-                            
-                            Object.keys(bets).forEach(userId => {
-                                const userBets = bets[userId];
-                                Object.keys(userBets).forEach(betId => {
-                                    const bet = userBets[betId];
-                                    const betKey = `${bet.type}_${bet.value}`;
-                                    
-                                    if(!betAggregates[betKey]) {
-                                        betAggregates[betKey] = {
-                                            type: bet.type,
-                                            value: bet.value,
-                                            total: 0,
-                                            count: 0
-                                        };
-                                    }
-                                    
-                                    betAggregates[betKey].total += bet.amount;
-                                    betAggregates[betKey].count++;
+        // Load bets
+        function loadBets(filter) {
+            let betsRef;
+            
+            if (filter === '30sec') {
+                betsRef = database.ref('bets').orderByKey().startAt('30S').endAt('30S\uf8ff');
+            } else if (filter === '1min') {
+                betsRef = database.ref('bets').orderByKey().startAt('1M').endAt('1M\uf8ff');
+            } else {
+                betsRef = database.ref('bets');
+            }
+            
+            betsRef.once('value').then((snapshot) => {
+                const betsData = snapshot.val();
+                const betsBody = document.getElementById('bets-body');
+                betsBody.innerHTML = '';
+                
+                if (betsData) {
+                    // Convert to array and sort by timestamp descending (newest first)
+                    let betsArray = [];
+                    
+                    Object.keys(betsData).forEach(periodId => {
+                        Object.keys(betsData[periodId]).forEach(userId => {
+                            Object.keys(betsData[periodId][userId]).forEach(betId => {
+                                const bet = betsData[periodId][userId][betId];
+                                betsArray.push({
+                                    periodId,
+                                    userId,
+                                    betId,
+                                    type: bet.type,
+                                    value: bet.value,
+                                    amount: bet.amount,
+                                    odds: bet.odds,
+                                    status: bet.status || 'pending',
+                                    timestamp: bet.timestamp
                                 });
                             });
-                            
-                            // Convert to array and sort by total amount
-                            const betArray = Object.values(betAggregates).sort((a, b) => b.total - a.total);
-                            
-                            // Display top 5 bets
-                            topBetsContainer.innerHTML = '';
-                            betArray.slice(0, 5).forEach(bet => {
-                                const betItem = document.createElement('div');
-                                betItem.className = 'bet-item';
-                                
-                                let displayType = '';
-                                if(bet.type === 'color') {
-                                    displayType = bet.value.charAt(0).toUpperCase() + bet.value.slice(1);
-                                } else if(bet.type === 'bigSmall') {
-                                    displayType = bet.value.charAt(0).toUpperCase() + bet.value.slice(1);
-                                } else if(bet.type === 'number') {
-                                    displayType = 'Number ' + bet.value;
-                                }
-                                
-                                betItem.innerHTML = `
-                                    <div class="bet-type">${displayType}</div>
-                                    <div class="bet-amount">₹${bet.total.toFixed(2)} (${bet.count} bets)</div>
-                                `;
-                                topBetsContainer.appendChild(betItem);
-                            });
-                            
-                            if(betArray.length === 0) {
-                                topBetsContainer.innerHTML = `
-                                    <div class="bet-item">
-                                        <div class="bet-type">No bets placed yet</div>
-                                        <div class="bet-amount">₹0</div>
-                                    </div>
-                                `;
-                            }
-                        } else {
-                            topBetsContainer.innerHTML = `
-                                <div class="bet-item">
-                                    <div class="bet-type">No bets placed yet</div>
-                                    <div class="bet-amount">₹0</div>
-                                </div>
-                            `;
-                        }
+                        });
                     });
+                    
+                    // Sort by timestamp (newest first)
+                    betsArray.sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    // Add to bets table
+                    betsArray.forEach(bet => {
+                        const row = document.createElement('tr');
+                        
+                        let typeClass = '';
+                        let typeText = '';
+                        if (bet.type === 'number') {
+                            typeClass = 'type-number';
+                            typeText = 'Number';
+                        } else if (bet.type === 'color') {
+                            typeClass = 'type-color';
+                            typeText = 'Color';
+                        } else if (bet.type === 'bigSmall') {
+                            typeClass = 'type-bigsmall';
+                            typeText = 'Big/Small';
+                        }
+                        
+                        let statusClass = '';
+                        if (bet.status === 'pending') {
+                            statusClass = 'status-pending';
+                        } else if (bet.status === 'won') {
+                            statusClass = 'status-won';
+                        } else if (bet.status === 'lost') {
+                            statusClass = 'status-lost';
+                        }
+                        
+                        const date = new Date(bet.timestamp);
+                        const timeString = date.toLocaleTimeString();
+                        
+                        row.innerHTML = `
+                            <td>${bet.periodId}</td>
+                            <td>${bet.userId}</td>
+                            <td><span class="bet-type ${typeClass}">${typeText}</span></td>
+                            <td>${bet.value}</td>
+                            <td>₹${bet.amount.toFixed(2)}</td>
+                            <td>${bet.odds}x</td>
+                            <td><span class="bet-status ${statusClass}">${bet.status}</span></td>
+                            <td>${timeString}</td>
+                        `;
+                        
+                        betsBody.appendChild(row);
+                    });
+                } else {
+                    betsBody.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center;">No bets available</td>
+                        </tr>
+                    `;
                 }
             });
+        }
+        
+        // Add to history array
+        function addToHistory(gameMode, period, number, bigSmall, color) {
+            // This is handled in the realtime database, no need for local storage
         }
         
         // Create notification
@@ -1677,19 +1552,6 @@
                 timestamp: Date.now(),
                 read: false
             });
-        }
-        
-        // Show confirm modal
-        function showConfirmModal(title, message, confirmAction) {
-            document.getElementById('confirm-title').textContent = title;
-            document.getElementById('confirm-message').textContent = message;
-            document.getElementById('confirm-action-btn').onclick = confirmAction;
-            document.getElementById('confirm-modal').style.display = 'flex';
-        }
-        
-        // Hide modal
-        function hideModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
         }
         
         // Show toast
@@ -1708,10 +1570,7 @@
         }
         
         // Initialize
-        window.addEventListener('load', () => {
-            checkAuth();
-            setupLogin();
-        });
+        window.addEventListener('load', checkAuth);
     </script>
 </body>
 </html>
