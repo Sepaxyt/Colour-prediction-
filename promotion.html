@@ -569,31 +569,28 @@
             window.location.href = "index.html";
         }
         
-        // Generate a random referral code if not exists
-        function generateReferralCode() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let result = '';
-            for (let i = 0; i < 8; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
+        // Generate a referral code based on phone number
+        function generateReferralCode(phone) {
+            return "53" + phone.slice(-6);
         }
         
         // Load user data and referrals
         function loadUserData() {
-            database.ref('users/' + userPhone).once('value').then((snapshot) => {
+            const userRef = database.ref('users/' + userPhone);
+            
+            userRef.once('value').then((snapshot) => {
                 const userData = snapshot.val() || {};
                 
                 // Set or generate referral code
                 let referralCode = userData.referralCode;
                 if (!referralCode) {
-                    referralCode = generateReferralCode();
-                    database.ref('users/' + userPhone + '/referralCode').set(referralCode);
+                    referralCode = generateReferralCode(userPhone);
+                    userRef.update({ referralCode: referralCode });
                 }
                 
-                // Update UI
+                // Update UI with referral code and link
                 document.getElementById('referral-code-input').value = referralCode;
-                const referralLink = window.location.origin + '/index.html?ref=' + referralCode;
+                const referralLink = window.location.origin + '/register.html?ref=' + referralCode;
                 document.getElementById('referral-link-input').value = referralLink;
                 
                 // Load balance
