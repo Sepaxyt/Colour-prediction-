@@ -678,11 +678,11 @@
         // User data
         let userData = {
             balance: 0,
-            totalDeposits: 0,
             totalBetAmount: 0,
             withdrawalsToday: 0,
             maxDailyWithdrawals: 3,
-            lastWithdrawalDate: null
+            lastWithdrawalDate: null,
+            totalDeposits: 0
         };
         
         // Check if user is logged in
@@ -707,11 +707,11 @@
                 if(data) {
                     userData = {
                         balance: data.balance || 0,
-                        totalDeposits: data.totalDeposits || 0,
                         totalBetAmount: data.totalBetAmount || 0,
                         withdrawalsToday: data.withdrawalsToday || 0,
                         maxDailyWithdrawals: data.maxDailyWithdrawals || 3,
-                        lastWithdrawalDate: data.lastWithdrawalDate || null
+                        lastWithdrawalDate: data.lastWithdrawalDate || null,
+                        totalDeposits: data.totalDeposits || 0
                     };
                     
                     // Check if it's a new day and reset withdrawals
@@ -749,28 +749,26 @@
             // User must bet their entire balance before withdrawing
             const betRemaining = Math.max(0, userData.balance - userData.totalBetAmount);
             const betCompleted = Math.min(userData.totalBetAmount, userData.balance);
-            const progressPercentage = (betCompleted / userData.balance) * 100 || 0;
+            const progressPercentage = userData.balance > 0 ? (betCompleted / userData.balance) * 100 : 0;
             
             document.getElementById('bet-progress-bar').style.width = `${progressPercentage}%`;
             document.getElementById('bet-remaining').textContent = 
-                '₹' + betRemaining.toLocaleString('en-IN');
+                '₹' + betRemaining.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             document.getElementById('bet-completed').textContent = 
-                '₹' + betCompleted.toLocaleString('en-IN');
+                '₹' + betCompleted.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             
             const withdrawalMessage = document.getElementById('withdrawal-message');
+            const withdrawBtn = document.getElementById('withdraw-btn');
+            
             if(betRemaining > 0) {
                 withdrawalMessage.textContent = 
-                    `Need to bet ₹${betRemaining.toLocaleString('en-IN')} to be able to withdraw`;
+                    `Need to bet ₹${betRemaining.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) to be able to withdraw`;
                 withdrawalMessage.style.color = 'var(--warning)';
-                
-                // Disable withdrawal button if betting requirement not met
-                document.getElementById('withdraw-btn').disabled = true;
+                withdrawBtn.disabled = true;
             } else {
                 withdrawalMessage.textContent = 'You can now withdraw your funds';
                 withdrawalMessage.style.color = 'var(--success)';
-                
-                // Enable withdrawal button if betting requirement met
-                document.getElementById('withdraw-btn').disabled = false;
+                withdrawBtn.disabled = false;
             }
         }
         
@@ -1042,7 +1040,7 @@
         
         // Process withdrawal
         function processWithdrawal() {
-            const amount = parseInt(document.getElementById('withdraw-amount').value);
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
             
             if(!amount || amount < 110 || amount > 50000) {
                 showToast('Withdrawal amount must be between ₹110 and ₹50,000', 'error');
@@ -1053,7 +1051,7 @@
             if(!checkWithdrawalEligibility()) {
                 const betRemaining = Math.max(0, userData.balance - userData.totalBetAmount);
                 if(betRemaining > 0) {
-                    showToast(`You need to bet ₹${betRemaining.toLocaleString('en-IN')} more to withdraw`, 'error');
+                    showToast(`You need to bet ₹${betRemaining.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2}) more to withdraw`, 'error');
                 } else if(userData.withdrawalsToday >= userData.maxDailyWithdrawals) {
                     showToast('You have reached your daily withdrawal limit', 'error');
                 }
@@ -1163,7 +1161,7 @@
                         'info'
                     );
                     
-                    showToast(`Withdrawal of ₹${amount} requested successfully!`, 'success');
+                    showToast(`Withdrawal of ₹${amount.toLocaleString('en-IN')} requested successfully!`, 'success');
                     
                     // Reset form
                     document.getElementById('withdraw-amount').value = '';
