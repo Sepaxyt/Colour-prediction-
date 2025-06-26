@@ -558,25 +558,6 @@
                 <div class="balance-amount" id="current-balance">₹0.00</div>
             </div>
             
-            <div class="balance-summary">
-                <div class="balance-row">
-                    <span class="balance-label">Deposited Amount:</span>
-                    <span class="balance-value" id="deposited-amount">₹0.00</span>
-                </div>
-                <div class="balance-row">
-                    <span class="balance-label">Bonus Amount:</span>
-                    <span class="balance-value" id="bonus-amount">₹0.00</span>
-                </div>
-                <div class="balance-row">
-                    <span class="balance-label">Winning Amount:</span>
-                    <span class="balance-value" id="winning-amount">₹0.00</span>
-                </div>
-                <div class="balance-row">
-                    <span class="balance-label">Unplayed Amount:</span>
-                    <span class="balance-value" id="unplayed-amount">₹0.00</span>
-                </div>
-            </div>
-            
             <div class="info-box">
                 <p><i class="fas fa-info-circle"></i> Withdrawal time: 00:00-23:59</p>
                 <p><i class="fas fa-info-circle"></i> Withdrawal amount range: ₹110.00-50,000.00</p>
@@ -751,11 +732,8 @@
         // User data
         let userData = {
             balance: 0,
-            totalDeposits: 0,
-            totalBonus: 0,
-            totalWinnings: 0,
             totalBetAmount: 0,
-            requiredBetAmount: 0,
+            requiredBetAmount: 0, // This will be equal to the total deposits
             withdrawalsToday: 0,
             maxDailyWithdrawals: 3,
             lastWithdrawalDate: null
@@ -786,11 +764,8 @@
                 if(data) {
                     userData = {
                         balance: data.balance || 0,
-                        totalDeposits: data.totalDeposits || 0,
-                        totalBonus: data.totalBonus || 0,
-                        totalWinnings: data.totalWinnings || 0,
                         totalBetAmount: data.totalBetAmount || 0,
-                        requiredBetAmount: data.requiredBetAmount || 0,
+                        requiredBetAmount: data.totalDeposits || 0, // Required bet amount is equal to total deposits
                         withdrawalsToday: data.withdrawalsToday || 0,
                         maxDailyWithdrawals: data.maxDailyWithdrawals || 3,
                         lastWithdrawalDate: data.lastWithdrawalDate || null
@@ -811,25 +786,12 @@
         
         // Update UI with user data
         function updateUI() {
-            // Calculate unplayed amount (deposits + bonus - bets)
-            const unplayedAmount = Math.max(0, (userData.totalDeposits + userData.totalBonus) - userData.totalBetAmount);
-            
             // Update balance
             document.getElementById('current-balance').textContent = 
                 '₹' + userData.balance.toLocaleString('en-IN', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                 });
-            
-            // Update balance summary
-            document.getElementById('deposited-amount').textContent = 
-                '₹' + userData.totalDeposits.toLocaleString('en-IN');
-            document.getElementById('bonus-amount').textContent = 
-                '₹' + userData.totalBonus.toLocaleString('en-IN');
-            document.getElementById('winning-amount').textContent = 
-                '₹' + userData.totalWinnings.toLocaleString('en-IN');
-            document.getElementById('unplayed-amount').textContent = 
-                '₹' + unplayedAmount.toLocaleString('en-IN');
             
             // Update remaining withdrawals
             document.getElementById('remaining-withdrawals').textContent = 
