@@ -252,7 +252,6 @@
             color: var(--danger);
         }
         
-        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -297,7 +296,6 @@
             font-size: 1.2rem;
         }
         
-        /* Loading Spinner */
         .spinner {
             display: inline-block;
             width: 20px;
@@ -313,7 +311,6 @@
             to { transform: rotate(360deg); }
         }
         
-        /* Responsive styles */
         @media (max-width: 768px) {
             .amount-buttons {
                 grid-template-columns: repeat(2, 1fr);
@@ -413,17 +410,26 @@
         if(!userPhone) {
             window.location.href = "index.html";
         } else {
-            // Load user balance
+            // Check for pending bonus from main page
+            const selectedAmount = localStorage.getItem('selectedDepositAmount');
+            const selectedBonus = localStorage.getItem('selectedDepositBonus');
+            
+            if (selectedAmount && selectedBonus) {
+                document.getElementById('deposit-amount').value = selectedAmount;
+                
+                document.querySelectorAll('.amount-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if(parseInt(btn.textContent.replace('₹', '')) === parseInt(selectedAmount)) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+            
             loadBalance();
-            
-            // Load deposit history
             loadDepositHistory();
-            
-            // Load notifications count
             loadNotificationCount();
         }
         
-        // Load user balance
         function loadBalance() {
             database.ref('users/' + userPhone + '/balance').on('value', (snapshot) => {
                 const balance = snapshot.val() || 0;
@@ -435,7 +441,6 @@
             });
         }
         
-        // Load deposit history
         function loadDepositHistory() {
             database.ref('deposits/' + userPhone).orderByChild('timestamp').limitToLast(5).on('value', (snapshot) => {
                 const deposits = snapshot.val();
@@ -444,7 +449,6 @@
                 if(deposits) {
                     historyContainer.innerHTML = '';
                     
-                    // Convert to array and reverse to show newest first
                     const depositsArray = Object.entries(deposits).reverse();
                     
                     depositsArray.forEach(([key, deposit]) => {
@@ -478,7 +482,6 @@
             });
         }
         
-        // Load notification count
         function loadNotificationCount() {
             database.ref('notifications/' + userPhone).orderByChild('read').equalTo(false).on('value', (snapshot) => {
                 const count = snapshot.numChildren();
@@ -486,11 +489,9 @@
             });
         }
         
-        // Set amount from quick buttons
         function setAmount(amount) {
             document.getElementById('deposit-amount').value = amount;
             
-            // Highlight the selected button
             document.querySelectorAll('.amount-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if(parseInt(btn.textContent.replace('₹', '')) === amount) {
@@ -499,10 +500,11 @@
             });
         }
         
-        // Process deposit
         function processDeposit() {
             const channel = document.getElementById('deposit-channel').value;
             const amount = parseInt(document.getElementById('deposit-amount').value);
+            const selectedAmount = localStorage.getItem('selectedDepositAmount');
+            const selectedBonus = localStorage.getItem('selectedDepositBonus');
             
             if(!channel) {
                 showToast('Please select a game channel', 'error');
@@ -514,22 +516,38 @@
                 return;
             }
             
-            // Generate a random transaction ID
+            let bonusAmount = 0;
+            if (selectedAmount && selectedBonus && amount >= parseInt(selectedAmount)) {
+                bonusAmount = parseInt(selectedBonus);
+            }
+            
             const transactionId = 'TXN' + Date.now() + Math.floor(Math.random() * 1000);
             
-            // Create deposit record
             const depositData = {
                 amount: amount,
                 channel: channel,
                 status: 'pending',
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                bonus: bonusAmount
             };
             
-            // Save to Firebase
             database.ref('deposits/' + userPhone + '/' + transactionId).set(depositData)
                 .then(() => {
-                    // Redirect to payment page with transaction details
-                    window.location.href = `payment.html?txn=${transactionId}&amount=${amount}&phone=${userPhone}`;
+                    if (bonusAmount > 0) {
+                        return database.ref('users/' + userPhone).transaction(user => {
+                            if (user) {
+                                user.hasDeposited = true;
+                                user.depositProgress = user.depositProgress || {};
+                                user.depositProgress[selectedAmount] = amount;
+                            }
+                            return user;
+                        });
+                    }
+                })
+                .then(() => {
+                    localStorage.removeItem('selectedDepositAmount');
+                    localStorage.removeItem('selectedDepositBonus');
+                    window.location.href = `payment.html?txn=${transactionId}&amount=${amount}&phone=${userPhone}&bonus=${bonusAmount}`;
                 })
                 .catch((error) => {
                     console.error('Error processing deposit:', error);
@@ -537,7 +555,6 @@
                 });
         }
         
-        // Show toast notification
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
