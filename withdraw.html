@@ -525,12 +525,10 @@
         
         <div class="wallet-container">
             <div class="balance-card">
-                <div class="balance-title">Your Current Balance</div>
+                <div class="balance-title">Withdrawable Amount</div>
                 <div class="balance-amount" id="current-balance">₹0.00</div>
                 <div style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">
-                    Deposit: <span id="deposit-balance">₹0.00</span> | 
-                    Bonus: <span id="bonus-balance">₹0.00</span> | 
-                    Winnings: <span id="winning-balance">₹0.00</span>
+                    Available for withdrawal
                 </div>
             </div>
             
@@ -539,7 +537,6 @@
                 <p><i class="fas fa-info-circle"></i> Withdrawal amount range: ₹110.00-50,000.00</p>
                 <p><i class="fas fa-info-circle"></i> Daily remaining withdrawal times: <span id="remaining-withdrawals">3</span></p>
                 <p><i class="fas fa-exclamation-triangle"></i> You must bet 1x your deposit amount before withdrawing</p>
-                <p><i class="fas fa-exclamation-triangle"></i> Free money cannot be withdrawn</p>
             </div>
             
             <div class="bet-progress" id="bet-progress-container">
@@ -708,8 +705,6 @@
         // User data
         let userData = {
             balance: 0,
-            depositBalance: 0,
-            bonusBalance: 0,
             winningBalance: 0,
             totalBetAmount: 0,
             withdrawalsToday: 0,
@@ -719,8 +714,7 @@
             totalWithdrawals: 0,
             rolloverRequirement: 1, // 1x rollover requirement
             rolloverCompleted: 0,
-            rolloverRequiredAmount: 0,
-            freeMoney: 0 // Track free money given by the site
+            rolloverRequiredAmount: 0
         };
         
         // Check if user is logged in
@@ -745,8 +739,6 @@
                 if(data) {
                     userData = {
                         balance: parseFloat(data.balance) || 0,
-                        depositBalance: parseFloat(data.depositBalance) || 0,
-                        bonusBalance: parseFloat(data.bonusBalance) || 0,
                         winningBalance: parseFloat(data.winningBalance) || 0,
                         totalBetAmount: parseFloat(data.totalBetAmount) || 0,
                         withdrawalsToday: parseInt(data.withdrawalsToday) || 0,
@@ -756,8 +748,7 @@
                         totalWithdrawals: parseFloat(data.totalWithdrawals) || 0,
                         rolloverRequirement: parseFloat(data.rolloverRequirement) || 1,
                         rolloverCompleted: parseFloat(data.rolloverCompleted) || 0,
-                        rolloverRequiredAmount: parseFloat(data.rolloverRequiredAmount) || 0,
-                        freeMoney: parseFloat(data.freeMoney) || 0
+                        rolloverRequiredAmount: parseFloat(data.rolloverRequiredAmount) || 0
                     };
                     
                     // Check if it's a new day and reset withdrawals
@@ -777,12 +768,6 @@
         function updateUI() {
             // Update balances with proper formatting
             document.getElementById('current-balance').textContent = 
-                formatCurrency(userData.balance);
-            document.getElementById('deposit-balance').textContent = 
-                formatCurrency(userData.depositBalance);
-            document.getElementById('bonus-balance').textContent = 
-                formatCurrency(userData.bonusBalance);
-            document.getElementById('winning-balance').textContent = 
                 formatCurrency(userData.winningBalance);
             
             // Update remaining withdrawals
@@ -805,7 +790,7 @@
         function updateBetProgress() {
             // Calculate rollover requirements
             // Users must bet at least 1x their deposit amount before withdrawing
-            const requiredBetAmount = userData.depositBalance * userData.rolloverRequirement;
+            const requiredBetAmount = userData.totalDeposits * userData.rolloverRequirement;
             const betRemaining = Math.max(0, requiredBetAmount - userData.rolloverCompleted);
             const betCompleted = Math.min(userData.rolloverCompleted, requiredBetAmount);
             const progressPercentage = requiredBetAmount > 0 ? (betCompleted / requiredBetAmount) * 100 : 0;
@@ -828,12 +813,8 @@
                 withdrawalMessage.textContent = 'No winnings available for withdrawal';
                 withdrawalMessage.style.color = 'var(--danger)';
                 withdrawBtn.disabled = true;
-            } else if(userData.depositBalance <= 0) {
+            } else if(userData.totalDeposits <= 0) {
                 withdrawalMessage.textContent = 'You must deposit first to withdraw';
-                withdrawalMessage.style.color = 'var(--danger)';
-                withdrawBtn.disabled = true;
-            } else if(userData.freeMoney > 0 && userData.balance <= userData.freeMoney) {
-                withdrawalMessage.textContent = 'Free money cannot be withdrawn';
                 withdrawalMessage.style.color = 'var(--danger)';
                 withdrawBtn.disabled = true;
             } else {
@@ -843,7 +824,7 @@
             }
             
             // Also check if user has balance and hasn't exceeded daily limit
-            if(userData.balance <= 0) {
+            if(userData.winningBalance <= 0) {
                 withdrawalMessage.textContent = 'No balance available for withdrawal';
                 withdrawalMessage.style.color = 'var(--danger)';
                 withdrawBtn.disabled = true;
@@ -857,15 +838,14 @@
         // Check withdrawal eligibility
         function checkWithdrawalEligibility() {
             // Check rollover requirement
-            const requiredBetAmount = userData.depositBalance * userData.rolloverRequirement;
+            const requiredBetAmount = userData.totalDeposits * userData.rolloverRequirement;
             const betRemaining = Math.max(0, requiredBetAmount - userData.rolloverCompleted);
             
             // User must have completed rollover, have winnings, and not exceeded daily withdrawal limit
             return betRemaining <= 0 && 
                    userData.winningBalance > 0 && 
                    userData.withdrawalsToday < userData.maxDailyWithdrawals &&
-                   userData.depositBalance > 0 &&
-                   (userData.freeMoney === 0 || userData.balance > userData.freeMoney);
+                   userData.totalDeposits > 0;
         }
         
         // Change withdrawal method
@@ -1138,7 +1118,7 @@
             
             // Check withdrawal eligibility
             if(!checkWithdrawalEligibility()) {
-                const requiredBetAmount = userData.depositBalance * userData.rolloverRequirement;
+                const requiredBetAmount = userData.totalDeposits * userData.rolloverRequirement;
                 const betRemaining = Math.max(0, requiredBetAmount - userData.rolloverCompleted);
                 
                 if(betRemaining > 0) {
@@ -1147,12 +1127,8 @@
                     showToast('You have reached your daily withdrawal limit', 'error');
                 } else if(userData.winningBalance <= 0) {
                     showToast('No winnings available for withdrawal', 'error');
-                } else if(userData.depositBalance <= 0) {
+                } else if(userData.totalDeposits <= 0) {
                     showToast('You must deposit first to withdraw', 'error');
-                } else if(userData.freeMoney > 0 && userData.balance <= userData.freeMoney) {
-                    showToast('Free money cannot be withdrawn', 'error');
-                } else if(userData.balance <= 0) {
-                    showToast('Insufficient balance for withdrawal', 'error');
                 }
                 return;
             }
@@ -1160,12 +1136,6 @@
             // Check if user has sufficient winnings
             if(amount > userData.winningBalance) {
                 showToast('Insufficient winnings for withdrawal', 'error');
-                return;
-            }
-            
-            // Check if trying to withdraw free money
-            if(userData.freeMoney > 0 && (userData.balance - userData.freeMoney) < amount) {
-                showToast('Cannot withdraw free money', 'error');
                 return;
             }
             
