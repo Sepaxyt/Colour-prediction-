@@ -477,6 +477,26 @@
             to { transform: rotate(360deg); }
         }
         
+        /* Withdrawal Method Badge */
+        .method-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-right: 5px;
+        }
+        
+        .method-bank {
+            background: rgba(106, 17, 203, 0.1);
+            color: var(--primary);
+        }
+        
+        .method-upi {
+            background: rgba(74, 107, 255, 0.1);
+            color: var(--secondary);
+        }
+        
         @media (max-width: 992px) {
             .admin-container {
                 grid-template-columns: 1fr;
@@ -686,6 +706,11 @@
                     
                     <div class="search-filter">
                         <input type="text" class="search-box" id="withdrawal-search" placeholder="Search by User ID or Amount">
+                        <select class="filter-select" id="withdrawal-method-filter">
+                            <option value="all">All Methods</option>
+                            <option value="bank">Bank Transfer</option>
+                            <option value="upi">UPI Transfer</option>
+                        </select>
                     </div>
                     
                     <div class="table-container">
@@ -695,7 +720,8 @@
                                     <th>Transaction ID</th>
                                     <th>User ID</th>
                                     <th>Amount</th>
-                                    <th>Bank Details</th>
+                                    <th>Method</th>
+                                    <th>Details</th>
                                     <th>Date</th>
                                     <th>Actions</th>
                                 </tr>
@@ -791,6 +817,16 @@
                     <div class="form-group">
                         <label>Minimum Deposit Amount</label>
                         <input type="number" class="form-control" id="min-deposit" value="100">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Minimum Withdrawal Amount</label>
+                        <input type="number" class="form-control" id="min-withdrawal" value="110">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Maximum Daily Withdrawals</label>
+                        <input type="number" class="form-control" id="max-withdrawals" value="3">
                     </div>
                     
                     <button class="submit-btn" onclick="saveSettings()">
@@ -907,8 +943,16 @@
                     <input type="text" id="approve-wdr-amount" readonly>
                 </div>
                 <div class="form-group">
+                    <label>Withdrawal Method</label>
+                    <input type="text" id="approve-wdr-method" readonly>
+                </div>
+                <div class="form-group" id="approve-wdr-bank-container">
                     <label>Bank Details</label>
                     <textarea id="approve-wdr-bank-details" rows="4" readonly></textarea>
+                </div>
+                <div class="form-group" id="approve-wdr-upi-container" style="display: none;">
+                    <label>UPI Details</label>
+                    <textarea id="approve-wdr-upi-details" rows="2" readonly></textarea>
                 </div>
                 <div class="form-group">
                     <label>UTR Number (Optional)</label>
@@ -947,10 +991,23 @@
                     <input type="text" id="reject-wdr-amount" readonly>
                 </div>
                 <div class="form-group">
+                    <label>Withdrawal Method</label>
+                    <input type="text" id="reject-wdr-method" readonly>
+                </div>
+                <div class="form-group" id="reject-wdr-bank-container">
+                    <label>Bank Details</label>
+                    <textarea id="reject-wdr-bank-details" rows="4" readonly></textarea>
+                </div>
+                <div class="form-group" id="reject-wdr-upi-container" style="display: none;">
+                    <label>UPI Details</label>
+                    <textarea id="reject-wdr-upi-details" rows="2" readonly></textarea>
+                </div>
+                <div class="form-group">
                     <label>Reason for Rejection</label>
                     <select id="reject-wdr-reason">
                         <option value="Insufficient Funds">Insufficient Funds</option>
                         <option value="Invalid Bank Details">Invalid Bank Details</option>
+                        <option value="Invalid UPI ID">Invalid UPI ID</option>
                         <option value="Suspicious Activity">Suspicious Activity</option>
                         <option value="Other">Other</option>
                     </select>
@@ -1326,19 +1383,29 @@
                             const date = new Date(txn.timestamp);
                             const formattedDate = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
                             
-                            const bankDetails = `
-                                ${txn.bankName}
-                                A/C: ${txn.accountNumber}
-                                IFSC: ${txn.ifscCode}
-                                ${txn.accountName} (${txn.accountType})
-                            `;
+                            let methodBadge = '';
+                            let details = '';
+                            
+                            if (txn.method === 'bank') {
+                                methodBadge = '<span class="method-badge method-bank">Bank Transfer</span>';
+                                details = `
+                                    ${txn.bankName || 'N/A'}
+                                    A/C: ${txn.accountNumber || 'N/A'}
+                                    IFSC: ${txn.ifscCode || 'N/A'}
+                                    ${txn.accountName || 'N/A'} (${txn.accountType || 'N/A'})
+                                `;
+                            } else if (txn.method === 'upi') {
+                                methodBadge = '<span class="method-badge method-upi">UPI Transfer</span>';
+                                details = `UPI ID: ${txn.upiId || 'N/A'}`;
+                            }
                             
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
                                 <td>${txnId}</td>
                                 <td>${userId}</td>
                                 <td>₹${txn.amount.toLocaleString('en-IN')}</td>
-                                <td>${bankDetails}</td>
+                                <td>${methodBadge}</td>
+                                <td>${details}</td>
                                 <td>${formattedDate}</td>
                                 <td>
                                     <button class="action-btn approve-btn" onclick="openApproveWithdrawalModal('${userId}', '${txnId}')">
@@ -1442,6 +1509,8 @@
                     document.getElementById('telegram-chat-id').value = settings.telegramChatId || '';
                     document.getElementById('upi-id').value = settings.upiId || 'nasir****@airtel';
                     document.getElementById('min-deposit').value = settings.minDeposit || 100;
+                    document.getElementById('min-withdrawal').value = settings.minWithdrawal || 110;
+                    document.getElementById('max-withdrawals').value = settings.maxDailyWithdrawals || 3;
                 }
             });
         }
@@ -1484,16 +1553,28 @@
                 document.getElementById('approve-wdr-txn-id').value = txnId;
                 document.getElementById('approve-wdr-user-id').value = userId;
                 document.getElementById('approve-wdr-amount').value = `₹${txn.amount.toLocaleString('en-IN')}`;
-                
-                const bankDetails = `
-                    Bank: ${txn.bankName}
-                    Account: ${txn.accountNumber}
-                    IFSC: ${txn.ifscCode}
-                    Name: ${txn.accountName} (${txn.accountType})
-                `;
-                document.getElementById('approve-wdr-bank-details').value = bankDetails;
+                document.getElementById('approve-wdr-method').value = txn.method === 'bank' ? 'Bank Transfer' : 'UPI Transfer';
                 document.getElementById('approve-wdr-utr').value = '';
                 document.getElementById('approve-wdr-notes').value = '';
+                
+                if (txn.method === 'bank') {
+                    document.getElementById('approve-wdr-bank-container').style.display = 'block';
+                    document.getElementById('approve-wdr-upi-container').style.display = 'none';
+                    
+                    const bankDetails = `
+                        Bank: ${txn.bankName || 'N/A'}
+                        Account: ${txn.accountNumber || 'N/A'}
+                        IFSC: ${txn.ifscCode || 'N/A'}
+                        Name: ${txn.accountName || 'N/A'} (${txn.accountType || 'N/A'})
+                    `;
+                    document.getElementById('approve-wdr-bank-details').value = bankDetails;
+                } else {
+                    document.getElementById('approve-wdr-bank-container').style.display = 'none';
+                    document.getElementById('approve-wdr-upi-container').style.display = 'block';
+                    
+                    const upiDetails = `UPI ID: ${txn.upiId || 'N/A'}`;
+                    document.getElementById('approve-wdr-upi-details').value = upiDetails;
+                }
                 
                 document.getElementById('approve-withdrawal-modal').style.display = 'flex';
             });
@@ -1507,8 +1588,28 @@
                 document.getElementById('reject-wdr-txn-id').value = txnId;
                 document.getElementById('reject-wdr-user-id').value = userId;
                 document.getElementById('reject-wdr-amount').value = `₹${txn.amount.toLocaleString('en-IN')}`;
-                document.getElementById('reject-wdr-reason').value = 'Insufficient Funds';
+                document.getElementById('reject-wdr-method').value = txn.method === 'bank' ? 'Bank Transfer' : 'UPI Transfer';
+                document.getElementById('reject-wdr-reason').value = txn.method === 'bank' ? 'Invalid Bank Details' : 'Invalid UPI ID';
                 document.getElementById('reject-wdr-notes').value = '';
+                
+                if (txn.method === 'bank') {
+                    document.getElementById('reject-wdr-bank-container').style.display = 'block';
+                    document.getElementById('reject-wdr-upi-container').style.display = 'none';
+                    
+                    const bankDetails = `
+                        Bank: ${txn.bankName || 'N/A'}
+                        Account: ${txn.accountNumber || 'N/A'}
+                        IFSC: ${txn.ifscCode || 'N/A'}
+                        Name: ${txn.accountName || 'N/A'} (${txn.accountType || 'N/A'})
+                    `;
+                    document.getElementById('reject-wdr-bank-details').value = bankDetails;
+                } else {
+                    document.getElementById('reject-wdr-bank-container').style.display = 'none';
+                    document.getElementById('reject-wdr-upi-container').style.display = 'block';
+                    
+                    const upiDetails = `UPI ID: ${txn.upiId || 'N/A'}`;
+                    document.getElementById('reject-wdr-upi-details').value = upiDetails;
+                }
                 
                 document.getElementById('reject-withdrawal-modal').style.display = 'flex';
             });
@@ -1557,7 +1658,7 @@
             } else {
                 database.ref(`withdrawals/${userId}/${txnId}`).once('value', (snapshot) => {
                     const txn = snapshot.val();
-                    alert(`Withdrawal Details\n\nUser: ${userId}\nAmount: ₹${txn.amount}\nStatus: ${txn.status}\nBank: ${txn.bankName}\nAccount: ${txn.accountNumber}`);
+                    alert(`Withdrawal Details\n\nUser: ${userId}\nAmount: ₹${txn.amount}\nStatus: ${txn.status}\nMethod: ${txn.method === 'bank' ? 'Bank Transfer' : 'UPI Transfer'}\nDetails: ${txn.method === 'bank' ? `Bank: ${txn.bankName}, A/C: ${txn.accountNumber}` : `UPI ID: ${txn.upiId}`}`);
                 });
             }
         }
@@ -1821,12 +1922,16 @@
             const telegramChatId = document.getElementById('telegram-chat-id').value;
             const upiId = document.getElementById('upi-id').value;
             const minDeposit = document.getElementById('min-deposit').value;
+            const minWithdrawal = document.getElementById('min-withdrawal').value;
+            const maxWithdrawals = document.getElementById('max-withdrawals').value;
             
             database.ref('settings').update({
                 telegramToken: telegramToken,
                 telegramChatId: telegramChatId,
                 upiId: upiId,
-                minDeposit: parseInt(minDeposit)
+                minDeposit: parseInt(minDeposit),
+                minWithdrawal: parseInt(minWithdrawal),
+                maxDailyWithdrawals: parseInt(maxWithdrawals)
             }).then(() => {
                 showToast('Settings saved successfully!', 'success');
             });
