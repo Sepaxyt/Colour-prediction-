@@ -140,6 +140,7 @@
         .payment-apps {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 15px;
             margin: 20px 0;
         }
@@ -153,6 +154,11 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .payment-app:hover {
+            transform: scale(1.1);
         }
         
         .payment-app img {
@@ -300,6 +306,14 @@
         .reminder strong {
             color: var(--light);
         }
+        
+        .verification-message {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            color: var(--warning);
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -347,6 +361,28 @@
                     <div class="payment-app" onclick="openPaymentApp('bhim')">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/BHIM_Logo.svg/1200px-BHIM_Logo.svg.png" alt="BHIM">
                     </div>
+                    <div class="payment-app" onclick="openPaymentApp('amazonpay')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1200px-Amazon_logo.svg.png" alt="Amazon Pay">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('whatsapp')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Pay">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('airtel')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Airtel_Logo.svg/1200px-Airtel_Logo.svg.png" alt="Airtel Payments Bank">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('freecharge')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Freecharge_Logo.svg/1200px-Freecharge_Logo.svg.png" alt="Freecharge">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('mobikwik')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/MobiKwik_logo.svg/1200px-MobiKwik_logo.svg.png" alt="MobiKwik">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('cred')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/CRED_Logo.svg/1200px-CRED_Logo.svg.png" alt="CRED">
+                    </div>
+                </div>
+                
+                <div class="verification-message" id="verification-message">
+                    <i class="fas fa-info-circle"></i> Please wait 3 to 5 minutes for verification after submitting UTR
                 </div>
                 
                 <div class="reminder">
@@ -455,6 +491,24 @@
                 case 'bhim':
                     url = `bhim://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
                     break;
+                case 'amazonpay':
+                    url = `amazonpay://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'whatsapp':
+                    url = `whatsapp://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'airtel':
+                    url = `airtel://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'freecharge':
+                    url = `freecharge://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'mobikwik':
+                    url = `mobikwik://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'cred':
+                    url = `cred://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
                 default:
                     return;
             }
@@ -480,6 +534,9 @@
             const btn = document.getElementById('submit-btn');
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span> Verifying...';
+            
+            // Show verification message
+            document.getElementById('verification-message').style.display = 'block';
             
             // Create deposit record in Firebase
             const depositData = {
@@ -523,6 +580,7 @@
                 showToast('Error processing payment. Please try again.', 'error');
                 btn.disabled = false;
                 btn.textContent = 'Verify Payment';
+                document.getElementById('verification-message').style.display = 'none';
             });
         }
         
