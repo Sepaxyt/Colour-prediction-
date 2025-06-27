@@ -203,7 +203,6 @@
             background-size: 20px 20px;
         }
         
-        /* Auto Slider Styles */
         .auto-slider {
             height: 180px;
             position: relative;
@@ -261,7 +260,6 @@
             border-radius: 4px;
         }
         
-        /* Horizontal Game Slider */
         .games-slider-container {
             position: relative;
             margin-bottom: 30px;
@@ -385,7 +383,6 @@
             right: 10px;
         }
         
-        /* Winning Info Styles */
         .winning-info {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
@@ -582,7 +579,6 @@
             color: var(--success);
         }
         
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -630,7 +626,6 @@
             line-height: 1.5;
         }
         
-        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 80px;
@@ -675,7 +670,6 @@
             font-size: 1.2rem;
         }
         
-        /* Animation for winners */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -685,7 +679,6 @@
             animation: fadeIn 0.5s ease;
         }
         
-        /* Deposit Bonus Popup - UPDATED */
         .deposit-popup-overlay {
             position: fixed;
             top: 0;
@@ -807,6 +800,11 @@
             box-shadow: 0 4px 12px rgba(106, 17, 203, 0.3);
         }
         
+        .deposit-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+        }
+        
         .deposit-popup-footer {
             display: flex;
             align-items: center;
@@ -852,7 +850,6 @@
             color: white;
         }
         
-        /* Responsive styles */
         @media (max-width: 768px) {
             .banner h2 {
                 font-size: 1.4rem;
@@ -954,25 +951,52 @@
             </div>
         </header>
         
-        <!-- Banner Slider -->
         <div class="auto-slider">
             <div class="auto-slider-container" id="auto-slider">
-                <!-- Slides will be loaded dynamically from JSON -->
+                <div class="auto-slide" style="background-image: url('https://i.ibb.co/3P8XPrq/20250625-224537.jpg')"></div>
+                <div class="auto-slide" style="background-image: url('https://i.ibb.co/C3RzsfYF/20250625-224500.jpg')"></div>
+                <div class="auto-slide" style="background-image: url('https://i.ibb.co/hxDQWfWz/20250625-224549.jpg')"></div>
+                <div class="auto-slide" style="background-image: url('https://i.ibb.co/FqqwF7bL/20250625-224557.jpg')"></div>
             </div>
             
             <div class="auto-slider-dots" id="auto-slider-dots">
-                <!-- Dots will be loaded dynamically -->
+                <div class="auto-slider-dot active" onclick="goToSlide(0)"></div>
+                <div class="auto-slider-dot" onclick="goToSlide(1)"></div>
+                <div class="auto-slider-dot" onclick="goToSlide(2)"></div>
+                <div class="auto-slider-dot" onclick="goToSlide(3)"></div>
             </div>
         </div>
         
-        <!-- WinGo Games Horizontal Slider -->
         <div class="games-slider-container">
             <div class="section-header">
                 <h3 class="section-title">WinGo Games</h3>
             </div>
             
             <div class="games-slider" id="wingo-games">
-                <!-- WinGo games will be loaded dynamically -->
+                <div class="game-card" onclick="openGame('wingo30')">
+                    <div class="game-thumbnail">
+                        <div class="game-icon">30</div>
+                        <div class="game-title">WinGo 30 Seconds</div>
+                    </div>
+                </div>
+                <div class="game-card" onclick="openGame('wingo1')">
+                    <div class="game-thumbnail">
+                        <div class="game-icon">1M</div>
+                        <div class="game-title">WinGo 1 Minute</div>
+                    </div>
+                </div>
+                <div class="game-card" onclick="openGame('wingo3')">
+                    <div class="game-thumbnail">
+                        <div class="game-icon">3M</div>
+                        <div class="game-title">WinGo 3 Minutes</div>
+                    </div>
+                </div>
+                <div class="game-card" onclick="openGame('wingo5')">
+                    <div class="game-thumbnail">
+                        <div class="game-icon">5M</div>
+                        <div class="game-title">WinGo 5 Minutes</div>
+                    </div>
+                </div>
             </div>
             
             <div class="slider-nav slider-prev" onclick="scrollSlider(-1)">
@@ -983,7 +1007,6 @@
             </div>
         </div>
         
-        <!-- Winning Information Section -->
         <div class="winning-info">
             <div class="winning-info-header">
                 <h3 class="winning-title"><i class="fas fa-trophy"></i> Winning Information</h3>
@@ -992,7 +1015,38 @@
             
             <div class="winners-container">
                 <div class="winners-list" id="winners-list">
-                    <!-- Winners will be loaded dynamically -->
+                    <div class="winner-card">
+                        <div class="winner-avatar">M</div>
+                        <div class="winner-details">
+                            <div class="winner-name">Mem™DEE</div>
+                            <div class="winner-amount">₹256.50</div>
+                            <div class="winner-game">WIN Go 30s</div>
+                        </div>
+                    </div>
+                    <div class="winner-card">
+                        <div class="winner-avatar">A</div>
+                        <div class="winner-details">
+                            <div class="winner-name">Axa**pq2</div>
+                            <div class="winner-amount">₹128.75</div>
+                            <div class="winner-game">WIN Go 1m</div>
+                        </div>
+                    </div>
+                    <div class="winner-card">
+                        <div class="winner-avatar">B</div>
+                        <div class="winner-details">
+                            <div class="winner-name">B.R***LA</div>
+                            <div class="winner-amount">₹512.00</div>
+                            <div class="winner-game">WIN Go 3m</div>
+                        </div>
+                    </div>
+                    <div class="winner-card">
+                        <div class="winner-avatar">M</div>
+                        <div class="winner-details">
+                            <div class="winner-name">Mem™WSV</div>
+                            <div class="winner-amount">₹64.25</div>
+                            <div class="winner-game">WIN Go 5m</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1000,7 +1054,33 @@
                 <h4 class="big-winners-title"><i class="fas fa-crown"></i> Today's Big Winners</h4>
                 
                 <div class="big-winners-grid" id="big-winners">
-                    <!-- Big winners will be loaded dynamically -->
+                    <div class="big-winner-card">
+                        <div class="big-winner-rank">NO1</div>
+                        <div class="big-winner-avatar">M</div>
+                        <div class="big-winner-details">
+                            <div class="big-winner-name">Mem™DEE</div>
+                            <div class="big-winner-game">WIN Go 30s</div>
+                            <div class="big-winner-amount">₹5,256,500</div>
+                        </div>
+                    </div>
+                    <div class="big-winner-card">
+                        <div class="big-winner-rank">NO2</div>
+                        <div class="big-winner-avatar">A</div>
+                        <div class="big-winner-details">
+                            <div class="big-winner-name">Axa**pq2</div>
+                            <div class="big-winner-game">WIN Go 1m</div>
+                            <div class="big-winner-amount">₹3,128,750</div>
+                        </div>
+                    </div>
+                    <div class="big-winner-card">
+                        <div class="big-winner-rank">NO3</div>
+                        <div class="big-winner-avatar">B</div>
+                        <div class="big-winner-details">
+                            <div class="big-winner-name">B.R***LA</div>
+                            <div class="big-winner-game">WIN Go 3m</div>
+                            <div class="big-winner-amount">₹2,512,000</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1014,7 +1094,6 @@
         </footer>
     </div>
     
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <a href="main.html" class="nav-item active">
             <i class="fas fa-home"></i>
@@ -1038,7 +1117,6 @@
         </a>
     </div>
     
-    <!-- Deposit Bonus Popup - UPDATED -->
     <div class="deposit-popup-overlay" id="deposit-popup" style="display: none;">
         <div class="deposit-popup">
             <button class="close-popup" onclick="closeDepositPopup()">
@@ -1057,9 +1135,9 @@
                     <div class="deposit-progress-bar" style="width: 0%"></div>
                 </div>
                 <div class="deposit-amount">
-                    <span>0/100</span>
+                    <span id="deposit-100">0/100</span>
                 </div>
-                <button class="deposit-btn" onclick="redirectToWallet()">Deposit</button>
+                <button class="deposit-btn" onclick="redirectToWallet(100, 18)">Deposit</button>
             </div>
             
             <div class="deposit-option">
@@ -1069,9 +1147,9 @@
                     <div class="deposit-progress-bar" style="width: 0%"></div>
                 </div>
                 <div class="deposit-amount">
-                    <span>0/300</span>
+                    <span id="deposit-300">0/300</span>
                 </div>
-                <button class="deposit-btn" onclick="redirectToWallet()">Deposit</button>
+                <button class="deposit-btn" onclick="redirectToWallet(300, 28)">Deposit</button>
             </div>
             
             <div class="deposit-option">
@@ -1081,9 +1159,9 @@
                     <div class="deposit-progress-bar" style="width: 0%"></div>
                 </div>
                 <div class="deposit-amount">
-                    <span>0/500</span>
+                    <span id="deposit-500">0/500</span>
                 </div>
-                <button class="deposit-btn" onclick="redirectToWallet()">Deposit</button>
+                <button class="deposit-btn" onclick="redirectToWallet(500, 108)">Deposit</button>
             </div>
             
             <div class="deposit-option">
@@ -1093,9 +1171,9 @@
                     <div class="deposit-progress-bar" style="width: 0%"></div>
                 </div>
                 <div class="deposit-amount">
-                    <span>0/1000</span>
+                    <span id="deposit-1000">0/1000</span>
                 </div>
-                <button class="deposit-btn" onclick="redirectToWallet()">Deposit</button>
+                <button class="deposit-btn" onclick="redirectToWallet(1000, 188)">Deposit</button>
             </div>
             
             <div class="deposit-popup-footer">
@@ -1132,72 +1210,6 @@
             window.location.href = "index.html";
         }
         
-        // Game data JSON structure with your provided images
-        const gameData = {
-            featuredBanners: [
-                {
-                    id: "banner1",
-                    image: "https://i.ibb.co/3P8XPrq/20250625-224537.jpg"
-                },
-                {
-                    id: "banner2",
-                    image: "https://i.ibb.co/C3RzsfYF/20250625-224500.jpg"
-                },
-                {
-                    id: "banner3",
-                    image: "https://i.ibb.co/hxDQWfWz/20250625-224549.jpg"
-                },
-                {
-                    id: "banner4",
-                    image: "https://i.ibb.co/FqqwF7bL/20250625-224557.jpg"
-                },
-                {
-                    id: "banner5",
-                    image: "https://i.ibb.co/FqqwF7bL/20250625-224557.jpg"
-                }
-            ],
-            wingoGames: [
-                {
-                    id: "wingo30",
-                    title: "WinGo 30 Seconds",
-                    icon: "30",
-                    description: "Fast-paced 30 second lottery game with quick results"
-                },
-                {
-                    id: "wingo1",
-                    title: "WinGo 1 Minute",
-                    icon: "1M",
-                    description: "Exciting 1 minute lottery game with bigger prizes"
-                },
-                {
-                    id: "wingo3",
-                    title: "WinGo 3 Minutes",
-                    icon: "3M",
-                    description: "Strategic 3 minute game with higher multipliers"
-                },
-                {
-                    id: "wingo5",
-                    title: "WinGo 5 Minutes",
-                    icon: "5M",
-                    description: "Premium 5 minute game with massive jackpots"
-                }
-            ]
-        };
-        
-        // Random names for winners
-        const randomNames = [
-            "Mem™DEE", "Mem™OWY", "Mem™VCL", "Mem™WSV", "Mem™WCM", "Mem™BWA",
-            "Mem™B75", "Axa**pq2", "B.R***LA", "Mem™SVZ", "Mem™4PI", "Mem™ZSF",
-            "Mem™FHN", "Mem™S2B", "Mem™GJN", "Mem™KLP", "Mem™QWE", "Mem™RTY",
-            "Mem™UIO", "Mem™PAS", "Mem™DFG", "Mem™HJK", "Mem™LZX", "Mem™CVB",
-            "Mem™NMQ", "Mem™WER", "Mem™SDF", "Mem™XCV", "Mem™FGH", "Mem™VBN"
-        ];
-        
-        // Random game names for winners
-        const randomGameNames = [
-            "WIN Go 30s", "WIN Go 1m", "WIN Go 3m", "WIN Go 5m"
-        ];
-        
         // Auto slider functionality
         let currentSlide = 0;
         let slideInterval;
@@ -1206,9 +1218,8 @@
             slideInterval = setInterval(() => {
                 currentSlide = (currentSlide + 1) % document.querySelectorAll('.auto-slide').length;
                 updateSlider();
-            }, 5000); // Change slide every 5 seconds
+            }, 5000);
             
-            // Update timer display
             updateRefreshTimer();
         }
         
@@ -1233,10 +1244,9 @@
             startSlider();
         }
         
-        // Horizontal game slider functionality
         function scrollSlider(direction) {
             const slider = document.getElementById('wingo-games');
-            const scrollAmount = 300; // Adjust this value to control scroll distance
+            const scrollAmount = 300;
             
             if (direction === 1) {
                 slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
@@ -1245,182 +1255,14 @@
             }
         }
         
-        // Load game data
-        function loadGameData() {
-            // Load featured banners
-            const autoSlider = document.getElementById('auto-slider');
-            const sliderDots = document.getElementById('auto-slider-dots');
-            
-            autoSlider.innerHTML = '';
-            sliderDots.innerHTML = '';
-            
-            gameData.featuredBanners.forEach((banner, index) => {
-                autoSlider.innerHTML += `
-                    <div class="auto-slide" style="background-image: url('${banner.image}')"></div>
-                `;
-                
-                sliderDots.innerHTML += `
-                    <div class="auto-slider-dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>
-                `;
-            });
-            
-            // Load WinGo games in horizontal slider
-            const wingoGamesContainer = document.getElementById('wingo-games');
-            wingoGamesContainer.innerHTML = '';
-            
-            gameData.wingoGames.forEach(game => {
-                wingoGamesContainer.innerHTML += `
-                    <div class="game-card" onclick="openGame('${game.id}')">
-                        <div class="game-thumbnail">
-                            <div class="game-icon">${game.icon}</div>
-                            <div class="game-title">${game.title}</div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-        
-        // Load user balance from Firebase
-        function loadUserBalance() {
-            database.ref('users/' + userPhone + '/balance').once('value').then((snapshot) => {
-                const balance = snapshot.val() || 0;
-                document.getElementById('user-balance').textContent = '₹' + balance.toLocaleString('en-IN', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-                
-                // Check if user has made any deposits
-                database.ref('users/' + userPhone + '/hasDeposited').once('value').then((depositSnapshot) => {
-                    const hasDeposited = depositSnapshot.val() || false;
-                    
-                    // Check if user has dismissed the popup for today
-                    const lastDismissed = localStorage.getItem('depositPopupDismissed');
-                    const today = new Date().toDateString();
-                    
-                    // Show popup only if:
-                    // 1. User hasn't made any deposits yet
-                    // 2. User hasn't dismissed the popup today
-                    if (!hasDeposited && lastDismissed !== today) {
-                        showDepositPopup();
-                    }
-                });
-            }).catch((error) => {
-                console.error("Error loading balance:", error);
-                document.getElementById('user-balance').textContent = '₹0.00';
-            });
-        }
-        
-        // Generate random winners
-        function generateRandomWinners() {
-            // Recent winners (6 random entries)
-            const recentWinners = [];
-            const usedNames = new Set();
-            
-            for (let i = 0; i < 6; i++) {
-                let name;
-                do {
-                    name = randomNames[Math.floor(Math.random() * randomNames.length)];
-                } while (usedNames.has(name));
-                
-                usedNames.add(name);
-                
-                recentWinners.push({
-                    id: name,
-                    amount: (Math.random() * 500 + 10).toFixed(2),
-                    game: randomGameNames[Math.floor(Math.random() * randomGameNames.length)]
-                });
-            }
-            
-            const winnersList = document.getElementById('winners-list');
-            winnersList.innerHTML = '';
-            
-            recentWinners.forEach(winner => {
-                const winnerCard = document.createElement('div');
-                winnerCard.className = 'winner-card';
-                winnerCard.innerHTML = `
-                    <div class="winner-avatar">${winner.id.charAt(4)}</div>
-                    <div class="winner-details">
-                        <div class="winner-name">${winner.id}</div>
-                        <div class="winner-amount">₹${winner.amount}</div>
-                        <div class="winner-game">${winner.game}</div>
-                    </div>
-                `;
-                winnersList.appendChild(winnerCard);
-            });
-            
-            // Big winners (5 random entries)
-            const bigWinners = [];
-            const usedBigNames = new Set();
-            
-            for (let i = 0; i < 5; i++) {
-                let name;
-                do {
-                    name = randomNames[Math.floor(Math.random() * randomNames.length)];
-                } while (usedBigNames.has(name) || usedNames.has(name));
-                
-                usedBigNames.add(name);
-                usedNames.add(name);
-                
-                bigWinners.push({
-                    id: name,
-                    amount: (Math.random() * 10000000 + 1000000).toFixed(2),
-                    rank: 'NO' + (i + 1),
-                    game: randomGameNames[Math.floor(Math.random() * randomGameNames.length)]
-                });
-            }
-            
-            const bigWinnersGrid = document.getElementById('big-winners');
-            bigWinnersGrid.innerHTML = '';
-            
-            bigWinners.forEach(winner => {
-                const bigWinnerCard = document.createElement('div');
-                bigWinnerCard.className = 'big-winner-card';
-                bigWinnerCard.innerHTML = `
-                    <div class="big-winner-rank">${winner.rank}</div>
-                    <div class="big-winner-avatar">${winner.id.charAt(4)}</div>
-                    <div class="big-winner-details">
-                        <div class="big-winner-name">${winner.id}</div>
-                        <div class="big-winner-game">${winner.game}</div>
-                        <div class="big-winner-amount">₹${parseFloat(winner.amount).toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
-                    </div>
-                `;
-                bigWinnersGrid.appendChild(bigWinnerCard);
-            });
-        }
-        
-        // Update refresh timer display
-        function updateRefreshTimer() {
-            let seconds = 5;
-            const timerElement = document.getElementById('refresh-timer');
-            
-            const timerInterval = setInterval(() => {
-                seconds--;
-                timerElement.textContent = `Auto-refreshing in ${seconds}s`;
-                
-                if (seconds <= 0) {
-                    clearInterval(timerInterval);
-                    generateRandomWinners();
-                    updateRefreshTimer(); // Restart the timer
-                }
-            }, 1000);
-        }
-        
-        // Open game
         function openGame(gameId) {
-            const game = gameData.wingoGames.find(g => g.id === gameId);
-            if (game) {
-                if (gameId.startsWith('wingo')) {
-                    // Redirect to WinGo game page
-                    window.location.href = `${gameId}.html`;
-                } else {
-                    showToast(`Opening ${game.title}...`, 'success');
-                }
+            if (gameId.startsWith('wingo')) {
+                window.location.href = `${gameId}.html`;
             } else {
-                showToast('Game is loading...', 'info');
+                showToast(`Opening game...`, 'success');
             }
         }
         
-        // Show toast notification
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
@@ -1435,12 +1277,10 @@
             }, 3000);
         }
         
-        // User menu toggle
         function toggleUserMenu() {
             document.getElementById('user-menu').classList.toggle('active');
         }
         
-        // Close user menu when clicking outside
         document.addEventListener('click', function(event) {
             const userMenu = document.getElementById('user-menu');
             const userAvatar = document.getElementById('user-avatar');
@@ -1450,7 +1290,6 @@
             }
         });
         
-        // Logout function
         function logout() {
             localStorage.removeItem('userLoggedIn');
             localStorage.removeItem('userPhone');
@@ -1461,14 +1300,12 @@
             window.location.href = "index.html";
         }
         
-        // Show deposit popup
         function showDepositPopup() {
             const popup = document.getElementById('deposit-popup');
             popup.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
         
-        // Close deposit popup
         function closeDepositPopup(permanent = false) {
             const popup = document.getElementById('deposit-popup');
             popup.style.display = 'none';
@@ -1480,20 +1317,86 @@
             }
         }
         
-        // Redirect to wallet page
-        function redirectToWallet() {
+        function redirectToWallet(amount, bonus) {
+            localStorage.setItem('selectedDepositAmount', amount);
+            localStorage.setItem('selectedDepositBonus', bonus);
+            
             closeDepositPopup();
-            window.location.href = 'wallet.html';
+            window.location.href = 'deposit.html';
         }
         
-        // Initialize the page
+        function loadUserBalance() {
+            database.ref('users/' + userPhone).once('value').then((snapshot) => {
+                const userData = snapshot.val() || {};
+                const balance = userData.balance || 0;
+                
+                document.getElementById('user-balance').textContent = '₹' + balance.toLocaleString('en-IN', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                
+                if (userData.depositProgress) {
+                    updateDepositProgress(userData.depositProgress);
+                }
+                
+                const hasDeposited = userData.hasDeposited || false;
+                const lastDismissed = localStorage.getItem('depositPopupDismissed');
+                const today = new Date().toDateString();
+                
+                if (!hasDeposited && lastDismissed !== today) {
+                    showDepositPopup();
+                }
+            }).catch((error) => {
+                console.error("Error loading balance:", error);
+                document.getElementById('user-balance').textContent = '₹0.00';
+            });
+        }
+        
+        function updateDepositProgress(progress) {
+            const tiers = {
+                '100': { element: 'deposit-100', bonus: 18 },
+                '300': { element: 'deposit-300', bonus: 28 },
+                '500': { element: 'deposit-500', bonus: 108 },
+                '1000': { element: 'deposit-1000', bonus: 188 }
+            };
+            
+            for (const [amount, data] of Object.entries(tiers)) {
+                const deposited = progress[amount] || 0;
+                const percent = Math.min(100, (deposited / parseInt(amount)) * 100);
+                
+                document.getElementById(data.element).textContent = `${deposited}/${amount}`;
+                document.querySelector(`#${data.element}`).closest('.deposit-option')
+                    .querySelector('.deposit-progress-bar').style.width = `${percent}%`;
+                
+                if (deposited >= parseInt(amount)) {
+                    const btn = document.querySelector(`#${data.element}`).closest('.deposit-option')
+                        .querySelector('.deposit-btn');
+                    btn.disabled = true;
+                    btn.textContent = 'Claimed';
+                    btn.style.background = 'var(--gray)';
+                }
+            }
+        }
+        
+        function updateRefreshTimer() {
+            let seconds = 5;
+            const timerElement = document.getElementById('refresh-timer');
+            
+            const timerInterval = setInterval(() => {
+                seconds--;
+                timerElement.textContent = `Auto-refreshing in ${seconds}s`;
+                
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    updateRefreshTimer();
+                }
+            }, 1000);
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
-            loadGameData();
             loadUserBalance();
-            generateRandomWinners();
             startSlider();
             
-            // Close popup when clicking outside
             document.getElementById('deposit-popup').addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeDepositPopup();
