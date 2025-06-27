@@ -528,7 +528,7 @@
                 </div>
                 
                 <div class="vip-level">
-                    <div class="vip-level-number" id="vip-current-level">1</div>
+                    <div class="vip-level-number" id="vip-current-level">0</div>
                     <div class="vip-level-label">Current VIP Level</div>
                 </div>
             </div>
@@ -541,7 +541,7 @@
                 <div class="vip-progress-bar">
                     <div class="vip-progress-fill" id="vip-progress-fill" style="width: 0%"></div>
                 </div>
-                <div class="vip-progress-goal">Next Level: VIP <span id="vip-next-level">2</span></div>
+                <div class="vip-progress-goal">Next Level: VIP <span id="vip-next-level">1</span></div>
             </div>
             
             <div class="vip-benefits">
@@ -601,7 +601,7 @@
                         <p>Claim your monthly VIP bonus</p>
                         <div class="reward-time" id="monthly-timer">Next reward in: 15 days</div>
                     </div>
-                    <div class="reward-amount" id="monthly-amount">₹30</div>
+                    <div class="reward-amount" id="monthly-amount">₹0</div>
                     <button class="reward-claim-btn" id="claim-monthly" disabled>Claim</button>
                 </div>
             </div>
@@ -653,6 +653,7 @@
         
         // VIP monthly rewards (in rupees)
         const monthlyRewards = {
+            0: 0,
             1: 30,
             2: 75,
             3: 150
@@ -671,7 +672,7 @@
                     document.getElementById('vip-userid').textContent = `Member ID: ${uid}`;
                     
                     // Get VIP data
-                    const vipLevel = userData.vipLevel || 1;
+                    const vipLevel = userData.vipLevel || 0;
                     const totalBet = userData.totalBet || 0;
                     const claimedLevels = userData.claimedLevels || {};
                     const lastMonthlyClaim = userData.lastMonthlyClaim || 0;
@@ -697,11 +698,17 @@
             database.ref('users/' + userPhone + '/totalBet').on('value', (snapshot) => {
                 const totalBet = snapshot.val() || 0;
                 updateVIPProgress(totalBet);
+                
+                // Automatically upgrade VIP level when requirements are met
+                const currentLevel = parseInt(document.getElementById('vip-current-level').textContent) || 0;
+                if (currentLevel < 3 && totalBet >= vipRequirements[currentLevel + 1]) {
+                    database.ref('users/' + userPhone + '/vipLevel').set(currentLevel + 1);
+                }
             });
             
             // Listen for VIP level changes
             database.ref('users/' + userPhone + '/vipLevel').on('value', (snapshot) => {
-                const vipLevel = snapshot.val() || 1;
+                const vipLevel = snapshot.val() || 0;
                 updateVIPLevel(vipLevel);
             });
             
@@ -720,14 +727,13 @@
         
         // Update VIP progress display
         function updateVIPProgress(totalBet) {
-            const vipLevel = parseInt(document.getElementById('vip-current-level').textContent) || 1;
-            let nextLevel = vipLevel;
+            const vipLevel = parseInt(document.getElementById('vip-current-level').textContent) || 0;
+            let nextLevel = vipLevel + 1;
             let progress = 0;
             
             if (vipLevel < 3) {
-                nextLevel = vipLevel + 1;
-                const currentRequirement = vipRequirements[vipLevel] || 0;
-                const nextRequirement = vipRequirements[nextLevel] || 0;
+                const currentRequirement = vipLevel === 0 ? 0 : vipRequirements[vipLevel];
+                const nextRequirement = vipRequirements[nextLevel] || vipRequirements[1];
                 progress = Math.min(100, ((totalBet - currentRequirement) / (nextRequirement - currentRequirement)) * 100);
             } else {
                 // Max level reached
@@ -786,7 +792,7 @@
         
         // Update claim buttons based on claimed levels
         function updateClaimButtons(claimedLevels) {
-            const vipLevel = parseInt(document.getElementById('vip-current-level').textContent) || 1;
+            const vipLevel = parseInt(document.getElementById('vip-current-level').textContent) || 0;
             
             for (let level = 1; level <= 3; level++) {
                 const button = document.getElementById(`claim-tier-${level}`);
@@ -859,7 +865,7 @@
         
         // Claim monthly reward
         function claimMonthlyReward() {
-            const vipLevel = parseInt(document.getElementById('vip-current-level').textContent) || 1;
+            const vipLevel = parseInt(document.getElementById('vip-current-level').textContent) || 0;
             const rewardAmount = monthlyRewards[vipLevel] || 0;
             
             if (rewardAmount <= 0) {
