@@ -107,6 +107,16 @@
             text-align: center;
             margin-bottom: 20px;
             color: var(--success);
+            padding: 8px;
+            background: rgba(40, 167, 69, 0.1);
+            border-radius: 8px;
+        }
+        
+        .total-amount {
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
         
         .timer {
@@ -341,6 +351,7 @@
                 
                 <div class="payment-amount" id="payment-amount">₹0.00</div>
                 <div class="bonus-amount" id="bonus-amount">Bonus: ₹0.00</div>
+                <div class="total-amount" id="total-amount">Total: ₹0.00</div>
                 
                 <div class="timer" id="timer">Time remaining: 05:00</div>
                 
@@ -437,11 +448,15 @@
         const transactionId = urlParams.get('txn');
         const amount = parseInt(urlParams.get('amount'));
         const userPhone = urlParams.get('phone');
-        const bonusAmount = parseInt(urlParams.get('bonus')) || 0;
+        const bonus = parseInt(urlParams.get('bonus')) || 0;
         
-        // Set payment amount and bonus
+        // Set payment amounts
         document.getElementById('payment-amount').textContent = `₹${amount.toLocaleString('en-IN')}`;
-        document.getElementById('bonus-amount').textContent = `Bonus: ₹${bonusAmount.toLocaleString('en-IN')}`;
+        document.getElementById('bonus-amount').textContent = `Bonus: ₹${bonus.toLocaleString('en-IN')}`;
+        document.getElementById('total-amount').textContent = `Total: ₹${(amount + bonus).toLocaleString('en-IN')}`;
+        
+        // Update QR code with actual amount
+        document.querySelector('.qr-code img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=nasir****@airtel&pn=53Club&am=${amount}&cu=INR&tn=${transactionId}`;
         
         // Start countdown timer (5 minutes)
         let timeLeft = 300; // 5 minutes in seconds
@@ -486,7 +501,6 @@
         function openPaymentApp(app) {
             let url;
             const upiId = 'nasir****@airtel';
-            const amount = document.getElementById('payment-amount').textContent.replace('₹', '');
             
             switch(app) {
                 case 'gpay':
@@ -551,8 +565,8 @@
             // Create deposit record in Firebase
             const depositData = {
                 amount: amount,
-                bonus: bonusAmount,
-                status: 'processing',
+                bonus: bonus,
+                status: 'pending_verification',
                 timestamp: Date.now(),
                 utr: utrNumber,
                 channel: 'UPI',
@@ -567,7 +581,7 @@
                     userId: userPhone,
                     transactionId: transactionId,
                     amount: amount,
-                    bonus: bonusAmount,
+                    bonus: bonus,
                     utr: utrNumber,
                     status: 'pending',
                     timestamp: Date.now(),
@@ -577,13 +591,13 @@
                 // Create success notification for user
                 createNotification(
                     'Payment Submitted',
-                    `Your payment of ₹${amount} with ₹${bonusAmount} bonus has been submitted for verification. UTR: ${utrNumber}`,
+                    `Your payment of ₹${amount} with ₹${bonus} bonus has been submitted for verification. UTR: ${utrNumber}`,
                     'info'
                 );
                 
                 showToast('Payment submitted for verification!', 'success');
                 
-                // Listen for verification status
+                // Listen for verification status changes
                 database.ref('deposits/' + userPhone + '/' + transactionId + '/verificationStatus').on('value', (snapshot) => {
                     const status = snapshot.val();
                     
@@ -591,7 +605,7 @@
                         // Update user balance with deposit and bonus
                         database.ref('users/' + userPhone).transaction(user => {
                             if (user) {
-                                user.balance = (user.balance || 0) + amount + bonusAmount;
+                                user.balance = (user.balance || 0) + amount + bonus;
                                 user.hasDeposited = true;
                             }
                             return user;
@@ -600,7 +614,7 @@
                         // Create success notification
                         createNotification(
                             'Payment Approved',
-                            `Your payment of ₹${amount} with ₹${bonusAmount} bonus has been approved and added to your balance.`,
+                            `Your payment of ₹${amount} with ₹${bonus} bonus has been approved and added to your balance.`,
                             'success'
                         );
                         
