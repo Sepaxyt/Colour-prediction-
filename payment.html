@@ -102,6 +102,23 @@
             color: var(--secondary);
         }
         
+        .bonus-amount {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--success);
+            padding: 8px;
+            background: rgba(40, 167, 69, 0.1);
+            border-radius: 8px;
+        }
+        
+        .total-amount {
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
         .timer {
             text-align: center;
             font-size: 1.2rem;
@@ -140,6 +157,7 @@
         .payment-apps {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
             gap: 15px;
             margin: 20px 0;
         }
@@ -153,6 +171,11 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .payment-app:hover {
+            transform: scale(1.1);
         }
         
         .payment-app img {
@@ -300,12 +323,20 @@
         .reminder strong {
             color: var(--light);
         }
+        
+        .verification-message {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            color: var(--warning);
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="wallet" class="back-btn">
+            <a href="wallet.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
             
@@ -319,6 +350,8 @@
                 <h3 class="payment-title"><i class="fas fa-qrcode"></i> Complete Payment</h3>
                 
                 <div class="payment-amount" id="payment-amount">₹0.00</div>
+                <div class="bonus-amount" id="bonus-amount">Bonus: ₹0.00</div>
+                <div class="total-amount" id="total-amount">Total: ₹0.00</div>
                 
                 <div class="timer" id="timer">Time remaining: 05:00</div>
                 
@@ -347,6 +380,28 @@
                     <div class="payment-app" onclick="openPaymentApp('bhim')">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/BHIM_Logo.svg/1200px-BHIM_Logo.svg.png" alt="BHIM">
                     </div>
+                    <div class="payment-app" onclick="openPaymentApp('amazonpay')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1200px-Amazon_logo.svg.png" alt="Amazon Pay">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('whatsapp')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1200px-WhatsApp.svg.png" alt="WhatsApp Pay">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('airtel')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Airtel_Logo.svg/1200px-Airtel_Logo.svg.png" alt="Airtel Payments Bank">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('freecharge')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Freecharge_Logo.svg/1200px-Freecharge_Logo.svg.png" alt="Freecharge">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('mobikwik')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/MobiKwik_logo.svg/1200px-MobiKwik_logo.svg.png" alt="MobiKwik">
+                    </div>
+                    <div class="payment-app" onclick="openPaymentApp('cred')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/CRED_Logo.svg/1200px-CRED_Logo.svg.png" alt="CRED">
+                    </div>
+                </div>
+                
+                <div class="verification-message" id="verification-message">
+                    <i class="fas fa-info-circle"></i> Please wait 3 to 5 minutes for verification after submitting UTR
                 </div>
                 
                 <div class="reminder">
@@ -390,12 +445,18 @@
         
         // Get parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
-        const transactionId = urlParams.get('txn');
-        const amount = parseInt(urlParams.get('amount'));
-        const userPhone = urlParams.get('phone');
+        const transactionId = urlParams.get('txn') || 'TXN' + Date.now();
+        const amount = parseInt(urlParams.get('amount')) || 0;
+        const userPhone = urlParams.get('phone') || 'unknown';
+        const bonus = parseInt(urlParams.get('bonus')) || 0;
         
-        // Set payment amount
+        // Set payment amounts
         document.getElementById('payment-amount').textContent = `₹${amount.toLocaleString('en-IN')}`;
+        document.getElementById('bonus-amount').textContent = `Bonus: ₹${bonus.toLocaleString('en-IN')}`;
+        document.getElementById('total-amount').textContent = `Total: ₹${(amount + bonus).toLocaleString('en-IN')}`;
+        
+        // Update QR code with actual amount
+        document.querySelector('.qr-code img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=nasir****@airtel&pn=53Club&am=${amount}&cu=INR&tn=${transactionId}`;
         
         // Start countdown timer (5 minutes)
         let timeLeft = 300; // 5 minutes in seconds
@@ -440,7 +501,6 @@
         function openPaymentApp(app) {
             let url;
             const upiId = 'nasir****@airtel';
-            const amount = document.getElementById('payment-amount').textContent.replace('₹', '');
             
             switch(app) {
                 case 'gpay':
@@ -454,6 +514,24 @@
                     break;
                 case 'bhim':
                     url = `bhim://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'amazonpay':
+                    url = `amazonpay://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'whatsapp':
+                    url = `whatsapp://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'airtel':
+                    url = `airtel://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'freecharge':
+                    url = `freecharge://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'mobikwik':
+                    url = `mobikwik://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
+                    break;
+                case 'cred':
+                    url = `cred://upi/pay?pa=${upiId}&pn=53Club&am=${amount}&cu=INR`;
                     break;
                 default:
                     return;
@@ -481,16 +559,33 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span> Verifying...';
             
+            // Show verification message
+            document.getElementById('verification-message').style.display = 'block';
+            
             // Create deposit record in Firebase
             const depositData = {
                 amount: amount,
-                status: 'processing',
+                bonus: bonus,
+                status: 'pending_verification',
                 timestamp: Date.now(),
                 utr: utrNumber,
-                channel: 'UPI'
+                channel: 'UPI',
+                verificationStatus: 'pending',
+                transactionId: transactionId,
+                userPhone: userPhone,
+                paymentMethod: 'UPI',
+                paymentDetails: {
+                    upiId: 'nasir****@airtel',
+                    merchantName: '53 Club'
+                }
             };
             
-            database.ref('deposits/' + userPhone + '/' + transactionId).set(depositData)
+            // Save to both user's deposits and admin's pending deposits
+            const updates = {};
+            updates['deposits/' + userPhone + '/' + transactionId] = depositData;
+            updates['admin/pendingDeposits/' + transactionId] = depositData;
+            
+            database.ref().update(updates)
             .then(() => {
                 // Send notification to admin
                 database.ref('adminNotifications').push({
@@ -498,6 +593,7 @@
                     userId: userPhone,
                     transactionId: transactionId,
                     amount: amount,
+                    bonus: bonus,
                     utr: utrNumber,
                     status: 'pending',
                     timestamp: Date.now(),
@@ -507,22 +603,68 @@
                 // Create success notification for user
                 createNotification(
                     'Payment Submitted',
-                    `Your payment of ₹${amount} has been submitted for verification. UTR: ${utrNumber}`,
+                    `Your payment of ₹${amount} with ₹${bonus} bonus has been submitted for verification. UTR: ${utrNumber}`,
                     'info'
                 );
                 
                 showToast('Payment submitted for verification!', 'success');
                 
-                // Redirect back to wallet after delay
-                setTimeout(() => {
-                    window.location.href = 'wallet';
-                }, 1500);
+                // Listen for verification status changes
+                const verificationRef = database.ref('deposits/' + userPhone + '/' + transactionId);
+                
+                verificationRef.on('value', (snapshot) => {
+                    const deposit = snapshot.val();
+                    
+                    if (!deposit) return;
+                    
+                    if (deposit.verificationStatus === 'approved') {
+                        // Update user balance with deposit and bonus
+                        database.ref('users/' + userPhone).transaction(user => {
+                            if (user) {
+                                user.balance = (user.balance || 0) + amount + bonus;
+                                user.totalDeposited = (user.totalDeposited || 0) + amount;
+                                user.hasDeposited = true;
+                                user.lastDeposit = Date.now();
+                            }
+                            return user;
+                        });
+                        
+                        // Create success notification
+                        createNotification(
+                            'Payment Approved',
+                            `Your payment of ₹${amount} with ₹${bonus} bonus has been approved and added to your balance.`,
+                            'success'
+                        );
+                        
+                        // Remove from pending deposits
+                        database.ref('admin/pendingDeposits/' + transactionId).remove();
+                        
+                        // Redirect to wallet after delay
+                        setTimeout(() => {
+                            window.location.href = 'wallet.html?payment=success';
+                        }, 1500);
+                    } else if (deposit.verificationStatus === 'rejected') {
+                        createNotification(
+                            'Payment Rejected',
+                            `Your payment of ₹${amount} was rejected. Please contact support.`,
+                            'error'
+                        );
+                        
+                        showToast('Payment rejected by admin', 'error');
+                        btn.disabled = false;
+                        btn.textContent = 'Try Again';
+                        
+                        // Remove from pending deposits if rejected
+                        database.ref('admin/pendingDeposits/' + transactionId).remove();
+                    }
+                });
             })
             .catch((error) => {
                 console.error('Error updating transaction:', error);
                 showToast('Error processing payment. Please try again.', 'error');
                 btn.disabled = false;
                 btn.textContent = 'Verify Payment';
+                document.getElementById('verification-message').style.display = 'none';
             });
         }
         
