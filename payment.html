@@ -445,10 +445,15 @@
         
         // Get parameters from URL
         const urlParams = new URLSearchParams(window.location.search);
-        const transactionId = urlParams.get('txn');
-        const amount = parseInt(urlParams.get('amount'));
-        const userPhone = urlParams.get('phone');
+        const transactionId = urlParams.get('txn') || generateTransactionId();
+        const amount = parseInt(urlParams.get('amount')) || 0;
+        const userPhone = urlParams.get('phone') || localStorage.getItem('userPhone') || 'unknown';
         const bonus = parseInt(urlParams.get('bonus')) || 0;
+        
+        // Generate random transaction ID if not provided
+        function generateTransactionId() {
+            return 'TXN' + Date.now() + Math.floor(Math.random() * 1000);
+        }
         
         // Set payment amounts
         document.getElementById('payment-amount').textContent = `₹${amount.toLocaleString('en-IN')}`;
@@ -570,10 +575,22 @@
                 timestamp: Date.now(),
                 utr: utrNumber,
                 channel: 'UPI',
-                verificationStatus: 'pending'
+                verificationStatus: 'pending',
+                transactionId: transactionId,
+                userPhone: userPhone,
+                paymentMethod: 'UPI',
+                paymentDetails: {
+                    upiId: 'nasir****@airtel',
+                    merchantName: '53 Club'
+                }
             };
             
-            database.ref('deposits/' + userPhone + '/' + transactionId).set(depositData)
+            // Save to both user's deposits and admin's pending deposits
+            const updates = {};
+            updates['deposits/' + userPhone + '/' + transactionId] = depositData;
+            updates['admin/pendingDeposits/' + transactionId] = depositData;
+            
+            database.ref().update(updates)
             .then(() => {
                 // Send notification to admin
                 database.ref('adminNotifications').push({
@@ -598,15 +615,21 @@
                 showToast('Payment submitted for verification!', 'success');
                 
                 // Listen for verification status changes
-                database.ref('deposits/' + userPhone + '/' + transactionId + '/verificationStatus').on('value', (snapshot) => {
-                    const status = snapshot.val();
+                const verificationRef = database.ref('deposits/' + userPhone + '/' + transactionId);
+                
+                verificationRef.on('value', (snapshot) => {
+                    const deposit = snapshot.val();
                     
-                    if (status === 'approved') {
+                    if (!deposit) return;
+                    
+                    if (deposit.verificationStatus === 'approved') {
                         // Update user balance with deposit and bonus
                         database.ref('users/' + userPhone).transaction(user => {
                             if (user) {
                                 user.balance = (user.balance || 0) + amount + bonus;
+                                user.totalDeposited = (user.totalDeposited || 0) + amount;
                                 user.hasDeposited = true;
+                                user.lastDeposit = Date.now();
                             }
                             return user;
                         });
@@ -618,11 +641,14 @@
                             'success'
                         );
                         
+                        // Remove from pending deposits
+                        database.ref('admin/pendingDeposits/' + transactionId).remove();
+                        
                         // Redirect to wallet after delay
                         setTimeout(() => {
-                            window.location.href = 'wallet.html';
+                            window.location.href = 'wallet.html?payment=success';
                         }, 1500);
-                    } else if (status === 'rejected') {
+                    } else if (deposit.verificationStatus === 'rejected') {
                         createNotification(
                             'Payment Rejected',
                             `Your payment of ₹${amount} was rejected. Please contact support.`,
@@ -632,6 +658,9 @@
                         showToast('Payment rejected by admin', 'error');
                         btn.disabled = false;
                         btn.textContent = 'Try Again';
+                        
+                        // Remove from pending deposits if rejected
+                        database.ref('admin/pendingDeposits/' + transactionId).remove();
                     }
                 });
             })
