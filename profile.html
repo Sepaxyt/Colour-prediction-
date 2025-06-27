@@ -298,21 +298,37 @@
             max-width: 500px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
         
         .modal-title {
             font-size: 1.3rem;
-            margin-bottom: 20px;
             color: var(--light);
+            display: flex;
+            align-items: center;
+        }
+        
+        .modal-title i {
+            margin-right: 10px;
+            color: var(--secondary);
         }
         
         .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
             color: var(--gray);
+            font-size: 1.5rem;
             cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--light);
         }
         
         .form-group {
@@ -346,6 +362,13 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .submit-btn i {
+            margin-right: 8px;
         }
         
         .submit-btn:hover {
@@ -399,7 +422,7 @@
                     <div class="stat-label">Total Wins</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value" id="vip-level">1</div>
+                    <div class="stat-value" id="vip-level">0</div>
                     <div class="stat-label">VIP Level</div>
                 </div>
             </div>
@@ -465,8 +488,10 @@
     <!-- Gift Code Modal -->
     <div class="modal" id="gift-modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="hideGiftCodeModal()">&times;</span>
-            <h3 class="modal-title"><i class="fas fa-gift"></i> Redeem Gift Code</h3>
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-gift"></i> Redeem Gift Code</h3>
+                <span class="close-modal" onclick="hideGiftCodeModal()">&times;</span>
+            </div>
             
             <div class="form-group">
                 <label class="form-label">Enter Gift Code</label>
@@ -526,7 +551,7 @@
                     // Set other user data
                     updateBalanceDisplay(userData.balance || 0);
                     document.getElementById('total-wins').textContent = userData.totalWins || 0;
-                    document.getElementById('vip-level').textContent = userData.vipLevel || 1;
+                    document.getElementById('vip-level').textContent = userData.vipLevel || 0;
                     
                     // Format dates
                     const regDate = userData.registrationDate ? formatDate(userData.registrationDate) : formatDate(new Date().toISOString());
@@ -569,6 +594,11 @@
             database.ref('users/' + userPhone + '/totalWins').on('value', (snapshot) => {
                 const wins = snapshot.val() || 0;
                 document.getElementById('total-wins').textContent = wins;
+            });
+            
+            database.ref('users/' + userPhone + '/vipLevel').on('value', (snapshot) => {
+                const level = snapshot.val() || 0;
+                document.getElementById('vip-level').textContent = level;
             });
         }
         
@@ -632,6 +662,7 @@
         // Hide gift code modal
         function hideGiftCodeModal() {
             document.getElementById('gift-modal').style.display = 'none';
+            document.getElementById('gift-code').value = '';
         }
         
         // Redeem gift code
