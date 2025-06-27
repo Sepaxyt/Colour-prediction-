@@ -164,6 +164,64 @@
             color: var(--gray);
         }
         
+        .upi-container {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .upi-qr {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .upi-qr img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .upi-id {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            word-break: break-all;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
         .submit-btn {
             width: 100%;
             padding: 15px;
@@ -187,6 +245,40 @@
             background: var(--gray);
             cursor: not-allowed;
             transform: none;
+        }
+        
+        .payment-status {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .payment-status.success {
+            color: var(--success);
+        }
+        
+        .payment-status.pending {
+            color: var(--warning);
+        }
+        
+        .payment-status-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .payment-status-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .payment-status-desc {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 15px;
         }
         
         .toast {
@@ -268,19 +360,19 @@
                 <div class="payment-details">
                     <div class="payment-row">
                         <span class="payment-label">Transaction ID:</span>
-                        <span class="payment-value" id="txn-id">TXN123456</span>
+                        <span class="payment-value" id="txn-id">TXN1750985811573399</span>
                     </div>
                     <div class="payment-row">
                         <span class="payment-label">Amount:</span>
-                        <span class="payment-value" id="payment-amount">₹0.00</span>
+                        <span class="payment-value" id="payment-amount">₹100</span>
                     </div>
                     <div class="payment-row">
                         <span class="payment-label">Bonus:</span>
-                        <span class="payment-value payment-bonus" id="payment-bonus">₹0.00</span>
+                        <span class="payment-value payment-bonus" id="payment-bonus">₹18</span>
                     </div>
                     <div class="payment-row" style="border-bottom: none;">
                         <span class="payment-label">Total:</span>
-                        <span class="payment-value" id="payment-total">₹0.00</span>
+                        <span class="payment-value" id="payment-total">₹118</span>
                     </div>
                 </div>
                 
@@ -293,30 +385,54 @@
                         </div>
                         <div class="payment-method-details">
                             <div class="payment-method-name">UPI Payment</div>
-                            <div class="payment-method-info">Instant deposit with any UPI app</div>
-                        </div>
-                    </div>
-                    
-                    <div class="payment-method" onclick="selectPaymentMethod('bank')">
-                        <div class="payment-method-icon">
-                            <i class="fas fa-university"></i>
-                        </div>
-                        <div class="payment-method-details">
-                            <div class="payment-method-name">Bank Transfer</div>
-                            <div class="payment-method-info">NEFT/IMPS/RGTS transfer</div>
+                            <div class="payment-method-info">Pay using any UPI app</div>
                         </div>
                     </div>
                 </div>
                 
-                <button class="submit-btn" id="complete-btn" onclick="completePayment()">
-                    Complete Payment
-                </button>
+                <div class="upi-container" id="upi-container">
+                    <div class="upi-qr">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=53club@upi&pn=53%20Club&am=100&tn=Deposit%20TXN1750985811573399" alt="UPI QR Code">
+                    </div>
+                    
+                    <div class="upi-id">
+                        53club@upi
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Enter UTR Number (Reference Number)</label>
+                        <input type="text" class="form-control" id="utr-number" placeholder="Enter 12-digit UTR number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Upload Payment Screenshot (Optional)</label>
+                        <input type="file" class="form-control" id="payment-screenshot" accept="image/*">
+                    </div>
+                    
+                    <button class="submit-btn" id="verify-btn" onclick="verifyPayment()">
+                        Verify Payment
+                    </button>
+                </div>
+                
+                <div class="payment-status pending" id="payment-status">
+                    <div class="payment-status-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="payment-status-title">Payment Under Review</div>
+                    <div class="payment-status-desc">
+                        Your payment is being verified by our team. You'll receive a notification once approved.
+                    </div>
+                    <button class="submit-btn" onclick="window.location.href='main.html'">
+                        Back to Home
+                    </button>
+                </div>
             </div>
         </div>
     </div>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     
     <script>
         // Initialize Firebase
@@ -333,6 +449,7 @@
         
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        const storage = firebase.storage();
         
         // Get transaction details from URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -347,46 +464,121 @@
         document.getElementById('payment-bonus').textContent = '₹' + bonus.toLocaleString('en-IN');
         document.getElementById('payment-total').textContent = '₹' + (amount + bonus).toLocaleString('en-IN');
         
+        // Update QR code and UPI ID with actual amount
+        document.querySelector('.upi-qr img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=53club@upi&pn=53%20Club&am=${amount}&tn=Deposit%20${txnId}`;
+        
         function selectPaymentMethod(method) {
             document.querySelectorAll('.payment-method').forEach(el => {
                 el.classList.remove('active');
             });
             event.currentTarget.classList.add('active');
+            
+            if (method === 'upi') {
+                document.getElementById('upi-container').style.display = 'block';
+            } else {
+                document.getElementById('upi-container').style.display = 'none';
+            }
         }
         
-        function completePayment() {
-            const btn = document.getElementById('complete-btn');
+        function verifyPayment() {
+            const utrNumber = document.getElementById('utr-number').value;
+            const screenshotFile = document.getElementById('payment-screenshot').files[0];
+            const btn = document.getElementById('verify-btn');
+            
+            if (!utrNumber || utrNumber.length < 12) {
+                showToast('Please enter a valid 12-digit UTR number', 'error');
+                return;
+            }
+            
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span> Processing...';
+            btn.innerHTML = '<span class="spinner"></span> Verifying...';
             
-            // In a real app, you would integrate with a payment gateway here
-            // For demo purposes, we'll simulate a successful payment after 2 seconds
-            
-            setTimeout(() => {
-                // Update deposit status to success
-                database.ref('deposits/' + phone + '/' + txnId).update({
-                    status: 'success',
-                    processedAt: Date.now()
-                }).then(() => {
-                    // Add deposited amount and bonus to user balance
-                    return database.ref('users/' + phone).transaction(user => {
-                        if (user) {
-                            user.balance = (user.balance || 0) + amount + bonus;
-                        }
-                        return user;
-                    });
-                }).then(() => {
-                    showToast('Payment successful! Funds added to your balance', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'deposit-success.html';
-                    }, 1500);
-                }).catch(error => {
-                    console.error('Payment confirmation failed:', error);
-                    showToast('Payment failed. Please try again.', 'error');
-                    btn.disabled = false;
-                    btn.textContent = 'Complete Payment';
+            // Upload screenshot if provided
+            let screenshotUrl = '';
+            if (screenshotFile) {
+                const uploadTask = storage.ref(`payment-proofs/${txnId}`).put(screenshotFile);
+                
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        // Progress monitoring
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                    }, 
+                    (error) => {
+                        console.error('Upload failed:', error);
+                        btn.disabled = false;
+                        btn.textContent = 'Verify Payment';
+                        showToast('Failed to upload screenshot', 'error');
+                    }, 
+                    () => {
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            screenshotUrl = downloadURL;
+                            completeVerification(utrNumber, screenshotUrl);
+                        });
+                    }
+                );
+            } else {
+                completeVerification(utrNumber, screenshotUrl);
+            }
+        }
+        
+        function completeVerification(utrNumber, screenshotUrl) {
+            // Update payment status to pending verification
+            database.ref('deposits/' + phone + '/' + txnId).update({
+                status: 'pending_verification',
+                utrNumber: utrNumber,
+                screenshotUrl: screenshotUrl,
+                verifiedAt: null,
+                verifiedBy: null,
+                verificationStatus: 'pending'
+            }).then(() => {
+                // Hide payment form and show status
+                document.getElementById('upi-container').style.display = 'none';
+                document.getElementById('payment-status').style.display = 'block';
+                
+                // Listen for verification status changes
+                database.ref('deposits/' + phone + '/' + txnId + '/verificationStatus').on('value', (snapshot) => {
+                    const status = snapshot.val();
+                    const statusElement = document.getElementById('payment-status');
+                    
+                    if (status === 'approved') {
+                        statusElement.classList.remove('pending');
+                        statusElement.classList.add('success');
+                        statusElement.querySelector('.payment-status-icon').innerHTML = '<i class="fas fa-check-circle"></i>';
+                        statusElement.querySelector('.payment-status-title').textContent = 'Payment Approved!';
+                        statusElement.querySelector('.payment-status-desc').textContent = 'Your deposit and bonus have been added to your account balance.';
+                        
+                        // Update button to go to home
+                        statusElement.querySelector('.submit-btn').textContent = 'Back to Home';
+                        statusElement.querySelector('.submit-btn').onclick = function() {
+                            window.location.href = 'main.html';
+                        };
+                        
+                        // Remove the listener
+                        database.ref('deposits/' + phone + '/' + txnId + '/verificationStatus').off();
+                    } else if (status === 'rejected') {
+                        statusElement.classList.remove('pending');
+                        statusElement.classList.add('error');
+                        statusElement.querySelector('.payment-status-icon').innerHTML = '<i class="fas fa-times-circle"></i>';
+                        statusElement.querySelector('.payment-status-title').textContent = 'Payment Rejected';
+                        statusElement.querySelector('.payment-status-desc').textContent = 'Your payment could not be verified. Please try again.';
+                        
+                        // Update button to retry
+                        statusElement.querySelector('.submit-btn').textContent = 'Try Again';
+                        statusElement.querySelector('.submit-btn').onclick = function() {
+                            window.location.reload();
+                        };
+                        
+                        // Remove the listener
+                        database.ref('deposits/' + phone + '/' + txnId + '/verificationStatus').off();
+                    }
                 });
-            }, 2000);
+            }).catch(error => {
+                console.error('Verification failed:', error);
+                document.getElementById('verify-btn').disabled = false;
+                document.getElementById('verify-btn').textContent = 'Verify Payment';
+                showToast('Verification failed. Please try again.', 'error');
+            });
         }
         
         function showToast(message, type = 'success') {
@@ -402,6 +594,11 @@
                 toast.remove();
             }, 3000);
         }
+        
+        // Initialize UPI payment by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('upi-container').style.display = 'block';
+        });
     </script>
 </body>
 </html>
