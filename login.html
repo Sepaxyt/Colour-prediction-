@@ -460,6 +460,20 @@
         .btn-primary:disabled::before {
             background: #333;
         }
+
+        /* Access Protocol Button */
+        .btn-access {
+            background: transparent;
+            color: var(--neon);
+            border: 1px solid var(--neon);
+            margin-bottom: 1rem;
+            box-shadow: 0 0 10px rgba(15, 240, 252, 0.3);
+        }
+        
+        .btn-access:hover {
+            background: rgba(15, 240, 252, 0.1);
+            box-shadow: 0 0 20px rgba(15, 240, 252, 0.5);
+        }
         
         /* Links */
         .links {
@@ -831,15 +845,6 @@
                 padding: 0.9rem;
             }
         }
-        
-        /* Cyber Lines */
-        .cyber-line {
-            position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--neon), transparent);
-            opacity: 0.1;
-            z-index: -1;
-        }
     </style>
 </head>
 <body>
@@ -866,6 +871,11 @@
             <h1 class="app-name animate__animated animate__fadeIn">53 CLUB</h1>
             <p class="tagline animate__animated animate__fadeIn animate__delay-1s">ELITE GAMING PORTAL</p>
         </div>
+        
+        <!-- Access Protocol Button -->
+        <button class="btn btn-access animate__animated animate__fadeIn animate__delay-1s" onclick="showAccessProtocol()">
+            <i class="fas fa-shield-alt"></i> ACCESS PROTOCOL
+        </button>
         
         <!-- Login Form -->
         <div id="login-tab" class="tab-content active">
@@ -915,7 +925,7 @@
             
             <div class="customer-service animate__animated animate__fadeIn animate__delay-2s">
                 <a href="#" onclick="showCustomerServiceModal()">
-                    <i class="fas fa-headset"></i> CONTACT SUPPORT TEAM
+                    <i class="fas fa-headset"></i> CUSTOMER CARE
                 </a>
             </div>
         </div>
@@ -949,7 +959,7 @@
     <div id="customer-service-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="hideCustomerServiceModal()">&times;</span>
-            <h2>SUPPORT REQUEST</h2>
+            <h2>CUSTOMER CARE</h2>
             
             <div class="form-group">
                 <label>YOUR PHONE NUMBER</label>
@@ -970,8 +980,34 @@
             </div>
             
             <button class="btn" id="send-message-btn" onclick="sendCustomerServiceMessage()">
-                <span id="send-text">TRANSMIT REQUEST</span>
+                <span id="send-text">SUBMIT REQUEST</span>
             </button>
+        </div>
+    </div>
+
+    <!-- Access Protocol Modal -->
+    <div id="access-protocol-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideAccessProtocol()">&times;</span>
+            <h2>ACCESS PROTOCOL</h2>
+            
+            <div class="form-group">
+                <p style="color: var(--neon); text-align: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-shield-alt" style="font-size: 2rem; margin-bottom: 1rem;"></i><br>
+                    Secure authentication system activated
+                </p>
+                
+                <ul style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; padding-left: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;">Two-factor authentication required</li>
+                    <li style="margin-bottom: 0.5rem;">End-to-end encrypted connection</li>
+                    <li style="margin-bottom: 0.5rem;">Real-time security monitoring</li>
+                    <li style="margin-bottom: 0.5rem;">Biometric verification available</li>
+                </ul>
+                
+                <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; text-align: center;">
+                    For security reasons, please keep your login credentials confidential
+                </p>
+            </div>
         </div>
     </div>
 
@@ -1031,32 +1067,6 @@
             }
         }
         
-        // Create cyber lines
-        function createCyberLines() {
-            const container = document.querySelector('.container');
-            
-            for (let i = 0; i < 8; i++) {
-                const line = document.createElement('div');
-                line.classList.add('cyber-line');
-                
-                // Random properties
-                const width = Math.random() * 200 + 100;
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const rotation = Math.random() * 360;
-                const opacity = Math.random() * 0.05 + 0.02;
-                const delay = Math.random() * 5;
-                
-                line.style.width = `${width}px`;
-                line.style.left = `${posX}%`;
-                line.style.top = `${posY}%`;
-                line.style.transform = `rotate(${rotation}deg)`;
-                line.style.opacity = opacity;
-                
-                container.appendChild(line);
-            }
-        }
-        
         // Check if user is already logged in
         if(localStorage.getItem('userLoggedIn') === 'true') {
             const expiry = localStorage.getItem('loginExpiry');
@@ -1071,10 +1081,9 @@
             window.location.href = "main.html";
         }
         
-        // Initialize particles and lines
+        // Initialize particles
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
-            createCyberLines();
             
             // Add subtle floating animation to container
             gsap.to(".container", {
@@ -1114,6 +1123,34 @@
                     ease: "power2.out"
                 });
             }
+        }
+        
+        // Show Access Protocol info
+        function showAccessProtocol() {
+            document.getElementById('access-protocol-modal').style.display = 'flex';
+            
+            // Animation
+            gsap.from("#access-protocol-modal .modal-content", {
+                opacity: 0,
+                y: -30,
+                rotateX: 20,
+                duration: 0.5,
+                ease: "power2.out"
+            });
+        }
+        
+        // Hide Access Protocol
+        function hideAccessProtocol() {
+            gsap.to("#access-protocol-modal .modal-content", {
+                opacity: 0,
+                y: 30,
+                rotateX: -20,
+                duration: 0.3,
+                ease: "power2.in",
+                onComplete: () => {
+                    document.getElementById('access-protocol-modal').style.display = 'none';
+                }
+            });
         }
         
         // Toggle password visibility
@@ -1413,9 +1450,14 @@
         // Close modal when clicking outside of it
         window.onclick = function(event) {
             const customerModal = document.getElementById('customer-service-modal');
+            const accessModal = document.getElementById('access-protocol-modal');
             
             if (event.target === customerModal) {
                 hideCustomerServiceModal();
+            }
+            
+            if (event.target === accessModal) {
+                hideAccessProtocol();
             }
         }
         
