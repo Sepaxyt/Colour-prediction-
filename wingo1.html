@@ -1023,6 +1023,141 @@
             box-shadow: 0 6px 20px rgba(106, 17, 203, 0.5);
         }
         
+        /* UPI Payment Modal */
+        .upi-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .upi-content {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(18, 18, 18, 0.98));
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        
+        .upi-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .upi-title i {
+            color: var(--primary);
+        }
+        
+        .upi-qr {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upi-qr img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .upi-details {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            text-align: left;
+        }
+        
+        .upi-detail {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upi-detail:last-child {
+            margin-bottom: 0;
+        }
+        
+        .upi-detail i {
+            color: var(--primary);
+            width: 20px;
+            text-align: center;
+        }
+        
+        .upi-amount {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 15px 0;
+            color: var(--green);
+        }
+        
+        .upi-note {
+            font-size: 0.85rem;
+            color: var(--gray-light);
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+        
+        .upi-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .upi-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .upi-btn.primary {
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: white;
+        }
+        
+        .upi-btn.primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .upi-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+        
+        .upi-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
         /* Responsive styles */
         @media (max-width: 768px) {
             .container {
@@ -1110,6 +1245,14 @@
                 padding: 8px 10px;
                 font-size: 0.8rem;
             }
+            
+            .upi-actions {
+                flex-direction: column;
+            }
+            
+            .upi-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -1135,10 +1278,10 @@
             <div class="wallet-balance" id="wallet-balance">₹0.00</div>
             
             <div class="wallet-actions">
-                <button class="wallet-btn withdraw-btn" onclick="window.location.href='withdraw.html'">
+                <button class="wallet-btn withdraw-btn" onclick="showWithdrawModal()">
                     <i class="fas fa-rupee-sign"></i> Withdraw
                 </button>
-                <button class="wallet-btn deposit-btn" onclick="window.location.href='deposit.html'">
+                <button class="wallet-btn deposit-btn" onclick="showDepositModal()">
                     <i class="fas fa-rupee-sign"></i> Deposit
                 </button>
             </div>
@@ -1146,7 +1289,7 @@
         
         <div class="game-section">
             <div class="game-info">
-                Place your bets on numbers, colors or big/small. The winning number is generated randomly every 60 seconds.
+                Place your bets on numbers or colors. The winning number is generated randomly every 60 seconds.
             </div>
             
             <div class="timer-container">
@@ -1163,50 +1306,50 @@
             <div class="color-options">
                 <div class="color-option green" onclick="openBetModal('green', 'Green', 2.0)">
                     <i class="fas fa-circle"></i>
-                    <span>Green (2x)</span>
+                    <span>Green</span>
                 </div>
                 <div class="color-option violet" onclick="openBetModal('violet', 'Violet', 4.5)">
                     <i class="fas fa-circle"></i>
-                    <span>Violet (4.5x)</span>
+                    <span>Violet</span>
                 </div>
                 <div class="color-option red" onclick="openBetModal('red', 'Red', 2.0)">
                     <i class="fas fa-circle"></i>
-                    <span>Red (2x)</span>
+                    <span>Red</span>
                 </div>
             </div>
             
             <div class="number-grid">
-                <div class="number-item" onclick="openBetModal('0', '0', 3.0)">0 (3x)</div>
-                <div class="number-item" onclick="openBetModal('1', '1', 3.0)">1 (3x)</div>
-                <div class="number-item" onclick="openBetModal('2', '2', 3.0)">2 (3x)</div>
-                <div class="number-item" onclick="openBetModal('3', '3', 3.0)">3 (3x)</div>
-                <div class="number-item" onclick="openBetModal('4', '4', 3.0)">4 (3x)</div>
-                <div class="number-item" onclick="openBetModal('5', '5', 3.0)">5 (3x)</div>
-                <div class="number-item" onclick="openBetModal('6', '6', 3.0)">6 (3x)</div>
-                <div class="number-item" onclick="openBetModal('7', '7', 3.0)">7 (3x)</div>
-                <div class="number-item" onclick="openBetModal('8', '8', 3.0)">8 (3x)</div>
+                <div class="number-item" onclick="openBetModal('0', '0', 3.0)">0</div>
+                <div class="number-item" onclick="openBetModal('1', '1', 3.0)">1</div>
+                <div class="number-item" onclick="openBetModal('2', '2', 3.0)">2</div>
+                <div class="number-item" onclick="openBetModal('3', '3', 3.0)">3</div>
+                <div class="number-item" onclick="openBetModal('4', '4', 3.0)">4</div>
+                <div class="number-item" onclick="openBetModal('5', '5', 3.0)">5</div>
+                <div class="number-item" onclick="openBetModal('6', '6', 3.0)">6</div>
+                <div class="number-item" onclick="openBetModal('7', '7', 3.0)">7</div>
+                <div class="number-item" onclick="openBetModal('8', '8', 3.0)">8</div>
             </div>
             
             <div class="bet-options">
                 <div class="bet-option big" onclick="openBetModal('big', 'Big', 2.0)">
                     <i class="fas fa-arrow-up"></i>
-                    <span>Big (2x)</span>
+                    <span>Big</span>
                 </div>
                 <div class="bet-option small" onclick="openBetModal('small', 'Small', 2.0)">
                     <i class="fas fa-arrow-down"></i>
-                    <span>Small (2x)</span>
+                    <span>Small</span>
                 </div>
             </div>
             
             <div class="quick-bet-section">
                 <h3 class="section-title"><i class="fas fa-bolt"></i> Quick Bets</h3>
                 <div class="random-options">
-                    <div class="random-option" onclick="placeRandomBet(1, 10)">X1 (₹10)</div>
-                    <div class="random-option" onclick="placeRandomBet(5, 50)">X5 (₹50)</div>
-                    <div class="random-option" onclick="placeRandomBet(10, 100)">X10 (₹100)</div>
-                    <div class="random-option" onclick="placeRandomBet(20, 200)">X20 (₹200)</div>
-                    <div class="random-option" onclick="placeRandomBet(50, 500)">X50 (₹500)</div>
-                    <div class="random-option" onclick="placeRandomBet(100, 1000)">X100 (₹1000)</div>
+                    <div class="random-option" onclick="placeRandomBet(1, 10)">₹10</div>
+                    <div class="random-option" onclick="placeRandomBet(1, 50)">₹50</div>
+                    <div class="random-option" onclick="placeRandomBet(1, 100)">₹100</div>
+                    <div class="random-option" onclick="placeRandomBet(1, 200)">₹200</div>
+                    <div class="random-option" onclick="placeRandomBet(1, 500)">₹500</div>
+                    <div class="random-option" onclick="placeRandomBet(1, 1000)">₹1000</div>
                 </div>
             </div>
         </div>
@@ -1262,10 +1405,6 @@
                     <span id="bet-type-display">-</span>
                 </div>
                 <div class="bet-detail-item">
-                    <span>Odds:</span>
-                    <span id="bet-odds-display">-</span>
-                </div>
-                <div class="bet-detail-item">
                     <span>Possible Win:</span>
                     <span id="bet-win-display">₹0.00</span>
                 </div>
@@ -1274,6 +1413,85 @@
             <button class="submit-bet" id="submit-bet" onclick="placeBet()" disabled>
                 Confirm Bet
             </button>
+        </div>
+    </div>
+    
+    <!-- Deposit Modal -->
+    <div class="modal upi-modal" id="deposit-modal">
+        <div class="upi-content">
+            <span class="close-modal" onclick="hideDepositModal()">&times;</span>
+            <h3 class="upi-title"><i class="fas fa-wallet"></i> Deposit Funds</h3>
+            
+            <div class="upi-details">
+                <div class="upi-detail">
+                    <i class="fas fa-qrcode"></i>
+                    <span>Scan QR code to deposit</span>
+                </div>
+                <div class="upi-detail">
+                    <i class="fas fa-id-card"></i>
+                    <span>UPI ID: 53club@upi</span>
+                </div>
+                <div class="upi-detail">
+                    <i class="fas fa-user"></i>
+                    <span>Name: 53 CLUB</span>
+                </div>
+            </div>
+            
+            <div class="upi-qr">
+                <!-- Replace with your actual QR code image -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=53club@upi&pn=53%20CLUB&cu=INR" alt="UPI QR Code">
+            </div>
+            
+            <div class="upi-note">
+                <strong>Note:</strong> Send exact amount you want to deposit. After payment, share screenshot on WhatsApp +91XXXXXXXXXX with your registered mobile number for instant credit.
+            </div>
+            
+            <div class="upi-actions">
+                <button class="upi-btn secondary" onclick="hideDepositModal()">Cancel</button>
+                <button class="upi-btn primary" onclick="copyUpiId()">
+                    <i class="fas fa-copy"></i> Copy UPI ID
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Withdraw Modal -->
+    <div class="modal upi-modal" id="withdraw-modal">
+        <div class="upi-content">
+            <span class="close-modal" onclick="hideWithdrawModal()">&times;</span>
+            <h3 class="upi-title"><i class="fas fa-money-bill-wave"></i> Withdraw Funds</h3>
+            
+            <div class="upi-details">
+                <div class="upi-detail">
+                    <i class="fas fa-rupee-sign"></i>
+                    <span>Minimum withdrawal: ₹100</span>
+                </div>
+                <div class="upi-detail">
+                    <i class="fas fa-clock"></i>
+                    <span>Processing time: 5-15 minutes</span>
+                </div>
+            </div>
+            
+            <input type="number" class="bet-amount-input" id="withdraw-amount" placeholder="Enter amount (₹100 minimum)" min="100" step="1">
+            
+            <div class="upi-details" style="margin-top: 20px;">
+                <div class="upi-detail">
+                    <i class="fas fa-id-card"></i>
+                    <span>Enter your UPI ID:</span>
+                </div>
+                <input type="text" class="bet-amount-input" id="withdraw-upi" placeholder="yourname@upi">
+            </div>
+            
+            <div class="upi-note">
+                <strong>Note:</strong> Withdrawals are processed within 15 minutes during working hours (10AM-10PM). Ensure your UPI ID is correct.
+            </div>
+            
+            <div class="upi-actions">
+                <button class="upi-btn secondary" onclick="hideWithdrawModal()">Cancel</button>
+                <button class="upi-btn primary" id="submit-withdraw" onclick="submitWithdrawal()" disabled>
+                    <i class="fas fa-paper-plane"></i> Submit Request
+                </button>
+            </div>
         </div>
     </div>
     
@@ -1902,7 +2120,6 @@
             }
             
             document.getElementById('bet-type-display').textContent = displayType;
-            document.getElementById('bet-odds-display').textContent = odds.toFixed(1) + 'x';
             document.getElementById('bet-amount').value = '';
             document.getElementById('bet-win-display').textContent = '₹0.00';
             document.getElementById('submit-bet').disabled = true;
@@ -2110,6 +2327,92 @@
             });
         }
         
+        // Show deposit modal
+        function showDepositModal() {
+            document.getElementById('deposit-modal').style.display = 'flex';
+        }
+        
+        // Hide deposit modal
+        function hideDepositModal() {
+            document.getElementById('deposit-modal').style.display = 'none';
+        }
+        
+        // Show withdraw modal
+        function showWithdrawModal() {
+            document.getElementById('withdraw-modal').style.display = 'flex';
+            document.getElementById('withdraw-amount').value = '';
+            document.getElementById('withdraw-upi').value = '';
+            document.getElementById('submit-withdraw').disabled = true;
+        }
+        
+        // Hide withdraw modal
+        function hideWithdrawModal() {
+            document.getElementById('withdraw-modal').style.display = 'none';
+        }
+        
+        // Copy UPI ID to clipboard
+        function copyUpiId() {
+            const upiId = '53club@upi';
+            navigator.clipboard.writeText(upiId).then(() => {
+                showToast('UPI ID copied to clipboard', 'success');
+            }).catch(() => {
+                showToast('Failed to copy UPI ID', 'error');
+            });
+        }
+        
+        // Submit withdrawal request
+        function submitWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+            const upiId = document.getElementById('withdraw-upi').value.trim();
+            
+            if (!amount || amount < 100) {
+                showToast('Minimum withdrawal amount is ₹100', 'error');
+                return;
+            }
+            
+            if (amount > userBalance) {
+                showToast('Insufficient balance for withdrawal', 'error');
+                return;
+            }
+            
+            if (!upiId || !upiId.includes('@')) {
+                showToast('Please enter a valid UPI ID', 'error');
+                return;
+            }
+            
+            const withdrawId = 'WDR' + Date.now();
+            
+            database.ref('withdrawals/' + userPhone + '/' + withdrawId).set({
+                amount: amount,
+                upiId: upiId,
+                timestamp: Date.now(),
+                status: 'pending'
+            }).then(() => {
+                showToast('Withdrawal request submitted successfully', 'success');
+                hideWithdrawModal();
+                
+                // Create notification for admin
+                database.ref('adminNotifications/' + withdrawId).set({
+                    userId: userPhone,
+                    amount: amount,
+                    upiId: upiId,
+                    timestamp: Date.now(),
+                    read: false
+                });
+            }).catch(() => {
+                showToast('Failed to submit withdrawal request', 'error');
+            });
+        }
+        
+        // Validate withdraw form
+        function validateWithdrawForm() {
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+            const upiId = document.getElementById('withdraw-upi').value.trim();
+            
+            const isValid = amount >= 100 && upiId.includes('@');
+            document.getElementById('submit-withdraw').disabled = !isValid;
+        }
+        
         // Show toast
         function showToast(message, type = 'success') {
             const toast = document.createElement('div');
@@ -2130,6 +2433,8 @@
         
         // Event listeners
         document.getElementById('bet-amount').addEventListener('input', calculateWinAmount);
+        document.getElementById('withdraw-amount').addEventListener('input', validateWithdrawForm);
+        document.getElementById('withdraw-upi').addEventListener('input', validateWithdrawForm);
         
         // Initialize
         window.addEventListener('load', checkAuth);
